@@ -1,0 +1,323 @@
+/*
+    This file is part of FlightClub.
+
+    Copyright Ãƒâ€šÃ‚Â© 2014-2015 Declan Murphy
+
+    FlightClub is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    FlightClub is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with FlightClub.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+/* ---------------- @font-face definitions ----------------- */
+@font-face {
+  font-family: "Neou Thin Web";
+  src: url('../fonts/Neou-Thin.ttf') format('truetype'); /* Safari, Android, iOS */
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* 
+Generic Styling, for Desktops/Laptops 
+*/
+html, body {
+  min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
+  color: #BBB;
+  font-family: 'Quicksand', sans-serif;
+  /*font-family:"Neou Thin Web", "Neou Thin", Helvetica, sans-serif;*/
+  font-weight: 900;
+}
+
+body, .container {
+  width: 100%;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+.bg {
+  position: fixed; 
+  top: -50%; 
+  left: -50%; 
+  width: 200%; 
+  height: 200%;
+}
+
+.bg img {
+  position: absolute; 
+  top: 0; 
+  left: 0; 
+  right: 0; 
+  bottom: 0; 
+  margin: auto; 
+  min-width: 50%;
+  min-height: 50%;
+  width: auto;
+}
+
+.tab-content {
+  margin: 2%;
+}
+
+form {
+  padding: 4%;
+  color: white !important;
+}
+
+nav {
+  width: auto;
+  list-style: none;
+  position: relative;
+  padding: 0px;
+  margin: 0px;
+}
+
+/* nav tab styling */
+nav li {
+  display: inline-block;
+  float: none;
+  padding-bottom: 3px;
+}
+
+nav li>a {
+  display: block;
+  padding: 10px 20px;
+  border-radius: 2px 2px 0 0;
+  color: #444;
+  background-color:rgba(0,0,0,0.0) !important;
+  cursor: pointer;
+  position: relative;
+  top: 3px;
+  border: 1px solid #444;
+  -webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+
+/* Put white border/text on active/hover tabs */
+nav li>a:hover,
+nav li>a:active,
+nav li.active>a {
+  border: 1px solid white;
+  color: white !important;
+}
+
+/* Turns tabs list into finite height scrollable list */
+#tabs {
+  overflow-y: hidden;
+}
+
+/* This rubs out the bottom border of the active stage tab */
+#tabs nav li>a:active,
+#tabs nav li.active>a {
+  border-bottom-color: #000011 !important;
+}
+
+#head {
+  height: 100%;
+  overflow-y: scroll;
+}
+
+#sites,
+#vehicles {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+#sites nav,
+#vehicles nav {
+  overflow-y: scroll;
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+/* Styled like nav li>a */
+#sites span,
+#vehicles span {
+  color: white;
+  border-radius: 4px;
+  padding: 10px 20px;
+}
+
+/* Force equal width input boxes */ 
+.input-group {
+  margin-left: 0;
+  margin-right: auto;
+  width: 100%;
+}
+
+.form-control {
+  color: #000;
+}
+
+.slideList {
+  list-style: none;
+  position: relative;
+  padding: 0px;
+  padding-top: 10px;
+  margin: 0px;
+  margin-left: 0px;
+  display: block;
+}
+
+.slideList>li {
+  background: rgba(0,0,0,0.0);
+  color: #444;
+  border: 1px solid #444;
+}
+
+.slideList>li, .header {
+  display: inline-block;
+  float: none;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-radius: 4px;
+  position: relative;
+  cursor: pointer;
+  -webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+
+.header:hover,
+.slideList>li:hover,
+.slideList>li.active {
+  color: white;
+  border: 1px solid white;
+}
+
+#sites .slideList>li,
+#vehicles .slideList>li {
+  border: none;
+}
+
+.header {
+  border: 1px solid #507B90;
+  background: #507B90;
+  border-radius: 4px;
+  float: left;
+}
+
+.slideItem {
+  cursor:default;    
+  padding: 10px;
+}
+
+  #vehicles .slideItem,
+  #sites .slideItem {
+    padding: 0px;
+  }
+
+.slideItem li {
+  display: inline !important;
+}
+
+.emptyrow {
+  min-height: 34px;
+}
+
+.progress-container {
+  z-index: -2000;
+  position: fixed;
+  top: 50%;
+}
+
+.centre  {
+  text-align: center;
+  display:block;
+}
+
+.text_white {
+  line-height:1;
+  color: white;
+}
+
+.text_black {
+  line-height:1;
+  color: black;
+}
+
+#clock, #velocity, #altitude {
+  display:block;
+  text-align:center;
+}
+
+/* RESULTS */
+#results-info {
+  background: #000;
+  padding: 20px;
+  position: absolute;
+  top: -100%;
+  -webkit-transition: all 0.5s ease-in-out;
+     -moz-transition: all 0.5s ease-in-out;
+       -o-transition: all 0.5s ease-in-out;
+          transition: all 0.5s ease-in-out;  
+}
+
+.results {
+  background: #fff;
+  width: 100% !important;
+}
+
+#results .navbar {
+  margin-bottom: 0px;
+}
+
+.results td {
+  padding: 0;
+  display: inline-block;
+}
+
+.results img {
+  width: 100%;
+}
+
+/* FOOTER */
+.footer {
+  color: lightskyblue;
+  position: fixed;
+  bottom: 15px;
+  text-align: right;
+  width: 100%;
+}
+
+/* MISC */
+.tmargin1 { margin-top: 5%; }
+.tmargin2 { margin-top: 10%; }
+.tmargin3 { margin-top: 15%; }
+.tmargin4 { margin-top: 20%; }
+
+.bmargin1 { margin-bottom: 5%; }
+.bmargin2 { margin-bottom: 10%; }
+.bmargin3 { margin-bottom: 15%; }
+.bmargin4 { margin-bottom: 20%; }
+
+.rborder { border-right:1px solid #fff}
+.lborder { border-left:1px solid #fff}
+.tborder { border-top:1px solid #fff}
+.bborder { border-bottom:1px solid #fff}
+
+.wfill {height: 100vh;}
+.vfill {height: 100%;}
+
+.left {float: left !important;}
+.right {float: right !important;}
+
+/* Z-INDEXES */
+.bg {z-index: -1000;}
+form {z-index: -500;}
+nav {z-index: 500;}
+.nav-tabs {z-index: 2000;}
+ul li {z-index: 3000;}

@@ -1,0 +1,112 @@
+/*
+    This file is part of FlightClub.
+
+    Copyright Ã‚Â© 2014-2015 Declan Murphy
+
+    FlightClub is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    FlightClub is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with FlightClub.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+/* 
+Tabs for bigger screens take custom style
+*/
+@media 
+only screen and (min-width: 768px)  {
+
+  /* BODY */
+  body {
+    font-size: 24px;
+  }
+
+  /* TABS */
+  #sites nav,
+  #vehicles nav {
+    height:100%;
+  }
+
+  #sites {text-align: right}
+  #vehicles {text-align: left}
+  
+  #copyInfo,
+  #saveInfo {
+    color: #444;
+    background: #ddd;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -150px;
+    margin-left: -300px;
+    padding: 15px;
+    width: 600px;
+    height: 300px;
+    z-index: 2800;
+    display: none; 
+  }
+
+  /* LOADING SCREEN */
+  .progress-container {
+    margin-top: -125px;
+  }
+
+  #rocket {
+    margin-left: -125px;
+    height: 249px;
+    width: 249px;
+  }
+
+  #rocket > img {
+    content: url("../images/rocket_large.png");
+  }
+
+  /* RESULTS */
+  .results td {
+    width: 33%;
+  }
+
+  /* LIVE */
+  .text_half  {
+    font-size:18px;
+  }
+  .text_full  {
+    font-size:36px; /* Actually 1.5x */
+  }
+
+  #live .live-info {
+    margin-top:150px;
+  }
+
+  #clock, #velocity, #altitude {
+    margin-top:20px;
+  }
+
+  /* MISC */
+  .rborder_large { border-right:1px solid #fff}
+  .lborder_large { border-left:1px solid #fff}
+  .tborder_large { border-top:1px solid #fff}
+  .bborder_large { border-bottom:1px solid #fff}
+
+  .footer {
+    font-size: 18px;
+  }
+
+  @media 
+  only screen and (max-height: 650px) {
+
+    .footer {
+      position: absolute;
+      top: -9999px;
+      left: -9999px;  
+    }
+  }
+
+}
