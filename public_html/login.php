@@ -31,6 +31,10 @@
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
     
+    <script src="js/jquery.cookie.js"></script>
+    <script src="js/form2js.js"></script>
+    <script src="js/ajax_testing.js"></script>
+    
     <link href='https://fonts.googleapis.com/css?family=Quicksand' rel='stylesheet' type='text/css'>
     
     <link rel="stylesheet" href="css/style.css" />
@@ -50,9 +54,9 @@
           <span class="navbar-brand right"></span>
         </div>
       </nav>
-      <form action="http://www.decmurphy.com:8080/FlightSchool/LoginProcess" method="POST" class="vmargin1">
-        <div class="row"><div class="col-xs-4 col-sm-offset-4 col-sm-2">Username</div><div class="col-xs-7 col-sm-3"><div class="input-group"><input title="" type="text" class="form-control" value="" name="username"/></div></div></div>
-        <div class="row"><div class="col-xs-4 col-sm-offset-4 col-sm-2">Password</div><div class="col-xs-7 col-sm-3"><div class="input-group"><input title="" type="password" class="form-control" value="" name="password"/></div></div></div>
+      <form id="login" method="POST" class="vmargin1">
+        <div class="row"><div class="col-xs-4 col-sm-offset-4 col-sm-2">Username</div><div class="col-xs-7 col-sm-3"><div class="input-group"><input title="" type="text" class="form-control" value="" name="Login.username"/></div></div></div>
+        <div class="row"><div class="col-xs-4 col-sm-offset-4 col-sm-2">Password</div><div class="col-xs-7 col-sm-3"><div class="input-group"><input title="" type="password" class="form-control" value="" name="Login.password"/></div></div></div>
         <div class="row"><div class="col-sm-offset-4 col-sm-4"><input type="checkbox" name="rememberMe" value="false"/>Remember Me?</div></div>
         <div class="row"><div class="col-sm-offset-4 col-sm-4"><button type="submit" class="btn btn-default"><span class="fa fa-play fa-2x"></span></button></div></div>
       </form>

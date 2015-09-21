@@ -17,23 +17,26 @@
  along with FlightClub.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-var domain = 'http://www.decmurphy.com:8080/'; 
-var server = 'FlightSchool/';
+var domain = 'http://www.decmurphy.com';
+var port = ':8080';
+var server = '/FlightSchool';
 /*
-var domain = 'http://localhost:8080/';
-var server = 'FlightClub/';
+var domain = 'http://localhost';
+var port = ':8080';
+var server = '/FlightClub';
 */
-var version = 'api/v1/';
-var url = domain + server + version;
+var version = '/api/v1';
+var home = domain + server;
+var api_url = domain + port + server + version;
 
 var mobile_query = window.matchMedia( "(max-width: 767px)" );
 var large_query = window.matchMedia( "(min-width: 768px)" );
 
 $(document).ready(function () 
 {
-  httpRequest('missions?display=1', 'GET', null, fillMissions);
-  httpRequest('launchsites', 'GET', null, fillLaunchSites);
-  httpRequest('launchvehicles', 'GET', null, fillLaunchVehicles); 
+  httpRequest(api_url+'/missions?display=1', 'GET', null, fillMissions);
+  httpRequest(api_url+'/launchsites', 'GET', null, fillLaunchSites);
+  httpRequest(api_url+'/launchvehicles', 'GET', null, fillLaunchVehicles); 
 
   $("#tabs ul").on('click', 'li[id="update"]', function (e) 
   {
@@ -46,7 +49,7 @@ $(document).ready(function ()
     e.preventDefault();
     var formAsJSON_object = form2js('submitForm', '.', true);
     var formAsJSON_string = JSON.stringify(formAsJSON_object, null, 2);    
-    httpRequest('missions', 'PUT', formAsJSON_string, updateSuccess);
+    httpRequest(api_url+'/missions', 'PUT', formAsJSON_string, updateSuccess);
   });
   
   $("#tabs ul").on('click', 'li[id="copy"]', function (e) 
@@ -60,7 +63,7 @@ $(document).ready(function ()
     e.preventDefault();
     var formAsJSON_object = form2js('submitForm', '.', true);
     var formAsJSON_string = JSON.stringify(formAsJSON_object, null, 2);    
-    httpRequest('missions/new', 'PUT', formAsJSON_string, updateSuccess);
+    httpRequest(api_url+'/missions/new', 'PUT', formAsJSON_string, updateSuccess);
   });
   
   $('#tabs ul').on('click', 'li[id="logout"]', function(e)
@@ -74,7 +77,7 @@ $(document).ready(function ()
     e.preventDefault();
     var formAsJSON_object = form2js('submitForm', '.', true);
     var formAsJSON_string = JSON.stringify(formAsJSON_object, null, 2);    
-    httpRequest('missions', 'DELETE', formAsJSON_string, updateSuccess);
+    httpRequest(api_url+'/missions', 'DELETE', formAsJSON_string, updateSuccess);
   });
   
   $("#tabs ul").on('click', 'li[id="launch"]', function (e) 
@@ -84,7 +87,7 @@ $(document).ready(function ()
     $("#copyInfo").fadeOut(100);
     var formAsJSON_object = form2js('submitForm', '.', true);
     var formAsJSON_string = JSON.stringify(formAsJSON_object, null, 2);    
-    httpRequest('simulator/new', 'POST', formAsJSON_string, completeSim);
+    httpRequest(api_url+'/simulator/new', 'POST', formAsJSON_string, completeSim);
     animate_rocket(30);
   });
   
@@ -92,7 +95,15 @@ $(document).ready(function ()
   {
     $(this).siblings().removeClass('active');
     $(this).addClass('active');
-    httpRequest('missions/'+$(this).attr('id'), 'GET', null, fillProfile);
+    httpRequest(api_url+'/missions/'+$(this).attr('id'), 'GET', null, fillProfile);
+  });
+  
+  $("#login").on('click', 'button[type=submit]', function(e)
+  {
+    e.preventDefault();
+    var formAsJSON_object = form2js('login', '.', true);
+    var formAsJSON_string = JSON.stringify(formAsJSON_object, null, 2);    
+    httpRequest(api_url+'/login', 'POST', formAsJSON_string, goHome);
   });
   
   $("#sites ul").on('click', '.slideItem li', function(e) 
@@ -182,7 +193,7 @@ function httpRequest(dest, method, data, fn)
 {  
   $.ajax({
       type: method,
-      url: url+dest,
+      url: dest,
       contentType: 'application/json',
       data: data,
       dataType: "json",
@@ -233,12 +244,20 @@ function completeSim(data)
     map[pair[0]] = pair[1];
   }
   
-  window.location = domain+server+'DisplayResults?id=' + map['id'] + '&pl=' + map['pl'];
+  window.location = domain+port+server+'/DisplayResults?id=' + map['id'] + '&pl=' + map['pl'];
 }
 
 function updateSuccess() 
 {
   window.location = domain+server+'Success';
+}
+
+function goHome(data)
+{
+  var obj = jQuery.parseJSON(JSON.stringify(data, null, 2));
+  $.cookie("authToken", obj.Success.authToken, { expires : obj.Success.maxAge });
+  
+  window.location = home;
 }
 
 function fillProfile(data) 
