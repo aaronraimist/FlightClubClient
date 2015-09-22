@@ -16,18 +16,20 @@
  You should have received a copy of the GNU General Public License
  along with FlightClub.  If not, see <http://www.gnu.org/licenses/>.
  */
-
+/*
 var domain = 'http://www.decmurphy.com';
 var port = ':8080';
 var server = '/FlightSchool';
-/*
+*/
 var domain = 'http://localhost';
 var port = ':8080';
 var server = '/FlightClub';
-*/
+
 var version = '/api/v1';
 var home = domain + server;
 var api_url = domain + port + server + version;
+
+var calculating = false;
 
 var mobile_query = window.matchMedia( "(max-width: 767px)" );
 var large_query = window.matchMedia( "(min-width: 768px)" );
@@ -88,6 +90,7 @@ $(document).ready(function ()
     var formAsJSON_object = form2js('submitForm', '.', true);
     var formAsJSON_string = JSON.stringify(formAsJSON_object, null, 2);    
     httpRequest(api_url+'/simulator/new', 'POST', formAsJSON_string, completeSim);
+    calculating = true;
     animate_rocket(30);
   });
   
@@ -210,11 +213,13 @@ function httpRequest(dest, method, data, fn)
 
 function animate_rocket(w) {
   
-  $(".bg").css('z-index', 2500);
-  $(".progress-container").css('z-index', 3000);
+  if(calculating) {
+    $(".bg").css('z-index', 2500);
+    $(".progress-container").css('z-index', 3000);
+  }
   
   var windowWidth = $(document).width();
-  if (w <= 99.5) {
+  if (w <= 99.5 && calculating) {
     $("#rocket").animate(
             {marginLeft: 0.01 * w * (windowWidth - 125) + 'px'},
     1500, "linear", function () {
@@ -223,6 +228,16 @@ function animate_rocket(w) {
     );
   }
 };
+
+function resetRocket() {
+  
+  calculating = false;
+  $(".bg").css('z-index', -1000);
+  $(".progress-container").css('z-index', -2000);
+  var rocketWidth = $("#rocket").width();
+  $("#rocket").css('marginLeft', rocketWidth/2 + 'px');
+  
+}
 
 /////////////////////////////////////////////////
 //                                             //
@@ -244,7 +259,8 @@ function completeSim(data)
     map[pair[0]] = pair[1];
   }
   
-  window.location = domain+port+server+'/DisplayResults?id=' + map['id'] + '&pl=' + map['pl'];
+  resetRocket();
+  window.open(domain+port+server+'/DisplayResults?id=' + map['id'] + '&pl=' + map['pl'], '_blank');
 }
 
 function updateSuccess() 
