@@ -34,6 +34,10 @@ only screen and (max-width: 767px) {
     height:50%;
   }
   
+  #vehicles {
+    top: -35px;
+  }
+  
   #copyInfo,
   #saveInfo {
     display: none;

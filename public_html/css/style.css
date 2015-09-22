@@ -135,6 +135,11 @@ nav li.active>a {
   padding-right: 0px;
 }
 
+#sites select,
+#vehicles select {
+  max-height: 0px;
+}
+
 #sites nav,
 #vehicles nav {
   overflow-y: scroll;
