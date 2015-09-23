@@ -91,6 +91,7 @@ $(document).ready(function ()
     var formAsJSON_string = JSON.stringify(formAsJSON_object, null, 2);    
     httpRequest(api_url+'/simulator/new', 'POST', formAsJSON_string, completeSim);
     calculating = true;
+    resetRocket();
     animate_rocket(30);
   });
   
@@ -229,13 +230,20 @@ function animate_rocket(w) {
   }
 };
 
-function resetRocket() {
+function showForm() {
   
   calculating = false;
   $(".bg").css('z-index', -1000);
   $(".progress-container").css('z-index', -2000);
+  
+}
+
+function resetRocket() {
+  
   var rocketWidth = $("#rocket").width();
-  $("#rocket").css('marginLeft', rocketWidth/2 + 'px');
+  var newW = -1*rocketWidth/2.0;
+  $("#rocket").removeAttr('style');
+  $("#rocket").css('marginLeft', newW + 'px');
   
 }
 
@@ -259,7 +267,7 @@ function completeSim(data)
     map[pair[0]] = pair[1];
   }
   
-  resetRocket();
+  showForm();
   window.open(domain+port+server+'/DisplayResults?id=' + map['id'] + '&pl=' + map['pl'], '_blank');
 }
 
