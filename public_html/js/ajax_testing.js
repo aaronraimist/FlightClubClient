@@ -34,11 +34,11 @@ var calculating = false;
 var mobile_query = window.matchMedia( "(max-width: 767px)" );
 var large_query = window.matchMedia( "(min-width: 768px)" );
 
-$(document).ready(function () 
+$("#home").ready(function () 
 {
   httpRequest(api_url+'/missions?display=1', 'GET', null, fillMissions);
   httpRequest(api_url+'/launchsites', 'GET', null, fillLaunchSites);
-  httpRequest(api_url+'/launchvehicles', 'GET', null, fillLaunchVehicles); 
+  httpRequest(api_url+'/launchvehicles', 'GET', null, fillLaunchVehicles);
 
   $("#tabs ul").on('click', 'li[id="update"]', function (e) 
   {
@@ -100,14 +100,6 @@ $(document).ready(function ()
     $(this).siblings().removeClass('active');
     $(this).addClass('active');
     httpRequest(api_url+'/missions/'+$(this).attr('id'), 'GET', null, fillProfile);
-  });
-  
-  $("#login").on('click', 'button[type=submit]', function(e)
-  {
-    e.preventDefault();
-    var formAsJSON_object = form2js('login', '.', true);
-    var formAsJSON_string = JSON.stringify(formAsJSON_object, null, 2);    
-    httpRequest(api_url+'/login', 'POST', formAsJSON_string, goHome);
   });
   
   $("#sites ul").on('click', '.slideItem li', function(e) 
@@ -193,6 +185,24 @@ $(document).ready(function ()
 
 });
 
+$("#login").ready(function()
+{
+  $("#login").on('click', 'button[type=submit]', function(e)
+  {
+    e.preventDefault();
+    var formAsJSON_object = form2js('loginForm', '.', true);
+    var formAsJSON_string = JSON.stringify(formAsJSON_object, null, 2);    
+    httpRequest(api_url+'/login', 'POST', formAsJSON_string, goHome);
+  });
+});
+
+function loadImages()
+{
+  var queryString = 'id=f4834adb-d2ba-4479-9ea5-a1c4b7077864&pl=JSN3';
+  httpRequest(api_url+'/simulator/results?'+queryString, 'GET', null, fillOutputArray);
+  
+};
+
 function httpRequest(dest, method, data, fn) 
 {  
   $.ajax({
@@ -257,18 +267,9 @@ function completeSim(data)
 {
   var obj = jQuery.parseJSON(JSON.stringify(data, null, 2));
   var queryString = obj.Mission.url.split('?')[1];
-  
-  var map = new Object();
-  var arr = queryString.split('&');
-  
-  for(var i=0;i<arr.length;i++) 
-  {
-    var pair = arr[i].split('=');
-    map[pair[0]] = pair[1];
-  }
-  
+    
   showForm();
-  window.open(domain+port+server+'/DisplayResults?id=' + map['id'] + '&pl=' + map['pl'], '_blank');
+  window.open(domain+server+'/results.php?' + queryString, '_blank');
 }
 
 function updateSuccess() 
@@ -282,6 +283,44 @@ function goHome(data)
   $.cookie("authToken", obj.Success.authToken, { expires : obj.Success.maxAge });
   
   window.location = home;
+}
+
+function fillOutputArray(data)
+{
+  var imageMap = new Object();
+  var images = data.Output.Images;
+  $.each(images, function(key,val)
+  {
+    imageMap[val.desc] = val.url;
+  });
+  
+  var content = 
+          '<div class="row">\n'+
+          '  <div class="col-sm-4"><img src="'+imageMap['globe']+'" alt="globe"/></div>\n'+
+          '  <div class="col-sm-4"><img src="'+imageMap['ground-track']+'" alt="ground-track"/></div>\n'+
+          '  <div class="col-sm-4"><img src="'+imageMap['altitude1']+'" alt="altitude1"/></div>\n'+
+          '</div>\n'+
+          '<div class="row">\n'+
+          '  <div class="col-sm-4"><img src="'+imageMap['landing']+'" alt="landing"/></div>\n'+
+          '  <div class="col-sm-4"><img src="'+imageMap['landing2']+'" alt="landing2"/></div>\n'+
+          '  <div class="col-sm-4"><img src="'+imageMap['altitude2']+'" alt="altitude2"/></div>\n'+
+          '</div>\n'+
+          '<div class="row">\n'+
+          '  <div class="col-sm-4"><img src="'+imageMap['profile1']+'" alt="profile1"/></div>\n'+
+          '  <div class="col-sm-4"><img src="'+imageMap['total-delta-v']+'" alt="total-delta-v"/></div>\n'+
+          '  <div class="col-sm-4"><img src="'+imageMap['velocity1']+'" alt="velocity1"/></div>\n'+
+          '</div>\n'+
+          '<div class="row">\n'+
+          '  <div class="col-sm-4"><img src="'+imageMap['velocity2']+'" alt="velocity2"/></div>\n'+
+          '  <div class="col-sm-4"><img src="'+imageMap['prop']+'" alt="prop"/></div>\n'+
+          '  <div class="col-sm-4"><img src="'+imageMap['phase1']+'" alt="phase1"/></div>\n'+
+          '</div>\n'+
+          '<div class="row">\n'+
+          '  <div class="col-sm-4"><img src="'+imageMap['q']+'" alt="q"/></div>\n'+
+          '</div>\n';
+  
+  $('.resultGrid').append(content);
+  
 }
 
 function fillProfile(data) 

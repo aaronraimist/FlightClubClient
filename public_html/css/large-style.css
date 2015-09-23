@@ -68,11 +68,6 @@ only screen and (min-width: 768px)  {
     content: url("../images/rocket_large.png");
   }
 
-  /* RESULTS */
-  .results td {
-    width: 33%;
-  }
-
   /* LIVE */
   .text_half  {
     font-size:18px;

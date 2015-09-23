@@ -271,7 +271,7 @@ nav li.active>a {
           transition: all 0.5s ease-in-out;  
 }
 
-.results {
+.resultGrid {
   background: #fff;
   width: 100% !important;
 }
@@ -280,12 +280,7 @@ nav li.active>a {
   margin-bottom: 0px;
 }
 
-.results td {
-  padding: 0;
-  display: inline-block;
-}
-
-.results img {
+.resultGrid img {
   width: 100%;
 }
 
