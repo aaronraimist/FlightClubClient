@@ -24,8 +24,8 @@ if(isset($_COOKIE['authToken'])) {
 
     <script src="js/jquery.cookie.js"></script>
     <script src="js/form2js.js"></script>
-    <script src='https://javascriptbase64.googlecode.com/files/base64.js' type='text/javascript'></script>
-    <script src="js/ajax_testing.js"></script>
+    <script src="js/core.js"></script>
+    <script src="js/home.js"></script>
     
     <link href='https://fonts.googleapis.com/css?family=Quicksand' rel='stylesheet' type='text/css'>
     

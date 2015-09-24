@@ -33,7 +33,8 @@
     
     <script src="js/jquery.cookie.js"></script>
     <script src="js/form2js.js"></script>
-    <script src="js/ajax_testing.js"></script>
+    <script src="js/core.js"></script>
+    <script src="js/login.js"></script>
     
     <link href='https://fonts.googleapis.com/css?family=Quicksand' rel='stylesheet' type='text/css'>
     
