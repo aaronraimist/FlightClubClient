@@ -16,15 +16,15 @@
  You should have received a copy of the GNU General Public License
  along with FlightClub.  If not, see <http://www.gnu.org/licenses/>.
  */
-/*
+
 var domain = 'http://www.decmurphy.com';
 var port = ':8080';
-var server = '/FlightSchool';
-*/
+var server = '/FlightClub';
+/*
 var domain = 'http://localhost';
 var port = ':8080';
 var server = '/FlightClub';
-
+*/
 var version = '/api/v1';
 var home = domain + server;
 var api_url = domain + port + server + version;
