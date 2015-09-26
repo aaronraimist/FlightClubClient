@@ -20,6 +20,6 @@
 $("#results").ready(function()
 {
   var queryString = window.location.href.slice(window.location.href.indexOf('?') + 1);
-  httpRequest(api_url+'/simulator/results?'+queryString, 'GET', null, fillOutputArray);
+  httpRequest(api_url+'/simulator/results?'+queryString, 'GET', null, fillOutputArray, null);
 });
 

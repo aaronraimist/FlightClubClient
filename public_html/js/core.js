@@ -34,7 +34,7 @@ var calculating = false;
 var mobile_query = window.matchMedia( "(max-width: 767px)" );
 var large_query = window.matchMedia( "(min-width: 768px)" );
 
-function httpRequest(dest, method, data, fn) 
+function httpRequest(dest, method, data, successfn, errorfn) 
 {  
   $.ajax({
       type: method,
@@ -47,9 +47,8 @@ function httpRequest(dest, method, data, fn)
       },
       headers: {
       },
-      success: fn,
-      error: function () {
-      }
+      success: successfn,
+      error: errorfn
     });
 }
 
@@ -72,7 +71,12 @@ function completeSim(data)
 
 function updateSuccess() 
 {
-  window.location = domain+server+'Success';
+  window.location = domain+server;
+}
+
+function updateError() 
+{
+  window.location = domain+server+'/error.php';
 }
 
 function goHome(data)

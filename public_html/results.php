@@ -40,10 +40,10 @@ if (isset($_GET["pl"])) {
       <nav class='navbar navbar-default'>
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class='navbar-header'>
-          <a class='navbar-brand left' href='/'><span class='glyphicon glyphicon-home'></span>  Home</a>
+          <a class='navbar-brand left' href='/FlightClub'><span class='glyphicon glyphicon-home'></span>  Home</a>
           <?php
           if ($id !== '' && $payload !== '') {
-            echo '<a class="navbar-brand left" href="/FlightClub/LiveLaunch?id=' . $id . '&pl=' . $payload . '><span class="glyphicon glyphicon-eye-open"></span>  Watch Live!</a>' . "\n";
+            echo '<a class="navbar-brand left" href="http://www.decmurphy.com:8080/FlightClub/LiveLaunch?id=' . $id . '&pl=' . $payload . '><span class="glyphicon glyphicon-eye-open"></span>  Watch Live!</a>' . "\n";
           }
           ?>
         </div>

@@ -24,6 +24,6 @@ $("#login").ready(function()
     e.preventDefault();
     var formAsJSON_object = form2js('loginForm', '.', true);
     var formAsJSON_string = JSON.stringify(formAsJSON_object, null, 2);    
-    httpRequest(api_url+'/login', 'POST', formAsJSON_string, goHome);
+    httpRequest(api_url+'/login', 'POST', formAsJSON_string, goHome, updateError);
   });
 });

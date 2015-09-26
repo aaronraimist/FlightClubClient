@@ -51,14 +51,13 @@
       <nav class="navbar navbar-default">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
-          <a class="navbar-brand left" href="javascript:history.back()"><span class="glyphicon glyphicon-home"></span>  Home</a>
+          <a class="navbar-brand left" href="/FlightClub"><span class="glyphicon glyphicon-home"></span>  Home</a>
           <span class="navbar-brand right"></span>
         </div>
       </nav>
-      <form id="loginForm" method="POST" class="vmargin1">
+      <form id="loginForm" method="POST" class="tmargin1">
         <div class="row"><div class="col-xs-4 col-sm-offset-4 col-sm-2">Username</div><div class="col-xs-7 col-sm-3"><div class="input-group"><input title="" type="text" class="form-control" value="" name="Login.username"/></div></div></div>
         <div class="row"><div class="col-xs-4 col-sm-offset-4 col-sm-2">Password</div><div class="col-xs-7 col-sm-3"><div class="input-group"><input title="" type="password" class="form-control" value="" name="Login.password"/></div></div></div>
-        <div class="row"><div class="col-sm-offset-4 col-sm-4"><input type="checkbox" name="rememberMe" value="false"/>Remember Me?</div></div>
         <div class="row"><div class="col-sm-offset-4 col-sm-4"><button type="submit" class="btn btn-default"><span class="fa fa-play fa-2x"></span></button></div></div>
       </form>
     </div>

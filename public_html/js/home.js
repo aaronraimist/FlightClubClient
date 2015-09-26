@@ -19,9 +19,9 @@
 
 $("#home").ready(function () 
 {
-  httpRequest(api_url+'/missions?display=1', 'GET', null, fillMissions);
-  httpRequest(api_url+'/launchsites', 'GET', null, fillLaunchSites);
-  httpRequest(api_url+'/launchvehicles', 'GET', null, fillLaunchVehicles);
+  httpRequest(api_url+'/missions?display=1', 'GET', null, fillMissions, null);
+  httpRequest(api_url+'/launchsites', 'GET', null, fillLaunchSites, null);
+  httpRequest(api_url+'/launchvehicles', 'GET', null, fillLaunchVehicles, null);
 
   $("#tabs ul").on('click', 'li[id="update"]', function (e) 
   {
@@ -34,7 +34,7 @@ $("#home").ready(function ()
     e.preventDefault();
     var formAsJSON_object = form2js('submitForm', '.', true);
     var formAsJSON_string = JSON.stringify(formAsJSON_object, null, 2);    
-    httpRequest(api_url+'/missions', 'PUT', formAsJSON_string, updateSuccess);
+    httpRequest(api_url+'/missions', 'PUT', formAsJSON_string, updateSuccess, updateError);
   });
   
   $("#tabs ul").on('click', 'li[id="copy"]', function (e) 
@@ -48,7 +48,7 @@ $("#home").ready(function ()
     e.preventDefault();
     var formAsJSON_object = form2js('submitForm', '.', true);
     var formAsJSON_string = JSON.stringify(formAsJSON_object, null, 2);    
-    httpRequest(api_url+'/missions/new', 'PUT', formAsJSON_string, updateSuccess);
+    httpRequest(api_url+'/missions/new', 'PUT', formAsJSON_string, updateSuccess, updateError);
   });
   
   $('#tabs ul').on('click', 'li[id="logout"]', function(e)
@@ -62,7 +62,7 @@ $("#home").ready(function ()
     e.preventDefault();
     var formAsJSON_object = form2js('submitForm', '.', true);
     var formAsJSON_string = JSON.stringify(formAsJSON_object, null, 2);    
-    httpRequest(api_url+'/missions', 'DELETE', formAsJSON_string, updateSuccess);
+    httpRequest(api_url+'/missions', 'DELETE', formAsJSON_string, updateSuccess, updateError);
   });
   
   $("#tabs ul").on('click', 'li[id="launch"]', function (e) 
@@ -72,7 +72,7 @@ $("#home").ready(function ()
     $("#copyInfo").fadeOut(100);
     var formAsJSON_object = form2js('submitForm', '.', true);
     var formAsJSON_string = JSON.stringify(formAsJSON_object, null, 2);    
-    httpRequest(api_url+'/simulator/new', 'POST', formAsJSON_string, completeSim);
+    httpRequest(api_url+'/simulator/new', 'POST', formAsJSON_string, completeSim, null);
     calculating = true;
     resetRocket();
     animate_rocket(30);
@@ -82,7 +82,7 @@ $("#home").ready(function ()
   {
     $(this).siblings().removeClass('active');
     $(this).addClass('active');
-    httpRequest(api_url+'/missions/'+$(this).attr('id'), 'GET', null, fillProfile);
+    httpRequest(api_url+'/missions/'+$(this).attr('id'), 'GET', null, fillProfile, null);
   });
   
   $("#sites ul").on('click', '.slideItem li', function(e) 
