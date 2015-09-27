@@ -12,7 +12,7 @@ if (isset($_GET["pl"])) {
 <!doctype html>
 <html>
   <head>
-    <title>Jason-3 Results</title>
+    <title></title>
     <meta charset='UTF-8'>
     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
     <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js'></script>
@@ -43,11 +43,11 @@ if (isset($_GET["pl"])) {
           <a class='navbar-brand left' href='/FlightClub'><span class='glyphicon glyphicon-home'></span>  Home</a>
           <?php
           if ($id !== '' && $payload !== '') {
-            echo '<a class="navbar-brand left" href="http://www.decmurphy.com:8080/FlightClub/LiveLaunch?id=' . $id . '&pl=' . $payload . '"><span class="glyphicon glyphicon-eye-open"></span>  Watch Live!</a>' . "\n";
+            echo '<a class="navbar-brand left" href="localhost:8080/FlightClub/LiveLaunch?id=' . $id . '&pl=' . $payload . '"><span class="glyphicon glyphicon-eye-open"></span>  Watch Live!</a>' . "\n";
           }
           ?>
         </div>
-        <span class='navbar-brand right'>Jason-3 Results</span>
+        <span id="missionTag" class='navbar-brand right'></span>
       </nav>
       <div class="resultGrid">
       </div>

@@ -16,15 +16,15 @@
  You should have received a copy of the GNU General Public License
  along with FlightClub.  If not, see <http://www.gnu.org/licenses/>.
  */
-
+/*
 var domain = 'http://www.decmurphy.com';
 var port = ':8080';
 var server = '/FlightClub';
-/*
+*/
 var domain = 'http://localhost';
 var port = ':8080';
 var server = '/FlightClub';
-*/
+
 var version = '/api/v1';
 var home = domain + server;
 var api_url = domain + port + server + version;
@@ -89,13 +89,17 @@ function goHome(data)
 
 function fillOutputArray(data)
 {
+  var title = data.Mission.description;
+  $(document).prop('title', title);
+  $("#missionTag").append(title + ' Results');
+  
   var imageMap = new Object();
-  var images = data.Output.Images;
+  var images = data.Mission.Output.Images;
   $.each(images, function(key,val)
   {
     imageMap[val.desc] = val.url;
   });
-  
+    
   var content = 
           '<div class="row">\n'+
           '  <div class="col-sm-4"><img src="'+imageMap['globe']+'" alt="globe"/></div>\n'+
