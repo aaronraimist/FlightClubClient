@@ -68,7 +68,6 @@ if(isset($_COOKIE['authToken'])) {
                       <?php
                       if(isset($token) && $token !== '') {
                         echo '<li id="logout" class="hidden-xs right"><a href="#"><span class="fa fa-sign-out"></span></a></li>'."\n";
-                        echo '<li id="remove" class="hidden-xs right"><a href="#"><span class="fa fa-remove"></span></a></li>'."\n";
                         echo '<li id="copy" class="hidden-xs right"><a href="#"><span class="fa fa-copy"></span></a></li>'."\n";
                         echo '<li id="update" class="hidden-xs right"><a href="#"><span class="fa fa-save"></span></a></li>'."\n";
                       }
@@ -132,6 +131,12 @@ if(isset($_COOKIE['authToken'])) {
                 <div class="col-xs-6">Launch Time (UTC)</div>
                 <div class="col-xs-6">
                   <div class="input-group"><input type="text" name="Mission.time" class="form-control" value=""/></div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xs-6">Display</div>
+                <div class="col-xs-6">
+                  <div class="input-group"><select name="Mission.display" class="form-control"><option value="true">On</option><option value="false">Off</option></select></select></div>
                 </div>
               </div>
               <div class="row">

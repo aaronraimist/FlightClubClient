@@ -139,6 +139,7 @@ function fillProfile(data)
   $("input[name='Mission.time']").val(mission.time);
   $("select[name='Mission.launchvehicle']").val(mission.launchvehicle);
   $("select[name='Mission.launchsite']").val(mission.launchsite);
+  $("select[name='Mission.display']").val(mission.display+'');
   
   var item = $('#sites li[id="'+mission.launchsite+'"]');
   item.siblings().removeClass("active");

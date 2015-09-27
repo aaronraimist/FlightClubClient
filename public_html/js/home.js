@@ -19,7 +19,9 @@
 
 $("#home").ready(function () 
 {
-  httpRequest(api_url+'/missions?display=1', 'GET', null, fillMissions, null);
+  var token = $.cookie('authToken');
+  var display = token===undefined ? '?display=1' : '';
+  httpRequest(api_url+'/missions'+display, 'GET', null, fillMissions, null);
   httpRequest(api_url+'/launchsites', 'GET', null, fillLaunchSites, null);
   httpRequest(api_url+'/launchvehicles', 'GET', null, fillLaunchVehicles, null);
 
@@ -31,7 +33,6 @@ $("#home").ready(function ()
   
   $('#saveInfo').on('click', 'span', function(e)
   {
-    e.preventDefault();
     var formAsJSON_object = form2js('submitForm', '.', true);
     var formAsJSON_string = JSON.stringify(formAsJSON_object, null, 2);    
     httpRequest(api_url+'/missions', 'PUT', formAsJSON_string, updateSuccess, updateError);
@@ -45,7 +46,6 @@ $("#home").ready(function ()
   
   $('#copyInfo').on('click', 'span', function(e)
   {
-    e.preventDefault();
     var formAsJSON_object = form2js('submitForm', '.', true);
     var formAsJSON_string = JSON.stringify(formAsJSON_object, null, 2);    
     httpRequest(api_url+'/missions/new', 'PUT', formAsJSON_string, updateSuccess, updateError);
@@ -57,17 +57,8 @@ $("#home").ready(function ()
     location.reload();
   });
   
-  $("#tabs ul").on('click', 'li[id="remove"]', function (e) 
-  {
-    e.preventDefault();
-    var formAsJSON_object = form2js('submitForm', '.', true);
-    var formAsJSON_string = JSON.stringify(formAsJSON_object, null, 2);    
-    httpRequest(api_url+'/missions', 'DELETE', formAsJSON_string, updateSuccess, updateError);
-  });
-  
   $("#tabs ul").on('click', 'li[id="launch"]', function (e) 
   {
-    e.preventDefault();
     $("#saveInfo").fadeOut(100);
     $("#copyInfo").fadeOut(100);
     var formAsJSON_object = form2js('submitForm', '.', true);
