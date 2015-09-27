@@ -61,7 +61,7 @@ function httpRequest(dest, method, data, successfn, errorfn)
 function completeSim(data) 
 {
   var obj = jQuery.parseJSON(JSON.stringify(data, null, 2));
-  var queryString = obj.Mission.url.split('?')[1];
+  var queryString = obj.Mission.output.split('?')[1];
     
   calculating = false;
   $(".bg").css('z-index', -1000);
@@ -89,7 +89,7 @@ function goHome(data)
 
 function fillOutputArray(data)
 {
-  var title = data.Mission.description;
+  var title = data.Mission.desc;
   $(document).prop('title', title);
   $("#missionTag").append(title + ' Results');
   
