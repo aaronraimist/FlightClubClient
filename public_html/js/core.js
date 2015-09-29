@@ -66,17 +66,28 @@ function completeSim(data)
   calculating = false;
   $(".bg").css('z-index', -1000);
   $(".progress-container").css('z-index', -2000);
-  window.open(domain+server+'/results.php?' + queryString, '_blank');
+  window.open(home+'/results.php?' + queryString, '_blank');
+}
+
+function errorSim(data)
+{
+  var errors = data.responseJSON.Mission.errors;
+  var errorsHash = window.btoa(errors);
+  
+  calculating = false;
+  $(".bg").css('z-index', -1000);
+  $(".progress-container").css('z-index', -2000);
+  window.open(home+'/error.php#'+errorsHash, '_blank');
 }
 
 function updateSuccess() 
 {
-  window.location = domain+server;
+  window.location = home;
 }
 
 function updateError() 
 {
-  window.location = domain+server+'/error.php';
+  window.location = home+'/error.php';
 }
 
 function goHome(data)
@@ -84,7 +95,7 @@ function goHome(data)
   var obj = jQuery.parseJSON(JSON.stringify(data, null, 2));
   $.cookie("authToken", obj.Success.authToken, { expires : obj.Success.maxAge });
   
-  window.location = home;
+  updateSuccess();
 }
 
 function fillOutputArray(data)

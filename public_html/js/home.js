@@ -63,7 +63,8 @@ $("#home").ready(function ()
     $("#copyInfo").fadeOut(100);
     var formAsJSON_object = form2js('submitForm', '.', true);
     var formAsJSON_string = JSON.stringify(formAsJSON_object, null, 2);
-    httpRequest(api_url+'/simulator/new', 'POST', formAsJSON_string, completeSim, null);
+    console.log(formAsJSON_string);
+    httpRequest(api_url+'/simulator/new', 'POST', formAsJSON_string, completeSim, errorSim);
     calculating = true;
     resetRocket();
     animate_rocket(30);

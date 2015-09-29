@@ -304,6 +304,16 @@ nav li.active>a {
 .bmargin3 { margin-bottom: 15%; }
 .bmargin4 { margin-bottom: 20%; }
 
+.tpadding1 { padding-top: 5%; }
+.tpadding2 { padding-top: 10%; }
+.tpadding3 { padding-top: 15%; }
+.tpadding4 { padding-top: 20%; }
+
+.bpadding1 { padding-bottom: 5%; }
+.bpadding2 { padding-bottom: 10%; }
+.bpadding3 { padding-bottom: 15%; }
+.bpadding4 { padding-bottom: 20%; }
+
 .rborder { border-right:1px solid #fff}
 .lborder { border-left:1px solid #fff}
 .tborder { border-top:1px solid #fff}

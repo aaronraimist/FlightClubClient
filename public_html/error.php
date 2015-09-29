@@ -15,6 +15,9 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
     
     <link href='https://fonts.googleapis.com/css?family=Quicksand' rel='stylesheet' type='text/css'>
+
+    <script src="js/core.js"></script>
+    <script src="js/error.js"></script>   
     
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="css/mobile-style.css" />
@@ -22,7 +25,7 @@
 
     <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
   </head>
-  <body id="results">
+  <body id="error">
     <div class="bg">
       <img src="images/background.jpg" alt="background" />
     </div>
@@ -34,7 +37,9 @@
       </div>
     </nav>
     <div class="text_white text_full centre tmargin2">
-      Error!
+      <span class="bborder">Error!</span>
+      <div id="errorText" class="tpadding1 text_half">
+      </div>
     </div>
   </body>
 </html>
