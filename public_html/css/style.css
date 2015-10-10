@@ -283,6 +283,12 @@ nav li.active>a {
 .resultGrid img {
   width: 100%;
 }
+  
+  #live img {
+    display:block;
+    width: 100% !important;
+    height: auto !important;
+  }
 
 /* FOOTER */
 .footer {

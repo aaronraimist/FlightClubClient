@@ -43,7 +43,7 @@ if (isset($_GET["pl"])) {
           <a class='navbar-brand left' href='/FlightClub'><span class='glyphicon glyphicon-home'></span>  Home</a>
           <?php
           if ($id !== '' && $payload !== '') {
-            echo '<a class="navbar-brand left" href="http://www.decmurphy.com:8080/FlightClub/LiveLaunch?id=' . $id . '&pl=' . $payload . '"><span class="glyphicon glyphicon-eye-open"></span>  Watch Live!</a>' . "\n";
+            echo '<a class="navbar-brand left" href="live.php?id=' . $id . '&pl=' . $payload . '"><span class="glyphicon glyphicon-eye-open"></span>  Watch Live!</a>' . "\n";
           }
           ?>
         </div>
