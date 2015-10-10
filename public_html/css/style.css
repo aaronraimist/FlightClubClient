@@ -284,11 +284,11 @@ nav li.active>a {
   width: 100%;
 }
   
-  #live img {
-    display:block;
-    width: 100% !important;
-    height: auto !important;
-  }
+.liveInfo img {
+  display:block;
+  width: 100% !important;
+  height: auto !important;
+}
 
 /* FOOTER */
 .footer {

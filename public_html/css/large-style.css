@@ -75,6 +75,10 @@ only screen and (min-width: 768px)  {
   .text_full  {
     font-size:36px; /* Actually 1.5x */
   }
+  
+  .textBox {
+    margin-top: 150px;
+  }
 
   #clock, #velocity, #altitude {
     margin-top:20px;
