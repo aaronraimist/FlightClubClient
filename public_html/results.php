@@ -46,11 +46,11 @@ if (isset($_GET["pl"])) {
             <span class="fa fa-bars"></span>
           </button>
           <ul class="dropdown-menu" aria-labelledby="dropdownBars">
-            <li class="right"><a class='navbar-brand' href='#'>Flight Log   <span class='fa fa-rocket'></span></a></li>
-            <li class="right"><a class='navbar-brand' href='#'>Warnings   <span class='fa fa-warning'></span></a></li>
+            <li class="right"><a class='navbar-brand' href='#'><span class='fa fa-rocket'>Flight Log</span></a></li>
+            <li class="right"><a class='navbar-brand' href='#'><span class='fa fa-warning'>Warnings</span></a></li>
             <?php
             if ($id !== '' && $payload !== '') {
-              echo '<li class="right"><a class="navbar-brand left" href="live.php?id=' . $id . '&pl=' . $payload . '">Watch Live!<span class="glyphicon glyphicon-eye-open"></span></a></li>' . "\n";
+              echo '<li class="right"><a class="navbar-brand left" href="live.php?id=' . $id . '&pl=' . $payload . '"><span class="fa fa-eye">Watch Live</span></a></li>' . "\n";
             }
             ?>
           </ul>            

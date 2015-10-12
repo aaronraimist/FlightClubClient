@@ -100,9 +100,9 @@ function goHome(data)
 
 function fillOutputArray(data)
 {
-  var title = data.Mission.desc;
+  var title = data.Mission.desc + ' Results';
   $(document).prop('title', title);
-  $("#missionTag").append(title + ' Results');
+  $("#missionTag").append(title);
   
   var imageMap = new Object();
   var images = data.Mission.Output.Images;

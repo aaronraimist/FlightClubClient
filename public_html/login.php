@@ -51,8 +51,7 @@
       <nav class="navbar navbar-default">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
-          <a class="navbar-brand left" href="/FlightClub"><span class="glyphicon glyphicon-home"></span>  Home</a>
-          <span class="navbar-brand right"></span>
+          <a class="navbar-brand left" href="#"><span>Login</span></a>
         </div>
       </nav>
       <form id="loginForm" method="POST" class="tmargin1">

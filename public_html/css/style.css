@@ -279,9 +279,35 @@ nav li.active>a {
 #results .navbar {
   margin-bottom: 0px;
 }
+  
+#results .dropdown {
+  padding: 8px;
+}
 
 .resultGrid img {
   width: 100%;
+}
+
+#results .dropdown-menu li {
+  width: 100%;
+}
+
+#results .dropdown-menu li>a {
+  border: none;
+  width: 100%;  
+}
+
+#results .dropdown-menu .fa:before {
+  padding: 4px;
+}
+
+#results .dropdown-menu {
+  border-radius: 6px;
+}
+
+#results .dropdown-menu li>a:hover {
+  border: 1px solid white;
+  color: black !important;
 }
   
 .liveInfo img {

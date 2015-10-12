@@ -25,12 +25,14 @@ $("#home").ready(function ()
   httpRequest(api_url+'/launchsites', 'GET', null, fillLaunchSites, null);
   httpRequest(api_url+'/launchvehicles', 'GET', null, fillLaunchVehicles, null);
 
+  // Open "extra info" dialog box on click of "save" button
   $("#tabs ul").on('click', 'li[id="update"]', function (e) 
   {
     $("#copyInfo").fadeOut(500);
     $("#saveInfo").fadeToggle(500);
   });
   
+  // Commit "save" dialog box
   $('#saveInfo').on('click', 'span', function(e)
   {
     var formAsJSON_object = form2js('submitForm', '.', true);
@@ -38,12 +40,14 @@ $("#home").ready(function ()
     httpRequest(api_url+'/missions', 'PUT', formAsJSON_string, updateSuccess, updateError);
   });
   
+  // Open "extra info" dialog box on click of "copy" button
   $("#tabs ul").on('click', 'li[id="copy"]', function (e) 
   {
     $("#saveInfo").fadeOut(500);
     $("#copyInfo").fadeToggle(500);
   });
   
+  // Commit "copy" dialog box
   $('#copyInfo').on('click', 'span', function(e)
   {
     var formAsJSON_object = form2js('submitForm', '.', true);
@@ -51,16 +55,19 @@ $("#home").ready(function ()
     httpRequest(api_url+'/missions/new', 'PUT', formAsJSON_string, updateSuccess, updateError);
   });
   
+  // Log out user, remove authToken cookie
   $('#tabs ul').on('click', 'li[id="logout"]', function(e)
   {
     $.removeCookie('authToken');
     location.reload();
   });
   
+  // Run launch profile on the Simulator, show the loading screen
   $("#tabs ul").on('click', 'li[id="launch"]', function (e) 
   {
     $("#saveInfo").fadeOut(100);
     $("#copyInfo").fadeOut(100);
+    $('.row-offcanvas').removeClass('active');
     var formAsJSON_object = form2js('submitForm', '.', true);
     var formAsJSON_string = JSON.stringify(formAsJSON_object, null, 2);
     console.log(formAsJSON_string);
@@ -70,6 +77,7 @@ $("#home").ready(function ()
     animate_rocket(30);
   });
   
+  // Load mission profile when a mission is chosen by user
   $("#head ul").on('click', 'li', function(e) 
   {
     $(this).siblings().removeClass('active');
@@ -77,6 +85,8 @@ $("#home").ready(function ()
     httpRequest(api_url+'/missions/'+$(this).attr('id'), 'GET', null, fillProfile, null);
   });
   
+  // select launchsite manually on click
+  // - doesn't happen automatically because of custom list
   $("#sites ul").on('click', '.slideItem li', function(e) 
   {
     $(this).siblings().removeClass('active');
@@ -84,6 +94,8 @@ $("#home").ready(function ()
     $("select[name='Mission.launchsite']").val($(this).attr('id'));
   });
   
+  // select launchvehicle manually on click
+  // - doesn't happen automatically because of custom list
   $("#vehicles ul").on('click', '.slideItem li', function(e) 
   {
     $(this).siblings().removeClass('active');
@@ -97,6 +109,7 @@ $("#home").ready(function ()
     e.preventDefault();
   });
 
+  // add new burn item
   $(document).on('click', 'div[id^=burns] .addbutton', function(e)
   {
     var burnsTab = $(this).closest('div[id^=burns]');
@@ -110,6 +123,7 @@ $("#home").ready(function ()
     addBurnItem(parent, burnPre, 'newBurn');
   });
 
+  // add new course correction item
   $(document).on('click', 'div[id^=course] .addbutton', function(e)
   {
     var courseTab = $(this).closest('div[id^=course]');
@@ -123,15 +137,18 @@ $("#home").ready(function ()
     addCourseItem(parent, coursePre, 'newCourse');
   });
   
+  // remove button for burn and course correction items
   $(document).on('click', '.removebutton', function(e) {
     e.preventDefault();
     $(this).closest('li').remove();
   });
   
+  // off canvas menu for mobile. button not visible on desktop
   $("[data-toggle='offcanvas']").click(function () {
     $('.row-offcanvas').toggleClass('active');
   });
 
+  // only show one item at a time in burn and course correction lists
   $(document).on('click', '.slideList>li', function (e) {
      
     if ($(e.target).is('.slideItem *'))
@@ -149,14 +166,20 @@ $("#home").ready(function ()
     $(this).siblings().children('ul').slideUp(); // Hide all li siblings child ul's
   });
 
+  // initially hide launchsite and launchvehicle lists on mobile
+  // maybe should only show one at a time like above?
   if (mobile_query.matches) {
     $("#core").find('.slideItem').hide();
   }
 
+  // fill burn and course correction item names when tag field is filled in
   $(document).on('keyup', 'input[name$=tag]', function() {
     var elem = $(this);
     elem.closest('.slideItem').siblings('span').first().text(elem.val());
   });
+  
+  // blur out course correction fields depending on which ones are filled in
+  
 
 });
 

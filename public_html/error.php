@@ -32,8 +32,7 @@
     <nav class="navbar navbar-default">
       <!-- Brand and toggle get grouped for better mobile display -->
       <div class="navbar-header">
-        <a class="navbar-brand left" href="/FlightClub"><span class="glyphicon glyphicon-home"></span>  Home</a>
-        <span class="navbar-brand right"></span>
+        <a class="navbar-brand left" href="#"><span>Error</span></a>
       </div>
     </nav>
     <div class="text_white text_full centre tmargin2">

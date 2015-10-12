@@ -1,3 +1,9 @@
+<?php
+$payload = '';
+if (isset($_GET["pl"])) {
+  $payload = $_GET["pl"];
+}
+?>
 
 <!doctype html>
 <html>
@@ -27,8 +33,7 @@
       <nav class="navbar navbar-default">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
-          <a class="navbar-brand left" href="http://www.decmurphy.com/FlightClub"><span class="glyphicon glyphicon-home"></span>  Home</a>
-          <span class="navbar-brand right"></span>
+          <a class="navbar-brand left" href="#"><span>LiveLaunch</span></a></li>
         </div>
       </nav>
       <div class='textBox text_full centre live-info'>
