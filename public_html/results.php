@@ -20,6 +20,7 @@ if (isset($_GET["pl"])) {
     <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css'>
     <!-- Optional theme -->
     <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css'>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     <!-- Latest compiled and minified JavaScript -->
     <script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js'></script>
     <link href='https://fonts.googleapis.com/css?family=Quicksand' rel='stylesheet' type='text/css'>
@@ -39,13 +40,20 @@ if (isset($_GET["pl"])) {
     <div class='container'>
       <nav class='navbar navbar-default'>
         <!-- Brand and toggle get grouped for better mobile display -->
-        <div class='navbar-header'>
-          <a class='navbar-brand left' href='/FlightClub'><span class='glyphicon glyphicon-home'></span>  Home</a>
-          <?php
-          if ($id !== '' && $payload !== '') {
-            echo '<a class="navbar-brand left" href="live.php?id=' . $id . '&pl=' . $payload . '"><span class="glyphicon glyphicon-eye-open"></span>  Watch Live!</a>' . "\n";
-          }
-          ?>
+        <span id="missionTag" class='navbar-brand left'></span>
+        <div class="dropdown pull-right right">
+          <button class="btn btn-default dropdown-toggle" type="button" id="dropdownBars" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            <span class="fa fa-bars"></span>
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="dropdownBars">
+            <li class="right"><a class='navbar-brand' href='#'>Flight Log   <span class='fa fa-rocket'></span></a></li>
+            <li class="right"><a class='navbar-brand' href='#'>Warnings   <span class='fa fa-warning'></span></a></li>
+            <?php
+            if ($id !== '' && $payload !== '') {
+              echo '<li class="right"><a class="navbar-brand left" href="live.php?id=' . $id . '&pl=' . $payload . '">Watch Live!<span class="glyphicon glyphicon-eye-open"></span></a></li>' . "\n";
+            }
+            ?>
+          </ul>            
         </div>
         <span id="missionTag" class='navbar-brand right'></span>
       </nav>
