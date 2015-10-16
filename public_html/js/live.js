@@ -198,8 +198,8 @@ function refreshTelemetry(launchDate)
 
 function updateScreen(data) {
 
-  $("#velocity").html(data.Stages[1].Telemetry.vel + ' M/S');
-  $("#altitude").html(data.Stages[1].Telemetry.alt + ' KM');
+  $("#velocity").html('VEL: ' + data.Stages[1].Telemetry.vel + ' M/S');
+  $("#altitude").html('ALT: ' + data.Stages[1].Telemetry.alt + ' KM');
 
   $("#boost").attr('src', data.Stages[0].Plots.url);
   $("#upper").attr('src', data.Stages[1].Plots.url);
