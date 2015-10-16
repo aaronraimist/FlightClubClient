@@ -214,6 +214,16 @@ function fillProfile(data)
       $("select[name='"+corrPre+"Attitude.gt']").val(corrVal.Attitude.gt);
       $("input[name='"+corrPre+"Attitude.throttle']").val(corrVal.Attitude.throttle);
       
+      if(corrVal.Attitude.pitch !== undefined) {
+        $("input[name='"+corrPre+"Attitude.pitch']").trigger('keyup');
+      } else if(corrVal.Attitude.yaw !== undefined) {
+        $("input[name='"+corrPre+"Attitude.yaw']").trigger('keyup');
+      } else if(corrVal.Attitude.gt !== undefined) {
+        $("select[name='"+corrPre+"Attitude.gt']").trigger('keyup');
+      } else if(corrVal.Attitude.throttle !== undefined) {
+        $("input[name='"+corrPre+"Attitude.throttle']").trigger('keyup');        
+      }
+      
     });
     
   });
@@ -355,7 +365,7 @@ function addStageTabPane(parent, id)
           + '                <div id="burns-'+id+'" class="col-sm-4 rborder_large">'
           + '                  <div class="header col-xs-12">'
           + '                    <div class="col-xs-9">Burns</div>'
-          + '                    <div class="col-xs-3"><span class="addbutton fa fa-plus"></span></div>'
+          + '                    <div class="addbutton col-xs-3"><span class="fa fa-plus"></span></div>'
           + '                  </div>'
           + '                  <hr>'
           + '                  <nav class="col-xs-12">'
@@ -366,7 +376,7 @@ function addStageTabPane(parent, id)
           + '                <div id="course-'+id+'" class="col-sm-4">'
           + '                  <div class="header col-xs-12">'
           + '                    <div class="col-xs-9">Corrections</div>'
-          + '                    <div class="col-xs-3"><span class="addbutton fa fa-plus"></span></div>'
+          + '                    <div class="addbutton col-xs-3"><span class="fa fa-plus"></span></div>'
           + '                  </div>'
           + '                  <hr>'
           + '                  <nav class="col-xs-12">'

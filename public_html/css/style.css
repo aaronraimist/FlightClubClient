@@ -162,6 +162,16 @@ nav li.active>a {
   width: 100%;
 }
 
+select {
+  cursor: pointer !important;
+}
+
+input:disabled, select:disabled {
+  background: transparent !important;
+  border: none;
+  cursor: default !important;
+}
+
 .form-control {
   color: #000;
 }
@@ -208,9 +218,14 @@ nav li.active>a {
   border: none;
 }
 
+.addbutton:hover,
+.removebutton:hover {
+  color: #507B90 !important;
+}
+
 .header {
-  border: 1px solid #507B90;
-  background: #507B90;
+  border: 1px solid #1F3F54;
+  background: #1F3F54;
   border-radius: 4px;
   float: left;
 }

@@ -177,9 +177,46 @@ $("#home").ready(function ()
     var elem = $(this);
     elem.closest('.slideItem').siblings('span').first().text(elem.val());
   });
-  
+
   // blur out course correction fields depending on which ones are filled in
-  
+  $(document).on('click', 'div[id^=course] .slideItem ul .input-group', function() {
+    $(this).trigger('keyup');
+  });
+
+  // blur out course correction fields depending on which ones are filled in
+  $(document).on('keyup', 'div[id^=course] .slideItem ul .input-group', function() {
+    var focus = $(this).children().first();
+    var list = $(this).closest('ul');
+
+    var text = focus.val();
+    if(text === '') {
+      text = $(list).find(":selected").text();
+    }
+    
+    if(text === '')
+    {
+      $(list).find('select').prop('disabled', false);
+      $(list).find('input').each(function() {
+        $(this).prop('disabled', false);
+      });
+    }
+    else
+    {
+      var name = focus.attr('name');
+      if(name.match('pitch$') || name.match('yaw')) {
+        $(list).find('select[name$=gt]').prop('disabled', true);
+        $(list).find('input[name$=throttle]').prop('disabled', true);
+      } else if(name.match('gt$')) {
+        $(list).find('input[name$=pitch]').prop('disabled', true);
+        $(list).find('input[name$=yaw]').prop('disabled', true);
+        $(list).find('input[name$=throttle]').prop('disabled', true);        
+      } else if(name.match('throttle$')) {
+        $(list).find('input[name$=pitch]').prop('disabled', true);
+        $(list).find('input[name$=yaw]').prop('disabled', true);
+        $(list).find('select[name$=gt]').prop('disabled', true);  
+      }
+    }
+  });  
 
 });
 
