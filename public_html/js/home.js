@@ -175,16 +175,21 @@ $("#home").ready(function ()
       text = $(list).find(":selected").text();
     }
     
+    var name = focus.attr('name');
     if(text === '')
     {
-      $(list).find('select').prop('disabled', false);
-      $(list).find('input').each(function() {
-        $(this).prop('disabled', false);
-      });
+      if(name.match('gt$') || name.match('throttle$')
+          || (name.match('pitch$') && $(list).find('input[name$=yaw]').val() === '')
+          || (name.match('yaw') && $(list).find('input[name$=pitch]').val() === '')
+        ) {
+        $(list).find('select').prop('disabled', false);
+        $(list).find('input').each(function() {
+          $(this).prop('disabled', false);
+        });
+      }
     }
     else
     {
-      var name = focus.attr('name');
       if(name.match('pitch$') || name.match('yaw')) {
         $(list).find('select[name$=gt]').prop('disabled', true);
         $(list).find('input[name$=throttle]').prop('disabled', true);
