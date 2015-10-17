@@ -98,9 +98,14 @@ $("#home").ready(function ()
   // - doesn't happen automatically because of custom list
   $("#vehicles ul").on('click', '.slideItem li', function(e) 
   {
+    var oldCode = $(this).parent().find('li.active').attr('id');
+
     $(this).siblings().removeClass('active');
     $(this).addClass("active");
     $("select[name='Mission.launchvehicle']").val($(this).attr('id'));
+    
+    var newCode = $(this).attr('id');
+    correctTabsForVehicle(oldCode, newCode);
   });
   
   $("#tab-content").on('click', 'button', function(e)
@@ -244,5 +249,46 @@ function resetRocket() {
   var newW = -1*rocketWidth/2.0;
   $("#rocket").removeAttr('style');
   $("#rocket").css('marginLeft', newW + 'px');
+  
+}
+
+function numStagesPerVehicle(vehicle) {
+  
+  switch (vehicle) {
+    case 'FNH':
+      return 3;
+    case 'F1A':
+    case 'F1C':
+    case 'FN9':
+    case 'F91':
+    case 'F92':
+      return 2;
+    default:
+      return -1;
+  }
+}
+
+function correctTabsForVehicle(oldCode, newCode) {
+  
+  var newNum = numStagesPerVehicle(newCode);
+  var oldNum = numStagesPerVehicle(oldCode);
+  
+  if(newNum > oldNum)
+  {
+    for(var i=0;i<newNum-oldNum;i++) {
+      // Tab for this stage
+      var key = oldNum + i;
+      $("#tabs ul.nav li[id='info']").before('<li id="tab-'+key+'"><a href="#stage-'+key+'" role="tab" data-toggle="tab">'+(key+1)+'</a></li>');
+      addStageTabPane($("#tab-content"), key);
+    }
+  }
+  else if(newNum < oldNum)
+  {
+    for(var i=0;i<oldNum-newNum;i++) {
+      var key = newNum + i;
+      $("#tabs").find("#tab-"+key).first().remove();
+      $("#tab-content").find("#stage-"+key).first().remove();
+    }
+  }
   
 }
