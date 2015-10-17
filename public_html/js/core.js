@@ -177,6 +177,7 @@ function fillOutputArray(data)
     content += '</ul>';
 
     $('.warnings').append(content);
+    $('.warnings .slideTag').append(' ('+(warnings.length-1)+')');
   });
   
   var telemetryFile = fileMap['telemetry'];

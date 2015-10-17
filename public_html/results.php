@@ -49,6 +49,11 @@ if (isset($_GET["pl"])) {
         </nav>
         <div id="resultsOffCanvas" class="col-xs-9 col-sm-3 sidebar-offcanvas">
           <ul class="slideList nav nav-pills nav-stacked">
+            <?php
+            if ($id !== '' && $payload !== '') {
+              echo '<li id="watchButton" class="col-xs-12"><a href="live.php?id=' . $id . '&pl=' . $payload . '"><span>Watch Live</span></a></li>' . "\n";
+            }
+            ?>
             <li class="col-xs-12 warnings"><span class="col-xs-10 slideTag">Warnings</span></li>
             <li class="col-xs-12 events"><span class="col-xs-10 slideTag">Event Log</span></li>
             <li class="col-xs-12 landing"><span class="col-xs-10 slideTag">Landing</span></li>

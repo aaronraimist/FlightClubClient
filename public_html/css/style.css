@@ -302,6 +302,15 @@ input:disabled, select:disabled {
 #results .slideItem {
   padding: 0px;
 }
+
+#watchButton {
+  margin-bottom: 2%;
+}
+
+#watchButton a {
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
   
 .liveInfo img {
   display:block;
