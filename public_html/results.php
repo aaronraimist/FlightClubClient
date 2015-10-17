@@ -38,26 +38,25 @@ if (isset($_GET["pl"])) {
       <img src='images/background.jpg' alt='background' />
     </div>
     <div class='container'>
-      <nav class='navbar navbar-default'>
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <span id="missionTag" class='navbar-brand left'></span>
-        <div class="dropdown pull-right right">
-          <button class="btn btn-default dropdown-toggle" type="button" id="dropdownBars" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-            <span class="fa fa-bars"></span>
-          </button>
-          <ul class="dropdown-menu" aria-labelledby="dropdownBars">
-            <li class="right"><a class='navbar-brand' href='#'><span class='fa fa-rocket'>Flight Log</span></a></li>
-            <li class="right"><a class='navbar-brand' href='#'><span class='fa fa-warning'>Warnings</span></a></li>
-            <?php
-            if ($id !== '' && $payload !== '') {
-              echo '<li class="right"><a class="navbar-brand left" href="live.php?id=' . $id . '&pl=' . $payload . '"><span class="fa fa-eye">Watch Live</span></a></li>' . "\n";
-            }
-            ?>
-          </ul>            
+      <div class="row row-offcanvas row-offcanvas-right vfill">
+        <nav class='navbar navbar-default'>
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <span id="missionTag" class='lmargin0 navbar-brand'></span>
+          <div class="right rmargin0 navbar-brand" data-toggle="offcanvas">
+            <a href="#" role="tab" data-toggle="tab"><span class="fa fa-bars"></span></a>
+          </div>
+          <span id="missionTag" class='navbar-brand right'></span>
+        </nav>
+        <div id="resultsOffCanvas" class="col-xs-9 col-sm-3 sidebar-offcanvas">
+          <ul class="slideList nav nav-pills nav-stacked">
+            <li class="col-xs-12 warnings"><span class="col-xs-10 slideTag">Warnings</span></li>
+            <li class="col-xs-12 events"><span class="col-xs-10 slideTag">Event Log</span></li>
+            <li class="col-xs-12 landing"><span class="col-xs-10 slideTag">Landing</span></li>
+            <li class="col-xs-12 orbit"><span class="col-xs-10 slideTag">Orbit</span></li>
+          </ul>
         </div>
-        <span id="missionTag" class='navbar-brand right'></span>
-      </nav>
-      <div class="resultGrid">
+        <div class="resultGrid">
+        </div>
       </div>
     </div>
   </body>

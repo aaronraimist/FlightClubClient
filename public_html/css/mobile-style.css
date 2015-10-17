@@ -60,7 +60,7 @@ only screen and (max-width: 767px) {
 
   /* LIVE */
   .text_half  {
-    font-size:9px;
+    font-size:15px;
   }
   .text_full  {
     font-size:27px; /* Actually 1.5x */
@@ -101,7 +101,7 @@ only screen and (max-width: 767px) {
   .row-offcanvas-right.active {
     right: 75%;
   }
-
+  
   .sidebar-offcanvas {
     position: absolute;
     top: 0;

@@ -90,6 +90,33 @@ only screen and (min-width: 768px)  {
   .tborder_large { border-top:1px solid #fff}
   .bborder_large { border-bottom:1px solid #fff}
 
+  /* OFF CANVAS */
+  #results .row-offcanvas {
+    position: relative;
+    -webkit-transition: all .5s ease-out;
+       -moz-transition: all .5s ease-out;
+         -o-transition: all .5s ease-out;
+            transition: all .5s ease-out;
+  }
+
+  #results .row-offcanvas-right {
+    right: 0;
+  }
+
+  #results .row-offcanvas-right .sidebar-offcanvas {
+    right: -33%;
+  }
+
+  #results .row-offcanvas-right.active {
+    right: 33%;
+  }
+  
+  #results .sidebar-offcanvas {
+    position: absolute;
+    top: 0;
+    width: 33%;
+  }
+
   .footer {
     font-size: 18px;
   }

@@ -18,13 +18,10 @@
  */
 
 var domain = 'http://www.decmurphy.com';
+//var domain = 'http://localhost';
 var port = ':8080';
 var server = '/FlightClub';
-/*
-var domain = 'http://localhost';
-var port = ':8080';
-var server = '/FlightClub';
-*/
+
 var version = '/api/v1';
 var home = domain + server;
 var api_url = domain + port + server + version;
@@ -51,6 +48,29 @@ function httpRequest(dest, method, data, successfn, errorfn)
       error: errorfn
     });
 }
+  
+// off canvas menu for mobile. button not visible on desktop
+$(document).on('click', '[data-toggle="offcanvas"]', function () {
+  $('.row-offcanvas').toggleClass('active');
+});
+
+// only show one item at a time in burn and course correction lists
+$(document).on('click', '.slideList>li', function (e) {
+
+  if ($(e.target).is('.slideItem *'))
+    return;
+
+  $(this).siblings().removeClass('active');
+  $(this).addClass('active');
+
+  var list = $(this).children('ul').first();
+  if (list.is(':visible')) {
+    $(this).removeClass('active');
+  }
+  list.slideToggle();
+
+  $(this).siblings().children('ul').slideUp(); // Hide all li siblings child ul's
+});
 
 /////////////////////////////////////////////////
 //                                             //
@@ -100,6 +120,7 @@ function goHome(data)
 
 function fillOutputArray(data)
 {
+  var dataString = JSON.stringify(data, null, 2);
   var title = data.Mission.desc + ' Results';
   $(document).prop('title', title);
   $("#missionTag").append(title);
@@ -109,6 +130,13 @@ function fillOutputArray(data)
   $.each(images, function(key,val)
   {
     imageMap[val.desc] = val.url;
+  });
+  
+  var fileMap = new Object();
+  var files = data.Mission.Output.Files;
+  $.each(files, function(key,val)
+  {
+    fileMap[val.desc] = val.url;
   });
     
   var content = 
@@ -137,6 +165,69 @@ function fillOutputArray(data)
           '</div>\n';
   
   $('.resultGrid').append(content);
+  
+  var warningsFile = fileMap['warnings'];
+  $.get(warningsFile, function (txt) {
+    var warnings = txt.split(";");
+
+    content = '<ul class="slideItem col-xs-12 nav nav-pills nav-stacked" style="display:none">';
+    for (var i = 0; i < warnings.length; i++) {
+      content += '<li><div class="row nopadding text_half"><div class="col-xs-12">' + warnings[i] + '</div></li>';
+    }
+    content += '</ul>';
+
+    $('.warnings').append(content);
+  });
+  
+  var telemetryFile = fileMap['telemetry'];
+  $.get(telemetryFile, function (txt) {
+
+    var lines = txt.split("\n");
+    for (var i = 0; i < lines.length; i++)
+    {
+      // time-event map
+      if (i === 0) {
+        content = '<ul class="slideItem col-xs-12 nav nav-pills nav-stacked" style="display:none">';
+        var event = lines[i].split(';');
+        for (var j = 0; j < event.length; j++) {
+          var pair = event[j].split(':');
+          if (pair[0] !== undefined && pair[1] !== undefined) {
+            content += '<li><div class="row nopadding text_half"><div class="col-xs-4 col-sm-3 textright">' + pair[0] + '</div><div class="col-xs-8 col-xs-9 textleft">' + pair[1] + '</div></div></li>';
+          }
+        }
+        content += '</ul>';
+        $('.events').append(content);
+      } else {
+        // landing info
+        var map = lines[i].split(':');
+        var infoMap = map[1].split(';');
+        if (map[0] === 'Landing') {
+          content = '<ul class="slideItem col-xs-12 nav nav-pills nav-stacked" style="display:none">';
+          for (var j = 0; j < infoMap.length; j++) {
+            var pair = infoMap[j].split('=');
+            if (pair[0] !== undefined && pair[1] !== undefined) {
+              content += '<li><div class="row nopadding text_half"><div class="col-xs-6 textright">' + pair[0] + '</div><div class="col-xs-6 textleft">' + pair[1] + '</div></div></li>';
+            }
+          }
+          content += '</ul>';
+          $('.landing').append(content);
+        }
+        // orbit info
+        else if (map[0] === 'Orbit') {
+          content = '<ul class="slideItem col-xs-12 nav nav-pills nav-stacked" style="display:none">';
+          for (var j = 0; j < infoMap.length; j++) {
+            var pair = infoMap[j].split('=');
+            if (pair[0] !== undefined && pair[1] !== undefined) {
+              content += '<li><div class="row nopadding text_half"><div class="col-xs-6 textright">' + pair[0] + '</div><div class="col-xs-6 textleft">' + pair[1] + '</div></div></li>';
+            }
+          }
+          content += '</ul>';
+          $('.orbit').append(content);
+          
+        }
+      }
+    }
+  });
   
 }
 
