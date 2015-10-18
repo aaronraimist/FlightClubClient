@@ -149,7 +149,7 @@ function refreshClock(launchDate)
   document.getElementById('minutes').innerHTML = minutes + ' minute' + ((minutes !== 1) ? 's' : '');
   document.getElementById('seconds').innerHTML = seconds + ' second' + ((seconds !== 1) ? 's' : '');
 
-  if (Math.abs(59 * _minute - distance) < 500)
+  if (Math.abs(59 * _minute - distance) < 1000) // clock -> wait limit
     window.location.reload(true);
 }
 
@@ -192,7 +192,7 @@ function refreshTelemetry(launchDate)
 
   httpRequest(api_url + '/live' + queryString, 'GET', null, updateScreen, null);
 
-  if (Math.abs(16 * _minute - distance) < 500)
+  if (15 * _minute - Math.abs(distance) < 1000) // launch -> over limit
     window.location.reload(true);
 }
 
@@ -225,10 +225,6 @@ function refreshWaitClock(launchTimeMillis)
     minutes -= 1;
     seconds -= 1;
   }
-  if (Math.abs(10 * _minute - distance) < 500)
-    window.location.reload(true);
-  if (Math.abs(1 * _minute - distance) < 500)
-    window.location.reload(true);
   if (hours < 10)
     hours = '0' + hours;
   if (minutes < 10)
@@ -237,6 +233,10 @@ function refreshWaitClock(launchTimeMillis)
     seconds = '0' + seconds;
   $('#clock').html('T' + sign + hours + ':' + minutes + ':' + seconds);
   
-  if (Math.abs(5 * _second - distance) < 500)
+  if (Math.abs(10 * _minute - distance) < 1000) // refresh after poll
+    window.location.reload(true);
+  if (Math.abs(1 * _minute - distance) < 1000) // refresh for launch
+    window.location.reload(true);
+  if (Math.abs(4 * _second - distance) < 1000) // wait -> launch limit
     window.location.reload(true);
 }
