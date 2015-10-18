@@ -118,6 +118,18 @@ function goHome(data)
   updateSuccess();
 }
 
+function setOverrideSuccess(data)
+{
+  $("#overrideStatus").removeClass();
+  $("#overrideStatus").addClass("fa fa-check");
+}
+
+function setOverrideFailure(data)
+{
+  $("#overrideStatus").removeClass();
+  $("#overrideStatus").addClass("fa fa-close");  
+}
+
 function fillOutputArray(data)
 {
   var dataString = JSON.stringify(data, null, 2);

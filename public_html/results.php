@@ -4,8 +4,12 @@ if (isset($_GET["id"])) {
   $id = $_GET["id"];
 }
 $payload = '';
-if (isset($_GET["pl"])) {
-  $payload = $_GET["pl"];
+if (isset($_GET["code"])) {
+  $payload = $_GET["code"];
+}
+$token = '';
+if(isset($_COOKIE['authToken'])) {
+    $token = $_COOKIE['authToken'];
 }
 ?>
 
@@ -25,6 +29,7 @@ if (isset($_GET["pl"])) {
     <script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js'></script>
     <link href='https://fonts.googleapis.com/css?family=Quicksand' rel='stylesheet' type='text/css'>
 
+    <script src="js/jquery.cookie.js"></script>
     <script src="js/core.js"></script>
     <script src="js/results.js"></script>    
 
@@ -51,7 +56,10 @@ if (isset($_GET["pl"])) {
           <ul class="slideList nav nav-pills nav-stacked">
             <?php
             if ($id !== '' && $payload !== '') {
-              echo '<li id="watchButton" class="col-xs-12"><a href="live.php?id=' . $id . '&pl=' . $payload . '"><span>Watch Live</span></a></li>' . "\n";
+              echo '<li id="watchButton" class="col-xs-12"><a href="live.php?id=' . $id . '&code=' . $payload . '"><span>Watch Live</span></a></li>' . "\n";
+            }
+            if(isset($token) && $token !== '') {
+              echo '<li id="liveInitButton" class="col-xs-12"><span class="col-xs-10 slideTag">Override Live Plots</span><span id="overrideStatus"/></li>' . "\n";
             }
             ?>
             <li class="col-xs-12 warnings"><span class="col-xs-10 slideTag">Warnings</span></li>

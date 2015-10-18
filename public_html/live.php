@@ -1,7 +1,7 @@
 <?php
 $payload = '';
-if (isset($_GET["pl"])) {
-  $payload = $_GET["pl"];
+if (isset($_GET["code"])) {
+  $payload = $_GET["code"];
 }
 ?>
 

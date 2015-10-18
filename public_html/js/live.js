@@ -33,7 +33,7 @@ $(document).ready(function ()
   }
 
   guid = params['id'];
-  httpRequest(api_url + '/missions/' + params['pl'], 'GET', null, fillData, null);
+  httpRequest(api_url + '/missions/' + params['code'], 'GET', null, fillData, null);
 
 });
 
@@ -188,7 +188,7 @@ function refreshTelemetry(launchDate)
   var distance = launchDate - now;
 
   var time = (now.getTime() - launchDate.getTime()) / 1000;
-  var queryString = '?id=' + guid + '&code=' + params['pl'] + '&time=' + time;
+  var queryString = '?id=' + guid + '&code=' + params['code'] + '&time=' + time;
 
   httpRequest(api_url + '/live' + queryString, 'GET', null, updateScreen, null);
 

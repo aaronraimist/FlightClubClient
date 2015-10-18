@@ -21,5 +21,11 @@ $("#results").ready(function()
 {
   var queryString = window.location.href.slice(window.location.href.indexOf('?') + 1);
   httpRequest(api_url+'/simulator/results?'+queryString, 'GET', null, fillOutputArray, null);
+  
+  $(document).on('click', '#liveInitButton', function() {
+    queryString = window.location.href.slice(window.location.href.indexOf('?') + 1)
+            + '&auth=' + $.cookie('authToken');
+    httpRequest(api_url+'/live/init?'+queryString, 'GET', null, setOverrideSuccess, setOverrideFailure);  
+  });
 });
 
