@@ -61,7 +61,6 @@ if(isset($_COOKIE['authToken'])) {
                 <div id="tabs" class="row">
                   <nav class="col-xs-12">
                     <ul class="nav nav-tabs">
-                      <li class="active"><a href="#core" role="tab" data-toggle="tab">Core</a></li>
                       <li class="visible-xs right" data-toggle="offcanvas"><a href="#" role="tab" data-toggle="tab"><span class="fa fa-bars"></span></a></li>
                       <li id="launch" class="right"><a href="#" role="tab" data-toggle="tab"><span class="fa fa-play"></span></a></li>
                       <li id="info" class="hidden-xs right"><a href="docs/"><span class="fa fa-info-circle"></span></a></li>

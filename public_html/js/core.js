@@ -269,15 +269,18 @@ function fillProfile(data)
   // Add Core tab before stages
   $("#tabs ul.nav li[id^='tab'").remove();
   $("#tab-content").children("[id^='stage']").remove();
+  
+  $("#tabs ul.nav li[id='info']").before('<li id="tab-0" class="active"><a href="#core" role="tab" data-toggle="tab">LV/Pad</a></li>');
 
   var stages = profile.Stages;
   $.each(stages, function(key,val)
   {
     // Just make sure key has the right value
     key = val.Core.id;
+    var stage = large_query.matches ? 'Stage ' : '';
     
     // Tab for this stage
-    $("#tabs ul.nav li[id='info']").before('<li id="tab-'+key+'"><a href="#stage-'+key+'" role="tab" data-toggle="tab">'+(key+1)+'</a></li>');
+    $("#tabs ul.nav li[id='info']").before('<li id="tab-'+(key+1)+'"><a href="#stage-'+key+'" role="tab" data-toggle="tab">'+stage+(key+1)+'</a></li>');
     
     addStageTabPane($("#tab-content"), key);
 
