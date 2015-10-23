@@ -162,8 +162,11 @@ if(isset($_COOKIE['authToken'])) {
           </form>
         </div>
         <nav id="head" class="col-xs-9 col-sm-3 sidebar-offcanvas">
-          <ul class="nav nav-pills nav-stacked">
-          </ul>
+          <div id="navHeader">Manifested Missions</div>
+          <div id="headList">
+            <ul class="nav nav-pills nav-stacked">
+            </ul>
+          </div>
         </nav>
       </div>
     </div>

@@ -38,6 +38,10 @@ html, body {
   font-weight: 900;
 }
 
+#home { 
+  overflow-y: hidden; 
+}
+
 body, .container {
   width: 100%;
   height: 100vh;
@@ -80,6 +84,17 @@ nav {
   position: relative;
   padding: 0px;
   margin: 0px;
+}
+
+#navHeader {
+  color: white;
+  background-color: #1F3F54;
+  text-align: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  border-radius: 4px;
 }
 
 /* nav tab styling */
@@ -131,7 +146,16 @@ nav li.active>a {
 
 #head {
   height: 100%;
+  padding-right: 25px;
+}
+
+#headList {
+  height: 92%;
   overflow-y: scroll;
+}
+
+#home ::-webkit-scrollbar { 
+  display: none; 
 }
 
 #sites,
