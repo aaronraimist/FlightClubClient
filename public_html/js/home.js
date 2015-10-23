@@ -254,13 +254,18 @@ function correctTabsForVehicle(oldCode, newCode) {
   
   var newNum = numStagesPerVehicle(newCode);
   var oldNum = numStagesPerVehicle(oldCode);
-  
+    
   if(newNum > oldNum)
   {
-    for(var i=0;i<newNum-oldNum;i++) {
+    for(var i=1;i<newNum;i++) {
       // Tab for this stage
       var key = oldNum + i;
-      $("#tabs ul.nav li[id='info']").before('<li id="tab-'+key+'"><a href="#stage-'+key+'" role="tab" data-toggle="tab">'+(key+1)+'</a></li>');
+      $("#tabs ul.nav li[id='tab"+key+"'").remove();
+      var name =
+              newNum === 2 ? (key === 0 ? 'Core Stage' : 'Upper Stage') // 2 stage rockets
+              : (key === 0 ? 'Boosters' : key === 1 ? 'Core Stage' : 'UpperStage'); // 3 stage rockets (FH)
+        
+      $("#tabs ul.nav li[id='info']").before('<li id="tab-'+key+'"><a href="#stage-'+key+'" role="tab" data-toggle="tab">'+name+'</a></li>');
       addStageTabPane($("#tab-content"), key);
     }
   }

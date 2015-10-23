@@ -280,7 +280,12 @@ function fillProfile(data)
     var stage = large_query.matches ? 'Stage ' : '';
     
     // Tab for this stage
-    $("#tabs ul.nav li[id='info']").before('<li id="tab-'+(key+1)+'"><a href="#stage-'+key+'" role="tab" data-toggle="tab">'+stage+(key+1)+'</a></li>');
+    var numStages = numStagesPerVehicle(mission.launchvehicle);
+    var name = 
+        numStages===2 ? (key===0 ? 'Core Stage' : 'Upper Stage') // 2 stage rockets
+        : (key===0 ? 'Boosters' : key===1 ? 'Core Stage' : 'UpperStage'); // 3 stage rockets (FH)
+            
+    $("#tabs ul.nav li[id='info']").before('<li id="tab-'+(key+1)+'"><a href="#stage-'+key+'" role="tab" data-toggle="tab">'+name+'</a></li>');
     
     addStageTabPane($("#tab-content"), key);
 
