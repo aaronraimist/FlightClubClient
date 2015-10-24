@@ -281,7 +281,7 @@ function fillProfile(data)
   $("#tabs ul.nav li[id^='tab'").remove();
   $("#tab-content").children("[id^='stage']").remove();
   
-  $("#tabs ul.nav li[id='info']").before('<li id="tab-0" class="active"><a href="#core" role="tab" data-toggle="tab">LV/Pad</a></li>');
+  $("#tabs ul.nav li[id='info']").before('<li id="tab-0" class="active"><a href="#core" role="tab" data-toggle="tab">Pad+LV</a></li>');
 
   var stages = profile.Stages;
   $.each(stages, function(key,val)
