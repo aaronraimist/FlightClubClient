@@ -252,30 +252,43 @@ function numStagesPerVehicle(vehicle) {
 
 function correctTabsForVehicle(oldCode, newCode) {
   
-  var newNum = numStagesPerVehicle(newCode);
-  var oldNum = numStagesPerVehicle(oldCode);
-    
-  if(newNum > oldNum)
-  {
-    for(var i=1;i<newNum;i++) {
-      // Tab for this stage
-      var key = oldNum + i;
-      $("#tabs ul.nav li[id='tab"+key+"'").remove();
-      var name =
-              newNum === 2 ? (key === 0 ? 'Core Stage' : 'Upper Stage') // 2 stage rockets
-              : (key === 0 ? 'Boosters' : key === 1 ? 'Core Stage' : 'UpperStage'); // 3 stage rockets (FH)
-        
-      $("#tabs ul.nav li[id='info']").before('<li id="tab-'+key+'"><a href="#stage-'+key+'" role="tab" data-toggle="tab">'+name+'</a></li>');
-      addStageTabPane($("#tab-content"), key);
+  var newNumStages = numStagesPerVehicle(newCode);
+  var oldNumStages = numStagesPerVehicle(oldCode);
+  
+  if (newNumStages !== oldNumStages) {
+    // remove old tab list
+    for (var i = 1; i <= oldNumStages; i++) {
+      $("#tabs").find("#tab-" + i).first().remove();
     }
-  }
-  else if(newNum < oldNum)
-  {
-    for(var i=0;i<oldNum-newNum;i++) {
-      var key = newNum + i;
-      $("#tabs").find("#tab-"+key).first().remove();
-      $("#tab-content").find("#stage-"+key).first().remove();
+
+    // build new tab list
+    for (var stage = 1; stage <= newNumStages; stage++)
+    {
+      var name = getStageName(stage, newNumStages);
+      $("#tabs ul.nav li[id='info']").before('<li id="tab-' + stage + '"><a href="#stage-' + (stage-1) + '" role="tab" data-toggle="tab">' + name + '</a></li>');
+    }
+
+    if (newNumStages > oldNumStages)
+    {
+      // add new tabs
+      for (var i = 1; i <= newNumStages - oldNumStages; i++) {
+        var key = oldNumStages + i;
+        var tab = $("#tab-content").find("#stage-" + (key-1));
+        
+        // tab will be created first time we go from 2stage -> 3stage
+        // won't be destroyed going back to 2stage
+        // so no need to recreate in future
+        if(tab.length === 0) {
+          addStageTabPane($("#tab-content"), key-1);
+        }
+      }
     }
   }
   
+}
+
+function getStageName(stage, numStages) {
+  
+  return numStages === 2 ? (stage === 1 ? 'Core Stage' : 'Upper Stage') // 2 stage rockets
+         : (stage === 1 ? 'Boosters' : stage === 2 ? 'Core Stage' : 'UpperStage'); // 3 stage rockets (FH)
 }

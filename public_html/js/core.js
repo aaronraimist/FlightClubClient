@@ -277,13 +277,10 @@ function fillProfile(data)
   {
     // Just make sure key has the right value
     key = val.Core.id;
-    var stage = large_query.matches ? 'Stage ' : '';
     
     // Tab for this stage
     var numStages = numStagesPerVehicle(mission.launchvehicle);
-    var name = 
-        numStages===2 ? (key===0 ? 'Core Stage' : 'Upper Stage') // 2 stage rockets
-        : (key===0 ? 'Boosters' : key===1 ? 'Core Stage' : 'UpperStage'); // 3 stage rockets (FH)
+    var name = getStageName(key+1, numStages);
             
     $("#tabs ul.nav li[id='info']").before('<li id="tab-'+(key+1)+'"><a href="#stage-'+key+'" role="tab" data-toggle="tab">'+name+'</a></li>');
     
@@ -401,9 +398,7 @@ function fillLaunchVehicles(data)
 function addStageTabPane(parent, id)
 {
   
-  var content = '<!-- Stage ' + id + ' -->'
-
-          + '            <div class="tab-pane fade in" id="stage-' + id + '">'
+  var content = '        <div class="tab-pane fade in" id="stage-' + id + '">'
           + '              <input name="Mission.Profile.Stages[' + id + '].Core.id" value="" type="hidden"/>'
           + '              <div class="row">'
           + '                <div class="col-xs-12 col-sm-4 rborder_large">'
