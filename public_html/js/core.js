@@ -72,6 +72,17 @@ $(document).on('click', '.slideList>li', function (e) {
   $(this).siblings().children('ul').slideUp(); // Hide all li siblings child ul's
 });
 
+function parseQueryString(queryString) 
+{
+  var pairs = queryString.split("&");
+  var paramMap = {};
+  for (var i = 0; i < pairs.length; i++) {
+    var pair = pairs[i].split("=");
+    paramMap[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || '');
+  }
+  return paramMap;
+}
+
 /////////////////////////////////////////////////
 //                                             //
 //    Functions to deal with AJAX responses    //

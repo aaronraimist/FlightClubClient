@@ -19,20 +19,13 @@
 
 var missionName;
 var launchTime;
-var guid;
 var params;
 
 $(document).ready(function ()
 {
   var queryString = window.location.search.substring(1);
-  var pairs = queryString.split("&");
-  params = {};
-  for (var i = 0; i < pairs.length; i++) {
-    var pair = pairs[i].split("=");
-    params[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || '');
-  }
+  params = parseQueryString(queryString);
 
-  guid = params['id'];
   httpRequest(api_url + '/missions/' + params['code'], 'GET', null, fillData, null);
 
 });
@@ -188,7 +181,7 @@ function refreshTelemetry(launchDate)
   var distance = launchDate - now;
 
   var time = (now.getTime() - launchDate.getTime()) / 1000;
-  var queryString = '?id=' + guid + '&code=' + params['code'] + '&time=' + time;
+  var queryString = '?code=' + params['code'] + '&time=' + time;
 
   httpRequest(api_url + '/live' + queryString, 'GET', null, updateScreen, null);
 

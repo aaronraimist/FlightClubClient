@@ -1,8 +1,4 @@
 <?php
-$id = '';
-if (isset($_GET["id"])) {
-  $id = $_GET["id"];
-}
 $payload = '';
 if (isset($_GET["code"])) {
   $payload = $_GET["code"];
@@ -55,8 +51,8 @@ if(isset($_COOKIE['authToken'])) {
         <div id="resultsOffCanvas" class="col-xs-9 col-sm-3 sidebar-offcanvas">
           <ul class="slideList nav nav-pills nav-stacked">
             <?php
-            if ($id !== '' && $payload !== '') {
-              echo '<li id="watchButton" class="col-xs-12"><a href="live.php?id=' . $id . '&code=' . $payload . '"><span>Watch Live</span></a></li>' . "\n";
+            if ($payload !== '') {
+              echo '<li id="watchButton" class="col-xs-12"><a href="live.php?code=' . $payload . '"><span>Watch Live</span></a></li>' . "\n";
             }
             if(isset($token) && $token !== '') {
               echo '<li id="liveInitButton" class="col-xs-12"><span class="col-xs-10 slideTag">Override Live Plots</span><span id="overrideStatus"/></li>' . "\n";
