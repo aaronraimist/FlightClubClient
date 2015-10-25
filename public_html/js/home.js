@@ -294,6 +294,10 @@ function correctTabsForVehicle(oldCode, newCode) {
 
 function getStageName(stage, numStages) {
   
+  if (mobile_query.matches) {
+    return stage;
+  }
+  
   return numStages === 2 ? (stage === 1 ? 'Core Stage' : 'Upper Stage') // 2 stage rockets
          : (stage === 1 ? 'Boosters' : stage === 2 ? 'Core Stage' : 'UpperStage'); // 3 stage rockets (FH)
 }
