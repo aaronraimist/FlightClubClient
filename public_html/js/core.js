@@ -83,6 +83,34 @@ function parseQueryString(queryString)
   return paramMap;
 }
 
+var popupBlockerChecker = {
+        check: function(popup_window, dest){
+            var _scope = this;
+            if (popup_window) {
+                if(/chrome/.test(navigator.userAgent.toLowerCase())){
+                    setTimeout(function () {
+                        _scope._is_popup_blocked(_scope, popup_window, dest);
+                     },200);
+                }else{
+                    popup_window.onload = function () {
+                        _scope._is_popup_blocked(_scope, popup_window, dest);
+                    };
+                }
+            }else{
+                _scope._displayError(dest);
+            }
+        },
+        _is_popup_blocked: function(scope, popup_window, dest){
+            if ((popup_window.innerHeight > 0)===false){ scope._displayError(dest); }
+        },
+        _displayError: function(dest){
+          if(large_query.matches) {
+            alert("You've blocked pop-ups! :(\n\nYou'll enjoy FlightClub more if you allow them. I Promise :)");
+          }
+          window.location = dest;
+        }
+    };
+
 /////////////////////////////////////////////////
 //                                             //
 //    Functions to deal with AJAX responses    //
@@ -97,7 +125,11 @@ function completeSim(data)
   calculating = false;
   $(".bg").css('z-index', -1000);
   $(".progress-container").css('z-index', -2000);
-  window.open(home+'/results.php?' + queryString, '_blank');
+  
+  var dest = home+'/results.php?' + queryString;
+  var popup = window.open(dest, '_blank');
+  popupBlockerChecker.check(popup, dest);
+  
 }
 
 function errorSim(data)
@@ -108,7 +140,10 @@ function errorSim(data)
   calculating = false;
   $(".bg").css('z-index', -1000);
   $(".progress-container").css('z-index', -2000);
-  window.open(home+'/error.php#'+errorsHash, '_blank');
+  
+  var dest = home+'/error.php#'+errorsHash;
+  var popup = window.open(dest, '_blank');
+  popupBlockerChecker.check(popup, dest);
 }
 
 function updateSuccess() 

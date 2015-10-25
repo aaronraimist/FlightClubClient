@@ -310,6 +310,10 @@ input:disabled, select:disabled {
           transition: all 0.5s ease-in-out;  
 }
 
+#missionTag {
+  padding-left: 0px;
+}
+
 .resultGrid {
   background: #fff;
   width: 100% !important;
