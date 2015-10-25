@@ -146,16 +146,15 @@ nav li.active>a {
 
 #head {
   height: 100%;
-  padding-right: 25px;
+  overflow: hidden;
 }
 
 #headList {
-  height: 92%;
   overflow-y: scroll;
 }
 
-#home ::-webkit-scrollbar { 
-  display: none; 
+#headList ul {
+  padding-bottom: 10px;
 }
 
 #sites,

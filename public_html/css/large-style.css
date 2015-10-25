@@ -53,6 +53,15 @@ only screen and (min-width: 768px)  {
     display: none; 
   }
 
+#head {
+  padding-right: 25px;
+}
+
+#headList {
+  margin-right: -25px;
+  padding-right: 13px;
+}
+
   /* LOADING SCREEN */
   .progress-container {
     margin-top: -125px;

@@ -203,7 +203,12 @@ $("#home").ready(function ()
         $(list).find('select[name$=gt]').prop('disabled', true);  
       }
     }
-  });  
+  });
+  
+  var windowHeight = window.innerHeight;
+  var headerHeight = $("#navHeader").outerHeight(true);
+  var listHeight = windowHeight - headerHeight;
+  $("#headList").css({ 'height': listHeight + "px" });
 
 });
 
