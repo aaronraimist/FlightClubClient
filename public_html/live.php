@@ -23,15 +23,18 @@ if (isset($_GET["code"])) {
     <link rel="stylesheet" href="css/mobile-style.css" />
     <link rel="stylesheet" href="css/large-style.css" />
     <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
-    
+
     <script src="js/core.js"></script>
     <script src="js/live.js"></script>
-    
+
   </head>
   <body id="live">
     <div class="container">
       <nav class="navbar navbar-default">
         <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="left lmargin0 navbar-brand">
+          <a href="index.php"><span class="fa fa-home"></span></a>
+        </div>
         <div class="navbar-header">
           <a class="navbar-brand left" href="#"><span>LiveLaunch</span></a></li>
         </div>

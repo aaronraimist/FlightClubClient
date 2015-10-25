@@ -30,14 +30,14 @@
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-    
+
     <script src="js/jquery.cookie.js"></script>
     <script src="js/form2js.js"></script>
     <script src="js/core.js"></script>
     <script src="js/login.js"></script>
-    
+
     <link href='https://fonts.googleapis.com/css?family=Quicksand' rel='stylesheet' type='text/css'>
-    
+
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="css/mobile-style.css" />
     <link rel="stylesheet" href="css/large-style.css" />
@@ -50,6 +50,9 @@
     <div class="container">
       <nav class="navbar navbar-default">
         <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="left lmargin0 navbar-brand">
+          <a href="index.php"><span class="fa fa-home"></span></a>
+        </div>
         <div class="navbar-header">
           <a class="navbar-brand left" href="#"><span>Login</span></a>
         </div>

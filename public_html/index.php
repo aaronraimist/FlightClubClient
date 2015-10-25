@@ -45,7 +45,7 @@ if(isset($_COOKIE['authToken'])) {
           <div class="text_full centre">
             Calculating trajectory...</br>
           </div>
-          <div id="rocket">
+          <div id="rocket" class="tmargin1">
             <img src="images/rocket_large.png" alt="rocket"/>
           </div>
         </div>

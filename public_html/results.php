@@ -42,11 +42,13 @@ if(isset($_COOKIE['authToken'])) {
       <div class="row row-offcanvas row-offcanvas-right vfill">
         <nav class='navbar navbar-default'>
           <!-- Brand and toggle get grouped for better mobile display -->
-          <span id="missionTag" class='lmargin0 navbar-brand'></span>
+          <div class="left lmargin0 navbar-brand">
+            <a href="index.php"><span class="fa fa-home"></span></a>
+          </div>
+          <span id="missionTag" class='navbar-brand'></span>
           <div class="right rmargin0 navbar-brand" data-toggle="offcanvas">
             <a href="#" role="tab" data-toggle="tab"><span class="fa fa-bars"></span></a>
           </div>
-          <span id="missionTag" class='navbar-brand right'></span>
         </nav>
         <div id="resultsOffCanvas" class="col-xs-9 col-sm-3 sidebar-offcanvas">
           <ul class="slideList nav nav-pills nav-stacked">
