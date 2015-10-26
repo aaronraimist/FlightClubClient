@@ -105,7 +105,7 @@ var popupBlockerChecker = {
         },
         _displayError: function(dest){
           if(large_query.matches) {
-            alert("You've blocked pop-ups! :(\n\nYou'll enjoy FlightClub more if you allow them. I Promise :)");
+            alert("You've blocked pop-ups! :(\n\nYou'll enjoy FlightClub more if you allow them. I promise :)");
           }
           window.location = dest;
         }
