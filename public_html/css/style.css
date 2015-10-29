@@ -317,6 +317,8 @@ input:disabled, select:disabled {
 .resultGrid {
   background: #fff;
   width: 100% !important;
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
 .resultGrid img {
