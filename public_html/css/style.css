@@ -317,12 +317,17 @@ input:disabled, select:disabled {
 .resultGrid {
   background: #fff;
   width: 100% !important;
-  padding-left: 20px;
-  padding-right: 20px;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+.resultGrid .col-sm-4 {
+  padding: 0px;
 }
 
 .resultGrid img {
   width: 100%;
+  border: 1px solid #eee;
 }
 
 #results .navbar {
