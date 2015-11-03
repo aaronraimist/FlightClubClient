@@ -36,7 +36,7 @@ function fillData(data)
   var title = missionName + ' Live!';
   $(document).prop('title', title);
   
-  var tempDate = data.Mission.date + ' ' + data.Mission.time + ' UTC';
+  var tempDate = data.Mission.date.replace(/-/g, "/") + ' ' + data.Mission.time + ' UTC';
   launchTime = Date.parse(tempDate);
 
   var timeUntilLaunch = getTimeRemaining();
