@@ -313,7 +313,7 @@ function fillProfile(data)
   var profile = mission.Profile;
   
   // Add Core tab before stages
-  $("#tabs ul.nav li[id^='tab'").remove();
+  $("#tabs ul.nav li[id^='tab']").remove();
   $("#tab-content").children("[id^='stage']").remove();
   
   $("#tabs ul.nav li[id='info']").before('<li id="tab-0" class="active"><a href="#core" role="tab" data-toggle="tab">Pad+LV</a></li>');
