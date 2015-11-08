@@ -62,7 +62,7 @@ if(isset($_COOKIE['authToken'])) {
             ?>
             <li class="col-xs-12 warnings"><span class="col-xs-10 slideTag">Warnings</span></li>
             <li class="col-xs-12 events"><span class="col-xs-10 slideTag">Event Log</span></li>
-            <li class="col-xs-12 landing"><span class="col-xs-10 slideTag">Landing</span></li>
+            <li class="col-xs-12 landing"><span class="col-xs-10 slideTag">Landing</span><ul class="slideItem col-xs-12 nav nav-pills nav-stacked" style="display:none"></ul></li>
             <li class="col-xs-12 orbit"><span class="col-xs-10 slideTag">Orbit</span></li>
           </ul>
         </div>

@@ -241,6 +241,7 @@ function fillOutputArray(data)
   var telemetryFile = fileMap['telemetry'];
   $.get(telemetryFile, function (txt) {
 
+    var stage = 0;
     var lines = txt.split("\n");
     for (var i = 0; i < lines.length; i++)
     {
@@ -261,15 +262,15 @@ function fillOutputArray(data)
         var map = lines[i].split(':');
         var infoMap = map[1].split(';');
         if (map[0] === 'Landing') {
-          content = '<ul class="slideItem col-xs-12 nav nav-pills nav-stacked" style="display:none">';
+          stage++;
+          content = stage===1 ? '' : '<hr>';
           for (var j = 0; j < infoMap.length; j++) {
             var pair = infoMap[j].split('=');
             if (pair[0] !== undefined && pair[1] !== undefined) {
               content += '<li><div class="row nopadding text_half"><div class="col-xs-6 textright">' + pair[0] + '</div><div class="col-xs-6 textleft">' + pair[1] + '</div></div></li>';
             }
           }
-          content += '</ul>';
-          $('.landing').append(content);
+          $('.landing ul').append(content);
         }
         // orbit info
         else if (map[0] === 'Orbit') {
