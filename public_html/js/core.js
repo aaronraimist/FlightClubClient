@@ -17,14 +17,10 @@
  along with FlightClub.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-var domain = 'http://www.decmurphy.com';
-//var domain = 'http://localhost';
-var port = ':8080';
-var server = '/FlightClub';
-
-var version = '/api/v1';
-var home = domain + server;
-var api_url = domain + port + server + version;
+var client = 'http://www.flightclub.io';
+//var client = 'http://localhost';
+var server = client + ':8080/FlightClub';
+var api_url = server + '/api/v1';
 
 var calculating = false;
 
@@ -126,7 +122,7 @@ function completeSim(data)
   $(".bg").css('z-index', -1000);
   $(".progress-container").css('z-index', -2000);
   
-  var dest = home+'/results.php?' + queryString;
+  var dest = client+'/results.php?' + queryString;
   var popup = window.open(dest, '_blank');
   popupBlockerChecker.check(popup, dest);
   
@@ -141,19 +137,19 @@ function errorSim(data)
   $(".bg").css('z-index', -1000);
   $(".progress-container").css('z-index', -2000);
   
-  var dest = home+'/error.php#'+errorsHash;
+  var dest = client+'/error.php#'+errorsHash;
   var popup = window.open(dest, '_blank');
   popupBlockerChecker.check(popup, dest);
 }
 
 function updateSuccess() 
 {
-  window.location = home;
+  window.location = client;
 }
 
 function updateError() 
 {
-  window.location = home+'/error.php';
+  window.location = client+'/error.php';
 }
 
 function goHome(data)
