@@ -425,6 +425,7 @@ input:disabled, select:disabled {
 
 /* Z-INDEXES */
 .bg {z-index: -1000;}
+.progress-container {z-index: -900;}
 form {z-index: -500;}
 nav {z-index: 500;}
 .nav-tabs {z-index: 2000;}
