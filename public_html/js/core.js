@@ -77,34 +77,6 @@ function parseQueryString(queryString)
   return paramMap;
 }
 
-var popupBlockerChecker = {
-        check: function(popup_window, dest){
-            var _scope = this;
-            if (popup_window) {
-                if(/chrome/.test(navigator.userAgent.toLowerCase())){
-                    setTimeout(function () {
-                        _scope._is_popup_blocked(_scope, popup_window, dest);
-                     },200);
-                }else{
-                    popup_window.onload = function () {
-                        _scope._is_popup_blocked(_scope, popup_window, dest);
-                    };
-                }
-            }else{
-                _scope._displayError(dest);
-            }
-        },
-        _is_popup_blocked: function(scope, popup_window, dest){
-            if ((popup_window.innerHeight > 0)===false){ scope._displayError(dest); }
-        },
-        _displayError: function(dest){
-          if(large_query.matches) {
-            alert("You've blocked pop-ups! :(\n\nYou'll enjoy FlightClub more if you allow them. I promise :)");
-          }
-          window.location = dest;
-        }
-    };
-
 /////////////////////////////////////////////////
 //                                             //
 //    Functions to deal with AJAX responses    //

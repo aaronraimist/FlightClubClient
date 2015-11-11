@@ -19,9 +19,10 @@
 
 $("#load").ready(function () 
 {
-  var formAsJSON_string = window.location.href.slice(window.location.href.indexOf('?') + 1);
-  formAsJSON_string = formAsJSON_string.replace(new RegExp('%20', 'g'), ' ').replace(new RegExp('%22', 'g'), '"');
-  httpRequest(api_url + '/simulator/new', 'POST', formAsJSON_string, completeSim, errorSim);
+  var formHash = window.location.hash.substring(1);
+  var formData = window.atob(formHash);
+  
+  httpRequest(api_url + '/simulator/new', 'POST', formData, completeSim, errorSim);
   animate_rocket(30);
 });
 

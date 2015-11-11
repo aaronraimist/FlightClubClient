@@ -73,7 +73,9 @@ $("#home").ready(function ()
     
     var formAsJSON_object = form2js('submitForm', '.', true);
     var formAsJSON_string = JSON.stringify(formAsJSON_object, null, 2);
-    window.open(client + '/loading.php?' + formAsJSON_string, '_blank');
+    
+    var formHash = window.btoa(formAsJSON_string);
+    window.open(client + '/loading.php#' + formHash, '_blank');
   });
   
   // Load mission profile when a mission is chosen by user
