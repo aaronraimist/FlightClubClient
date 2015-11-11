@@ -22,8 +22,6 @@ var client = 'http://www.flightclub.io';
 var server = client + ':8080/FlightClub';
 var api_url = server + '/api/v1';
 
-var calculating = false;
-
 var mobile_query = window.matchMedia( "(max-width: 767px)" );
 var large_query = window.matchMedia( "(min-width: 768px)" );
 
@@ -117,14 +115,8 @@ function completeSim(data)
 {
   var obj = jQuery.parseJSON(JSON.stringify(data, null, 2));
   var queryString = obj.Mission.output.split('?')[1];
-    
-  calculating = false;
-  $(".bg").css('z-index', -1000);
-  $(".progress-container").css('z-index', -2000);
   
-  var dest = client+'/results.php?' + queryString;
-  var popup = window.open(dest, '_blank');
-  popupBlockerChecker.check(popup, dest);
+  window.location = client+'/results.php?' + queryString;
   
 }
 
@@ -133,13 +125,7 @@ function errorSim(data)
   var errors = data.responseJSON.Mission.errors;
   var errorsHash = window.btoa(errors);
   
-  calculating = false;
-  $(".bg").css('z-index', -1000);
-  $(".progress-container").css('z-index', -2000);
-  
-  var dest = client+'/error.php#'+errorsHash;
-  var popup = window.open(dest, '_blank');
-  popupBlockerChecker.check(popup, dest);
+  window.location = client+'/error.php#'+errorsHash;
 }
 
 function updateSuccess() 

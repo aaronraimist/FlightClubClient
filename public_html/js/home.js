@@ -65,16 +65,15 @@ $("#home").ready(function ()
   // Run launch profile on the Simulator, show the loading screen
   $("#tabs ul").on('click', 'li[id="launch"]', function (e) 
   {
+    e.preventDefault();    
+    
     $("#saveInfo").fadeOut(100);
     $("#copyInfo").fadeOut(100);
     $('.row-offcanvas').removeClass('active');
+    
     var formAsJSON_object = form2js('submitForm', '.', true);
     var formAsJSON_string = JSON.stringify(formAsJSON_object, null, 2);
-    console.log(formAsJSON_string);
-    httpRequest(api_url+'/simulator/new', 'POST', formAsJSON_string, completeSim, errorSim);
-    calculating = true;
-    resetRocket();
-    animate_rocket(30);
+    window.open(client + '/loading.php?' + formAsJSON_string, '_blank');
   });
   
   // Load mission profile when a mission is chosen by user
@@ -211,33 +210,6 @@ $("#home").ready(function ()
   $("#headList").css({ 'height': listHeight + "px" });
 
 });
-
-function animate_rocket(w) {
-  
-  if(calculating) {
-    $(".bg").css('z-index', 2500);
-    $(".progress-container").css('z-index', 3000);
-  }
-  
-  var windowWidth = $(document).width();
-  if (w <= 99.5 && calculating) {
-    $("#rocket").animate(
-            {marginLeft: 0.01 * w * (windowWidth - 125) + 'px'},
-    1500, "linear", function () {
-      animate_rocket(50 + 0.5 * w);
-    }
-    );
-  }
-};
-
-function resetRocket() {
-  
-  var rocketWidth = $("#rocket").width();
-  var newW = -1*rocketWidth/2.0;
-  $("#rocket").removeAttr('style');
-  $("#rocket").css('marginLeft', newW + 'px');
-  
-}
 
 function numStagesPerVehicle(vehicle) {
   

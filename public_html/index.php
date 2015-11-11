@@ -41,14 +41,6 @@ if(isset($_COOKIE['authToken'])) {
     </div>
     <div class="container">
       <div class="row row-offcanvas row-offcanvas-right vfill">
-        <div class="col-xs-12 col-sm-12 progress-container">
-          <div class="text_full centre">
-            Calculating trajectory...</br>
-          </div>
-          <div id="rocket" class="tmargin1">
-            <img src="images/rocket_large.png" alt="rocket"/>
-          </div>
-        </div>
         <div class="col-xs-12 col-sm-9 vfill rborder">
           <form id="submitForm" class="vfill">
             <?php
