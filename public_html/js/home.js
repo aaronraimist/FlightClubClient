@@ -250,18 +250,23 @@ function correctTabsForVehicle(oldCode, newCode) {
     if (newNumStages > oldNumStages)
     {
       // add new tabs
-      for (var i = 1; i <= newNumStages - oldNumStages; i++) {
+      for (var i = 0; i < newNumStages - oldNumStages; i++) {
         var key = oldNumStages + i;
-        var tab = $("#tab-content").find("#stage-" + (key-1));
+        var tab = $("#tab-content").find("#stage-" + key);
         
         // tab will be created first time we go from 2stage -> 3stage
         // won't be destroyed going back to 2stage
         // so no need to recreate in future
         if(tab.length === 0) {
-          addStageTabPane($("#tab-content"), key-1);
+          addStageTabPane($("#tab-content"), key);
         }
       }
     }
+    
+    $("#tab-content").find("div[id^=\"burns\"]").find(".slideList").find("li").remove();
+    $("#tab-content").find("div[id^=\"course\"]").find(".slideList").find("li").remove();
+    $("#tab-content").find("input").val('');
+    
   }
   
 }
