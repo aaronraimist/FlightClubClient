@@ -21,6 +21,16 @@
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="css/mobile-style.css" />
     <link rel="stylesheet" href="css/large-style.css" />
+    
+    <meta property="og:title" content="Loading..." />
+    <meta property="og:site_name" content="Flight Club"/>
+    <meta property="og:url" content="http://www.flightclub.io" />
+    <meta property="og:description" content="Flight Club is a rocket launch + landing simulator 
+          and trajectory visualiser. Based on SpaceX's launch vehicles, it serves as a tool for
+          checking how likely it is that a booster can return to the launch pad for upcoming missions." />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:image" content="http://www.flightclub.io/images/og_image.png" />   
 
     <link rel="apple-touch-icon" sizes="57x57" href="images/favicon-round/apple-icon-57x57.png">
     <link rel="apple-touch-icon" sizes="60x60" href="images/favicon-round/apple-icon-60x60.png">
