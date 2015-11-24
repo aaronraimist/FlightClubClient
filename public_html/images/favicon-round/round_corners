@@ -1,0 +1,3 @@
+# This command rounds the corners of an image with a circle of radius=6 on each corner
+#
+# convert input.png \( +clone  -alpha extract -draw 'fill black polygon 0,0 0,6 6,0 fill white circle 6,6 6,0' \( +clone -flip \) -compose Multiply -composite \( +clone -flop \) -compose Multiply -composite \) -alpha off -compose CopyOpacity -composite output.png
