@@ -174,6 +174,8 @@ function fillOutputArray(data)
           '</div>\n'+
           '<div class="row">\n'+
           '  <div class="col-sm-4"><img src="'+imageMap['q']+'" alt="q"/></div>\n'+
+          '  <div class="col-sm-4"><img src="'+imageMap['acceleration1']+'" alt="acceleration1"/></div>\n'+
+          '  <div class="col-sm-4"><img src="'+imageMap['acceleration2']+'" alt="acceleration2"/></div>\n'+
           '</div>\n';
   
   $('.resultGrid').append(content);
