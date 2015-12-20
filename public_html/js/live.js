@@ -59,35 +59,21 @@ function fillData(data)
   }
   else if (timeUntilLaunch > 5 * 1000)
   {
-    var html =
-            "<div class='row'>\n" +
-            "  <div class='col-xs-12 col-sm-4'>\n" +
-            "    <img id='boost' src='' alt='profile1'/>\n" +
-            "  </div>\n" +
-            "  <div class='col-xs-12 col-sm-8'>\n" +
-            "    <img id='upper' src='' alt='profile2'/>" +
-            "  </div>\n" +
-            "</div>\n";
+    $("#plot_0").append("    <img id='boost' src='' alt='profile1'/>\n");
+    $("#plot_1").append("    <img id='upper' src='' alt='profile2'/>\n");
+
     textBox.hide();
     infoBox.show();
-    infoBox.append(html);
     waitScript(launchTime);
 
   }
   else if (timeUntilLaunch > -15 * 60 * 1000)
   {
-    var html =
-            "<div class='row'>\n" +
-            "  <div class='col-xs-12 col-sm-4'>\n" +
-            "    <img id='boost' src='' alt='profile1'/>\n" +
-            "  </div>\n" +
-            "  <div class='col-xs-12 col-sm-8'>\n" +
-            "    <img id='upper' src='' alt='profile2'/>" +
-            "  </div>\n" +
-            "</div>\n";
+    $("#plot_0").append("    <img id='boost' src='' alt='profile1'/>\n");
+    $("#plot_1").append("    <img id='upper' src='' alt='profile2'/>\n");
+    
     textBox.hide();
     infoBox.show();
-    infoBox.append(html);
     liveScript(launchTime);
   }
   else
@@ -191,8 +177,11 @@ function refreshTelemetry(launchDate)
 
 function updateScreen(data) {
 
-  $("#velocity").html('VEL: ' + data.Stages[1].Telemetry.vel + ' M/S');
-  $("#altitude").html('ALT: ' + data.Stages[1].Telemetry.alt + ' KM');
+  $("#velocity_0").html('VEL: ' + data.Stages[0].Telemetry.vel + ' M/S');
+  $("#altitude_0").html('ALT: ' + data.Stages[0].Telemetry.alt + ' KM');
+
+  $("#velocity_1").html('VEL: ' + data.Stages[1].Telemetry.vel + ' M/S');
+  $("#altitude_1").html('ALT: ' + data.Stages[1].Telemetry.alt + ' KM');
 
   $("#boost").attr('src', data.Stages[0].Plots.url);
   $("#upper").attr('src', data.Stages[1].Plots.url);

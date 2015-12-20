@@ -70,9 +70,18 @@ if (isset($_GET["code"])) {
       </div>
       <div class='liveInfo'>
         <div class='row'>
-          <div id="clock" class="text_black text_full col-xs-4"></div>
-          <div id="velocity" class="text_black text_full col-xs-4"></div>
-          <div id="altitude" class="text_black text_full col-xs-4"></div>
+          <div id="clock" class="text_black text_full col-xs-12"></div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-xs-12 col-sm-4" id="plot_0">
+            <span id="velocity_0" class="text_black text_half centre col-xs-6"></span>
+            <span id="altitude_0" class="text_black text_half centre col-xs-6"></span>
+          </div>
+          <div class="col-xs-12 col-sm-8" id="plot_1">
+            <span id="velocity_1" class="text_black text_half centre col-xs-6"></span>
+            <span id="altitude_1" class="text_black text_half centre col-xs-6"></span>
+          </div>
         </div>
       </div>
     </div>
