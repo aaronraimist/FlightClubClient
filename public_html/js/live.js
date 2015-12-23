@@ -171,16 +171,16 @@ function refreshTelemetry(launchDate)
 
   httpRequest(api_url + '/live' + queryString, 'GET', null, updateScreen, null);
 
-  if (15 * _minute - Math.abs(distance) < 1000) // launch -> over limit
+  if (Math.abs(15 * _minute - Math.abs(distance)) < 1000) // launch -> over limit
     window.location.reload(true);
 }
 
 function updateScreen(data) {
 
-  $("#velocity_0").html('VEL: ' + data.Stages[0].Telemetry.vel + ' M/S');
+  $("#velocity_0").html('VEL: ' + data.Stages[0].Telemetry.vel + ' KM/HR');
   $("#altitude_0").html('ALT: ' + data.Stages[0].Telemetry.alt + ' KM');
 
-  $("#velocity_1").html('VEL: ' + data.Stages[1].Telemetry.vel + ' M/S');
+  $("#velocity_1").html('VEL: ' + data.Stages[1].Telemetry.vel + ' KM/HR');
   $("#altitude_1").html('ALT: ' + data.Stages[1].Telemetry.alt + ' KM');
 
   $("#boost").attr('src', data.Stages[0].Plots.url);
