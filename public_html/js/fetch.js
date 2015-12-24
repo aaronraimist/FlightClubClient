@@ -11,8 +11,8 @@ $(document).ready(function ()
   var d1 = [], d2 = [], d3 = [];
   var launchTime = new Date();
   var i = -5;
-  var throttle = 1;
-  
+  var throttle = 0;
+
   var queryString = window.location.search.substring(1);
   params = parseQueryString(queryString);
 
@@ -23,7 +23,7 @@ $(document).ready(function ()
   start();
 
   function getDataFile(id, stage) {
-    var url = 'http://www.flightclub.io/output/' + id + '_' + stage + '.dat';
+    var url = 'http://localhost/output/' + id + '_' + stage + '.dat';
     $.ajax({type: 'GET', url: url, async: false, contentType: 'text', data: null,
       xhrFields: {withCredentials: false},
       success: successfn,
@@ -42,9 +42,9 @@ $(document).ready(function ()
       alert(data);
     }
   }
-  
+
   function getEventsFile(id, stage) {
-    var url = 'http://www.flightclub.io/output/' + id + '_' + stage + '_events.dat';
+    var url = 'http://localhost/output/' + id + '_' + stage + '_events.dat';
     $.ajax({type: 'GET', url: url, async: false, contentType: 'text', data: null,
       xhrFields: {withCredentials: false},
       success: successfn,
@@ -72,61 +72,51 @@ $(document).ready(function ()
       },
       yaxis: {
         min: 0,
-        max: 200
+        max: 100,
+        zoomRange: [0.1, 300],
+        panRange: [0, 200]
       },
       xaxis: {
         min: 0,
-        max: 100
+        max: 100,
+        zoomRange: [0.1, 300],
+        panRange: [-100, 400]
+      },
+      zoom: {
+        interactive: true
+      },
+      pan: {
+        interactive: true
       }
     });
-    
-		placeholder.bind("plotpan", function (event, plot) {
-      /*
-			var axes = plot.getAxes();
-			$(".message").html("Panning to x: "  + axes.xaxis.min.toFixed(2)
-			+ " &ndash; " + axes.xaxis.max.toFixed(2)
-			+ " and y: " + axes.yaxis.min.toFixed(2)
-			+ " &ndash; " + axes.yaxis.max.toFixed(2));
-      */
-		});
 
-		placeholder.bind("plotzoom", function (event, plot) {
-      /*
-			var axes = plot.getAxes();
-			$(".message").html("Zooming to x: "  + axes.xaxis.min.toFixed(2)
-			+ " &ndash; " + axes.xaxis.max.toFixed(2)
-			+ " and y: " + axes.yaxis.min.toFixed(2)
-			+ " &ndash; " + axes.yaxis.max.toFixed(2));
-      */
-		});
+    $("<span class='fa fa-minus-circle' style='right:50px;top:20px'/>")
+            .appendTo(placeholder)
+            .click(function (event) {
+              event.preventDefault();
+              plot.zoomOut();
+            });
 
-		// add zoom out button 
+    $("<span class='fa fa-plus-circle' style='right:30px;top:20px'/>")
+            .appendTo(placeholder)
+            .click(function (event) {
+              event.preventDefault();
+              plot.zoomOut();
+            });
 
-		$("<div class='button fa fa-minus' style='right:20px;top:20px'></div>")
-			.appendTo(placeholder)
-			.click(function (event) {
-				event.preventDefault();
-				plot.zoomOut();
-			});
+    function addArrow(dir, right, top, offset) {
+      $("<span class='fa fa-chevron-" + dir + "' style='right:" + right + "px;top:" + top + "px'/>")
+              .appendTo(placeholder)
+              .click(function (e) {
+                e.preventDefault();
+                plot.pan(offset);
+              });
+    }
 
-		// and add panning buttons
-
-		// little helper for taking the repetitive work out of placing
-		// panning arrows
-
-		function addArrow(dir, right, top, offset) {
-			$("<span class='button fa fa-chevron-" + dir + "' style='right:" + right + "px;top:" + top + "px'></span>")
-				.appendTo(placeholder)
-				.click(function (e) {
-					e.preventDefault();
-					plot.pan(offset);
-				});
-		}
-
-		addArrow("left", 55, 60, { left: -100 });
-		addArrow("right", 25, 60, { left: 100 });
-		addArrow("up", 40, 45, { top: -100 });
-		addArrow("down", 40, 75, { top: 100 });
+    addArrow("left", 56, 51, {left: -100});
+    addArrow("right", 28, 51, {left: 100});
+    addArrow("up", 40, 36, {top: -100});
+    addArrow("down", 40, 64, {top: 100});
 
     update();
 
@@ -164,7 +154,7 @@ $(document).ready(function ()
             d2.push(null);
           else
             d1.push(null);
-          
+
           // Burn start/end points
           var tel = fullData[i].split(":");
           d3.push([tel[0], tel[1]]);

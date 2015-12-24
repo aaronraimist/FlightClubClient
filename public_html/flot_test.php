@@ -1,15 +1,25 @@
 <!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
 <html>
   <head>
-    <title>TODO supply a title</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Flot Examples: Navigation</title>
+    <style type="text/css">
+
+      #placeholder .button,
+      #placeholder .fa {
+        position: absolute;
+        cursor: pointer;
+      }
+
+      #placeholder div.button {
+        font-size: smaller;
+        color: #999;
+        background-color: #eee;
+        padding: 2px;
+      }
+
+    </style>
+    <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="../../excanvas.min.js"></script><![endif]-->
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <!-- Optional theme -->
@@ -18,20 +28,10 @@ and open the template in the editor.
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
-    <script language="javascript" type="text/javascript" src="js/jquery.flot.js"></script>
-    <script language="javascript" type="text/javascript" src="js/jquery.flot.navigate.js"></script>
+    <script language="javascript" type="text/javascript" src="js/flot.min.js"></script>
 
     <script src="js/core.js"></script>
     <script src="js/fetch.js"></script>
-    
-    <script type="text/css">
-      
-      #placeholder .button {
-        position: absolute;
-        cursor: pointer;
-      }
-
-    </script>
 
   </head>
   <body>
