@@ -7,6 +7,9 @@
 $(document).ready(function ()
 {
 
+  //var host = 'www.flightclub.io';
+  var warp = 1;
+  var host = 'localhost';
   var fullData = {}, eventsData = {};
   var d1 = [], d2 = [], d3 = [];
   var launchTime = new Date();
@@ -14,17 +17,13 @@ $(document).ready(function ()
   var throttle = 0;
 
   var queryString = window.location.search.substring(1);
-  params = parseQueryString(queryString);
+  var queryParams = parseQueryString(queryString);
 
-  var plot;
-
-  getDataFile(params['id'], 'Booster');
-  getEventsFile(params['id'], 'Booster');
-  start();
+  getDataFile(queryParams['id'], 'Booster');
 
   function getDataFile(id, stage) {
-    var url = 'http://localhost/output/' + id + '_' + stage + '.dat';
-    $.ajax({type: 'GET', url: url, async: false, contentType: 'text', data: null,
+    var url = 'http://' + host + '/output/' + id + '_' + stage + '.dat';
+    $.ajax({type: 'GET', url: url, contentType: 'text', data: null,
       xhrFields: {withCredentials: false},
       success: successfn,
       error: errorfn
@@ -34,8 +33,10 @@ $(document).ready(function ()
       var lines = data.split("\n");
       for (var i = 1; i < lines.length; i++) {
         var data = lines[i].split("\t");
+        // fullData[time] = downrange:alt
         fullData[parseInt(data[0])] = parseFloat(data[6]) + ":" + parseFloat(data[4]);
       }
+      getEventsFile(queryParams['id'], 'Booster');
     }
 
     function errorfn(data) {
@@ -44,8 +45,8 @@ $(document).ready(function ()
   }
 
   function getEventsFile(id, stage) {
-    var url = 'http://localhost/output/' + id + '_' + stage + '_events.dat';
-    $.ajax({type: 'GET', url: url, async: false, contentType: 'text', data: null,
+    var url = 'http://' + host + '/output/' + id + '_' + stage + '_events.dat';
+    $.ajax({type: 'GET', url: url, contentType: 'text', data: null,
       xhrFields: {withCredentials: false},
       success: successfn,
       error: errorfn
@@ -55,8 +56,9 @@ $(document).ready(function ()
       var lines = data.split("\n");
       for (var i = 1; i < lines.length; i++) {
         var data = lines[i].split("\t");
-        eventsData[parseInt(data[0])] = parseInt(data[12]);
+        eventsData[parseInt(data[0])] = parseInt(data[12]); // eventsData[time] = throttle
       }
+      start();
     }
 
     function errorfn(data) {
@@ -66,7 +68,7 @@ $(document).ready(function ()
 
   function start() {
     var placeholder = $("#placeholder");
-    plot = $.plot(placeholder, [d1, d2, d3], {
+    var plot = $.plot(placeholder, [d1, d2, d3], {
       series: {
         shadowSize: 0	// Drawing is faster without shadows
       },
@@ -74,7 +76,7 @@ $(document).ready(function ()
         min: 0,
         max: 100,
         zoomRange: [0.1, 300],
-        panRange: [0, 200]
+        panRange: [0, 300]
       },
       xaxis: {
         min: 0,
@@ -104,6 +106,24 @@ $(document).ready(function ()
               plot.zoomOut();
             });
 
+    if(host === 'localhost') {
+      $("<span class='fa fa-backward' style='right:50px;top:85px'/>")
+              .appendTo(placeholder)
+              .click(function (event) {
+                event.preventDefault();
+                if (warp > 1)
+                  warp--;
+              });
+
+      $("<span class='fa fa-forward' style='right:30px;top:85px'/>")
+              .appendTo(placeholder)
+              .click(function (event) {
+                event.preventDefault();
+                if (warp < 1000)
+                  warp++;
+              });
+    }
+
     function addArrow(dir, right, top, offset) {
       $("<span class='fa fa-chevron-" + dir + "' style='right:" + right + "px;top:" + top + "px'/>")
               .appendTo(placeholder)
@@ -118,25 +138,47 @@ $(document).ready(function ()
     addArrow("up", 40, 36, {top: -100});
     addArrow("down", 40, 64, {top: 100});
 
-    update();
+    update(plot);
 
   }
 
-  function update() {
+  function update(plot) {
 
     var finished = false;
     var currentTime = new Date();
-    var time = (currentTime - launchTime) / 1000;
+    var time = (currentTime - launchTime)*warp / 1000;
 
     while (true) {
 
       if (i <= time) {
 
-        // Main curve
-        if (fullData[i] === undefined) {
+        if (fullData[i] === undefined)
+        {
           finished = true;
           break;
-        } else {
+        } 
+        else if (eventsData[i] !== undefined)
+        {
+          var tel = fullData[i].split(":");
+          throttle = eventsData[i];
+
+          // Separator for burns curves
+          // end old curve & start new one at same point
+          if (throttle === 0) {
+            d2.push([tel[0], tel[1]]);
+            d2.push(null);
+            d1.push([tel[0], tel[1]]);
+          } else {
+            d1.push([tel[0], tel[1]]);
+            d1.push(null);
+            d2.push([tel[0], tel[1]]);
+          }
+
+          // Burn start/end points
+          d3.push([tel[0], tel[1]]);
+        } 
+        else
+        {
           var tel = fullData[i].split(":");
 
           // Burn curves
@@ -145,21 +187,7 @@ $(document).ready(function ()
           else
             d2.push([tel[0], tel[1]]);
         }
-
-        if (eventsData[i] !== undefined) {
-          throttle = eventsData[i];
-
-          // Separator for burns curves
-          if (throttle === 0)
-            d2.push(null);
-          else
-            d1.push(null);
-
-          // Burn start/end points
-          var tel = fullData[i].split(":");
-          d3.push([tel[0], tel[1]]);
-        }
-
+        
         i++;
       }
       else
@@ -182,11 +210,12 @@ $(document).ready(function ()
         lines: {show: false},
         points: {show: true}
       }]);
+    
     // Since the axes don't change, we don't need to call plot.setupGrid()
     plot.draw();
 
     if (!finished)
-      setTimeout(update, 1000);
+      setTimeout(update, 1000, plot);
   }
 
 });
