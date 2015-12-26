@@ -19,14 +19,20 @@
 
 var missionName;
 var launchTime;
-var params;
+var queryParams;
+
+var fullData = {}, eventsData = {};
+var d1 = [], d2 = [], d3 = [];
+var boosterPlot;
+var throttle = 0;
+var warp = 1;
 
 $(document).ready(function ()
 {
   var queryString = window.location.search.substring(1);
-  params = parseQueryString(queryString);
+  queryParams = parseQueryString(queryString);
 
-  httpRequest(api_url + '/missions/' + params['code'], 'GET', null, fillData, null);
+  httpRequest(api_url + '/missions/' + queryParams['code'], 'GET', null, fillData, null);
 
 });
 
@@ -34,10 +40,68 @@ function fillData(data)
 {
   missionName = data.Mission.description;
   var title = missionName + ' Live!';
-  $(document).prop('title', title);
-  
+  document.title = title;
+
   var tempDate = data.Mission.date.replace(/-/g, "/") + ' ' + data.Mission.time + ' UTC';
   launchTime = Date.parse(tempDate);
+  launchTime = new Date();
+
+  initialise();
+
+}
+
+function initialise() {
+
+  getDataFile(queryParams['id'], 'Booster');
+
+}
+
+function getDataFile(id, stage) {
+  var url = client + '/output/' + id + '_' + stage + '.dat';
+  $.ajax({type: 'GET', url: url, contentType: 'text', data: null,
+    xhrFields: {withCredentials: false},
+    success: successfn,
+    error: errorfn
+  });
+
+  function successfn(data) {
+    var lines = data.split("\n");
+    for (var i = 1; i < lines.length; i++) {
+      var data = lines[i].split("\t");
+      // fullData[time] = downrange:alt:vel
+      fullData[parseInt(data[0])] = parseFloat(data[6]) + ":" + parseFloat(data[4]) + ":" + parseFloat(data[5]);
+    }
+    getEventsFile(queryParams['id'], 'Booster');
+  }
+
+  function errorfn(data) {
+    alert(data);
+  }
+}
+
+function getEventsFile(id, stage) {
+  var url = client + '/output/' + id + '_' + stage + '_events.dat';
+  $.ajax({type: 'GET', url: url, contentType: 'text', data: null,
+    xhrFields: {withCredentials: false},
+    success: successfn,
+    error: errorfn
+  });
+
+  function successfn(data) {
+    var lines = data.split("\n");
+    for (var i = 1; i < lines.length; i++) {
+      var data = lines[i].split("\t");
+      eventsData[parseInt(data[0])] = parseInt(data[12]); // eventsData[time] = throttle
+    }
+    start();
+  }
+
+  function errorfn(data) {
+    alert(data);
+  }
+}
+
+function start() {
 
   var timeUntilLaunch = getTimeRemaining();
   var textBox = $(".textBox");
@@ -57,24 +121,79 @@ function fillData(data)
     textBox.append(html);
     displayClock(launchTime);
   }
-  else if (timeUntilLaunch > 5 * 1000)
-  {
-    $("#plot_0").append("    <img id='boost' src='' alt='profile1'/>\n");
-    $("#plot_1").append("    <img id='upper' src='' alt='profile2'/>\n");
-
-    textBox.hide();
-    infoBox.show();
-    waitScript(launchTime);
-
-  }
   else if (timeUntilLaunch > -15 * 60 * 1000)
   {
-    $("#plot_0").append("    <img id='boost' src='' alt='profile1'/>\n");
-    $("#plot_1").append("    <img id='upper' src='' alt='profile2'/>\n");
+
+    var placeholder = $("#boost");
     
+    var width = placeholder.width();
+    placeholder.height(width);
+    
+    boosterPlot = $.plot(placeholder, [d1, d2, d3], {
+      series: {
+        shadowSize: 0	// Drawing is faster without shadows
+      },
+      yaxis: {
+        min: 0,
+        max: 100,
+        zoomRange: [0.1, 300],
+        panRange: [0, 300]
+      },
+      xaxis: {
+        min: 0,
+        max: 100,
+        zoomRange: [0.1, 300],
+        panRange: [-100, 400]
+      },
+      zoom: {
+        interactive: true
+      },
+      pan: {
+        interactive: true
+      }
+    });
+
+    $("<span class='fa fa-minus-circle' style='right:50px;top:30px'/>")
+            .appendTo(placeholder)
+            .click(function (event) {
+              event.preventDefault();
+              boosterPlot.zoomOut();
+            });
+
+    $("<span class='fa fa-plus-circle' style='right:30px;top:30px'/>")
+            .appendTo(placeholder)
+            .click(function (event) {
+              event.preventDefault();
+              boosterPlot.zoomOut();
+            });
+
+    if (client === 'http://localhost') {
+      $("<span class='fa fa-backward' style='right:50px;top:95px'/>")
+              .appendTo(placeholder)
+              .click(function (event) {
+                event.preventDefault();
+                if (warp > 1)
+                  warp--;
+              });
+
+      $("<span class='fa fa-forward' style='right:30px;top:95px'/>")
+              .appendTo(placeholder)
+              .click(function (event) {
+                event.preventDefault();
+                if (warp < 1000)
+                  warp++;
+              });
+    }
+
+    addArrow(placeholder, "left", 56, 61, {left: -100});
+    addArrow(placeholder, "right", 28, 61, {left: 100});
+    addArrow(placeholder, "up", 40, 46, {top: -100});
+    addArrow(placeholder, "down", 40, 74, {top: 100});
+
     textBox.hide();
     infoBox.show();
-    liveScript(launchTime);
+    update(boosterPlot, -5);
+
   }
   else
   {
@@ -87,7 +206,6 @@ function fillData(data)
     textBox.show();
     textBox.append(html);
   }
-
 }
 
 function getTimeRemaining()
@@ -132,63 +250,16 @@ function refreshClock(launchDate)
     window.location.reload(true);
 }
 
-//////////////////////////////////////
-//              WAIT                //
-//////////////////////////////////////
-
-function waitScript(launchTimeMillis)
-{
-  var launchDate = new Date(launchTimeMillis);
-  refreshTelemetry(launchDate);
-  setInterval(function () {
-    refreshWaitClock(launchDate);
-  }, 1000);
+function addArrow(placeholder, dir, right, top, offset) {
+  $("<span class='fa fa-chevron-" + dir + "' style='right:" + right + "px;top:" + top + "px'/>")
+          .appendTo(placeholder)
+          .click(function (e) {
+            e.preventDefault();
+            boosterPlot.pan(offset);
+          });
 }
 
-//////////////////////////////////////
-//              LIVE                //
-//////////////////////////////////////
-
-function liveScript(launchTimeMillis)
-{
-  var launchDate = new Date(launchTimeMillis);
-  setInterval(function () {
-    refreshTelemetry(launchDate);
-    refreshWaitClock(launchDate);
-  }, 1000);
-}
-
-function refreshTelemetry(launchDate)
-{
-  var _second = 1000;
-  var _minute = _second * 60;
-
-  var now = new Date();
-  var distance = launchDate - now;
-
-  var time = (now.getTime() - launchDate.getTime()) / 1000;
-  var queryString = '?code=' + params['code'] + '&time=' + time;
-
-  httpRequest(api_url + '/live' + queryString, 'GET', null, updateScreen, null);
-
-  if (Math.abs(15 * _minute - Math.abs(distance)) < 1000) // launch -> over limit
-    window.location.reload(true);
-}
-
-function updateScreen(data) {
-
-  $("#velocity_0").html('VEL: ' + data.Stages[0].Telemetry.vel + ' KM/HR');
-  $("#altitude_0").html('ALT: ' + data.Stages[0].Telemetry.alt + ' KM');
-
-  $("#velocity_1").html('VEL: ' + data.Stages[1].Telemetry.vel + ' KM/HR');
-  $("#altitude_1").html('ALT: ' + data.Stages[1].Telemetry.alt + ' KM');
-
-  $("#boost").attr('src', data.Stages[0].Plots.url);
-  $("#upper").attr('src', data.Stages[1].Plots.url);
-
-}
-
-function refreshWaitClock(launchTimeMillis)
+function refreshClock(launchTimeMillis)
 {
   var launchTime = new Date(launchTimeMillis);
   var _second = 1000;
@@ -214,11 +285,89 @@ function refreshWaitClock(launchTimeMillis)
   if (seconds < 10)
     seconds = '0' + seconds;
   $('#clock').html('T' + sign + hours + ':' + minutes + ':' + seconds);
-  
-  if (Math.abs(10 * _minute - distance) < 1000) // refresh after poll
-    window.location.reload(true);
-  if (Math.abs(1 * _minute - distance) < 1000) // refresh for launch
-    window.location.reload(true);
-  if (Math.abs(4 * _second - distance) < 1000) // wait -> launch limit
-    window.location.reload(true);
+}
+
+function update(plot1, i) {
+
+  var finished = false;
+  var currentTime = new Date();
+  var time = (currentTime - launchTime) * warp / 1000;
+
+  while (true) {
+
+    if (i <= time) {
+
+      if (fullData[i] === undefined)
+      {
+        finished = true;
+        $("#velocity_0").html('VEL: 0 KM/HR');
+        $("#altitude_0").html('ALT: 0 KM');
+        break;
+      }
+      else if (eventsData[i] !== undefined)
+      {
+        var tel = fullData[i].split(":");
+        throttle = eventsData[i];
+
+        // Separator for burns curves
+        // end old curve & start new one at same point
+        if (throttle === 0) {
+          d2.push([tel[0], tel[1]]);
+          d2.push(null);
+          d1.push([tel[0], tel[1]]);
+        } else {
+          d1.push([tel[0], tel[1]]);
+          d1.push(null);
+          d2.push([tel[0], tel[1]]);
+        }
+
+        // Burn start/end points
+        d3.push([tel[0], tel[1]]);
+
+        $("#velocity_0").html('VEL: ' + tel[2] + ' KM/HR');
+        $("#altitude_0").html('ALT: ' + tel[1] + ' KM');
+      }
+      else
+      {
+        var tel = fullData[i].split(":");
+
+        // Burn curves
+        if (throttle === 0)
+          d1.push([tel[0], tel[1]]);
+        else
+          d2.push([tel[0], tel[1]]);
+
+        $("#velocity_0").html('VEL: ' + tel[2] + ' KM/HR');
+        $("#altitude_0").html('ALT: ' + tel[1] + ' KM');
+      }
+
+      i++;
+    }
+    else
+      break;
+
+  }
+
+  plot1.setData([{
+      data: d1,
+      lineWidth: 1,
+      lines: {show: true}
+    }, {
+      data: d2,
+      lineWidth: 10,
+      color: '#ff0000',
+      lines: {show: true}
+    }, {
+      data: d3,
+      color: '#ff0000',
+      lines: {show: false},
+      points: {show: true}
+    }]);
+
+  // Since the axes don't change, we don't need to call plot.setupGrid()
+  plot1.draw();
+  refreshClock(launchTime);
+
+  if (!finished)
+    setTimeout(update, 500, plot1, i);
 }

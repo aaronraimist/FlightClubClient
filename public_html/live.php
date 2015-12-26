@@ -9,6 +9,19 @@ if (isset($_GET["code"])) {
 <html>
   <head>
     <title></title>
+    <style type="text/css">
+      
+      #boost {
+        font-size: 12px;
+        color: black;
+      }
+
+      #boost .fa {
+        position: absolute;
+        cursor: pointer;
+      }
+
+    </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
@@ -16,9 +29,12 @@ if (isset($_GET["code"])) {
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
     <link href='https://fonts.googleapis.com/css?family=Quicksand' rel='stylesheet' type='text/css'>
+
+    <script language="javascript" type="text/javascript" src="js/flot.min.js"></script>
 
     <script src="js/core.js"></script>
     <script src="js/live.js"></script>
@@ -74,13 +90,15 @@ if (isset($_GET["code"])) {
         </div>
         <hr>
         <div class="row">
-          <div class="col-xs-12 col-sm-4" id="plot_0">
-            <span id="velocity_0" class="text_black text_half centre col-xs-6"></span>
-            <span id="altitude_0" class="text_black text_half centre col-xs-6"></span>
+          <div class="col-xs-12 col-sm-4">
+            <span id="velocity_0" class="text_black text_half centre col-xs-7"></span>
+            <span id="altitude_0" class="text_black text_half centre col-xs-5"></span>
+            <div id="boost"></div>
           </div>
-          <div class="col-xs-12 col-sm-8" id="plot_1">
-            <span id="velocity_1" class="text_black text_half centre col-xs-6"></span>
-            <span id="altitude_1" class="text_black text_half centre col-xs-6"></span>
+          <div class="col-xs-12 col-sm-8">
+            <span id="velocity_1" class="text_black text_half centre col-xs-7"></span>
+            <span id="altitude_1" class="text_black text_half centre col-xs-5"></span>
+            <div id="upper"></div>
           </div>
         </div>
       </div>
