@@ -11,12 +11,12 @@ if (isset($_GET["code"])) {
     <title></title>
     <style type="text/css">
       
-      #boost {
+      #Booster, #UpperStage {
         font-size: 12px;
         color: black;
       }
 
-      #boost .fa {
+      #Booster .fa, #UpperStage .fa {
         position: absolute;
         cursor: pointer;
       }
@@ -93,12 +93,12 @@ if (isset($_GET["code"])) {
           <div class="col-xs-12 col-sm-4">
             <span id="velocity_0" class="text_black text_half centre col-xs-7"></span>
             <span id="altitude_0" class="text_black text_half centre col-xs-5"></span>
-            <div id="boost"></div>
+            <div id="Booster"></div>
           </div>
           <div class="col-xs-12 col-sm-8">
             <span id="velocity_1" class="text_black text_half centre col-xs-7"></span>
             <span id="altitude_1" class="text_black text_half centre col-xs-5"></span>
-            <div id="upper"></div>
+            <div id="UpperStage"></div>
           </div>
         </div>
       </div>

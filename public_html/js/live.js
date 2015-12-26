@@ -21,16 +21,20 @@ var missionName;
 var launchTime;
 var queryParams;
 
-var fullData = {}, eventsData = {};
-var d1 = [], d2 = [], d3 = [];
-var boosterPlot;
-var throttle = 0;
+var fullData = [], eventsData = [];
+var d = [];
+var stageMap = {};
+var plot = [];
+var throttle = [0, 0];
 var warp = 1;
 
 $(document).ready(function ()
 {
   var queryString = window.location.search.substring(1);
   queryParams = parseQueryString(queryString);
+
+  stageMap[0] = 'Booster';
+  stageMap[1] = 'UpperStage';
 
   httpRequest(api_url + '/missions/' + queryParams['code'], 'GET', null, fillData, null);
 
@@ -52,12 +56,15 @@ function fillData(data)
 
 function initialise() {
 
-  getDataFile(queryParams['id'], 'Booster');
+  getDataFile(queryParams['id'], 0);
 
 }
 
 function getDataFile(id, stage) {
-  var url = client + '/output/' + id + '_' + stage + '.dat';
+  if (stageMap[stage] === undefined)
+    start();
+
+  var url = client + '/output/' + id + '_' + stageMap[stage] + '.dat';
   $.ajax({type: 'GET', url: url, contentType: 'text', data: null,
     xhrFields: {withCredentials: false},
     success: successfn,
@@ -66,21 +73,28 @@ function getDataFile(id, stage) {
 
   function successfn(data) {
     var lines = data.split("\n");
+    fullData[stage] = [];
+    d[stage] = [];
+
+    d[stage][0] = []; // burn
+    d[stage][1] = []; // coast
+    d[stage][2] = []; // events
+
     for (var i = 1; i < lines.length; i++) {
       var data = lines[i].split("\t");
       // fullData[time] = downrange:alt:vel
-      fullData[parseInt(data[0])] = parseFloat(data[6]) + ":" + parseFloat(data[4]) + ":" + parseFloat(data[5]);
+      fullData[stage][parseInt(data[0])] = parseFloat(data[6]) + ":" + parseFloat(data[4]) + ":" + parseFloat(data[5]);
     }
-    getEventsFile(queryParams['id'], 'Booster');
+    getEventsFile(id, stage);
   }
 
   function errorfn(data) {
-    alert(data);
+    console.log(data);
   }
 }
 
 function getEventsFile(id, stage) {
-  var url = client + '/output/' + id + '_' + stage + '_events.dat';
+  var url = client + '/output/' + id + '_' + stageMap[stage] + '_events.dat';
   $.ajax({type: 'GET', url: url, contentType: 'text', data: null,
     xhrFields: {withCredentials: false},
     success: successfn,
@@ -89,15 +103,16 @@ function getEventsFile(id, stage) {
 
   function successfn(data) {
     var lines = data.split("\n");
+    eventsData[stage] = [];
     for (var i = 1; i < lines.length; i++) {
       var data = lines[i].split("\t");
-      eventsData[parseInt(data[0])] = parseInt(data[12]); // eventsData[time] = throttle
+      eventsData[stage][parseInt(data[0])] = parseInt(data[12]); // eventsData[time] = throttle
     }
-    start();
+    getDataFile(queryParams['id'], stage + 1);
   }
 
   function errorfn(data) {
-    alert(data);
+    console.log(data);
   }
 }
 
@@ -124,75 +139,14 @@ function start() {
   else if (timeUntilLaunch > -15 * 60 * 1000)
   {
 
-    var placeholder = $("#boost");
-    
-    var width = placeholder.width();
-    placeholder.height(width);
-    
-    boosterPlot = $.plot(placeholder, [d1, d2, d3], {
-      series: {
-        shadowSize: 0	// Drawing is faster without shadows
-      },
-      yaxis: {
-        min: 0,
-        max: 100,
-        zoomRange: [0.1, 300],
-        panRange: [0, 300]
-      },
-      xaxis: {
-        min: 0,
-        max: 100,
-        zoomRange: [0.1, 300],
-        panRange: [-100, 400]
-      },
-      zoom: {
-        interactive: true
-      },
-      pan: {
-        interactive: true
-      }
-    });
-
-    $("<span class='fa fa-minus-circle' style='right:50px;top:30px'/>")
-            .appendTo(placeholder)
-            .click(function (event) {
-              event.preventDefault();
-              boosterPlot.zoomOut();
-            });
-
-    $("<span class='fa fa-plus-circle' style='right:30px;top:30px'/>")
-            .appendTo(placeholder)
-            .click(function (event) {
-              event.preventDefault();
-              boosterPlot.zoomOut();
-            });
-
-    if (client === 'http://localhost') {
-      $("<span class='fa fa-backward' style='right:50px;top:95px'/>")
-              .appendTo(placeholder)
-              .click(function (event) {
-                event.preventDefault();
-                if (warp > 1)
-                  warp--;
-              });
-
-      $("<span class='fa fa-forward' style='right:30px;top:95px'/>")
-              .appendTo(placeholder)
-              .click(function (event) {
-                event.preventDefault();
-                if (warp < 1000)
-                  warp++;
-              });
-    }
-
-    addArrow(placeholder, "left", 56, 61, {left: -100});
-    addArrow(placeholder, "right", 28, 61, {left: 100});
-    addArrow(placeholder, "up", 40, 46, {top: -100});
-    addArrow(placeholder, "down", 40, 74, {top: 100});
+    for (var i = 0; i < 2; i++)
+      initialisePlot(i);
 
     textBox.hide();
     infoBox.show();
-    update(boosterPlot, -5);
+    displayClock(launchTime);
+
+    update(-5);
 
   }
   else
@@ -206,6 +160,76 @@ function start() {
     textBox.show();
     textBox.append(html);
   }
+}
+
+function initialisePlot(stage) {
+
+  var placeholder = $("#" + stageMap[stage]);
+
+  var width = $("#Booster").width();
+  placeholder.height(width);
+
+  plot[stage] = $.plot(placeholder, [d[0], d[1]], {
+    series: {
+      shadowSize: 0	// Drawing is faster without shadows
+    },
+    yaxis: {
+      min: 0,
+      max: 100,
+      zoomRange: [0.1, 300],
+      panRange: [0, 300]
+    },
+    xaxis: {
+      min: 0,
+      max: 100,
+      zoomRange: [0.1, 300],
+      panRange: [-100, 400]
+    },
+    zoom: {
+      interactive: true
+    },
+    pan: {
+      interactive: true
+    }
+  });
+
+  $("<span class='fa fa-minus-circle' style='right:50px;top:30px'/>")
+          .appendTo(placeholder)
+          .click(function (event) {
+            event.preventDefault();
+            plot[stage].zoomOut();
+          });
+
+  $("<span class='fa fa-plus-circle' style='right:30px;top:30px'/>")
+          .appendTo(placeholder)
+          .click(function (event) {
+            event.preventDefault();
+            plot[stage].zoomOut();
+          });
+
+  if (client === 'http://localhost') {
+    $("<span class='fa fa-backward' style='right:50px;top:95px'/>")
+            .appendTo(placeholder)
+            .click(function (event) {
+              event.preventDefault();
+              if (warp > 1)
+                warp--;
+            });
+
+    $("<span class='fa fa-forward' style='right:30px;top:95px'/>")
+            .appendTo(placeholder)
+            .click(function (event) {
+              event.preventDefault();
+              if (warp < 1000)
+                warp++;
+            });
+  }
+
+  addArrow(placeholder, plot[stage], "left", 56, 61, {left: -100});
+  addArrow(placeholder, plot[stage], "right", 28, 61, {left: 100});
+  addArrow(placeholder, plot[stage], "up", 40, 46, {top: -100});
+  addArrow(placeholder, plot[stage], "down", 40, 74, {top: 100});
+
 }
 
 function getTimeRemaining()
@@ -250,12 +274,12 @@ function refreshClock(launchDate)
     window.location.reload(true);
 }
 
-function addArrow(placeholder, dir, right, top, offset) {
+function addArrow(placeholder, plot, dir, right, top, offset) {
   $("<span class='fa fa-chevron-" + dir + "' style='right:" + right + "px;top:" + top + "px'/>")
           .appendTo(placeholder)
           .click(function (e) {
             e.preventDefault();
-            boosterPlot.pan(offset);
+            plot.pan(offset);
           });
 }
 
@@ -287,87 +311,91 @@ function refreshClock(launchTimeMillis)
   $('#clock').html('T' + sign + hours + ':' + minutes + ':' + seconds);
 }
 
-function update(plot1, i) {
+function update(i) {
 
-  var finished = false;
   var currentTime = new Date();
   var time = (currentTime - launchTime) * warp / 1000;
 
   while (true) {
+    for (var stage = 0; stage < 2; stage++) {
 
-    if (i <= time) {
+      if (i <= time) {
 
-      if (fullData[i] === undefined)
-      {
-        finished = true;
-        $("#velocity_0").html('VEL: 0 KM/HR');
-        $("#altitude_0").html('ALT: 0 KM');
-        break;
-      }
-      else if (eventsData[i] !== undefined)
-      {
-        var tel = fullData[i].split(":");
-        throttle = eventsData[i];
-
-        // Separator for burns curves
-        // end old curve & start new one at same point
-        if (throttle === 0) {
-          d2.push([tel[0], tel[1]]);
-          d2.push(null);
-          d1.push([tel[0], tel[1]]);
-        } else {
-          d1.push([tel[0], tel[1]]);
-          d1.push(null);
-          d2.push([tel[0], tel[1]]);
+        if (fullData[stage][i] === undefined)
+        {
+          $("#velocity_" + stage).html('VEL: 0 KM/HR');
+          $("#altitude_" + stage).html('ALT: 0 KM');
+          break;
         }
+        else if (eventsData[stage][i] !== undefined)
+        {
+          var tel = fullData[stage][i].split(":");
+          throttle[stage] = eventsData[stage][i];
 
-        // Burn start/end points
-        d3.push([tel[0], tel[1]]);
+          // Separator for burns curves
+          // end old curve & start new one at same point
+          if (throttle[stage] === 0) {
+            d[stage][1].push([tel[0], tel[1]]);
+            d[stage][1].push(null);
+            d[stage][0].push([tel[0], tel[1]]);
+          } else {
+            d[stage][0].push([tel[0], tel[1]]);
+            d[stage][0].push(null);
+            d[stage][1].push([tel[0], tel[1]]);
+          }
 
-        $("#velocity_0").html('VEL: ' + tel[2] + ' KM/HR');
-        $("#altitude_0").html('ALT: ' + tel[1] + ' KM');
-      }
-      else
-      {
-        var tel = fullData[i].split(":");
+          // Burn start/end points
+          d[stage][2].push([tel[0], tel[1]]);
 
-        // Burn curves
-        if (throttle === 0)
-          d1.push([tel[0], tel[1]]);
+          $("#velocity_" + stage).html('VEL: ' + tel[2] + ' KM/HR');
+          $("#altitude_" + stage).html('ALT: ' + tel[1] + ' KM');
+        }
         else
-          d2.push([tel[0], tel[1]]);
+        {
+          var tel = fullData[stage][i].split(":");
 
-        $("#velocity_0").html('VEL: ' + tel[2] + ' KM/HR');
-        $("#altitude_0").html('ALT: ' + tel[1] + ' KM');
+          // Burn curves
+          if (throttle[stage] === 0)
+            d[stage][0].push([tel[0], tel[1]]);
+          else
+            d[stage][1].push([tel[0], tel[1]]);
+
+          $("#velocity_" + stage).html('VEL: ' + tel[2] + ' KM/HR');
+          $("#altitude_" + stage).html('ALT: ' + tel[1] + ' KM');
+        }
       }
 
+    }
+    if (i <= time) {
       i++;
     }
     else
       break;
+  }
+
+  for (var stage = 0; stage < 2; stage++) {
+
+    var plot1 = plot[stage];
+    plot1.setData([{
+        data: d[stage][0],
+        lineWidth: 1,
+        lines: {show: true}
+      }, {
+        data: d[stage][1],
+        lineWidth: 10,
+        color: '#ff0000',
+        lines: {show: true}
+      }, {
+        data: d[stage][2],
+        color: '#ff0000',
+        lines: {show: false},
+        points: {show: true}
+      }]);
+
+    // Since the axes don't change, we don't need to call plot.setupGrid()
+    plot1.draw();
 
   }
 
-  plot1.setData([{
-      data: d1,
-      lineWidth: 1,
-      lines: {show: true}
-    }, {
-      data: d2,
-      lineWidth: 10,
-      color: '#ff0000',
-      lines: {show: true}
-    }, {
-      data: d3,
-      color: '#ff0000',
-      lines: {show: false},
-      points: {show: true}
-    }]);
-
-  // Since the axes don't change, we don't need to call plot.setupGrid()
-  plot1.draw();
-  refreshClock(launchTime);
-
-  if (!finished)
-    setTimeout(update, 500, plot1, i);
+  setTimeout(update, 500, i);
 }
