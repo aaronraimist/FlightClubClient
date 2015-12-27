@@ -346,12 +346,6 @@ input:disabled, select:disabled {
   padding-top: 0px;
   padding-bottom: 0px;
 }
-  
-.liveInfo img {
-  display:block;
-  width: 100% !important;
-  height: auto !important;
-}
 
 /* FOOTER */
 .footer {

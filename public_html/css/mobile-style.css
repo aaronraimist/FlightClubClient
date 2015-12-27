@@ -66,14 +66,6 @@ only screen and (max-width: 767px) {
     font-size:27px; /* Actually 1.5x */
   }
 
-  #live .live-info {
-    margin-top:75px;
-  }
-
-  #clock, #velocity, #altitude {
-    margin-top:10px;
-  }
-
   /* MISC */
   .rborder_small { border-right:1px solid #fff}
   .lborder_small { border-left:1px solid #fff}

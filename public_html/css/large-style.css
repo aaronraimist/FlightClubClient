@@ -89,10 +89,6 @@ only screen and (min-width: 768px)  {
     margin-top: 150px;
   }
 
-  #clock, #velocity, #altitude {
-    margin-top:20px;
-  }
-
   /* MISC */
   .rborder_large { border-right:1px solid #fff}
   .lborder_large { border-left:1px solid #fff}
