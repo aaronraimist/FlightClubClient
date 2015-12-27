@@ -78,6 +78,9 @@ only screen and (min-width: 768px)  {
   }
 
   /* LIVE */
+  .text_quarter  {
+    font-size:12px;
+  }
   .text_half  {
     font-size:18px;
   }

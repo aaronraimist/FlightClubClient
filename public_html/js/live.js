@@ -115,10 +115,10 @@ function getEventsFile(liveId, stage) {
 }
 
 function start() {
-
-  var timeUntilLaunch = getTimeRemaining();
+  
+  var now = new Date();
+  var timeUntilLaunch = launchTime - now;
   var textBox = $(".textBox");
-  var infoBox = $('.liveInfo');
 
   if (timeUntilLaunch > 1 * 60 * 60 * 1000)
   {
@@ -129,7 +129,6 @@ function start() {
             "\t<div id='hours'></div>\n" +
             "\t<div id='minutes'></div>\n" +
             "\t<div id='seconds'></div>\n";
-    infoBox.hide();
     textBox.show();
     textBox.append(html);
     displayClock(launchTime, true);
@@ -137,7 +136,6 @@ function start() {
   else if (timeUntilLaunch > -14 * 60 * 1000)
   {
     textBox.hide();
-    infoBox.show();
     displayClock(launchTime, false);
 
     initialisePlot();
@@ -147,23 +145,25 @@ function start() {
   {
     $("#live").prepend("<div class='bg'><img src='images/background.jpg' alt='background'/></div>");
     var html =
-            "<div class='text_full centre live-info'>\n" +
+            "<div class='text_full centre'>\n" +
             "  <div>" + missionName + " has already launched.</div>\n" +
             "</div>";
-    infoBox.hide();
     textBox.show();
     textBox.append(html);
   }
 }
 
-function initialisePlot() {
+$(window).resize(function() {
+  initialisePlot();
+});
 
+function initialisePlot() {
+    
   var windowHeight = $(window).height();
   var navbarHeight = $(".navbar").outerHeight(true);
-  var clockHeight = $("#clock").outerHeight(true);
 
   var placeholder = $("#placeholder");
-  placeholder.height(windowHeight - (navbarHeight + clockHeight + 80)); // there's a <hr> that takes 40, and i want 40 more
+  placeholder.height(windowHeight - (navbarHeight + 10)); // margin bottom 10
 
   var width = placeholder.width();
   var height = placeholder.height();
@@ -194,21 +194,41 @@ function initialisePlot() {
     }
   });
 
-  if (client === 'http://localhost') {
   $("<span class='fa fa-minus-circle' style='right:50px;top:30px'/>")
           .appendTo(placeholder)
           .click(function (event) {
             event.preventDefault();
-            plot.zoomOut();
+
+            var yoptions = plot.getAxes().yaxis.options;
+            yoptions.min = 0;
+            yoptions.max = yoptions.min + (yoptions.max - yoptions.min) * 1.5; // zoom out 50%
+
+            var xoptions = plot.getAxes().xaxis.options;
+            xoptions.min = 0;
+            xoptions.max = yoptions.max*aspectRatio;
+
+            plot.setupGrid();
+            plot.draw();
           });
 
   $("<span class='fa fa-plus-circle' style='right:30px;top:30px'/>")
           .appendTo(placeholder)
           .click(function (event) {
             event.preventDefault();
-            plot.zoomOut();
+
+            var yoptions = plot.getAxes().yaxis.options;
+            yoptions.min = 0;
+            yoptions.max = yoptions.min + (yoptions.max - yoptions.min) / 1.5; // zoom in 50%
+
+            var xoptions = plot.getAxes().xaxis.options;
+            xoptions.min = 0;
+            xoptions.max = yoptions.max*aspectRatio;
+
+            plot.setupGrid();
+            plot.draw();
           });
 
+  if (client === 'http://localhost') {
     $("<span class='fa fa-backward' style='right:50px;top:95px'/>")
             .appendTo(placeholder)
             .click(function (event) {
@@ -230,13 +250,20 @@ function initialisePlot() {
   addArrow(placeholder, "right", 28, 61, {left: 100});
   addArrow(placeholder, "up", 40, 46, {top: -100});
   addArrow(placeholder, "down", 40, 74, {top: 100});
+  
+  $('<div id="clock" class="text_black text_half" style="position:absolute;left:30px;top:20px"></div>').appendTo(placeholder);
+  $('<div class="text_black text_quarter" style="position:absolute;left:30px;top:50px">Booster Stage<div id="telemetry_0"></div></div>').appendTo(placeholder);
+  $('<div class="text_black text_quarter" style="position:absolute;left:30px;top:110px">Upper Stage<div id="telemetry_1"></div></div>').appendTo(placeholder);
 
 }
 
-function getTimeRemaining()
-{
-  var now = new Date();
-  return launchTime - now;
+function addArrow(placeholder, dir, right, top, offset) {
+  $("<span class='fa fa-chevron-" + dir + "' style='right:" + right + "px;top:" + top + "px'/>")
+          .appendTo(placeholder)
+          .click(function (e) {
+            e.preventDefault();
+            plot.pan(offset);
+          });
 }
 
 //////////////////////////////////////
@@ -250,15 +277,6 @@ function displayClock(launchTimeMillis, waiting)
   setInterval(function () {
     refreshClock(launchDate, waiting);
   }, 1000);
-}
-
-function addArrow(placeholder, dir, right, top, offset) {
-  $("<span class='fa fa-chevron-" + dir + "' style='right:" + right + "px;top:" + top + "px'/>")
-          .appendTo(placeholder)
-          .click(function (e) {
-            e.preventDefault();
-            plot.pan(offset);
-          });
 }
 
 function refreshClock(launchTimeMillis, waiting)
@@ -319,9 +337,9 @@ function update(i) {
         {
           if (fullData[stage - 1] !== undefined && fullData[stage - 1][i] !== undefined) {
             var tel = fullData[stage - 1][i].split(":");
-            $("#telemetry_" + stage).html(' || VEL: ' + tel[2] + ' M/S || ALT: ' + tel[1] + ' KM ||');
+            $("#telemetry_" + stage).html('VEL: ' + tel[2] + ' M/S<br>ALT: ' + tel[1] + ' KM<br>');
           } else {
-            $("#telemetry_" + stage).html(' || VEL: 0 M/S || ALT: 0 KM ||');
+            $("#telemetry_" + stage).html('VEL: 0 M/S<br>ALT: 0 KM<br>');
           }
           continue;
         }
@@ -345,7 +363,7 @@ function update(i) {
           // Burn start/end points
           d[stage][2].push([tel[0], tel[1]]);
 
-          $("#telemetry_" + stage).html(' || VEL: ' + tel[2] + ' M/S || ALT: ' + tel[1] + ' KM ||');
+          $("#telemetry_" + stage).html('VEL: ' + tel[2] + ' M/S<br>ALT: ' + tel[1] + ' KM<br>');
         }
         else
         {
@@ -357,7 +375,7 @@ function update(i) {
           else
             d[stage][1].push([tel[0], tel[1]]);
 
-          $("#telemetry_" + stage).html(' || VEL: ' + tel[2] + ' M/S || ALT: ' + tel[1] + ' KM ||');
+          $("#telemetry_" + stage).html('VEL: ' + tel[2] + ' M/S<br>ALT: ' + tel[1] + ' KM<br>');
         }
       }
     }

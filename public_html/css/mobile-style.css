@@ -58,7 +58,10 @@ only screen and (max-width: 767px) {
     content: url("../images/rocket_small.png");
   }
 
-  /* LIVE */
+  /* LIVE */  
+  .text_quarter  {
+    font-size:10px;
+  }
   .text_half  {
     font-size:15px;
   }

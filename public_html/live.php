@@ -82,28 +82,8 @@ if (isset($_GET["code"])) {
           <a class="navbar-brand left" href="#"><span>LiveLaunch</span></a></li>
         </div>
       </nav>
-      <div class='textBox text_full centre live-info'>
-      </div>
-      <div class='liveInfo'>
-        <div class='row'>
-          <div id="clock" class="text_black text_full col-xs-12"></div>
-        </div>
-        <hr>
-        <div class="row">
-          <div class="col-xs-12 col-sm-5">
-            <span id="telemetry_0" class="text_black text_half right"></span>
-            <span class="text_black text_half right">|| Booster Stage </span>
-          </div>
-          <div class="col-sm-2">
-            <span class="col-sm-12 text_black text_half centre">---</span>
-          </div>
-          <div class="col-xs-12 col-sm-5">
-            <span class="text_black text_half left">|| Upper Stage </span>
-            <span id="telemetry_1" class="text_black text_half left"></span>
-          </div>
-        </div>
-        <div id="placeholder" style="height:500px"></div>
-      </div>
+      <div class='textBox text_full centre'></div>
+      <div id="placeholder"></div>
     </div>
   </body>
 </html>
