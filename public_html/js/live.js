@@ -319,9 +319,9 @@ function update(i) {
         {
           if (fullData[stage - 1] !== undefined && fullData[stage - 1][i] !== undefined) {
             var tel = fullData[stage - 1][i].split(":");
-            $("#telemetry_" + stage).html(' || VEL: ' + tel[2] + ' KM/HR || ALT: ' + tel[1] + ' KM ||');
+            $("#telemetry_" + stage).html(' || VEL: ' + tel[2] + ' M/S || ALT: ' + tel[1] + ' KM ||');
           } else {
-            $("#telemetry_" + stage).html(' || VEL: 0 KM/HR || ALT: 0 KM ||');
+            $("#telemetry_" + stage).html(' || VEL: 0 M/S || ALT: 0 KM ||');
           }
           continue;
         }
@@ -345,7 +345,7 @@ function update(i) {
           // Burn start/end points
           d[stage][2].push([tel[0], tel[1]]);
 
-          $("#telemetry_" + stage).html(' || VEL: ' + tel[2] + ' KM/HR || ALT: ' + tel[1] + ' KM ||');
+          $("#telemetry_" + stage).html(' || VEL: ' + tel[2] + ' M/S || ALT: ' + tel[1] + ' KM ||');
         }
         else
         {
@@ -357,7 +357,7 @@ function update(i) {
           else
             d[stage][1].push([tel[0], tel[1]]);
 
-          $("#telemetry_" + stage).html(' || VEL: ' + tel[2] + ' KM/HR || ALT: ' + tel[1] + ' KM ||');
+          $("#telemetry_" + stage).html(' || VEL: ' + tel[2] + ' M/S || ALT: ' + tel[1] + ' KM ||');
         }
       }
     }
