@@ -24,7 +24,7 @@ var queryParams;
 var fullData = [], eventsData = [];
 var d = [];
 var stageMap = {};
-var plot = [];
+var plot;
 var throttle = [0, 0];
 var warp = 1;
 
@@ -139,13 +139,12 @@ function start() {
   else if (timeUntilLaunch > -15 * 60 * 1000)
   {
 
-    for (var i = 0; i < 2; i++)
-      initialisePlot(i);
 
     textBox.hide();
     infoBox.show();
     displayClock(launchTime);
 
+    initialisePlot();
     update(-5);
 
   }
@@ -162,28 +161,35 @@ function start() {
   }
 }
 
-function initialisePlot(stage) {
+function initialisePlot() {
+  
+  var windowHeight = $(window).height();
+  var navbarHeight = $(".navbar").outerHeight(true);
+  var clockHeight = $("#clock").outerHeight(true);
 
-  var placeholder = $("#" + stageMap[stage]);
+  var placeholder = $("#placeholder");
+  placeholder.height(windowHeight - (navbarHeight + clockHeight + 80)); // there's a <hr> that takes 40, and i want 40 more
+  
+  var width = placeholder.width();
+  var height = placeholder.height();
+  
+  var aspectRatio = width/height;
 
-  var width = $("#Booster").width();
-  placeholder.height(width);
-
-  plot[stage] = $.plot(placeholder, [d[0], d[1]], {
+  plot = $.plot(placeholder, [d[0], d[1]], {
     series: {
       shadowSize: 0	// Drawing is faster without shadows
     },
     yaxis: {
       min: 0,
-      max: 100,
-      zoomRange: [0.1, 300],
-      panRange: [0, 300]
+      max: 400,
+      zoomRange: [0.1, 1000],
+      panRange: [0, 1000]
     },
     xaxis: {
       min: 0,
-      max: 100,
-      zoomRange: [0.1, 300],
-      panRange: [-100, 400]
+      max: 400*aspectRatio,
+      zoomRange: [0.1, 1000*aspectRatio],
+      panRange: [-100, 1000*aspectRatio]
     },
     zoom: {
       interactive: true
@@ -197,14 +203,14 @@ function initialisePlot(stage) {
           .appendTo(placeholder)
           .click(function (event) {
             event.preventDefault();
-            plot[stage].zoomOut();
+            plot.zoomOut();
           });
 
   $("<span class='fa fa-plus-circle' style='right:30px;top:30px'/>")
           .appendTo(placeholder)
           .click(function (event) {
             event.preventDefault();
-            plot[stage].zoomOut();
+            plot.zoomOut();
           });
 
   if (client === 'http://localhost') {
@@ -225,10 +231,10 @@ function initialisePlot(stage) {
             });
   }
 
-  addArrow(placeholder, plot[stage], "left", 56, 61, {left: -100});
-  addArrow(placeholder, plot[stage], "right", 28, 61, {left: 100});
-  addArrow(placeholder, plot[stage], "up", 40, 46, {top: -100});
-  addArrow(placeholder, plot[stage], "down", 40, 74, {top: 100});
+  addArrow(placeholder, "left", 56, 61, {left: -100});
+  addArrow(placeholder, "right", 28, 61, {left: 100});
+  addArrow(placeholder, "up", 40, 46, {top: -100});
+  addArrow(placeholder, "down", 40, 74, {top: 100});
 
 }
 
@@ -245,6 +251,7 @@ function getTimeRemaining()
 function displayClock(launchTimeMillis)
 {
   var launchDate = new Date(launchTimeMillis);
+  refreshClock(launchDate);
   setInterval(function () {
     refreshClock(launchDate);
   }, 1000);
@@ -258,7 +265,7 @@ function refreshClock(launchDate)
   var _day = _hour * 24;
 
   var now = new Date();
-  var distance = launchDate - now;
+  var distance = (launchDate - now)*warp;
 
   var days = Math.floor(distance / _day);
   var hours = Math.floor((distance % _day) / _hour);
@@ -274,7 +281,7 @@ function refreshClock(launchDate)
     window.location.reload(true);
 }
 
-function addArrow(placeholder, plot, dir, right, top, offset) {
+function addArrow(placeholder, dir, right, top, offset) {
   $("<span class='fa fa-chevron-" + dir + "' style='right:" + right + "px;top:" + top + "px'/>")
           .appendTo(placeholder)
           .click(function (e) {
@@ -292,7 +299,7 @@ function refreshClock(launchTimeMillis)
   var _day = _hour * 24;
 
   var now = new Date();
-  var distance = launchTime - now;
+  var distance = (launchTime - now)*warp;
   var sign = distance > 0 ? '-' : '+';
   var hours = Math.abs(Math.floor((distance % _day) / _hour));
   var minutes = Math.abs(Math.floor((distance % _hour) / _minute));
@@ -323,9 +330,13 @@ function update(i) {
 
         if (fullData[stage][i] === undefined)
         {
-          $("#velocity_" + stage).html('VEL: 0 KM/HR');
-          $("#altitude_" + stage).html('ALT: 0 KM');
-          break;
+          if(fullData[stage-1] !== undefined && fullData[stage-1][i] !== undefined) {
+            var tel = fullData[stage-1][i].split(":");
+            $("#telemetry_" + stage).html(' || VEL: ' + tel[2] + ' KM/HR || ALT: ' + tel[1] + ' KM ||');
+          } else{
+            $("#telemetry_" + stage).html(' || VEL: 0 KM/HR || ALT: 0 KM ||');
+          }
+          continue;
         }
         else if (eventsData[stage][i] !== undefined)
         {
@@ -347,8 +358,7 @@ function update(i) {
           // Burn start/end points
           d[stage][2].push([tel[0], tel[1]]);
 
-          $("#velocity_" + stage).html('VEL: ' + tel[2] + ' KM/HR');
-          $("#altitude_" + stage).html('ALT: ' + tel[1] + ' KM');
+          $("#telemetry_" + stage).html(' || VEL: ' + tel[2] + ' KM/HR || ALT: ' + tel[1] + ' KM ||');
         }
         else
         {
@@ -360,40 +370,30 @@ function update(i) {
           else
             d[stage][1].push([tel[0], tel[1]]);
 
-          $("#velocity_" + stage).html('VEL: ' + tel[2] + ' KM/HR');
-          $("#altitude_" + stage).html('ALT: ' + tel[1] + ' KM');
+          $("#telemetry_" + stage).html(' || VEL: ' + tel[2] + ' KM/HR || ALT: ' + tel[1] + ' KM ||');
         }
       }
-
     }
-    if (i <= time) {
+    
+    if (i <= time)
       i++;
-    }
     else
       break;
   }
 
   for (var stage = 0; stage < 2; stage++) {
 
-    var plot1 = plot[stage];
-    plot1.setData([{
-        data: d[stage][0],
-        lineWidth: 1,
-        lines: {show: true}
-      }, {
-        data: d[stage][1],
-        lineWidth: 10,
-        color: '#ff0000',
-        lines: {show: true}
-      }, {
-        data: d[stage][2],
-        color: '#ff0000',
-        lines: {show: false},
-        points: {show: true}
-      }]);
+    plot.setData([
+      {data: d[0][0], lineWidth: 1, lines: {show: true}},
+      {data: d[0][1], lineWidth: 10, color: '#ff0000', lines: {show: true}},
+      {data: d[0][2], color: '#ff0000', lines: {show: false}, points: {show: true}},
+      {data: d[1][0], lineWidth: 1, lines: {show: true}},
+      {data: d[1][1], lineWidth: 10, color: '#ff0000', lines: {show: true}},
+      {data: d[1][2], color: '#ff0000', lines: {show: false}, points: {show: true}}
+    ]);
 
     // Since the axes don't change, we don't need to call plot.setupGrid()
-    plot1.draw();
+    plot.draw();
 
   }
 

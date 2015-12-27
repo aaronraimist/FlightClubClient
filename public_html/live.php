@@ -11,12 +11,12 @@ if (isset($_GET["code"])) {
     <title></title>
     <style type="text/css">
       
-      #Booster, #UpperStage {
+      #placeholder {
         font-size: 12px;
         color: black;
       }
 
-      #Booster .fa, #UpperStage .fa {
+      #placeholder .fa {
         position: absolute;
         cursor: pointer;
       }
@@ -90,17 +90,19 @@ if (isset($_GET["code"])) {
         </div>
         <hr>
         <div class="row">
-          <div class="col-xs-12 col-sm-4">
-            <span id="velocity_0" class="text_black text_half centre col-xs-7"></span>
-            <span id="altitude_0" class="text_black text_half centre col-xs-5"></span>
-            <div id="Booster"></div>
+          <div class="col-xs-12 col-sm-5">
+            <span id="telemetry_0" class="text_black text_half right"></span>
+            <span class="text_black text_half right">|| Booster Stage</span>
           </div>
-          <div class="col-xs-12 col-sm-8">
-            <span id="velocity_1" class="text_black text_half centre col-xs-7"></span>
-            <span id="altitude_1" class="text_black text_half centre col-xs-5"></span>
-            <div id="UpperStage"></div>
+          <div class="col-sm-2">
+            <span class="col-sm-12 text_black text_half centre">---</span>
+          </div>
+          <div class="col-xs-12 col-sm-5">
+            <span class="text_black text_half left">|| Upper Stage</span>
+            <span id="telemetry_1" class="text_black text_half left"></span>
           </div>
         </div>
+        <div id="placeholder" style="height:500px"></div>
       </div>
     </div>
   </body>
