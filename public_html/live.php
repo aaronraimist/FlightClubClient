@@ -92,13 +92,13 @@ if (isset($_GET["code"])) {
         <div class="row">
           <div class="col-xs-12 col-sm-5">
             <span id="telemetry_0" class="text_black text_half right"></span>
-            <span class="text_black text_half right">|| Booster Stage</span>
+            <span class="text_black text_half right">|| Booster Stage </span>
           </div>
           <div class="col-sm-2">
             <span class="col-sm-12 text_black text_half centre">---</span>
           </div>
           <div class="col-xs-12 col-sm-5">
-            <span class="text_black text_half left">|| Upper Stage</span>
+            <span class="text_black text_half left">|| Upper Stage </span>
             <span id="telemetry_1" class="text_black text_half left"></span>
           </div>
         </div>

@@ -21,8 +21,7 @@ var missionName;
 var launchTime;
 var queryParams;
 
-var fullData = [], eventsData = [];
-var d = [];
+var fullData = [], eventsData = [], d = [];
 var stageMap = {};
 var plot;
 var throttle = [0, 0];
@@ -48,23 +47,22 @@ function fillData(data)
 
   var tempDate = data.Mission.date.replace(/-/g, "/") + ' ' + data.Mission.time + ' UTC';
   launchTime = Date.parse(tempDate);
-  launchTime = new Date();
 
-  initialise();
-
-}
-
-function initialise() {
-
-  getDataFile(queryParams['id'], 0);
+  initialise(data.Mission.livelaunch);
 
 }
 
-function getDataFile(id, stage) {
+function initialise(liveId) {
+
+  getDataFile(liveId, 0);
+
+}
+
+function getDataFile(liveId, stage) {
   if (stageMap[stage] === undefined)
     start();
 
-  var url = client + '/output/' + id + '_' + stageMap[stage] + '.dat';
+  var url = client + '/output/' + liveId + '_' + stageMap[stage] + '.dat';
   $.ajax({type: 'GET', url: url, contentType: 'text', data: null,
     xhrFields: {withCredentials: false},
     success: successfn,
@@ -73,9 +71,9 @@ function getDataFile(id, stage) {
 
   function successfn(data) {
     var lines = data.split("\n");
+
     fullData[stage] = [];
     d[stage] = [];
-
     d[stage][0] = []; // burn
     d[stage][1] = []; // coast
     d[stage][2] = []; // events
@@ -85,16 +83,16 @@ function getDataFile(id, stage) {
       // fullData[time] = downrange:alt:vel
       fullData[stage][parseInt(data[0])] = parseFloat(data[6]) + ":" + parseFloat(data[4]) + ":" + parseFloat(data[5]);
     }
-    getEventsFile(id, stage);
+    getEventsFile(liveId, stage);
   }
 
   function errorfn(data) {
-    console.log(data);
+    //console.log(data);
   }
 }
 
-function getEventsFile(id, stage) {
-  var url = client + '/output/' + id + '_' + stageMap[stage] + '_events.dat';
+function getEventsFile(liveId, stage) {
+  var url = client + '/output/' + liveId + '_' + stageMap[stage] + '_events.dat';
   $.ajax({type: 'GET', url: url, contentType: 'text', data: null,
     xhrFields: {withCredentials: false},
     success: successfn,
@@ -108,11 +106,11 @@ function getEventsFile(id, stage) {
       var data = lines[i].split("\t");
       eventsData[stage][parseInt(data[0])] = parseInt(data[12]); // eventsData[time] = throttle
     }
-    getDataFile(queryParams['id'], stage + 1);
+    getDataFile(liveId, stage + 1);
   }
 
   function errorfn(data) {
-    console.log(data);
+    //console.log(data);
   }
 }
 
@@ -134,19 +132,16 @@ function start() {
     infoBox.hide();
     textBox.show();
     textBox.append(html);
-    displayClock(launchTime);
+    displayClock(launchTime, true);
   }
-  else if (timeUntilLaunch > -15 * 60 * 1000)
+  else if (timeUntilLaunch > -14 * 60 * 1000)
   {
-
-
     textBox.hide();
     infoBox.show();
-    displayClock(launchTime);
+    displayClock(launchTime, false);
 
     initialisePlot();
     update(-5);
-
   }
   else
   {
@@ -162,18 +157,18 @@ function start() {
 }
 
 function initialisePlot() {
-  
+
   var windowHeight = $(window).height();
   var navbarHeight = $(".navbar").outerHeight(true);
   var clockHeight = $("#clock").outerHeight(true);
 
   var placeholder = $("#placeholder");
   placeholder.height(windowHeight - (navbarHeight + clockHeight + 80)); // there's a <hr> that takes 40, and i want 40 more
-  
+
   var width = placeholder.width();
   var height = placeholder.height();
-  
-  var aspectRatio = width/height;
+
+  var aspectRatio = width / height;
 
   plot = $.plot(placeholder, [d[0], d[1]], {
     series: {
@@ -187,9 +182,9 @@ function initialisePlot() {
     },
     xaxis: {
       min: 0,
-      max: 400*aspectRatio,
-      zoomRange: [0.1, 1000*aspectRatio],
-      panRange: [-100, 1000*aspectRatio]
+      max: 400 * aspectRatio,
+      zoomRange: [0.1, 1000 * aspectRatio],
+      panRange: [-100, 1000 * aspectRatio]
     },
     zoom: {
       interactive: true
@@ -199,6 +194,7 @@ function initialisePlot() {
     }
   });
 
+  if (client === 'http://localhost') {
   $("<span class='fa fa-minus-circle' style='right:50px;top:30px'/>")
           .appendTo(placeholder)
           .click(function (event) {
@@ -213,7 +209,6 @@ function initialisePlot() {
             plot.zoomOut();
           });
 
-  if (client === 'http://localhost') {
     $("<span class='fa fa-backward' style='right:50px;top:95px'/>")
             .appendTo(placeholder)
             .click(function (event) {
@@ -248,37 +243,13 @@ function getTimeRemaining()
 //              CLOCK               //
 //////////////////////////////////////
 
-function displayClock(launchTimeMillis)
+function displayClock(launchTimeMillis, waiting)
 {
   var launchDate = new Date(launchTimeMillis);
-  refreshClock(launchDate);
+  refreshClock(launchDate, waiting);
   setInterval(function () {
-    refreshClock(launchDate);
+    refreshClock(launchDate, waiting);
   }, 1000);
-}
-
-function refreshClock(launchDate)
-{
-  var _second = 1000;
-  var _minute = _second * 60;
-  var _hour = _minute * 60;
-  var _day = _hour * 24;
-
-  var now = new Date();
-  var distance = (launchDate - now)*warp;
-
-  var days = Math.floor(distance / _day);
-  var hours = Math.floor((distance % _day) / _hour);
-  var minutes = Math.floor((distance % _hour) / _minute);
-  var seconds = Math.floor((distance % _minute) / _second);
-
-  document.getElementById('days').innerHTML = days + ' day' + ((days !== 1) ? 's' : '');
-  document.getElementById('hours').innerHTML = hours + ' hour' + ((hours !== 1) ? 's' : '');
-  document.getElementById('minutes').innerHTML = minutes + ' minute' + ((minutes !== 1) ? 's' : '');
-  document.getElementById('seconds').innerHTML = seconds + ' second' + ((seconds !== 1) ? 's' : '');
-
-  if (Math.abs(59 * _minute - distance) < 1000) // clock -> wait limit
-    window.location.reload(true);
 }
 
 function addArrow(placeholder, dir, right, top, offset) {
@@ -290,7 +261,7 @@ function addArrow(placeholder, dir, right, top, offset) {
           });
 }
 
-function refreshClock(launchTimeMillis)
+function refreshClock(launchTimeMillis, waiting)
 {
   var launchTime = new Date(launchTimeMillis);
   var _second = 1000;
@@ -299,23 +270,39 @@ function refreshClock(launchTimeMillis)
   var _day = _hour * 24;
 
   var now = new Date();
-  var distance = (launchTime - now)*warp;
+  var distance = (launchTime - now) * warp;
   var sign = distance > 0 ? '-' : '+';
+  var days = Math.floor(distance / _day);
   var hours = Math.abs(Math.floor((distance % _day) / _hour));
   var minutes = Math.abs(Math.floor((distance % _hour) / _minute));
   var seconds = Math.abs(Math.floor((distance % _minute) / _second));
-  if (sign === '+') {
-    hours -= 1;
-    minutes -= 1;
-    seconds -= 1;
+
+  if (waiting) {
+    document.getElementById('days').innerHTML = days + ' day' + ((days !== 1) ? 's' : '');
+    document.getElementById('hours').innerHTML = hours + ' hour' + ((hours !== 1) ? 's' : '');
+    document.getElementById('minutes').innerHTML = minutes + ' minute' + ((minutes !== 1) ? 's' : '');
+    document.getElementById('seconds').innerHTML = seconds + ' second' + ((seconds !== 1) ? 's' : '');
+
+    if (Math.abs(59 * _minute - distance) < 1000) // clock -> wait limit
+      window.location.reload(true);
   }
-  if (hours < 10)
-    hours = '0' + hours;
-  if (minutes < 10)
-    minutes = '0' + minutes;
-  if (seconds < 10)
-    seconds = '0' + seconds;
-  $('#clock').html('T' + sign + hours + ':' + minutes + ':' + seconds);
+  else {
+    if (sign === '+') {
+      hours -= 1;
+      minutes -= 1;
+      seconds -= 1;
+    }
+    if (hours < 10)
+      hours = '0' + hours;
+    if (minutes < 10)
+      minutes = '0' + minutes;
+    if (seconds < 10)
+      seconds = '0' + seconds;
+    $('#clock').html('T' + sign + hours + ':' + minutes + ':' + seconds);
+    
+    if (Math.abs(15 * _minute + distance) < 1000) // clock -> wait limit
+      window.location.reload(true);    
+  }
 }
 
 function update(i) {
@@ -330,10 +317,10 @@ function update(i) {
 
         if (fullData[stage][i] === undefined)
         {
-          if(fullData[stage-1] !== undefined && fullData[stage-1][i] !== undefined) {
-            var tel = fullData[stage-1][i].split(":");
+          if (fullData[stage - 1] !== undefined && fullData[stage - 1][i] !== undefined) {
+            var tel = fullData[stage - 1][i].split(":");
             $("#telemetry_" + stage).html(' || VEL: ' + tel[2] + ' KM/HR || ALT: ' + tel[1] + ' KM ||');
-          } else{
+          } else {
             $("#telemetry_" + stage).html(' || VEL: 0 KM/HR || ALT: 0 KM ||');
           }
           continue;
@@ -374,7 +361,7 @@ function update(i) {
         }
       }
     }
-    
+
     if (i <= time)
       i++;
     else
