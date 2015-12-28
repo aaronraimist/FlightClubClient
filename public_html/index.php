@@ -99,7 +99,7 @@ if(isset($_COOKIE['authToken'])) {
                   
                   <div class="tab-pane fade active in" id="core">
                     <div class="row tmargin1">
-                      <div id="sites" class="col-sm-6">
+                      <div id="sites" class="col-sm-4">
                         <nav class="col-xs-12" style="overflow-y:hidden">
                           <ul class="slideList nav nav-pills nav-stacked">
                             <li class="col-xs-12">
@@ -112,7 +112,7 @@ if(isset($_COOKIE['authToken'])) {
                         <select name="Mission.launchsite" style="visibility:hidden">
                         </select>
                       </div>
-                      <div id="vehicles" class="col-sm-6">
+                      <div id="vehicles" class="col-sm-4">
                         <nav class="col-xs-12" style="overflow-y:hidden">
                           <ul class="slideList nav nav-pills nav-stacked">
                             <li class="col-xs-12">
@@ -123,6 +123,19 @@ if(isset($_COOKIE['authToken'])) {
                           </ul>
                         </nav>
                         <select name="Mission.launchvehicle" style="visibility:hidden">
+                        </select>
+                      </div>
+                      <div id="payloads" class="col-sm-4">
+                        <nav class="col-xs-12" style="overflow-y:hidden">
+                          <ul class="slideList nav nav-pills nav-stacked">
+                            <li class="col-xs-12">
+                              <span class="col-xs-12 slideTag header">Payloads</span>
+                              <ul class="slideItem col-xs-12 nav nav-pills nav-stacked">
+                              </ul>
+                            </li>
+                          </ul>
+                        </nav>
+                        <select name="Mission.Profile.Payload.code" style="visibility:hidden">
                         </select>
                       </div>
                     </div>

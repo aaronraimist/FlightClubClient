@@ -25,17 +25,15 @@ only screen and (min-width: 768px)  {
 
   /* BODY */
   body {
-    font-size: 24px;
+    font-size: 20px;
   }
 
   /* TABS */
   #sites nav,
-  #vehicles nav {
+  #vehicles nav,
+  #payloads nav {
     height:100%;
   }
-
-  #sites {text-align: right}
-  #vehicles {text-align: left}
   
   #copyInfo,
   #saveInfo {

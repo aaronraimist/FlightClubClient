@@ -17,8 +17,8 @@
  along with FlightClub.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-var client = 'http://www.flightclub.io';
-//var client = 'http://localhost';
+//var client = 'http://www.flightclub.io';
+var client = 'http://localhost';
 var server = client + ':8080/FlightClub';
 var api_url = server + '/api/v1';
 
@@ -258,12 +258,17 @@ function fillProfile(data)
   $("select[name='Mission.launchvehicle']").val(mission.launchvehicle);
   $("select[name='Mission.launchsite']").val(mission.launchsite);
   $("select[name='Mission.display']").val(mission.display+'');
-  
+  $("select[name='Mission.Profile.Payload.code']").val(mission.Profile.Payload.code+'');
+
   var item = $('#sites li[id="'+mission.launchsite+'"]');
   item.siblings().removeClass("active");
   item.addClass("active");
   
   item = $('#vehicles li[id="'+mission.launchvehicle+'"]');
+  item.siblings().removeClass("active");
+  item.addClass("active");
+  
+  item = $('#payloads li[id="'+mission.Profile.Payload.code+'"]');
   item.siblings().removeClass("active");
   item.addClass("active");
   
@@ -287,7 +292,7 @@ function fillProfile(data)
             
     $("#tabs ul.nav li[id='info']").before('<li id="tab-'+(key+1)+'"><a href="#stage-'+key+'" role="tab" data-toggle="tab">'+name+'</a></li>');
     
-    addStageTabPane($("#tab-content"), key);
+    addStageTabPane($("#tab-content"), key, numStages);
 
     var pre = 'Mission.Profile.Stages['+key+'].';
     
@@ -340,7 +345,6 @@ function fillProfile(data)
     
   });
 
-  $("input[name='Mission.Profile.Payload.code']").val(profile.Payload.code);
   $("input[name='Mission.Profile.Payload.mass']").val(profile.Payload.mass);
   
   // Activate Core tab-pane
@@ -392,13 +396,25 @@ function fillLaunchVehicles(data)
   });
 }
 
+function fillPayloads(data) 
+{
+  var obj = jQuery.parseJSON(JSON.stringify(data, null, 2));
+  var list = obj.data;
+  
+  $.each(list, function(key,val)
+  {
+    $('#payloads ul.slideItem').prepend('<li id="'+val.code+'"><a href="#">'+val.description+'</a></li>');
+    $('#payloads select').prepend('<option value="'+val.code+'">'+val.description+'</option>');
+  });
+}
+
 /////////////////////////////////////////////////
 //                                             //
 //    Functions to add stage tab-pane HTML     //
 //                                             //
 /////////////////////////////////////////////////
 
-function addStageTabPane(parent, id)
+function addStageTabPane(parent, id, numStages)
 {
   
   var content = '        <div class="tab-pane fade in" id="stage-' + id + '">'
@@ -463,6 +479,17 @@ function addStageTabPane(parent, id)
             + '                    <div class="col-xs-6">'
             + '                      <div class="input-group">'
             + '                        <input name="Mission.Profile.Payload.mass" value="" class="form-control" type="text"/>'
+            + '                      </div>'
+            + '                    </div>'
+            + '                  </div>';
+  }
+  if(id === numStages-1) {
+        content +=
+              '                  <div class="tmargin2 row">'
+            + '                    <div class="col-xs-6">Fairing Sep</div>'
+            + '                    <div class="col-xs-6">'
+            + '                      <div class="input-group">'
+            + '                        <input name="Mission.Profile.fairing_sep" value="" class="form-control" type="text"/>'
             + '                      </div>'
             + '                    </div>'
             + '                  </div>';

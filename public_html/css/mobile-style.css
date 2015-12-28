@@ -30,12 +30,17 @@ only screen and (max-width: 767px) {
 
   /* TABS */
   #sites nav,
-  #vehicles nav {
+  #vehicles nav,
+  payloads nav {
     height:50%;
   }
   
   #vehicles {
     top: -35px;
+  }
+  
+  #payloads {
+    top: -70px;
   }
   
   #copyInfo,

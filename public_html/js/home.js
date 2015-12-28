@@ -24,6 +24,7 @@ $("#home").ready(function ()
   httpRequest(api_url+'/missions'+display, 'GET', null, fillMissions, null);
   httpRequest(api_url+'/launchsites', 'GET', null, fillLaunchSites, null);
   httpRequest(api_url+'/launchvehicles', 'GET', null, fillLaunchVehicles, null);
+  httpRequest(api_url+'/payloads', 'GET', null, fillPayloads, null);
 
   // Open "extra info" dialog box on click of "save" button
   $("#tabs ul").on('click', 'li[id="update"]', function (e) 
@@ -93,6 +94,15 @@ $("#home").ready(function ()
     $(this).siblings().removeClass('active');
     $(this).addClass('active');
     $("select[name='Mission.launchsite']").val($(this).attr('id'));
+  });
+  
+  // select payload manually on click
+  // - doesn't happen automatically because of custom list
+  $("#payloads ul").on('click', '.slideItem li', function(e) 
+  {
+    $(this).siblings().removeClass('active');
+    $(this).addClass('active');
+    $("select[name='Mission.Profile.Payload.code']").val($(this).attr('id'));
   });
   
   // select launchvehicle manually on click

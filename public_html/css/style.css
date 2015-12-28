@@ -154,17 +154,20 @@ nav li.active>a {
 }
 
 #sites,
+#payloads,
 #vehicles {
   padding-left: 0px;
   padding-right: 0px;
 }
 
 #sites select,
+#payloads select,
 #vehicles select {
   max-height: 0px;
 }
 
 #sites nav,
+#payloads nav,
 #vehicles nav {
   overflow-y: scroll;
   padding-left: 0px;
@@ -173,6 +176,7 @@ nav li.active>a {
 
 /* Styled like nav li>a */
 #sites span,
+#payloads span,
 #vehicles span {
   color: white;
   border-radius: 4px;
@@ -238,6 +242,7 @@ input:disabled, select:disabled {
 }
 
 #sites .slideList>li,
+#payloads .slideList>li,
 #vehicles .slideList>li {
   border: none;
 }
@@ -260,6 +265,7 @@ input:disabled, select:disabled {
 }
 
   #vehicles .slideItem,
+  #payloads .slideItem,
   #sites .slideItem {
     padding: 0px;
   }
