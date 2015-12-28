@@ -27,6 +27,8 @@ var plot;
 var throttle = [0, 0];
 var warp = 1;
 
+var rand5;
+
 $(document).ready(function ()
 {
   var queryString = window.location.search.substring(1);
@@ -34,6 +36,8 @@ $(document).ready(function ()
 
   stageMap[0] = 'Booster';
   stageMap[1] = 'UpperStage';
+  
+  rand5 = 5*60*1000*Math.random(); // 5 minute range
 
   httpRequest(api_url + '/missions/' + queryParams['code'], 'GET', null, fillData, null);
 
@@ -48,7 +52,37 @@ function fillData(data)
   var tempDate = data.Mission.date.replace(/-/g, "/") + ' ' + data.Mission.time + ' UTC';
   launchTime = Date.parse(tempDate);
 
-  initialise(data.Mission.livelaunch);
+  var now = new Date();
+  var timeUntilLaunch = launchTime - now;
+  var textBox = $(".textBox");
+
+  if (timeUntilLaunch > 1 * 60 * 60 * 1000)
+  {
+    $("#live").prepend("<div class='bg'><img src='images/background.jpg' alt='background'/></div>");
+    var html =
+            "<div>" + missionName + " will launch in</div>\n" +
+            "\t<div id='days'></div>\n" +
+            "\t<div id='hours'></div>\n" +
+            "\t<div id='minutes'></div>\n" +
+            "\t<div id='seconds'></div>\n";
+    textBox.show();
+    textBox.append(html);
+    displayClock(true);
+  } 
+  else if (timeUntilLaunch < -14 * 60 * 1000)
+  {
+    $("#live").prepend("<div class='bg'><img src='images/background.jpg' alt='background'/></div>");
+    var html =
+            "<div class='text_full centre'>\n" +
+            "  <div>" + missionName + " has already launched.</div>\n" +
+            "</div>";
+    textBox.show();
+    textBox.append(html);
+  }
+  else
+  {
+    initialise(data.Mission.livelaunch);
+  }
 
 }
 
@@ -104,7 +138,7 @@ function getEventsFile(liveId, stage) {
     eventsData[stage] = [];
     for (var i = 1; i < lines.length; i++) {
       var data = lines[i].split("\t");
-      eventsData[stage][parseInt(data[0])] = parseInt(data[12]); // eventsData[time] = throttle
+      eventsData[stage][parseInt(data[0])] = parseFloat(data[12]); // eventsData[time] = throttle
     }
     getDataFile(liveId, stage + 1);
   }
@@ -116,41 +150,12 @@ function getEventsFile(liveId, stage) {
 
 function start() {
   
-  var now = new Date();
-  var timeUntilLaunch = launchTime - now;
-  var textBox = $(".textBox");
+  $(".textBox").hide();
+  displayClock(false);
 
-  if (timeUntilLaunch > 1 * 60 * 60 * 1000)
-  {
-    $("#live").prepend("<div class='bg'><img src='images/background.jpg' alt='background'/></div>");
-    var html =
-            "<div>" + missionName + " will launch in</div>\n" +
-            "\t<div id='days'></div>\n" +
-            "\t<div id='hours'></div>\n" +
-            "\t<div id='minutes'></div>\n" +
-            "\t<div id='seconds'></div>\n";
-    textBox.show();
-    textBox.append(html);
-    displayClock(launchTime, true);
-  }
-  else if (timeUntilLaunch > -14 * 60 * 1000)
-  {
-    textBox.hide();
-    displayClock(launchTime, false);
+  initialisePlot();
+  update(-5);
 
-    initialisePlot();
-    update(-5);
-  }
-  else
-  {
-    $("#live").prepend("<div class='bg'><img src='images/background.jpg' alt='background'/></div>");
-    var html =
-            "<div class='text_full centre'>\n" +
-            "  <div>" + missionName + " has already launched.</div>\n" +
-            "</div>";
-    textBox.show();
-    textBox.append(html);
-  }
 }
 
 $(window).resize(function() {
@@ -270,18 +275,16 @@ function addArrow(placeholder, dir, right, top, offset) {
 //              CLOCK               //
 //////////////////////////////////////
 
-function displayClock(launchTimeMillis, waiting)
+function displayClock(waiting)
 {
-  var launchDate = new Date(launchTimeMillis);
-  refreshClock(launchDate, waiting);
+  refreshClock(waiting);
   setInterval(function () {
-    refreshClock(launchDate, waiting);
+    refreshClock(waiting);
   }, 1000);
 }
 
-function refreshClock(launchTimeMillis, waiting)
+function refreshClock(waiting)
 {
-  var launchTime = new Date(launchTimeMillis);
   var _second = 1000;
   var _minute = _second * 60;
   var _hour = _minute * 60;
@@ -301,7 +304,7 @@ function refreshClock(launchTimeMillis, waiting)
     document.getElementById('minutes').innerHTML = minutes + ' minute' + ((minutes !== 1) ? 's' : '');
     document.getElementById('seconds').innerHTML = seconds + ' second' + ((seconds !== 1) ? 's' : '');
 
-    if (Math.abs(59 * _minute - distance) < 1000) // clock -> wait limit
+    if (Math.abs((59 * _minute - rand5) - distance) < 1000) // clock -> plots limit between T-59 -> T-54
       window.location.reload(true);
   }
   else {
@@ -318,9 +321,25 @@ function refreshClock(launchTimeMillis, waiting)
       seconds = '0' + seconds;
     $('#clock').html('T' + sign + hours + ':' + minutes + ':' + seconds);
     
-    if (Math.abs(15 * _minute + distance) < 1000) // clock -> wait limit
+    if (Math.abs((5 * _minute - rand5) - distance) < 1000)  // polls for aborts between T-5 -> T-0
+      pollLaunchTime();
+    if (Math.abs(rand5 + distance) < 1000) // poll for aborts between T-0 -> T+5
+      pollLaunchTime();
+    if (Math.abs((15 * _minute + 2*rand5) + distance) < 1000) // plots -> over limit between T+15 -> T+25
       window.location.reload(true);    
   }
+}
+
+function pollLaunchTime() {
+  httpRequest(api_url + '/missions/' + queryParams['code'], 'GET', null,
+          function (data) {
+            var tempDate = data.Mission.date.replace(/-/g, "/") + ' ' + data.Mission.time + ' UTC';
+            var newTime = Date.parse(tempDate);
+
+            if (newTime !== launchTime)
+              window.location.reload(true);
+          },
+          null);
 }
 
 function update(i) {
