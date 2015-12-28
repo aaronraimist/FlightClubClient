@@ -203,8 +203,11 @@ function initialisePlot() {
           .appendTo(placeholder)
           .click(function (event) {
             event.preventDefault();
-
+            
             var yoptions = plot.getAxes().yaxis.options;
+            if(yoptions.max - yoptions.min > 1000.0)
+              return;
+
             yoptions.min = 0;
             yoptions.max = yoptions.min + (yoptions.max - yoptions.min) * 1.5; // zoom out 50%
 
@@ -222,6 +225,9 @@ function initialisePlot() {
             event.preventDefault();
 
             var yoptions = plot.getAxes().yaxis.options;
+            if(yoptions.max - yoptions.min < 10.0)
+              return;
+            
             yoptions.min = 0;
             yoptions.max = yoptions.min + (yoptions.max - yoptions.min) / 1.5; // zoom in 50%
 
