@@ -298,6 +298,7 @@ function fillProfile(data)
     
     $("input[name='"+pre+"Core.id']").val(val.Core.id);
     $("select[name='"+pre+"Core.legs']").val(val.Core.legs+'');
+    $("input[name='"+pre+"Core.fairing_sep']").val(val.Core.fairing_sep);
     $("input[name='"+pre+"release']").val(val.release);
     if (typeof val.PitchKick !== "undefined") {
       $("input[name='" + pre + "PitchKick.start']").val(val.PitchKick.start);
@@ -422,14 +423,6 @@ function addStageTabPane(parent, id, numStages)
           + '              <div class="row">'
           + '                <div class="col-xs-12 col-sm-4 rborder_large">'
           + '                  <div class="row">'
-          + '                    <div class="col-xs-6">Release</div>'
-          + '                    <div class="col-xs-6">'
-          + '                      <div class="input-group">'
-          + '                        <input name="Mission.Profile.Stages[' + id + '].release" value="" class="form-control" type="text"/>'
-          + '                      </div>'
-          + '                    </div>'
-          + '                  </div>'
-          + '                  <div class="row">'
           + '                    <div class="col-xs-6">Legs</div>'
           + '                    <div class="col-xs-6">'
           + '                      <div class="input-group">'
@@ -438,9 +431,38 @@ function addStageTabPane(parent, id, numStages)
           + '                    </div>'
           + '                  </div>';
 
+  if (id === numStages-1) {
+    content +=
+              '                  <div class="row">'
+            + '                    <div class="col-xs-6">Payload Mass</div>'
+            + '                    <div class="col-xs-6">'
+            + '                      <div class="input-group">'
+            + '                        <input name="Mission.Profile.Payload.mass" value="" class="form-control" type="text"/>'
+            + '                      </div>'
+            + '                    </div>'
+            + '                  </div>'
+            + '                  <div class="row">'
+            + '                    <div class="col-xs-6">Orbits</div>'
+            + '                    <div class="col-xs-6">'
+            + '                      <div class="input-group">'
+            + '                        <input name="Mission.Profile.orbits" value="1" class="form-control" type="text"/>'
+            + '                      </div>'
+            + '                    </div>'
+            + '                  </div>';
+  }
+  content +=
+            '                  <div class="tmargin2 row">'
+          + '                    <div class="col-xs-6">' + (id===0 ? 'Launch' : 'Stage Sep') + '</div>'
+          + '                    <div class="col-xs-6">'
+          + '                      <div class="input-group">'
+          + '                        <input name="Mission.Profile.Stages[' + id + '].release" value="" class="form-control" type="text"/>'
+          + '                      </div>'
+          + '                    </div>'
+          + '                  </div>';
+    
   if (id === 0) {
     content +=
-              '                  <div class="tmargin2 row">'
+              '                  <div class="row">'
             + '                    <div class="col-xs-12">PitchKick</div>'
             + '                  </div>'
             + '                  <div class="row">'
@@ -466,30 +488,16 @@ function addStageTabPane(parent, id, numStages)
             + '                        <input name="Mission.Profile.Stages[' + id + '].PitchKick.yaw" value="" class="form-control" type="text"/>'
             + '                      </div>'
             + '                    </div>'
-            + '                  </div>'
-            + '                  <div class="row">'
-            + '                    <div class="col-xs-6">'
-            + '                      <div class="input-group">'
-            + '                        <input name="Mission.Profile.Payload.code" value="" class="form-control" type="hidden"/>'
-            + '                      </div>'
-            + '                    </div>'
-            + '                  </div>'
-            + '                  <div class="tmargin2 row">'
-            + '                    <div class="col-xs-6">Payload Mass</div>'
-            + '                    <div class="col-xs-6">'
-            + '                      <div class="input-group">'
-            + '                        <input name="Mission.Profile.Payload.mass" value="" class="form-control" type="text"/>'
-            + '                      </div>'
-            + '                    </div>'
             + '                  </div>';
   }
+  
   if(id === numStages-1) {
         content +=
-              '                  <div class="tmargin2 row">'
+              '                  <div class="row">'
             + '                    <div class="col-xs-6">Fairing Sep</div>'
             + '                    <div class="col-xs-6">'
             + '                      <div class="input-group">'
-            + '                        <input name="Mission.Profile.fairing_sep" value="" class="form-control" type="text"/>'
+            + '                        <input name="Mission.Profile.Stages[' + id + '].Core.fairing_sep" value="" class="form-control" type="text"/>'
             + '                      </div>'
             + '                    </div>'
             + '                  </div>';
