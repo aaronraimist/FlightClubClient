@@ -103,6 +103,9 @@ $("#home").ready(function ()
     $(this).siblings().removeClass('active');
     $(this).addClass('active');
     $("select[name='Mission.Profile.Payload.code']").val($(this).attr('id'));
+    
+    $("input[name$='Core.fairing_sep']").prop('disabled', $(this).attr('id') !== 'SATL');
+    
   });
   
   // select launchvehicle manually on click
@@ -189,7 +192,7 @@ $("#home").ready(function ()
     var name = focus.attr('name');
     if(text === '')
     {
-      if(name.match('gt$') || name.match('throttle$')
+      if(name.match('gt$')
           || (name.match('pitch$') && $(list).find('input[name$=yaw]').val() === '')
           || (name.match('yaw') && $(list).find('input[name$=pitch]').val() === '')
         ) {
@@ -203,15 +206,9 @@ $("#home").ready(function ()
     {
       if(name.match('pitch$') || name.match('yaw')) {
         $(list).find('select[name$=gt]').prop('disabled', true);
-        $(list).find('input[name$=throttle]').prop('disabled', true);
       } else if(name.match('gt$')) {
         $(list).find('input[name$=pitch]').prop('disabled', true);
         $(list).find('input[name$=yaw]').prop('disabled', true);
-        $(list).find('input[name$=throttle]').prop('disabled', true);        
-      } else if(name.match('throttle$')) {
-        $(list).find('input[name$=pitch]').prop('disabled', true);
-        $(list).find('input[name$=yaw]').prop('disabled', true);
-        $(list).find('select[name$=gt]').prop('disabled', true);  
       }
     }
   });

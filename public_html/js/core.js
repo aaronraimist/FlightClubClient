@@ -271,6 +271,8 @@ function fillProfile(data)
   item = $('#payloads li[id="'+mission.Profile.Payload.code+'"]');
   item.siblings().removeClass("active");
   item.addClass("active");
+
+  var notSatellite = mission.Profile.Payload.code !== 'SATL';
   
   var profile = mission.Profile;
   
@@ -299,6 +301,7 @@ function fillProfile(data)
     $("input[name='"+pre+"Core.id']").val(val.Core.id);
     $("select[name='"+pre+"Core.legs']").val(val.Core.legs+'');
     $("input[name='"+pre+"Core.fairing_sep']").val(val.Core.fairing_sep);
+    $("input[name='"+pre+"Core.fairing_sep']").prop('disabled', notSatellite);    
     $("input[name='"+pre+"release']").val(val.release);
     if (typeof val.PitchKick !== "undefined") {
       $("input[name='" + pre + "PitchKick.start']").val(val.PitchKick.start);
@@ -347,7 +350,7 @@ function fillProfile(data)
   });
 
   $("input[name='Mission.Profile.Payload.mass']").val(profile.Payload.mass);
-  
+      
   // Activate Core tab-pane
   $("#tabs").find('li').first().addClass('active');
   var corePane = $("#tab-content").children('.tab-pane[id="core"]');
@@ -432,6 +435,11 @@ function addStageTabPane(parent, id, numStages)
           + '                  </div>';
 
   if (id === numStages-1) {
+    
+    
+    var token = $.cookie('authToken');
+    var disabled = token===undefined ? ' disabled' : '';
+  
     content +=
               '                  <div class="row">'
             + '                    <div class="col-xs-6">Payload Mass</div>'
@@ -445,7 +453,7 @@ function addStageTabPane(parent, id, numStages)
             + '                    <div class="col-xs-6">Orbits</div>'
             + '                    <div class="col-xs-6">'
             + '                      <div class="input-group">'
-            + '                        <input name="Mission.Profile.orbits" value="1" class="form-control" type="text"/>'
+            + '                        <input name="Mission.Profile.orbits" value="1" class="form-control" type="text"' + disabled + '/>'
             + '                      </div>'
             + '                    </div>'
             + '                  </div>';
@@ -459,37 +467,6 @@ function addStageTabPane(parent, id, numStages)
           + '                      </div>'
           + '                    </div>'
           + '                  </div>';
-    
-  if (id === 0) {
-    content +=
-              '                  <div class="row">'
-            + '                    <div class="col-xs-12">PitchKick</div>'
-            + '                  </div>'
-            + '                  <div class="row">'
-            + '                    <div class="col-xs-offset-1 col-xs-5">Start</div>'
-            + '                    <div class="col-xs-6">'
-            + '                      <div class="input-group">'
-            + '                        <input name="Mission.Profile.Stages[' + id + '].PitchKick.start" value="" class="form-control" type="text"/>'
-            + '                      </div>'
-            + '                    </div>'
-            + '                  </div>'
-            + '                  <div class="row">'
-            + '                    <div class="col-xs-offset-1 col-xs-5">Pitch (°)</div>'
-            + '                    <div class="col-xs-6">'
-            + '                      <div class="input-group">'
-            + '                        <input name="Mission.Profile.Stages[' + id + '].PitchKick.pitch" value="" class="form-control" type="text"/>'
-            + '                      </div>'
-            + '                    </div>'
-            + '                  </div>'
-            + '                  <div class="row">'
-            + '                    <div class="col-xs-offset-1 col-xs-5">Yaw (°)</div>'
-            + '                    <div class="col-xs-6">'
-            + '                      <div class="input-group">'
-            + '                        <input name="Mission.Profile.Stages[' + id + '].PitchKick.yaw" value="" class="form-control" type="text"/>'
-            + '                      </div>'
-            + '                    </div>'
-            + '                  </div>';
-  }
   
   if(id === numStages-1) {
         content +=
