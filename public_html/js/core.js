@@ -303,11 +303,6 @@ function fillProfile(data)
     $("input[name='"+pre+"Core.fairing_sep']").val(val.Core.fairing_sep);
     $("input[name='"+pre+"Core.fairing_sep']").prop('disabled', notSatellite);    
     $("input[name='"+pre+"release']").val(val.release);
-    if (typeof val.PitchKick !== "undefined") {
-      $("input[name='" + pre + "PitchKick.start']").val(val.PitchKick.start);
-      $("input[name='" + pre + "PitchKick.pitch']").val(val.PitchKick.pitch);
-      $("input[name='" + pre + "PitchKick.yaw']").val(val.PitchKick.yaw);
-    }
     
     var burns = val.Burns;
     $.each(burns, function(burnKey,burnVal)
