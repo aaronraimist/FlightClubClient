@@ -195,7 +195,7 @@ select {
 }
 
 input:disabled, select:disabled {
-  background: transparent !important;
+  background: rgba(200,200,200,0.4) !important;
   border: none;
   cursor: default !important;
 }
