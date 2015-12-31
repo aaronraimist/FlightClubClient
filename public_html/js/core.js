@@ -467,16 +467,17 @@ function addStageTabPane(parent, id, numStages)
             + '                    </div>'
             + '                  </div>';
   }
-  content +=
+  if(id !== 0) {
+    content +=
             '                  <div class="tmargin2 row">'
-          + '                    <div class="col-xs-6">' + (id===0 ? 'Launch' : 'Stage Sep') + '</div>'
+          + '                    <div class="col-xs-6">Stage Sep</div>'
           + '                    <div class="col-xs-6">'
           + '                      <div class="input-group">'
           + '                        <input name="Mission.Profile.Stages[' + id + '].release" value="" class="form-control" type="text"/>'
           + '                      </div>'
           + '                    </div>'
           + '                  </div>';
-  
+  }
   if(id === numStages-1) {
         content +=
               '                  <div class="row">'
