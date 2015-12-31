@@ -64,9 +64,9 @@
         <a class="navbar-brand left" href="#"><span>Error</span></a>
       </div>
     </nav>
-    <div class="text_white text_full centre tmargin2">
+    <div class="text_white text_double centre tmargin2">
       <span>Woops!</span>
-      <div id="errorText" class="tpadding1 text_half">
+      <div id="errorText" class="tpadding1 text_normal">
       </div>
     </div>
   </body>

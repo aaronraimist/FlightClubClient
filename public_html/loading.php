@@ -57,7 +57,7 @@
     <div class="container">
       <div class="row row-offcanvas row-offcanvas-right vfill">
         <div class="col-xs-12 col-sm-12 progress-container">
-          <div class="text_full centre">
+          <div class="text_double centre">
             Calculating trajectory...</br>
           </div>
           <div id="rocket" class="tmargin1">

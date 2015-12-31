@@ -186,7 +186,7 @@ function fillOutputArray(data)
 
     content = '<ul class="slideItem col-xs-12 nav nav-pills nav-stacked" style="display:none">';
     for (var i = 0; i < warnings.length; i++) {
-      content += '<li><div class="row nopadding text_half"><div class="col-xs-12">' + warnings[i] + '</div></li>';
+      content += '<li><div class="row nopadding text_normal"><div class="col-xs-12">' + warnings[i] + '</div></li>';
     }
     content += '</ul>';
 
@@ -208,7 +208,7 @@ function fillOutputArray(data)
         for (var j = 0; j < event.length; j++) {
           var pair = event[j].split(':');
           if (pair[0] !== undefined && pair[1] !== undefined) {
-            content += '<li><div class="row nopadding text_half"><div class="col-xs-4 col-sm-3 textright">' + pair[0] + '</div><div class="col-xs-8 col-xs-9 textleft">' + pair[1] + '</div></div></li>';
+            content += '<li><div class="row nopadding text_normal"><div class="col-xs-4 col-sm-3 textright">' + pair[0] + '</div><div class="col-xs-8 col-xs-9 textleft">' + pair[1] + '</div></div></li>';
           }
         }
         content += '</ul>';
@@ -223,7 +223,7 @@ function fillOutputArray(data)
           for (var j = 0; j < infoMap.length; j++) {
             var pair = infoMap[j].split('=');
             if (pair[0] !== undefined && pair[1] !== undefined) {
-              content += '<li><div class="row nopadding text_half"><div class="col-xs-6 textright">' + pair[0] + '</div><div class="col-xs-6 textleft">' + pair[1] + '</div></div></li>';
+              content += '<li><div class="row nopadding text_normal"><div class="col-xs-6 textright">' + pair[0] + '</div><div class="col-xs-6 textleft">' + pair[1] + '</div></div></li>';
             }
           }
           $('.landing ul').append(content);
@@ -234,7 +234,7 @@ function fillOutputArray(data)
           for (var j = 0; j < infoMap.length; j++) {
             var pair = infoMap[j].split('=');
             if (pair[0] !== undefined && pair[1] !== undefined) {
-              content += '<li><div class="row nopadding text_half"><div class="col-xs-6 textright">' + pair[0] + '</div><div class="col-xs-6 textleft">' + pair[1] + '</div></div></li>';
+              content += '<li><div class="row nopadding text_normal"><div class="col-xs-6 textright">' + pair[0] + '</div><div class="col-xs-6 textleft">' + pair[1] + '</div></div></li>';
             }
           }
           content += '</ul>';

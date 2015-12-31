@@ -82,7 +82,7 @@ if (isset($_GET["code"])) {
           <a class="navbar-brand left" href="#"><span>LiveLaunch</span></a></li>
         </div>
       </nav>
-      <div class='textBox text_full centre'></div>
+      <div class='textBox text_double centre'></div>
       <div id="placeholder"></div>
     </div>
   </body>

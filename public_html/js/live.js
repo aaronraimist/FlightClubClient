@@ -73,7 +73,7 @@ function fillData(data)
   {
     $("#live").prepend("<div class='bg'><img src='images/background.jpg' alt='background'/></div>");
     var html =
-            "<div class='text_full centre'>\n" +
+            "<div class='text_double centre'>\n" +
             "  <div>" + missionName + " has already launched.</div>\n" +
             "</div>";
     textBox.show();
@@ -262,9 +262,9 @@ function initialisePlot() {
   addArrow(placeholder, "up", 40, 46, {top: -100});
   addArrow(placeholder, "down", 40, 74, {top: 100});
   
-  $('<div id="clock" class="text_black text_half" style="position:absolute;left:30px;top:20px"></div>').appendTo(placeholder);
-  $('<div class="text_black text_quarter" style="position:absolute;left:30px;top:50px">Booster Stage<div id="telemetry_0"></div></div>').appendTo(placeholder);
-  $('<div class="text_black text_quarter" style="position:absolute;left:30px;top:110px">Upper Stage<div id="telemetry_1"></div></div>').appendTo(placeholder);
+  $('<div id="clock" class="text_black text_normal" style="position:absolute;left:30px;top:20px"></div>').appendTo(placeholder);
+  $('<div class="text_black text_small" style="position:absolute;left:30px;top:50px">Booster Stage<div id="telemetry_0"></div></div>').appendTo(placeholder);
+  $('<div class="text_black text_small" style="position:absolute;left:30px;top:110px">Upper Stage<div id="telemetry_1"></div></div>').appendTo(placeholder);
 
 }
 

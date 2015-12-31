@@ -23,11 +23,6 @@ Tabs for bigger screens take custom style
 @media 
 only screen and (min-width: 768px)  {
 
-  /* BODY */
-  body {
-    font-size: 20px;
-  }
-
   /* TABS */
   #sites nav,
   #vehicles nav,
@@ -73,17 +68,6 @@ only screen and (min-width: 768px)  {
 
   #rocket > img {
     content: url("../images/rocket_large.png");
-  }
-
-  /* LIVE */
-  .text_quarter  {
-    font-size:12px;
-  }
-  .text_half  {
-    font-size:18px;
-  }
-  .text_full  {
-    font-size:36px; /* Actually 1.5x */
   }
   
   .textBox {

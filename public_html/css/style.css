@@ -34,6 +34,7 @@ html, body {
   width: 100%;
   overflow-x: hidden;
   color: #BBB;
+  font-size: 18px;
   font-family: 'Quicksand', sans-serif !important;
   font-weight: 900;
 }
@@ -297,6 +298,17 @@ input:disabled, select:disabled {
 .text_black {
   line-height:1;
   color: black;
+}
+
+/* LIVE */
+.text_small  {
+  font-size:12px;
+}
+.text_normal  {
+  font-size:18px;
+}
+.text_double  {
+  font-size:36px; /* Actually 1.5x */
 }
 
 #clock, #velocity, #altitude {

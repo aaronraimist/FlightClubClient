@@ -23,11 +23,6 @@ mobile style
 @media 
 only screen and (max-width: 767px) {
 
-  /* BODY */
-  body {
-    font-size: 18px;
-  }
-
   /* TABS */
   #sites nav,
   #vehicles nav,
@@ -63,15 +58,13 @@ only screen and (max-width: 767px) {
     content: url("../images/rocket_small.png");
   }
 
-  /* LIVE */  
-  .text_quarter  {
-    font-size:10px;
-  }
-  .text_half  {
-    font-size:15px;
-  }
-  .text_full  {
+  /* LIVE */
+  .text_double  {
     font-size:27px; /* Actually 1.5x */
+  }
+  
+  .textBox {
+    margin-top: 10%;
   }
 
   /* MISC */
