@@ -212,11 +212,6 @@ $("#home").ready(function ()
       }
     }
   });
-  
-  var windowHeight = window.innerHeight;
-  var headerHeight = $("#navHeader").outerHeight(true);
-  var listHeight = windowHeight - headerHeight;
-  $("#headList").css({ 'height': listHeight + "px" });
 
 });
 

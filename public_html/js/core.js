@@ -370,6 +370,11 @@ function fillMissions(data)
     }
   });
   
+  var windowHeight = window.innerHeight;
+  var headerHeight = $("#navHeader").outerHeight(true);
+  var listHeight = windowHeight - headerHeight;
+  $("#headList").css({ 'height': listHeight + "px" });
+  
   var hash = window.location.hash;
   if(hash !== '') {
     var el = $("#headList li" + hash);
