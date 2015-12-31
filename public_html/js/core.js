@@ -369,6 +369,15 @@ function fillMissions(data)
       li.trigger("click");
     }
   });
+  
+  var hash = window.location.hash;
+  if(hash !== '') {
+    var el = $("#headList li" + hash);
+    var parent = $("#headList");
+    parent.animate({scrollTop: el.offset().top - parent.offset().top + parent.scrollTop()}, 1000);
+
+    el.trigger('click');
+  }
 }
 
 function fillLaunchSites(data) 
