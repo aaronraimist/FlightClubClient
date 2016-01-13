@@ -44,12 +44,12 @@ function httpRequest(dest, method, data, successfn, errorfn)
 }
   
 // off canvas menu for mobile. button not visible on desktop
-$(document).on('click', '[data-toggle="offcanvas"]', function () {
+$(document).bind('click', '[data-toggle="offcanvas"]', function () {
   $('.row-offcanvas').toggleClass('active');
 });
 
 // only show one item at a time in burn and course correction lists
-$(document).on('click', '.slideList>li', function (e) {
+$(document).bind('click', '.slideList>li', function (e) {
 
   if ($(e.target).is('.slideItem *'))
     return;
@@ -86,16 +86,25 @@ function parseQueryString(queryString)
 function completeSim(data) 
 {
   var obj = jQuery.parseJSON(JSON.stringify(data, null, 2));
-  var queryString = obj.Mission.output.split('?')[1];
-  
-  window.location = client+'/results.php?' + queryString;
+  if(obj.Mission.success === true) {
+    var queryString = obj.Mission.output.split('?')[1];
+    window.location = client+'/results.php?' + queryString;
+  } else {
+    var errors = obj.Mission.errors;
+    var errorsHash = window.btoa(errors);
+
+    window.location = client + '/error.php#' + errorsHash;
+  }
   
 }
 
 function errorSim(data)
 {
-  var errors = data.responseJSON.Mission.errors;
-  var errorsHash = window.btoa(errors);
+  var errors, errorsHash='';
+  if(data.responseJSON!==undefined) {
+    errors = data.responseJSON.Mission.errors;
+    errorsHash = window.btoa(errors);
+  }
   
   window.location = client+'/error.php#'+errorsHash;
 }
@@ -176,6 +185,11 @@ function fillOutputArray(data)
           '  <div class="col-sm-4"><img src="'+imageMap['q']+'" alt="q"/></div>\n'+
           '  <div class="col-sm-4"><img src="'+imageMap['acceleration1']+'" alt="acceleration1"/></div>\n'+
           '  <div class="col-sm-4"><img src="'+imageMap['acceleration2']+'" alt="acceleration2"/></div>\n'+
+          '</div>\n'+
+          '<div class="row">\n'+
+          '  <div class="col-sm-4"><img src="'+imageMap['aoa']+'" alt="aoa"/></div>\n'+
+          '  <div class="col-sm-4"><img src="'+imageMap['velocity']+'" alt="velocity"/></div>\n'+
+          '  <div class="col-sm-4"><img src="'+imageMap['pitch']+'" alt="pitch"/></div>\n'+
           '</div>\n';
   
   $('.resultGrid').append(content);

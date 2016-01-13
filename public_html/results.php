@@ -26,8 +26,9 @@ if(isset($_COOKIE['authToken'])) {
     <link href='https://fonts.googleapis.com/css?family=Quicksand' rel='stylesheet' type='text/css'>
 
     <script src="js/jquery.cookie.js"></script>
+    <script language="javascript" type="text/javascript" src="js/flot.min.js"></script>
     <script src="js/core.js"></script>
-    <script src="js/results.js"></script>    
+    <script src="js/results_v2.js"></script>    
 
     <link rel='stylesheet' href='css/style.css' />
     <link rel='stylesheet' href='css/mobile-style.css' />
@@ -62,9 +63,6 @@ if(isset($_COOKIE['authToken'])) {
     <meta name="theme-color" content="#ffffff">
   </head>
   <body id="results">
-    <div class='bg'>
-      <img src='images/background.jpg' alt='background' />
-    </div>
     <div class='container'>
       <div class="row row-offcanvas row-offcanvas-right vfill">
         <nav class='navbar navbar-default'>
@@ -93,7 +91,29 @@ if(isset($_COOKIE['authToken'])) {
             <li class="col-xs-12 orbit"><span class="col-xs-10 slideTag">Orbit</span></li>
           </ul>
         </div>
-        <div class="resultGrid">
+        <div class="row">
+          <div class="col-sm-4"><span class="plot" id="altitude1"></span></div>
+          <div class="col-sm-4"><span class="plot" id="altitude2"></span></div>
+          <div class="col-sm-4"><span class="plot" id="profile1"></span></div>
+        </div>
+        <div class="row">
+          <div class="col-sm-4"><span class="plot" id="total-delta-v"></span></div>
+          <div class="col-sm-4"><span class="plot" id="velocity1"></span></div>
+          <div class="col-sm-4"><span class="plot" id="velocity2"></span></div>
+         </div>
+        <div class="row">
+          <div class="col-sm-4"><span class="plot" id="prop"></span></div>
+          <div class="col-sm-4"><span class="plot" id="phase1"></span></div>
+          <div class="col-sm-4"><span class="plot" id="q"></span></div>
+        </div>
+        <div class="row">
+          <div class="col-sm-4"><span class="plot" id="acceleration1"></span></div>
+          <div class="col-sm-4"><span class="plot" id="acceleration2"></span></div>
+          <div class="col-sm-4"><span class="plot" id="aoa"></span></div>
+        </div>
+        <div class="row">
+          <div class="col-sm-4"><span class="plot" id="velocity"></span></div>
+          <div class="col-sm-4"><span class="plot" id="pitch"></span></div>
         </div>
       </div>
     </div>
