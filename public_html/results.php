@@ -26,7 +26,7 @@ if(isset($_COOKIE['authToken'])) {
     <link href='https://fonts.googleapis.com/css?family=Quicksand' rel='stylesheet' type='text/css'>
 
     <script src="js/jquery.cookie.js"></script>
-    <script language="javascript" type="text/javascript" src="js/flot.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src="js/core.js"></script>
     <script src="js/results_v2.js"></script>    
 
@@ -91,29 +91,30 @@ if(isset($_COOKIE['authToken'])) {
             <li class="col-xs-12 orbit"><span class="col-xs-10 slideTag">Orbit</span></li>
           </ul>
         </div>
-        <div class="row">
-          <div class="col-sm-4"><span class="plot" id="altitude1"></span></div>
-          <div class="col-sm-4"><span class="plot" id="altitude2"></span></div>
-          <div class="col-sm-4"><span class="plot" id="profile1"></span></div>
+        <div class="row">          
+          <div class="col-sm-4"><div class="plot" id="globe"></div></div>
+          <div class="col-sm-4"><div class="plot" id="altitude1"></div></div>
+          <div class="col-sm-4"><div class="plot" id="altitude2"></div></div>
         </div>
         <div class="row">
-          <div class="col-sm-4"><span class="plot" id="total-delta-v"></span></div>
-          <div class="col-sm-4"><span class="plot" id="velocity1"></span></div>
-          <div class="col-sm-4"><span class="plot" id="velocity2"></span></div>
+          <div class="col-sm-4"><div class="plot" id="profile1"></div></div>
+          <div class="col-sm-4"><div class="plot" id="total-dv"></div></div>
+          <div class="col-sm-4"><div class="plot" id="velocity1"></div></div>
          </div>
         <div class="row">
-          <div class="col-sm-4"><span class="plot" id="prop"></span></div>
-          <div class="col-sm-4"><span class="plot" id="phase1"></span></div>
-          <div class="col-sm-4"><span class="plot" id="q"></span></div>
+          <div class="col-sm-4"><div class="plot" id="velocity2"></div></div>
+          <div class="col-sm-4"><div class="plot" id="prop"></div></div>
+          <div class="col-sm-4"><div class="plot" id="phase1"></div></div>
         </div>
         <div class="row">
-          <div class="col-sm-4"><span class="plot" id="acceleration1"></span></div>
-          <div class="col-sm-4"><span class="plot" id="acceleration2"></span></div>
-          <div class="col-sm-4"><span class="plot" id="aoa"></span></div>
+          <div class="col-sm-4"><div class="plot" id="q"></div></div>
+          <div class="col-sm-4"><div class="plot" id="accel1"></div></div>
+          <div class="col-sm-4"><div class="plot" id="accel2"></div></div>
         </div>
         <div class="row">
-          <div class="col-sm-4"><span class="plot" id="velocity"></span></div>
-          <div class="col-sm-4"><span class="plot" id="pitch"></span></div>
+          <div class="col-sm-4"><div class="plot" id="aoa"></div></div>
+          <div class="col-sm-4"><div class="plot" id="aov"></div></div>
+          <div class="col-sm-4"><div class="plot" id="aop"></div></div>
         </div>
       </div>
     </div>

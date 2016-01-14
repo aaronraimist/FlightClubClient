@@ -44,12 +44,12 @@ function httpRequest(dest, method, data, successfn, errorfn)
 }
   
 // off canvas menu for mobile. button not visible on desktop
-$(document).bind('click', '[data-toggle="offcanvas"]', function () {
+$(document).on('click', '[data-toggle="offcanvas"]', function () {
   $('.row-offcanvas').toggleClass('active');
 });
 
 // only show one item at a time in burn and course correction lists
-$(document).bind('click', '.slideList>li', function (e) {
+$(document).on('click', '.slideList>li', function (e) {
 
   if ($(e.target).is('.slideItem *'))
     return;
@@ -141,7 +141,6 @@ function setOverrideFailure(data)
 
 function fillOutputArray(data)
 {
-  var dataString = JSON.stringify(data, null, 2);
   var title = data.Mission.desc + ' Results';
   $(document).prop('title', title);
   $("#missionTag").append(title);

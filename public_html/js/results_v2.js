@@ -1,31 +1,7 @@
 
-var missionName;
-var launchTime;
-var queryParams;
-
-var fullData = [], eventsData = [], d = [];
-var stageMap = {};
-var plot = [];
-
-var T    = 0;
-var X    = 1;
-var Y    = 2;
-var Z    = 3;
-var ALT  = 4;
-var VR   = 5;
-var DR   = 6;
-var Q    = 7;
-var PROP = 8;
-var dV_t = 9;
-var dV_g = 10;
-var dV_d = 11;
-var TH   = 12;
-var A    = 13;
-var AOA  = 14;
-var AOV  = 15;
-var AOP  = 16;
-
-var MAX = 16;
+var fullData = [], eventsData = [];
+var stageMap = {}, queryParams = {};
+var numCols= 16;
 
 $(document).ready(function ()
 {
@@ -41,9 +17,9 @@ $(document).ready(function ()
 
 function fillData(data)
 {
-  missionName = data.Mission.description;
-  var title = missionName + ' Results';
-  document.title = title;
+  var title = data.Mission.description + ' Results';
+  $(document).prop('title', title);
+  $("#missionTag").append(title);
 
   getDataFile(0);
 
@@ -65,11 +41,10 @@ function getDataFile(stage) {
     var lines = data.split("\n");
 
     fullData[stage] = [];
-    for(var j=0;j<=MAX;j++) {
+    for(var j=0;j<=numCols;j++) {
       fullData[stage][j] = [];
       for (var i = 1; i < lines.length; i++) {
         var data = lines[i].split("\t");
-        // fullData[time] = downrange:alt:vel
         fullData[stage][j][i] = parseFloat(data[j]);
       }
     }
@@ -93,11 +68,11 @@ function getEventsFile(stage) {
     var lines = data.split("\n");
     
     eventsData[stage] = [];
-    for(var j=0;j<=MAX;j++) {
+    for(var j=0;j<=numCols;j++) {
       eventsData[stage][j] = [];
       for (var i = 1; i < lines.length; i++) {
         var data = lines[i].split("\t");
-        eventsData[stage][j][i] = parseFloat(data[j]); // eventsData[time] = throttle
+        eventsData[stage][j][i] = parseFloat(data[j]);
       }
     }
     getDataFile(stage + 1);
@@ -108,134 +83,120 @@ function getEventsFile(stage) {
   }
 }
 
-$(window).resize(function() {
-  initialisePlot();
-});
-
 function initialisePlots() {
   
-//initialisePlot(i, alt, fromStage, numStages, xData, yData, title);
-  initialisePlot(0,  "altitude1",     0, 1, T,  ALT,  "Booster Altitude", [0, null], [0, null]);
-  initialisePlot(1,  "altitude2",     1, 1, T,  ALT,  "Upper Stage Altitude", [0, null], [0, null]);
-  initialisePlot(2,  "profile1",      0, 1, DR, ALT,  "Booster Profile", [0, null], [0, null]);
-  initialisePlot(3,  "total-delta-v", 0, 2, T,  dV_t, "Total dV Expended", [0, 1000], [0, null]);
-  initialisePlot(4,  "velocity1",     0, 1, T,  VR,   "Booster Velocity", [0, null], [0, null]);
-  initialisePlot(5,  "velocity2",     1, 1, T,  VR,   "UpperStage Velocity", [0, null], [0, null]);
-  initialisePlot(6,  "prop",          0, 2, T,  PROP, "Propellant Mass", [0, 1000], [0, null]);
-  initialisePlot(7,  "phase1",        0, 1, ALT,VR,   "Booster Phasespace", [0, null], [0, null]);
-  initialisePlot(8,  "q",             0, 1, T,  Q,    "Aerodynamic Pressure", [0, null], [0, null]);
-  initialisePlot(9,  "acceleration1", 0, 1, T,  A,    "Booster Acceleration", [0, null], [0, null]);
-  initialisePlot(10, "acceleration2", 1, 1, T,  A,    "Upper Stage Acceleration", [0, null], [0, null]);
-  initialisePlot(11, "aoa",           0, 2, T,  AOA,  "Angle of Attack", [0,1000], [null, null]);
-  initialisePlot(12, "velocity",      0, 2, T,  AOV,  "Velocity Angle", [0,1000], [null, null]);
-  initialisePlot(13, "pitch",         0, 2, T,  AOP,  "Pitch Angle", [0,1000], [null, null]);
+  var plotMap = [];
+  plotMap.push({id:'globe',stages:[1],title:'Trajectory',
+    x:{axis:1,type:"linear"},
+    y:{axis:2,type:"linear"},
+    z:{axis:3,type:"linear"}});
   
-}
-
-function initialisePlot(i, plot, fromStage, numStages, index1, index2, title, xrange, yrange) {
-  
-  var placeholder = $("#"+plot);
-
-  var width = placeholder.parent().width();
-  placeholder.width(width);
-  placeholder.height(width);
-  
-  var d1 =[];
-  var dataToPlot = [];
-  var k = 0;
-  while(k<numStages) {
-    d1[2*k] = [];
-    d1[2*k+1] = [];
-    for (var i = 0; i < fullData[fromStage+k][index1].length; i++) {
-      d1[2*k].push([fullData[fromStage+k][index1][i], fullData[fromStage+k][index2][i]]);
-    }
-    var col = fromStage+k===0 ? '#FF0000' : '#FFA500';
-    dataToPlot.push({data: d1[2*k], lineWidth: 0, color: col, points: {show: false}, lines: {show:true}});
-    for (var i = 0; i < eventsData[fromStage+k][index1].length; i++) {
-      d1[2*k+1].push([eventsData[fromStage+k][index1][i], eventsData[fromStage+k][index2][i]]);
-    }
-    dataToPlot.push({data: d1[2*k+1], lineWidth: 0, color: '#ff0000', points: {show: true}, lines: {show:false}});
-    k++;
+  for(var i=0;i<plotMap.length;i++) {
+    initialisePlot3(plotMap[i]);
   }
   
-  plot[i] = $.plot(placeholder, dataToPlot, {
-    series: {
-      shadowSize: 0	// Drawing is faster without shadows
-    },
-    yaxis: {
-      min: yrange[0],
-      max: yrange[1],
-      zoomRange: [0.1, 1000],
-      panRange: [0, 1000]
-    },
-    xaxis: {
-      min: xrange[0],
-      max: xrange[1],
-      zoomRange: [0.1, 1000],
-      panRange: [-100, 1000]
-    },
-    zoom: {
-      interactive: false
-    },
-    pan: {
-      interactive: true
-    }
-  });
-  $('<span class="text_black text_normal" style="position:absolute;left:50px;top:20px">'+title+'</span>').appendTo(placeholder.parent());
-/*
-  $("<span class='fa fa-minus-circle' style='right:50px;top:30px'/>")
-          .appendTo(placeholder)
-          .click(function (event) {
-            event.preventDefault();
-            
-            var yoptions = plot.getAxes().yaxis.options;
-            if(yoptions.max - yoptions.min > 1000.0)
-              return;
+  plotMap = [];
+  plotMap.push({id:'altitude1',stages:[0],title:"Booster Altitude",
+    x:{axis:0,label:"Time (s)",type:"linear"},
+    y:{axis:4,label:"Altitude (km)",type:"linear"}});
+  plotMap.push({id:'altitude2',stages:[1],title:"Upper Stage Altitude",
+    x:{axis:0,label:"Time (s)",type:"linear"},
+    y:{axis:4,label:"Altitude (km)", type:"linear"}});
+  plotMap.push({id:'profile1',stages:[0],title:"Booster Profile",
+    x:{axis:6,label:"Downrange (km)", type:"linear"},
+    y:{axis:4,label:"Altitude (km)", type:"linear"}});
+  plotMap.push({id:'total-dv',stages:[0,1],title:"Total dV Expended",
+    x:{axis:0,label:"Time (s)",type:"log"},
+    y:{axis:9,label:"dV (m/s)", type:"log"}});
+  plotMap.push({id:'velocity1',stages:[0],title:"Booster Velocity",
+    x:{axis:0,label:"Time (s)",type:"linear"},
+    y:{axis:5,label:"Velocity (m/s)", type:"linear"}});
+  plotMap.push({id:'velocity2',stages:[1],title:"Upper Stage Velocity",
+    x:{axis:0,label:"Time (s)",type:"linear"},
+    y:{axis:5,label:"Velocity (m/s)",type:"linear"}});
+  plotMap.push({id:'prop',stages:[0,1],title:"Propellant Mass",
+    x:{axis:0,label:"Time (s)",type:"log"},
+    y:{axis:8,label:"Mass (t)",type:"log"}});
+  plotMap.push({id:'phase1',stages:[0],title:"Booster Phasespace",
+    x:{axis:4,label:"Altitude (km)",type:"linear"},
+    y:{axis:5,label:"Velocity (m/s)",type:"linear"}});
+  plotMap.push({id:'q',stages:[0],title:"Aerodynamic Pressure",
+    x:{axis:0,label:"Time (s)",type:"linear"},
+    y:{axis:7,label:"Altitude (km)",type:"linear"}});
+  plotMap.push({id:'accel1',stages:[0],title:"Booster Acceleration",
+    x:{axis:0,label:"Time (s)",type:"linear"},
+    y:{axis:13,label:"Acceleration (g)", type:"linear"}});
+  plotMap.push({id:'accel2',stages:[1],title:"Upper Stage Acceleration",
+    x:{axis:0,label:"Time (s)",type:"linear"},
+    y:{axis:13,label:"Acceleration (g)", type:"linear"}});
+  plotMap.push({id:'aoa',stages:[0,1],title:"Angle of Attack",
+    x:{axis:0,label:"Time (s)",type:"linear"},
+    y:{axis:14,label:"Angle (degrees)", type:"linear"}});
+  plotMap.push({id:'aov',stages:[0,1],title:"Velocity Angle",
+    x:{axis:0,label:"Time (s)",type:"linear"},
+    y:{axis:15,label:"Angle (degrees)", type:"linear"}});
+  plotMap.push({id:'aop',stages:[0,1],title:"Pitch Angle",
+    x:{axis:0,label:"Time (s)",type:"linear"},
+    y:{axis:16,label:"Angle (degrees)", type:"linear"}});
+  
+  for(var i=0;i<plotMap.length;i++) {
+    initialisePlot2(plotMap[i]);
+  }
+}
 
-            yoptions.min = 0;
-            yoptions.max = yoptions.min + (yoptions.max - yoptions.min) * 1.5; // zoom out 50%
+function initialisePlot2(plot) {
 
-            var xoptions = plot.getAxes().xaxis.options;
-            xoptions.min = 0;
-            xoptions.max = yoptions.max;
+  var data = [];  
+  for(var i=0;i<plot.stages.length;i++) {
+    var s = plot.stages[i];
+    data.push({
+      x: fullData[s][plot.x.axis],
+      y: fullData[s][plot.y.axis],
+      mode: 'lines',
+      name: (s === 0 ? 'Booster':'Upper Stage')
+    });
+    data.push({
+      x: eventsData[s][plot.x.axis],
+      y: eventsData[s][plot.y.axis],
+      color: '#ff0000',
+      mode: 'markers'
+    });
+  }
+  
+  var layout = {
+    title: plot.title,
+    showlegend: false,
+    xaxis: {type: plot.x.type, title: plot.x.label, range: plot.y.axis>13 ? [0,1000] : [null,null]},
+    yaxis: {type: plot.y.type, title: plot.y.label}
+  };
 
-            plot.setupGrid();
-            plot.draw();
-          });
-
-  $("<span class='fa fa-plus-circle' style='right:30px;top:30px'/>")
-          .appendTo(placeholder)
-          .click(function (event) {
-            event.preventDefault();
-
-            var yoptions = plot.getAxes().yaxis.options;
-            if(yoptions.max - yoptions.min < 10.0)
-              return;
-            
-            yoptions.min = 0;
-            yoptions.max = yoptions.min + (yoptions.max - yoptions.min) / 1.5; // zoom in 50%
-
-            var xoptions = plot.getAxes().xaxis.options;
-            xoptions.min = 0;
-            xoptions.max = yoptions.max;
-
-            plot.setupGrid();
-            plot.draw();
-          });
-
-  addArrow(placeholder, "left", 56, 61, {left: -100});
-  addArrow(placeholder, "right", 28, 61, {left: 100});
-  addArrow(placeholder, "up", 40, 46, {top: -100});
-  addArrow(placeholder, "down", 40, 74, {top: 100});
-  */
+  Plotly.newPlot(plot.id, data, layout);
 
 }
 
-function addArrow(placeholder, dir, right, top, offset) {
-  $("<span class='fa fa-chevron-" + dir + "' style='right:" + right + "px;top:" + top + "px'/>")
-          .appendTo(placeholder)
-          .click(function (e) {
-            e.preventDefault();
-            plot.pan(offset);
-          });
+function initialisePlot3(plot) {
+
+  var data = [];  
+  for(var i=0;i<plot.stages.length;i++) {
+    var s = plot.stages[i];
+    data.push({
+      x: fullData[s][plot.x.axis],
+      y: fullData[s][plot.y.axis],
+      z: fullData[s][plot.z.axis],
+      mode: 'lines',
+      name: (s === 0 ? 'Booster':'Upper Stage'),
+      type: 'scatter3d'
+    });
+  }
+  
+  var layout = {
+    title: plot.title,
+    showlegend: false,
+    xaxis: {type: plot.x.type, title: plot.x.label,autorange: true,showgrid: false,zeroline: false,showline: false,autotick: true,ticks: '',showticklabels: false},
+    yaxis: {type: plot.y.type, title: plot.y.label,autorange: true,showgrid: false,zeroline: false,showline: false,autotick: true,ticks: '',showticklabels: false},
+    zaxis: {type: plot.z.type, title: plot.z.label,autorange: true,showgrid: false,zeroline: false,showline: false,autotick: true,ticks: '',showticklabels: false}
+  };
+
+  Plotly.newPlot(plot.id, data, layout);
+
 }
