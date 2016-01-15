@@ -7,9 +7,6 @@ $(document).ready(function ()
 {
   var queryString = window.location.search.substring(1);
   queryParams = parseQueryString(queryString);
-
-  stageMap[0] = 'Booster';
-  stageMap[1] = 'UpperStage';
   
   httpRequest(api_url + '/missions/' + queryParams['code'], 'GET', null, fillData, null);
 
@@ -20,6 +17,10 @@ function fillData(data)
   var title = data.Mission.description + ' Results';
   $(document).prop('title', title);
   $("#missionTag").append(title);
+
+  $.each(data.Mission.Profile.Stages, function(key,val) {
+    stageMap[val.Core.id] = val.name;
+  });
 
   getDataFile(0);
 
@@ -153,12 +154,11 @@ function initialisePlot2(plot) {
       x: fullData[s][plot.x.axis],
       y: fullData[s][plot.y.axis],
       mode: 'lines',
-      name: (s === 0 ? 'Booster':'Upper Stage')
+      name: stageMap[s]
     });
     data.push({
       x: eventsData[s][plot.x.axis],
       y: eventsData[s][plot.y.axis],
-      color: '#ff0000',
       mode: 'markers'
     });
   }
@@ -184,7 +184,7 @@ function initialisePlot3(plot) {
       y: fullData[s][plot.y.axis],
       z: fullData[s][plot.z.axis],
       mode: 'lines',
-      name: (s === 0 ? 'Booster':'Upper Stage'),
+      name: stageMap[s],
       type: 'scatter3d'
     });
   }
