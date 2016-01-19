@@ -141,8 +141,10 @@ function setOverrideFailure(data)
 
 function fillOutputArray(data)
 {
-  var title = data.Mission.desc + ' Results';
-  $(document).prop('title', title);
+  var missionName = data.Mission.desc;
+  var title = 'Simulation Results';
+  if(missionName !== undefined)
+    title = missionName + ' Results';
   $("#missionTag").append(title);
   
   var imageMap = new Object();
