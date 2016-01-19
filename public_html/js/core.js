@@ -159,39 +159,10 @@ function fillOutputArray(data)
     fileMap[val.desc] = val.url;
   });
     
-  var content = 
-          '<div class="row">\n'+
-          '  <div class="col-sm-4"><img src="'+imageMap['globe']+'" alt="globe"/></div>\n'+
-          '  <div class="col-sm-4"><img src="'+imageMap['ground-track']+'" alt="ground-track"/></div>\n'+
-          '  <div class="col-sm-4"><img src="'+imageMap['altitude1']+'" alt="altitude1"/></div>\n'+
-          '</div>\n'+
-          '<div class="row">\n'+
-          '  <div class="col-sm-4"><img src="'+imageMap['landing']+'" alt="landing"/></div>\n'+
-          '  <div class="col-sm-4"><img src="'+imageMap['landing2']+'" alt="landing2"/></div>\n'+
-          '  <div class="col-sm-4"><img src="'+imageMap['altitude2']+'" alt="altitude2"/></div>\n'+
-          '</div>\n'+
-          '<div class="row">\n'+
-          '  <div class="col-sm-4"><img src="'+imageMap['profile1']+'" alt="profile1"/></div>\n'+
-          '  <div class="col-sm-4"><img src="'+imageMap['total-delta-v']+'" alt="total-delta-v"/></div>\n'+
-          '  <div class="col-sm-4"><img src="'+imageMap['velocity1']+'" alt="velocity1"/></div>\n'+
-          '</div>\n'+
-          '<div class="row">\n'+
-          '  <div class="col-sm-4"><img src="'+imageMap['velocity2']+'" alt="velocity2"/></div>\n'+
-          '  <div class="col-sm-4"><img src="'+imageMap['prop']+'" alt="prop"/></div>\n'+
-          '  <div class="col-sm-4"><img src="'+imageMap['phase1']+'" alt="phase1"/></div>\n'+
-          '</div>\n'+
-          '<div class="row">\n'+
-          '  <div class="col-sm-4"><img src="'+imageMap['q']+'" alt="q"/></div>\n'+
-          '  <div class="col-sm-4"><img src="'+imageMap['acceleration1']+'" alt="acceleration1"/></div>\n'+
-          '  <div class="col-sm-4"><img src="'+imageMap['acceleration2']+'" alt="acceleration2"/></div>\n'+
-          '</div>\n'+
-          '<div class="row">\n'+
-          '  <div class="col-sm-4"><img src="'+imageMap['aoa']+'" alt="aoa"/></div>\n'+
-          '  <div class="col-sm-4"><img src="'+imageMap['velocity']+'" alt="velocity"/></div>\n'+
-          '  <div class="col-sm-4"><img src="'+imageMap['pitch']+'" alt="pitch"/></div>\n'+
-          '</div>\n';
-  
-  $('.resultGrid').append(content);
+  $("#globe").attr("src", imageMap['globe']);
+  $("#ground-track").attr("src", imageMap['ground-track']);
+  $("#landing").attr("src", imageMap['landing']);
+  $("#landing2").attr("src", imageMap['landing2']);
   
   var warningsFile = fileMap['warnings'];
   $.get(warningsFile, function (txt) {

@@ -375,7 +375,7 @@ function update(i) {
 
           // Separator for burns curves
           // end old curve & start new one at same point
-          if (throttle[stage] === 0) {
+          if (throttle[stage] < 0.5) {
             d[stage][1].push([tel[0], tel[1]]);
             d[stage][1].push(null);
             d[stage][0].push([tel[0], tel[1]]);
@@ -395,7 +395,7 @@ function update(i) {
           var tel = fullData[stage][i].split(":");
 
           // Burn curves
-          if (throttle[stage] === 0)
+          if (throttle[stage] < 0.5)
             d[stage][0].push([tel[0], tel[1]]);
           else
             d[stage][1].push([tel[0], tel[1]]);
