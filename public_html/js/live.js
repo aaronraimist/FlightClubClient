@@ -51,8 +51,12 @@ function fillData(data)
 
   var tempDate = data.Mission.date.replace(/-/g, "/") + ' ' + data.Mission.time + ' UTC';
   launchTime = Date.parse(tempDate);
-
+  
   var now = new Date();
+  if(queryParams['rewatch']===1 && launchTime < now) {
+    launchTime = new Date(now+10*1000);
+  }
+
   var timeUntilLaunch = launchTime - now;
   var textBox = $(".textBox");
 
