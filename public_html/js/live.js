@@ -53,7 +53,7 @@ function fillData(data)
   launchTime = Date.parse(tempDate);
   
   var now = new Date();
-  if(queryParams['rewatch']===1 && launchTime < now) {
+  if(queryParams['rewatch']==='1' && launchTime < now) {
     launchTime = new Date(now+10*1000);
   }
 
@@ -79,6 +79,7 @@ function fillData(data)
     var html =
             "<div class='text_double centre'>\n" +
             "  <div>" + missionName + " has already launched.</div>\n" +
+            "  <a href='"+window.location+"&rewatch=1'>Rewatch the launch here</a>\n" +
             "</div>";
     textBox.show();
     textBox.append(html);
@@ -333,9 +334,9 @@ function refreshClock(waiting)
     
     if (Math.abs((5 * _minute - rand5) - distance) < 1000)  // polls for aborts between T-5 -> T-0
       pollLaunchTime();
-    if (Math.abs(rand5 + distance) < 1000) // poll for aborts between T-0 -> T+5
+    if (Math.abs(rand5 + distance) < 1000 && queryParams['rewatch']!=='1') // poll for aborts between T-0 -> T+5
       pollLaunchTime();
-    if (Math.abs((15 * _minute + 2*rand5) + distance) < 1000) // plots -> over limit between T+15 -> T+25
+    if (Math.abs((15 * _minute + 2*rand5) + distance) < 1000 && queryParams['rewatch']!=='1') // plots -> over limit between T+15 -> T+25
       window.location.reload(true);    
   }
 }

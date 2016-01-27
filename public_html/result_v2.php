@@ -29,6 +29,7 @@ if(isset($_COOKIE['authToken'])) {
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src="js/core.js"></script>
     <script src="js/results_v2.js"></script>    
+    <script src="js/test.js"></script>    
 
     <link rel='stylesheet' href='css/style.css' />
     <link rel='stylesheet' href='css/mobile-style.css' />
@@ -63,9 +64,9 @@ if(isset($_COOKIE['authToken'])) {
     <meta name="theme-color" content="#ffffff">
   </head>
   <body id="results">
-    <div class="bg">
+    <!--<div class="bg">
       <img src="images/background.jpg" alt="background"/>
-    </div>
+    </div> -->
     <div class='container'>
       <div class="row row-offcanvas row-offcanvas-right vfill">
         <nav class='navbar navbar-default'>
@@ -94,35 +95,22 @@ if(isset($_COOKIE['authToken'])) {
             <li class="col-xs-12 orbit"><span class="col-xs-10 slideTag">Orbit</span></li>
           </ul>
         </div>
-        <div class="resultGrid" style="background-color:white">
-          <div class="row">          
-            <div class="col-sm-4"><img id="globe"/></div>
-            <div class="col-sm-4"><img id="ground-track"/></div>
-            <div class="col-sm-4"><div class="plot" id="altitude1"></div></div>
-          </div>
-          <div class="row">
-            <div class="col-sm-4"><img id="landing"/></div>
-            <div class="col-sm-4"><img id="landing2"/></div>
-            <div class="col-sm-4"><div class="plot" id="profile1"></div></div>
-          </div>
-          <div class="row">
-            <div class="col-sm-4"><div class="plot" id="total-dv"></div></div>
-            <div class="col-sm-4"><div class="plot" id="velocity1"></div></div>
-            <div class="col-sm-4"><div class="plot" id="prop"></div></div>
-          </div>
-          <div class="row">
-            <div class="col-sm-4"><div class="plot" id="phase1"></div></div>
-            <div class="col-sm-4"><div class="plot" id="q"></div></div>
-            <div class="col-sm-4"><div class="plot" id="accel1"></div></div>
-          </div>
-          <div class="row">
-            <div class="col-sm-4"><div class="plot" id="aoa"></div></div>
-            <div class="col-sm-4"><div class="plot" id="aov"></div></div>
-            <div class="col-sm-4"><div class="plot" id="aop"></div></div>
-          </div>
-          <div class="row">
-            <div class="col-sm-4"><div class="plot" id="drag"></div></div>
-          </div>
+        <div class="paneHolder">
+          <div class="row"><div class="pane col-sm-10"><img id="globe"/></div><div class="tag col-sm-2">Press Me!</div></div>
+          <div class="row"><div class="pane col-sm-10"><img id="ground-track"/></div><div class="tag col-sm-2">Press Me!</div></div>
+          <div class="row"><div class="pane col-sm-10"><div class="plot" id="altitude1"></div></div><div class="tag col-sm-2">Press Me!</div></div>
+          <div class="row"><div class="pane col-sm-10"><img id="landing"/></div><div class="tag col-sm-2">Press Me!</div></div>
+          <div class="row"><div class="pane col-sm-10"><img id="landing2"/></div><div class="tag col-sm-2">Press Me!</div></div>
+          <div class="row"><div class="pane col-sm-10"><div class="plot" id="profile1"></div></div><div class="tag col-sm-2">Press Me!</div></div>
+          <div class="row"><div class="pane col-sm-10"><div class="plot" id="total-dv"></div></div><div class="tag col-sm-2">Press Me!</div></div>
+          <div class="row"><div class="pane col-sm-10"><div class="plot" id="velocity1"></div></div><div class="tag col-sm-2">Press Me!</div></div>
+          <div class="row"><div class="pane col-sm-10"><div class="plot" id="prop"></div></div><div class="tag col-sm-2">Press Me!</div></div>
+          <div class="row"><div class="pane col-sm-10"><div class="plot" id="phase1"></div></div><div class="tag col-sm-2">Press Me!</div></div>
+          <div class="row"><div class="pane col-sm-10"><div class="plot" id="q"></div></div><div class="tag col-sm-2">Press Me!</div></div>
+          <div class="row"><div class="pane col-sm-10"><div class="plot" id="accel1"></div></div><div class="tag col-sm-2">Press Me!</div></div>
+          <div class="row"><div class="pane col-sm-10"><div class="plot" id="aoa"></div></div><div class="tag col-sm-2">Press Me!</div></div>
+          <div class="row"><div class="pane col-sm-10"><div class="plot" id="aov"></div></div><div class="tag col-sm-2">Press Me!</div></div>
+          <div class="row"><div class="pane col-sm-10"><div class="plot" id="aop"></div></div><div class="tag col-sm-2">Press Me!</div></div>
         </div>
       </div>
     </div>

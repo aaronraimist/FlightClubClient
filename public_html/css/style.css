@@ -332,6 +332,23 @@ input:disabled, select:disabled {
   padding-left: 0px;
 }
 
+.paneHolder .row {
+  position: absolute;
+}
+
+.paneHolder .row:nth-child(1) {margin-top:0px;}
+.paneHolder .row:nth-child(2) {margin-top:20px;}
+.paneHolder .row:nth-child(3) {margin-top:40px;}
+.paneHolder .row:nth-child(4) {margin-top:60px;}
+.paneHolder .row:nth-child(5) {margin-top:80px;}
+.paneHolder .row:nth-child(6) {margin-top:100px;}
+.paneHolder .row:nth-child(7) {margin-top:120px;}
+.paneHolder .row:nth-child(8) {margin-top:140px;}
+.paneHolder .row:nth-child(9) {margin-top:160px;}
+.paneHolder .row:nth-child(10) {margin-top:180px;}
+.paneHolder .row:nth-child(11) {margin-top:200px;}
+.paneHolder .row:nth-child(12) {margin-top:220px;}
+
 .resultGrid {
   background: #fff;
   width: 100% !important;
