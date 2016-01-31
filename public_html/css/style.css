@@ -316,6 +316,14 @@ input:disabled, select:disabled {
   text-align:center;
 }
 
+#cesiumContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+}
+
 /* RESULTS */
 #results-info {
   background: #000;
