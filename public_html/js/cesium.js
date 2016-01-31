@@ -3,7 +3,6 @@
 // Initialize map
 var viewer = new Cesium.Viewer('cesiumContainer', {
 	timeline: false,
-	skyAtmosphere: false,
 	animation: false,
 	scene3DOnly: true,
 	fullscreenButton: false,

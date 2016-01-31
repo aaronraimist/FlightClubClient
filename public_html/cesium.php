@@ -22,7 +22,7 @@ $payload = $_GET["code"];
     <link href='https://fonts.googleapis.com/css?family=Quicksand' rel='stylesheet' type='text/css'>
 
     <script src="http://cesiumjs.org/releases/1.17/Build/Cesium/Cesium.js"></script>
-    <link rel="stylesheet" href="http://cesiumjs.org/releases/1.17/Build/Cesium/Widgets/widgets.css" />
+    <link rel="stylesheet" href="http://cesiumjs.org/releases/1.17/Build/Cesium/Widgets/widgets.css" /> 
     
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="css/mobile-style.css" />
@@ -68,8 +68,11 @@ $payload = $_GET["code"];
         </div>
       </nav>
       -->
-      <div id=cesiumContainer></div>
+      <div class='textBox text_double centre'></div>
+      <div id="cesiumContainer"></div>
     </div>
 	<script src="js/cesium.js"></script>
+  <script src="js/core.js"></script>
+  <script src="js/cesium_live.js"></script>
   </body>
 </html>
