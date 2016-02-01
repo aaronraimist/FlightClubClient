@@ -11,6 +11,16 @@ var warp = 1;
 
 var rand5;
 
+var launchPadViews = {};
+launchPadViews['LC4E'] = {
+  destination: Cesium.Cartesian3.fromDegrees(-123.402, 36.094, 150000.0),
+  orientation: {
+    heading: Cesium.Math.toRadians(149.97),
+    pitch: Cesium.Math.toRadians(-16.964),
+    roll: Cesium.Math.toRadians(0.143)
+  }
+};
+
 $(document).ready(function ()
 {
   var queryString = window.location.search.substring(1);
@@ -72,9 +82,7 @@ function fillData(data)
     var launchSite = data.Mission.launchsite;
     var url = api_url + '/launchsites/' + launchSite;
     httpRequest(url, 'GET', null, function (data) {
-      viewer.camera.flyTo({
-        destination: Cesium.Cartesian3.fromRadians(data.data[0].longitude, data.data[0].latitude, 15000.0)
-      });
+      viewer.camera.flyTo(launchPadViews[launchSite]);
     }, null);
     initialise(data.Mission.livelaunch);
   }
@@ -146,12 +154,26 @@ function getEventsFile(liveId, stage) {
 
 function start() {
   
+  setInterval(function() {
+    var heading = 180.0*viewer.camera.heading/Math.PI;
+    var pitch = 180.0*viewer.camera.pitch/Math.PI;
+    var roll = 180.0*viewer.camera.roll/Math.PI;
+    var matrix = viewer.camera.inverseViewMatrix;
+    var pos1 = Math.sqrt(matrix[12]*matrix[12]+matrix[13]*matrix[13]);
+    var pos2 = matrix[14];
+    var lat = 180.0*Math.atan(pos2/pos1)/Math.PI;
+    var lon = 180.0*Math.atan(matrix[12]/matrix[13])/Math.PI;
+    var radius = Math.sqrt(matrix[12]*matrix[12]+matrix[13]*matrix[13]+matrix[14]*matrix[14]);
+    var height = radius - 6378137;
+    var x = 1;
+  }, 10000);
+  /*
   $(".textBox").hide();
   displayClock(false);
 
   initialisePlot();
   update(-5);
-
+*/
 }
 
 function initialisePlot() {
