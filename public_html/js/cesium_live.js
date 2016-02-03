@@ -13,11 +13,27 @@ var rand5;
 
 var launchPadViews = {};
 launchPadViews['LC4E'] = {
-  destination: Cesium.Cartesian3.fromDegrees(-123.402, 36.094, 150000.0),
+  destination: Cesium.Cartesian3.fromDegrees(-128.654, 27.955, 772000.0),
   orientation: {
-    heading: Cesium.Math.toRadians(149.97),
-    pitch: Cesium.Math.toRadians(-16.964),
-    roll: Cesium.Math.toRadians(0.143)
+    heading: Cesium.Math.toRadians(67.776),
+    pitch: Cesium.Math.toRadians(-36.982),
+    roll: Cesium.Math.toRadians(359.873)
+  }
+};
+launchPadViews['LC40'] = {
+  destination: Cesium.Cartesian3.fromDegrees(-76.162, 19.863, 480000.0),
+  orientation: {
+    heading: Cesium.Math.toRadians(356.939),
+    pitch: Cesium.Math.toRadians(-26.816),
+    roll: Cesium.Math.toRadians(359.795)
+  }
+};
+launchPadViews['BOCA'] = {
+  destination: Cesium.Cartesian3.fromDegrees(-93.885, 15.088, 882000.0),
+  orientation: {
+    heading: Cesium.Math.toRadians(326.332),
+    pitch: Cesium.Math.toRadians(-36.270),
+    roll: Cesium.Math.toRadians(359.831)
   }
 };
 
@@ -79,11 +95,7 @@ function fillData(data)
   }
   else
   {
-    var launchSite = data.Mission.launchsite;
-    var url = api_url + '/launchsites/' + launchSite;
-    httpRequest(url, 'GET', null, function (data) {
-      viewer.camera.flyTo(launchPadViews[launchSite]);
-    }, null);
+    viewer.camera.flyTo(launchPadViews[data.Mission.launchsite]);
     initialise(data.Mission.livelaunch);
   }
 
@@ -96,31 +108,74 @@ function initialise(liveId) {
 }
 
 function getDataFile(liveId, stage) {
-  if (stageMap[stage] === undefined)    
+  if (stageMap[stage] === undefined)
     start();
-
-  var url = client + '/output/' + liveId + '_' + stageMap[stage] + '.dat';
-  $.ajax({type: 'GET', url: url, contentType: 'text', data: null,
-    xhrFields: {withCredentials: false},
-    success: successfn,
-    error: errorfn
-  });
+  else {
+    var url = client + '/output/' + liveId + '_' + stageMap[stage] + '.dat';
+    $.ajax({type: 'GET', url: url, contentType: 'text', data: null,
+      xhrFields: {withCredentials: false},
+      success: successfn,
+      error: errorfn
+    });
+  }
 
   function successfn(data) {
   
     var lines = data.split("\n");
 
-    fullData[stage] = [];
-    d[stage] = [];
-    d[stage][0] = []; // burn
-    d[stage][1] = []; // coast
-    d[stage][2] = []; // events
+    var property = new Cesium.SampledPositionProperty();
+    var start = Cesium.JulianDate.fromDate(new Date());
 
+    var t = 0;
     for (var i = 1; i < lines.length; i++) {
+      if (lines[i] === "")
+        continue;
+      
+      if(i%10!==0)
+        continue;
+
       var data = lines[i].split("\t");
-      // fullData[time] = downrange:alt:vel
-      fullData[stage][parseInt(data[0])] = parseFloat(data[6]) + ":" + parseFloat(data[4]) + ":" + parseFloat(data[5]);
+
+      t = parseInt(data[0]);
+      var x = parseFloat(data[1]);
+      var y = parseFloat(data[2]);
+      var z = parseFloat(data[3]);
+      var h = parseFloat(data[4]) * 1e3;
+
+      var lat = 180 * Math.atan(z / Math.sqrt(x * x + y * y)) / Math.PI;
+      var lon = 180 * Math.atan2(y, x) / Math.PI;
+
+      var time = Cesium.JulianDate.addSeconds(start, t, new Cesium.JulianDate());
+      var position = Cesium.Cartesian3.fromDegrees(lon, lat, h);
+      property.addSample(time, position);
+
     }
+    
+    var stop = Cesium.JulianDate.addSeconds(start, t, new Cesium.JulianDate());
+    
+    var entity = viewer.entities.add({
+      availability: new Cesium.TimeIntervalCollection([new Cesium.TimeInterval({
+          start: start,
+          stop: stop
+        })]),
+      //Use our computed positions
+      position: property,
+      //Show the path as a pink line sampled in 1 second increments.
+      path: {
+        resolution: 1,
+        material: new Cesium.PolylineGlowMaterialProperty({
+          glowPower: 0.1,
+          color: Cesium.Color.YELLOW
+        }),
+        width: 10
+      }
+    });
+    entity.position.setInterpolationOptions({
+      interpolationDegree: 5,
+      interpolationAlgorithm: Cesium.LagrangePolynomialApproximation
+    });
+    viewer.trackedEntity = entity;
+    
     getEventsFile(liveId, stage);
   }
 
@@ -139,11 +194,29 @@ function getEventsFile(liveId, stage) {
 
   function successfn(data) {
     var lines = data.split("\n");
-    eventsData[stage] = [];
+
     for (var i = 1; i < lines.length; i++) {
       var data = lines[i].split("\t");
-      eventsData[stage][parseInt(data[0])] = parseFloat(data[12]); // eventsData[time] = throttle
+      var x = parseFloat(data[1]);
+      var y = parseFloat(data[2]);
+      var z = parseFloat(data[3]);
+      var h = parseFloat(data[4])*1e3;
+
+      var lat = 180*Math.atan(z/Math.sqrt(x*x+y*y))/Math.PI;
+      var lon = 180*Math.atan2(y, x)/Math.PI;
+
+      var position = Cesium.Cartesian3.fromDegrees(lon, lat, h);
+      viewer.entities.add({
+        position: position,
+        point: {
+          pixelSize: 4,
+          color: Cesium.Color.TRANSPARENT,
+          outlineColor: parseFloat(data[12]) > 0.5 ? Cesium.Color.RED : Cesium.Color.YELLOW,
+          outlineWidth: 1
+        }
+      });
     }
+
     getDataFile(liveId, stage + 1);
   }
 
