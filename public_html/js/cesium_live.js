@@ -5,6 +5,7 @@ var queryParams;
 
 var fullData = [], eventsData = [], d = [];
 var stageMap = {};
+var entities = {};
 var plot;
 var throttle = [0, 0];
 var warp = 1;
@@ -95,7 +96,7 @@ function fillData(data)
   }
   else
   {
-    viewer.camera.flyTo(launchPadViews[data.Mission.launchsite]);
+    //viewer.camera.flyTo(launchPadViews[data.Mission.launchsite]);
     initialise(data.Mission.livelaunch);
   }
 
@@ -122,17 +123,23 @@ function getDataFile(liveId, stage) {
   function successfn(data) {
   
     var lines = data.split("\n");
+    var step = Math.ceil(lines.length/250);
 
-    var property = new Cesium.SampledPositionProperty();
+    var p_stage = new Cesium.SampledPositionProperty();
+    var trajectory = new Cesium.SampledPositionProperty();
     var start = Cesium.JulianDate.fromDate(new Date());
+    var stop = Cesium.JulianDate.addSeconds(start, 36000, new Cesium.JulianDate());
 
-    var t = 0;
+    var t = 0, throttle = -1;
     for (var i = 1; i < lines.length; i++) {
       if (lines[i] === "")
         continue;
       
-      if(i%10!==0)
+      if(i%step!==0)
         continue;
+      
+      if(throttle === -1)
+        throttle = parseFloat(data[12]);
 
       var data = lines[i].split("\t");
 
@@ -147,11 +154,38 @@ function getDataFile(liveId, stage) {
 
       var time = Cesium.JulianDate.addSeconds(start, t, new Cesium.JulianDate());
       var position = Cesium.Cartesian3.fromDegrees(lon, lat, h);
-      property.addSample(time, position);
+      trajectory.addSample(time, position);
+      p_stage.addSample(time, position);
+      
+      if((throttle< 0.5 && parseFloat(data[12]) >= 0.5) || (throttle >= 0.5 && parseFloat(data[12]) < 0.5)) {
+        var plotEntity = viewer.entities.add({
+          availability: new Cesium.TimeIntervalCollection([new Cesium.TimeInterval({
+              start: start,
+              stop: stop
+            })]),
+          //Use our computed positions
+          position: trajectory,
+          //Show the path as a pink line sampled in 1 second increments.
+          path: {
+            resolution: 1,
+            material: new Cesium.PolylineGlowMaterialProperty({
+              glowPower: 0.1,
+              color: throttle >= 0.5 ? Cesium.Color.RED : Cesium.Color.YELLOW
+            }),
+            width: 10
+          }
+        });
+        plotEntity.position.setInterpolationOptions({
+          interpolationDegree: 5,
+          interpolationAlgorithm: Cesium.LagrangePolynomialApproximation
+        });
+        
+        trajectory = new Cesium.SampledPositionProperty();
+        trajectory.addSample(time, position);
+      }
+      throttle = parseFloat(data[12]);
 
     }
-    
-    var stop = Cesium.JulianDate.addSeconds(start, t, new Cesium.JulianDate());
     
     var entity = viewer.entities.add({
       availability: new Cesium.TimeIntervalCollection([new Cesium.TimeInterval({
@@ -159,13 +193,13 @@ function getDataFile(liveId, stage) {
           stop: stop
         })]),
       //Use our computed positions
-      position: property,
+      position: trajectory,
       //Show the path as a pink line sampled in 1 second increments.
       path: {
         resolution: 1,
         material: new Cesium.PolylineGlowMaterialProperty({
           glowPower: 0.1,
-          color: Cesium.Color.YELLOW
+          color: throttle >= 0.5 ? Cesium.Color.RED : Cesium.Color.YELLOW
         }),
         width: 10
       }
@@ -174,8 +208,28 @@ function getDataFile(liveId, stage) {
       interpolationDegree: 5,
       interpolationAlgorithm: Cesium.LagrangePolynomialApproximation
     });
-    viewer.trackedEntity = entity;
-    
+        
+    var stageEntity = viewer.entities.add({
+      availability: new Cesium.TimeIntervalCollection([new Cesium.TimeInterval({
+          start: start,
+          stop: stop
+        })]),
+      position: p_stage,
+      path: {
+        resolution: 1,
+        material: new Cesium.PolylineGlowMaterialProperty({
+          glowPower: 0.1,
+          color: Cesium.Color.TRANSPARENT
+        }),
+        width: 10
+      }
+    });
+    stageEntity.position.setInterpolationOptions({
+      interpolationDegree: 5,
+      interpolationAlgorithm: Cesium.LagrangePolynomialApproximation
+    });
+    entities[stage] = stageEntity;
+
     getEventsFile(liveId, stage);
   }
 
@@ -210,7 +264,7 @@ function getEventsFile(liveId, stage) {
         position: position,
         point: {
           pixelSize: 4,
-          color: Cesium.Color.TRANSPARENT,
+          color: parseFloat(data[12]) > 0.5 ? Cesium.Color.RED : Cesium.Color.YELLOW,
           outlineColor: parseFloat(data[12]) > 0.5 ? Cesium.Color.RED : Cesium.Color.YELLOW,
           outlineWidth: 1
         }
@@ -239,14 +293,14 @@ function start() {
     var radius = Math.sqrt(matrix[12]*matrix[12]+matrix[13]*matrix[13]+matrix[14]*matrix[14]);
     var height = radius - 6378137;
     var x = 1;
-  }, 10000);
-  /*
-  $(".textBox").hide();
-  displayClock(false);
+  }, 10000);  
 
-  initialisePlot();
+  viewer.trackedEntity = entities[0];
+  
+  /*
+  displayClock(false);
   update(-5);
-*/
+  */
 }
 
 function initialisePlot() {
@@ -329,5 +383,5 @@ function update(i) {
   var currentTime = new Date();
   var time = (currentTime - launchTime) * warp / 1000;
 
-  //setTimeout(update, 500, i);
+  setTimeout(update, 1000, i);
 }
