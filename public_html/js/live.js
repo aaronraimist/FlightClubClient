@@ -42,6 +42,10 @@ $(document).ready(function ()
   httpRequest(api_url + '/missions/' + queryParams['code'], 'GET', null, fillData, null);
 
 });
+  
+$(document).on('click', "#data_option", function () {
+  window.location = 'results.php?' + window.location.search.substring(1);
+});
 
 function fillData(data)
 {

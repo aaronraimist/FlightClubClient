@@ -41,7 +41,7 @@ launchPadViews['BOCA'] = {
 $(document).ready(function ()
 {
   var queryString = window.location.search.substring(1);
-  queryParams = parseQueryString(queryString);
+  queryParams = parseQueryString(queryString); // watch=1 : livelaunch, watch=2 : rewatch
 
   stageMap[0] = 'Booster';
   stageMap[1] = 'UpperStage';
@@ -50,6 +50,10 @@ $(document).ready(function ()
 
   httpRequest(api_url + '/missions/' + queryParams['code'], 'GET', null, fillData, null);
 
+});
+  
+$(document).on('click', "#data_option", function () {
+  window.location = 'results.php?' + window.location.search.substring(1);
 });
 
 function fillData(data)
@@ -62,41 +66,52 @@ function fillData(data)
   launchTime = Date.parse(tempDate);
   
   var now = new Date();
-  if(queryParams['rewatch']==='1' && launchTime < now) {
+  if(queryParams['watch']==='2' && launchTime < now) {
     launchTime = new Date(now+10*1000);
   }
 
   var timeUntilLaunch = launchTime - now;
   var textBox = $(".textBox");
-
-  if (timeUntilLaunch > 1 * 60 * 60 * 1000)
-  {
-    $("#live").prepend("<div class='bg'><img src='images/background.jpg' alt='background'/></div>");
-    var html =
-            "<div>" + missionName + " will launch in</div>\n" +
-            "\t<div id='days'></div>\n" +
-            "\t<div id='hours'></div>\n" +
-            "\t<div id='minutes'></div>\n" +
-            "\t<div id='seconds'></div>\n";
-    textBox.show();
-    textBox.append(html);
-    displayClock(true);
-  } 
-  else if (timeUntilLaunch < -14 * 60 * 1000)
-  {
-    $("#cesiumContainer").hide();
-    $("#live").prepend("<div class='bg'><img src='images/background.jpg' alt='background'/></div>");
-    var html =
-            "<div class='text_double centre'>\n" +
-            "  <div>" + missionName + " has already launched.</div>\n" +
-            "  <a href='"+window.location+"&rewatch=1'>Rewatch the launch here</a>\n" +
-            "</div>";
-    textBox.show();
-    textBox.append(html);
+/*
+  if (queryParams['watch'] !== undefined) {
+   $('nav').remove();    
   }
+*/
+  if (queryParams['watch'] !== undefined) {
+    if (timeUntilLaunch > 1 * 60 * 60 * 1000)
+    {
+      $("#live").prepend("<div class='bg'><img src='images/background.jpg' alt='background'/></div>");
+      var html =
+              "<div>" + missionName + " will launch in</div>\n" +
+              "\t<div id='days'></div>\n" +
+              "\t<div id='hours'></div>\n" +
+              "\t<div id='minutes'></div>\n" +
+              "\t<div id='seconds'></div>\n";
+      textBox.show();
+      textBox.append(html);
+      displayClock(true);
+    }
+    else if (timeUntilLaunch < -14 * 60 * 1000)
+    {
+      $("#cesiumContainer").hide();
+      $("#live").prepend("<div class='bg'><img src='images/background.jpg' alt='background'/></div>");
+      var html =
+              "<div class='text_double centre'>\n" +
+              "  <div>" + missionName + " has already launched.</div>\n" +
+              "  <a href='world.php?code=" + queryParams['code'] + "&watch=2'>Rewatch the launch here</a>\n" +
+              "</div>";
+      textBox.show();
+      textBox.append(html);
+    }
+    else
+    {
+      $('nav').remove();    
+      initialise(data.Mission.livelaunch);
+    }
+  } 
   else
   {
-    //viewer.camera.flyTo(launchPadViews[data.Mission.launchsite]);
+    viewer.camera.flyTo(launchPadViews[data.Mission.launchsite]);
     initialise(data.Mission.livelaunch);
   }
 
@@ -280,7 +295,7 @@ function getEventsFile(liveId, stage) {
 }
 
 function start() {
-  
+  /*
   setInterval(function() {
     var heading = 180.0*viewer.camera.heading/Math.PI;
     var pitch = 180.0*viewer.camera.pitch/Math.PI;
@@ -294,13 +309,10 @@ function start() {
     var height = radius - 6378137;
     var x = 1;
   }, 10000);  
-
-  viewer.trackedEntity = entities[0];
+*/
+  if (queryParams['watch'] !== undefined)
+    viewer.trackedEntity = entities[0];
   
-  /*
-  displayClock(false);
-  update(-5);
-  */
 }
 
 function initialisePlot() {
@@ -359,9 +371,9 @@ function refreshClock(waiting)
     
     if (Math.abs((5 * _minute - rand5) - distance) < 1000)  // polls for aborts between T-5 -> T-0
       pollLaunchTime();
-    if (Math.abs(rand5 + distance) < 1000 && queryParams['rewatch']!=='1') // poll for aborts between T-0 -> T+5
+    if (Math.abs(rand5 + distance) < 1000 && queryParams['watch']!=='2') // poll for aborts between T-0 -> T+5
       pollLaunchTime();
-    if (Math.abs((15 * _minute + 2*rand5) + distance) < 1000 && queryParams['rewatch']!=='1') // plots -> over limit between T+15 -> T+25
+    if (Math.abs((15 * _minute + 2*rand5) + distance) < 1000 && queryParams['watch']!=='2') // plots -> over limit between T+15 -> T+25
       window.location.reload(true);    
   }
 }

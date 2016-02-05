@@ -446,10 +446,10 @@ input:disabled, select:disabled {
 .rpadding3 { padding-right: 15%; }
 .rpadding4 { padding-right: 20%; }
 
-.rborder { border-right:1px solid #fff}
-.lborder { border-left:1px solid #fff}
-.tborder { border-top:1px solid #fff}
-.bborder { border-bottom:1px solid #fff}
+.rborder { border-right:1px solid #aaa}
+.lborder { border-left:1px solid #aaa}
+.tborder { border-top:1px solid #aaa}
+.bborder { border-bottom:1px solid #aaa}
 
 .textright {text-align: right;}
 .textleft {text-align: left;}

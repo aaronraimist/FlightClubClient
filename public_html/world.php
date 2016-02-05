@@ -58,21 +58,22 @@ $payload = $_GET["code"];
   </head>
   <body id="live">
     <div class="container">
-      <!--
       <nav class="navbar navbar-default">
+        <!-- Brand and toggle get grouped for better mobile display -->
         <div class="left lmargin0 navbar-brand">
           <a href="index.php"><span class="fa fa-home"></span></a>
         </div>
-        <div class="navbar-header">
-          <a class="navbar-brand left" href="#"><span>LiveLaunch</span></a></li>
+        <span class='rborder navbar-brand'>FlightClub World</span>
+        <div id="data_option" class="navbar-brand">
+          <a href="#"><span class="fa fa-area-chart"></span></a>
         </div>
+        <span class='navbar-brand rborder'>Data</span>
       </nav>
-      -->
       <div class='textBox text_double centre'></div>
       <div id="cesiumContainer"></div>
     </div>
 	<script src="js/cesium.js"></script>
   <script src="js/core.js"></script>
-  <script src="js/cesium_live.js"></script>
+  <script src="js/world.js"></script>
   </body>
 </html>

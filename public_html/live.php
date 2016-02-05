@@ -33,12 +33,7 @@ if (isset($_GET["code"])) {
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
     <link href='https://fonts.googleapis.com/css?family=Quicksand' rel='stylesheet' type='text/css'>
-
-    <script language="javascript" type="text/javascript" src="js/flot.min.js"></script>
-
-    <script src="js/core.js"></script>
-    <script src="js/live.js"></script>
-
+    
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="css/mobile-style.css" />
     <link rel="stylesheet" href="css/large-style.css" />
@@ -78,12 +73,13 @@ if (isset($_GET["code"])) {
         <div class="left lmargin0 navbar-brand">
           <a href="index.php"><span class="fa fa-home"></span></a>
         </div>
-        <div class="navbar-header">
-          <a class="navbar-brand left" href="#"><span>LiveLaunch</span></a></li>
-        </div>
+        <span class='rborder navbar-brand'>LiveLaunch</span>
       </nav>
       <div class='textBox text_double centre'></div>
       <div id="placeholder"></div>
     </div>
+	<script src="js/cesium.js"></script>
+  <script src="js/core.js"></script>
+  <script src="js/world.js"></script>
   </body>
 </html>

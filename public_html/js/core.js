@@ -148,24 +148,12 @@ function fillOutputArray(data)
   $("#missionTag").append(title);
   document.title = title;
   
-  var imageMap = new Object();
-  var images = data.Mission.Output.Images;
-  $.each(images, function(key,val)
-  {
-    imageMap[val.desc] = val.url;
-  });
-  
   var fileMap = new Object();
   var files = data.Mission.Output.Files;
   $.each(files, function(key,val)
   {
     fileMap[val.desc] = val.url;
   });
-    
-  $("#globe").attr("src", imageMap['globe']);
-  $("#ground-track").attr("src", imageMap['ground-track']);
-  $("#landing").attr("src", imageMap['landing']);
-  $("#landing2").attr("src", imageMap['landing2']);
   
   var warningsFile = fileMap['warnings'];
   $.get(warningsFile, function (txt) {
