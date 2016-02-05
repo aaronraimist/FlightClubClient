@@ -316,6 +316,14 @@ input:disabled, select:disabled {
   text-align:center;
 }
 
+#cesiumContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+}
+
 /* RESULTS */
 #results-info {
   background: #000;
@@ -331,6 +339,23 @@ input:disabled, select:disabled {
 #missionTag {
   padding-left: 0px;
 }
+
+.paneHolder .row {
+  position: absolute;
+}
+
+.paneHolder .row:nth-child(1) {margin-top:0px;}
+.paneHolder .row:nth-child(2) {margin-top:20px;}
+.paneHolder .row:nth-child(3) {margin-top:40px;}
+.paneHolder .row:nth-child(4) {margin-top:60px;}
+.paneHolder .row:nth-child(5) {margin-top:80px;}
+.paneHolder .row:nth-child(6) {margin-top:100px;}
+.paneHolder .row:nth-child(7) {margin-top:120px;}
+.paneHolder .row:nth-child(8) {margin-top:140px;}
+.paneHolder .row:nth-child(9) {margin-top:160px;}
+.paneHolder .row:nth-child(10) {margin-top:180px;}
+.paneHolder .row:nth-child(11) {margin-top:200px;}
+.paneHolder .row:nth-child(12) {margin-top:220px;}
 
 .resultGrid {
   background: #fff;
@@ -421,10 +446,10 @@ input:disabled, select:disabled {
 .rpadding3 { padding-right: 15%; }
 .rpadding4 { padding-right: 20%; }
 
-.rborder { border-right:1px solid #fff}
-.lborder { border-left:1px solid #fff}
-.tborder { border-top:1px solid #fff}
-.bborder { border-bottom:1px solid #fff}
+.rborder { border-right:1px solid #aaa}
+.lborder { border-left:1px solid #aaa}
+.tborder { border-top:1px solid #aaa}
+.bborder { border-bottom:1px solid #aaa}
 
 .textright {text-align: right;}
 .textleft {text-align: left;}

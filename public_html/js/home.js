@@ -134,9 +134,17 @@ $("#home").ready(function ()
     var burnsTab = $(this).closest('div[id^=burns]');
     var parent = burnsTab.find('.slideList').first();
     var count = parent.children().length;
+    
+    var burnPre;
     var id = burnsTab.attr('id');
-    var key = id.substr(id.length - 1);    
-    var burnPre = 'Mission.Profile.Stages['+key+'].Burns['+count+'].';
+    var key = id.substr(id.length - 1);  
+    for(var i=0;i<=count;i++) {
+      burnPre = "Mission.Profile.Stages["+key+"].Burns["+i+"].";
+      var x = $('input[name^="'+burnPre+'"]');
+      if(x.length===0) {
+        break;
+      }
+    }  
     
     e.preventDefault();
     addBurnItem(parent, burnPre, 'newBurn');
@@ -148,9 +156,17 @@ $("#home").ready(function ()
     var courseTab = $(this).closest('div[id^=course]');
     var parent = courseTab.find('.slideList').first();
     var count = parent.children().length;
+    
     var id = courseTab.attr('id');
     var key = id.substr(id.length - 1);    
-    var coursePre = 'Mission.Profile.Stages['+key+'].Course['+count+'].';
+    var coursePre;
+    for(var i=0;i<=count;i++) {
+      coursePre = "Mission.Profile.Stages["+key+"].Course["+i+"].";
+      var x = $('input[name^="'+coursePre+'"]');
+      if(x.length===0) {
+        break;
+      }
+    }  
     
     e.preventDefault();
     addCourseItem(parent, coursePre, 'newCourse');

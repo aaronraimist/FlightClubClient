@@ -17,8 +17,8 @@
  along with FlightClub.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-//var client = 'http://www.flightclub.io';
-var client = 'http://localhost';
+var client = 'http://www.flightclub.io';
+//var client = 'http://localhost';
 var server = client + ':8080/FlightClub';
 var api_url = server + '/api/v1';
 
@@ -146,13 +146,7 @@ function fillOutputArray(data)
   if(missionName !== undefined)
     title = missionName + ' Results';
   $("#missionTag").append(title);
-  
-  var imageMap = new Object();
-  var images = data.Mission.Output.Images;
-  $.each(images, function(key,val)
-  {
-    imageMap[val.desc] = val.url;
-  });
+  document.title = title;
   
   var fileMap = new Object();
   var files = data.Mission.Output.Files;
@@ -160,11 +154,6 @@ function fillOutputArray(data)
   {
     fileMap[val.desc] = val.url;
   });
-    
-  $("#globe").attr("src", imageMap['globe']);
-  $("#ground-track").attr("src", imageMap['ground-track']);
-  $("#landing").attr("src", imageMap['landing']);
-  $("#landing2").attr("src", imageMap['landing2']);
   
   var warningsFile = fileMap['warnings'];
   $.get(warningsFile, function (txt) {

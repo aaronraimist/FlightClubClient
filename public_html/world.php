@@ -1,27 +1,14 @@
 <?php
 $payload = '';
 if (isset($_GET["code"])) {
-  $payload = $_GET["code"];
+$payload = $_GET["code"];
 }
 ?>
 
 <!doctype html>
 <html>
   <head>
-    <title></title>
-    <style type="text/css">
-      
-      #placeholder {
-        font-size: 12px;
-        color: black;
-      }
-
-      #placeholder .fa {
-        position: absolute;
-        cursor: pointer;
-      }
-
-    </style>
+    <title>FlightClub v2.0</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
@@ -33,11 +20,14 @@ if (isset($_GET["code"])) {
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
     <link href='https://fonts.googleapis.com/css?family=Quicksand' rel='stylesheet' type='text/css'>
+
+    <script src="http://cesiumjs.org/releases/1.17/Build/Cesium/Cesium.js"></script>
+    <link rel="stylesheet" href="http://cesiumjs.org/releases/1.17/Build/Cesium/Widgets/widgets.css" /> 
     
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="css/mobile-style.css" />
     <link rel="stylesheet" href="css/large-style.css" />
-    
+
     <meta property="og:title" content="LiveLaunch!" />
     <meta property="og:site_name" content="Flight Club"/>
     <meta property="og:url" content="http://www.flightclub.io" />
@@ -73,10 +63,14 @@ if (isset($_GET["code"])) {
         <div class="left lmargin0 navbar-brand">
           <a href="index.php"><span class="fa fa-home"></span></a>
         </div>
-        <span class='rborder navbar-brand'>LiveLaunch</span>
+        <span class='rborder navbar-brand'>FlightClub World</span>
+        <div id="data_option" class="navbar-brand">
+          <a href="#"><span class="fa fa-area-chart"></span></a>
+        </div>
+        <span class='navbar-brand rborder'>Data</span>
       </nav>
       <div class='textBox text_double centre'></div>
-      <div id="placeholder"></div>
+      <div id="cesiumContainer"></div>
     </div>
 	<script src="js/cesium.js"></script>
   <script src="js/core.js"></script>

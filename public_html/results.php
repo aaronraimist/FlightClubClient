@@ -73,7 +73,11 @@ if(isset($_COOKIE['authToken'])) {
           <div class="left lmargin0 navbar-brand">
             <a href="index.php"><span class="fa fa-home"></span></a>
           </div>
-          <span id="missionTag" class='navbar-brand'></span>
+          <span id="missionTag" class='rborder navbar-brand'></span>
+          <div id="world_option" class="navbar-brand">
+            <a href="#"><span class="fa fa-globe"></span></a>
+          </div>
+          <span class='navbar-brand rborder'>World</span>
           <div class="right rmargin0 navbar-brand" data-toggle="offcanvas">
             <a href="#" role="tab" data-toggle="tab"><span class="fa fa-bars"></span></a>
           </div>
@@ -82,7 +86,7 @@ if(isset($_COOKIE['authToken'])) {
           <ul class="slideList nav nav-pills nav-stacked">
             <?php
             if ($payload !== '') {
-              echo '<li id="watchButton" class="col-xs-12"><a href="live.php?code=' . $payload . '"><span>Watch Live</span></a></li>' . "\n";
+              echo '<li id="watchButton" class="col-xs-12"><a href="world.php?code=' . $payload . '&watch=1"><span>Watch Live</span></a></li>' . "\n";
             }
             if(isset($token) && $token !== '') {
               echo '<li id="liveInitButton" class="col-xs-12"><span class="col-xs-10 slideTag">Override Live Plots</span><span id="overrideStatus"/></li>' . "\n";
@@ -95,30 +99,25 @@ if(isset($_COOKIE['authToken'])) {
           </ul>
         </div>
         <div class="resultGrid" style="background-color:white">
-          <div class="row">          
-            <div class="col-sm-4"><img id="globe"/></div>
-            <div class="col-sm-4"><img id="ground-track"/></div>
+          <div class="row">
             <div class="col-sm-4"><div class="plot" id="altitude1"></div></div>
-          </div>
-          <div class="row">
-            <div class="col-sm-4"><img id="landing"/></div>
-            <div class="col-sm-4"><img id="landing2"/></div>
-            <div class="col-sm-4"><div class="plot" id="profile1"></div></div>
-          </div>
-          <div class="row">
-            <div class="col-sm-4"><div class="plot" id="total-dv"></div></div>
             <div class="col-sm-4"><div class="plot" id="velocity1"></div></div>
-            <div class="col-sm-4"><div class="plot" id="prop"></div></div>
+            <div class="col-sm-4"><div class="plot" id="profile1"></div></div>
           </div>
           <div class="row">
             <div class="col-sm-4"><div class="plot" id="phase1"></div></div>
             <div class="col-sm-4"><div class="plot" id="q"></div></div>
-            <div class="col-sm-4"><div class="plot" id="accel1"></div></div>
+            <div class="col-sm-4"><div class="plot" id="prop"></div></div>
           </div>
           <div class="row">
             <div class="col-sm-4"><div class="plot" id="aoa"></div></div>
             <div class="col-sm-4"><div class="plot" id="aov"></div></div>
             <div class="col-sm-4"><div class="plot" id="aop"></div></div>
+          </div>
+          <div class="row">
+            <div class="col-sm-4"><div class="plot" id="total-dv"></div></div>
+            <div class="col-sm-4"><div class="plot" id="accel1"></div></div>
+            <div class="col-sm-4"><div class="plot" id="drag"></div></div>
           </div>
         </div>
       </div>
