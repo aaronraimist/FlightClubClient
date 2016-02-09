@@ -3,7 +3,7 @@ var missionName;
 var launchTime;
 var queryParams;
 
-var fullData = [], eventsData = [], d = [];
+var fullData = [], eventsData = [], d = [], focusPoints = [];
 var stageMap = {};
 var entities = {};
 var plot;
@@ -116,21 +116,18 @@ function fillData(data)
 
 function initialise(liveId) {
 
-  getDataFile(liveId, 0);
+  getEventsFile(liveId, 0);
 
 }
 
 function getDataFile(liveId, stage) {
-  if (stageMap[stage] === undefined)
-    start();
-  else {
-    var url = client + '/output/' + liveId + '_' + stageMap[stage] + '.dat';
-    $.ajax({type: 'GET', url: url, contentType: 'text', data: null,
-      xhrFields: {withCredentials: false},
-      success: successfn,
-      error: errorfn
-    });
-  }
+  
+  var url = client + '/output/' + liveId + '_' + stageMap[stage] + '.dat';
+  $.ajax({type: 'GET', url: url, contentType: 'text', data: null,
+    xhrFields: {withCredentials: false},
+    success: successfn,
+    error: errorfn
+  });
 
   function successfn(data) {
   
@@ -144,16 +141,23 @@ function getDataFile(liveId, stage) {
 
     var t = 0, throttle = -1;
     for (var i = 1; i < lines.length; i++) {
-      if (lines[i] === "")
+      
+      var focus = false;
+      var data = lines[i].split("\t");
+      for(var j=0;j<focusPoints.length;j++) {
+        if(Math.abs(data[0]-focusPoints[j])<0.5) {
+          focus = true;
+        }
+      }
+
+      if (!focus && lines[i] === "")
         continue;
       
-      if(i%step!==0)
+      if (!focus && i%step!==0)
         continue;
       
       if(throttle === -1)
         throttle = parseFloat(data[12]);
-
-      var data = lines[i].split("\t");
 
       t = parseInt(data[0]);
       var x = parseFloat(data[1]);
@@ -169,7 +173,7 @@ function getDataFile(liveId, stage) {
       trajectory.addSample(time, position);
       p_stage.addSample(time, position);
       
-      if((throttle< 0.5 && parseFloat(data[12]) >= 0.5) || (throttle >= 0.5 && parseFloat(data[12]) < 0.5)) {
+      if(focus) {
         var plotEntity = viewer.entities.add({
           availability: new Cesium.TimeIntervalCollection([new Cesium.TimeInterval({
               start: start,
@@ -184,7 +188,7 @@ function getDataFile(liveId, stage) {
               glowPower: 0.1,
               color: throttle >= 0.5 ? Cesium.Color.RED : Cesium.Color.YELLOW
             }),
-            width: 10
+            width: 8
           }
         });
         plotEntity.position.setInterpolationOptions({
@@ -211,9 +215,9 @@ function getDataFile(liveId, stage) {
         resolution: 1,
         material: new Cesium.PolylineGlowMaterialProperty({
           glowPower: 0.1,
-          color: throttle >= 0.5 ? Cesium.Color.RED : Cesium.Color.YELLOW
+          color: Cesium.Color.RED
         }),
-        width: 10
+        width: 8
       }
     });
     entity.position.setInterpolationOptions({
@@ -233,7 +237,7 @@ function getDataFile(liveId, stage) {
           glowPower: 0.1,
           color: Cesium.Color.TRANSPARENT
         }),
-        width: 10
+        width: 1
       }
     });
     stageEntity.position.setInterpolationOptions({
@@ -242,7 +246,7 @@ function getDataFile(liveId, stage) {
     });
     entities[stage] = stageEntity;
 
-    getEventsFile(liveId, stage);
+    getEventsFile(liveId, stage+1);
   }
 
   function errorfn(data) {
@@ -251,18 +255,29 @@ function getDataFile(liveId, stage) {
 }
 
 function getEventsFile(liveId, stage) {
-  var url = client + '/output/' + liveId + '_' + stageMap[stage] + '_events.dat';
-  $.ajax({type: 'GET', url: url, contentType: 'text', data: null,
-    xhrFields: {withCredentials: false},
-    success: successfn,
-    error: errorfn
-  });
+  if (stageMap[stage] === undefined)
+    start();
+  else {
+    var url = client + '/output/' + liveId + '_' + stageMap[stage] + '_events.dat';
+    $.ajax({type: 'GET', url: url, contentType: 'text', data: null,
+      xhrFields: {withCredentials: false},
+      success: successfn,
+      error: errorfn
+    });
+  }
 
   function successfn(data) {
     var lines = data.split("\n");
 
-    for (var i = 1; i < lines.length; i++) {
+    focusPoints = [];
+    for (var i = 1; i < lines.length; i++) {      
       var data = lines[i].split("\t");
+      
+      if(data.length===1)
+        continue;
+      
+      focusPoints.push(parseFloat(data[0]));
+      
       var x = parseFloat(data[1]);
       var y = parseFloat(data[2]);
       var z = parseFloat(data[3]);
@@ -275,15 +290,15 @@ function getEventsFile(liveId, stage) {
       viewer.entities.add({
         position: position,
         point: {
-          pixelSize: 4,
-          color: parseFloat(data[12]) > 0.5 ? Cesium.Color.RED : Cesium.Color.YELLOW,
-          outlineColor: parseFloat(data[12]) > 0.5 ? Cesium.Color.RED : Cesium.Color.YELLOW,
+          pixelSize: 5,
+          color: Cesium.Color.TRANSPARENT,
+          outlineColor: Cesium.Color.RED,
           outlineWidth: 1
         }
       });
     }
 
-    getDataFile(liveId, stage + 1);
+    getDataFile(liveId, stage);
   }
 
   function errorfn(data) {
