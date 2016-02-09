@@ -3,6 +3,10 @@ $payload = '';
 if (isset($_GET["code"])) {
 $payload = $_GET["code"];
 }
+$id = '';
+if (isset($_GET["id"])) {
+$id = $_GET["id"];
+}
 ?>
 
 <!doctype html>
@@ -64,10 +68,14 @@ $payload = $_GET["code"];
           <a href="index.php"><span class="fa fa-home"></span></a>
         </div>
         <span class='rborder navbar-brand'>FlightClub World</span>
-        <div id="data_option" class="navbar-brand">
-          <a href="#"><span class="fa fa-area-chart"></span></a>
-        </div>
-        <span class='navbar-brand rborder'>Data</span>
+        <?php
+            if ($id !== '') {
+              echo '<div id="data_option" class="navbar-brand">' . "\n" .
+                      '<a href="#"><span class="fa fa-area-chart"></span></a>' . "\n".
+                    '</div>' . "\n".
+                    '<span class="navbar-brand rborder">Data</span>';
+        }
+        ?>
       </nav>
       <div class='textBox text_double centre'></div>
       <div id="cesiumContainer"></div>

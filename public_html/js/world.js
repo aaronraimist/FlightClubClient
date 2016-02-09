@@ -72,14 +72,11 @@ function fillData(data)
 
   var timeUntilLaunch = launchTime - now;
   var textBox = $(".textBox");
-/*
-  if (queryParams['watch'] !== undefined) {
-   $('nav').remove();    
-  }
-*/
+
   if (queryParams['watch'] !== undefined) {
     if (timeUntilLaunch > 1 * 60 * 60 * 1000)
     {
+      $("#cesiumContainer").hide();
       $("#live").prepend("<div class='bg'><img src='images/background.jpg' alt='background'/></div>");
       var html =
               "<div>" + missionName + " will launch in</div>\n" +
@@ -112,7 +109,7 @@ function fillData(data)
   else
   {
     viewer.camera.flyTo(launchPadViews[data.Mission.launchsite]);
-    initialise(data.Mission.livelaunch);
+    initialise(queryParams['id']);
   }
 
 }
