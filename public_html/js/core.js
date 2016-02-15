@@ -17,8 +17,8 @@
  along with FlightClub.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-var client = 'http://www.flightclub.io';
-//var client = 'http://localhost';
+//var client = 'http://www.flightclub.io';
+var client = 'http://localhost';
 var server = client + ':8080/FlightClub';
 var api_url = server + '/api/v1';
 

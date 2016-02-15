@@ -12,17 +12,16 @@ $id = $_GET["id"];
 <!doctype html>
 <html>
   <head>
-    <title>FlightClub v2.0</title>
+    <title>Flight Club World</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-    <!-- Optional theme -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-messages.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
     <link href='https://fonts.googleapis.com/css?family=Quicksand' rel='stylesheet' type='text/css'>
 
     <script src="http://cesiumjs.org/releases/1.17/Build/Cesium/Cesium.js"></script>
@@ -42,46 +41,68 @@ $id = $_GET["id"];
     <meta property="og:locale" content="en_US" />
     <meta property="og:image" content="http://www.flightclub.io/images/og_image.png" />   
 
-    <link rel="apple-touch-icon" sizes="57x57" href="images/favicon-round/apple-icon-57x57.png">
-    <link rel="apple-touch-icon" sizes="60x60" href="images/favicon-round/apple-icon-60x60.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="images/favicon-round/apple-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="76x76" href="images/favicon-round/apple-icon-76x76.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="images/favicon-round/apple-icon-114x114.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="images/favicon-round/apple-icon-120x120.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="images/favicon-round/apple-icon-144x144.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="images/favicon-round/apple-icon-152x152.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="images/favicon-round/apple-icon-180x180.png">
-    <link rel="icon" type="image/png" sizes="192x192"  href="images/favicon-round/android-icon-192x192.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-round/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="96x96" href="images/favicon-round/favicon-96x96.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-round/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="57x57" href="images/favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="images/favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="images/favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="images/favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="images/favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="images/favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="images/favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="images/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="images/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16x16.png">
     <link rel="manifest" href="images/favicon-round/manifest.json">
-    <meta name="msapplication-TileColor" content="#ffffff">
-    <meta name="msapplication-TileImage" content="images/favicon-round/ms-icon-144x144.png">
-    <meta name="theme-color" content="#ffffff">
+
   </head>
-  <body id="live">
-    <div class="container">
-      <nav class="navbar navbar-default">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="left lmargin0 navbar-brand">
-          <a href="index.php"><span class="fa fa-home"></span></a>
-        </div>
-        <span class='rborder navbar-brand'>FlightClub World</span>
-        <?php
-            if ($id !== '') {
-              echo '<div id="data_option" class="navbar-brand">' . "\n" .
-                      '<a href="#"><span class="fa fa-area-chart"></span></a>' . "\n".
-                    '</div>' . "\n".
-                    '<span class="navbar-brand rborder">Data</span>';
-        }
-        ?>
-      </nav>
-      <div class='textBox text_double centre'></div>
-      <div id="cesiumContainer"></div>
+  <body ng-app="FCWorld">
+    <div ng-controller="sideNavCtrl" layout="column" layout-fill ng-cloak>
+      <section layout="row" flex>
+
+        <md-content ng-show="backgroundShow" flex>
+          <div class="bg">
+            <img src="images/background.jpg" alt="background"/>
+          </div>
+          <div class='textBox text_double centre text1'></div>
+        </md-content>
+
+        <md-content ng-show="cesiumShow" flex>
+          <div id="cesiumContainer"></div>
+        </md-content>
+
+        <md-sidenav ng-show="cesiumShow && sidebarShow" flex layout="column" class="md-sidenav-right md-whiteframe-z2" md-component-id="right" md-is-locked-open="$mdMedia('min-width: 350px')">
+          <md-toolbar class="md-theme-indigo">
+            <div class="md-toolbar-tools" layout="row" layout-align="space-around center" flex>
+              <h1><span>{{missionName}}</span></h1>
+              <md-button class="md-raised" ng-click="clickStage(0)">{{stage0}}</md-button>
+              <md-button class="md-raised" ng-click="clickStage(1)">{{stage1}}</md-button>
+            </div>
+          </md-toolbar>
+          <md-content>
+            <div layout="column" layout-align="space-around center">
+              <p>{{clock}}</p>
+            </div>
+          </md-content>
+          <md-divider></md-divider>
+          <md-content flex layout="column" layout-align="space-around center">
+            <div layout-fill layout="column" layout-align="center center">
+              <span id="altitudeTel{{selectedStage}}"></span>
+              <div class="plot" id="altitudePlot{{selectedStage}}"></div>
+            </div>
+            <div layout-fill layout="column" layout-align="center center">
+              <span id="velocityTel{{selectedStage}}"></span>
+              <div class="plot" id="velocityPlot{{selectedStage}}"></div>
+            </div>
+          </md-content>
+        </md-sidenav>
+
+      </section>
     </div>
-	<script src="js/cesium.js"></script>
+  <script src="js/flot.min.js"></script>
   <script src="js/core.js"></script>
   <script src="js/world.js"></script>
+  <script src='js/playground.js'></script>   
   </body>
 </html>

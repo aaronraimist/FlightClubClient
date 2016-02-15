@@ -22,7 +22,7 @@ Tabs for bigger screens take custom style
 */
 @media 
 only screen and (min-width: 768px)  {
-
+  
   /* TABS */
   #sites nav,
   #vehicles nav,
@@ -42,8 +42,12 @@ only screen and (min-width: 768px)  {
     padding: 15px;
     width: 600px;
     height: 300px;
-    z-index: 2800;
+    z-index: 6;
     display: none; 
+  }
+  
+  .plot {
+    width: 100%;
   }
 
 #head {
@@ -71,6 +75,7 @@ only screen and (min-width: 768px)  {
   }
   
   .textBox {
+    position: relative;
     margin-top: 150px;
   }
 

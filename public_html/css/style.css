@@ -33,10 +33,21 @@ html, body {
   min-height: 100vh;
   width: 100%;
   overflow-x: hidden;
-  color: #BBB;
+  color: #BBB !important;
   font-size: 18px;
   font-family: 'Quicksand', sans-serif !important;
   font-weight: 900;
+}
+
+::-webkit-scrollbar { 
+  display: none; 
+}
+
+/*
+  Hack. Setting timeline: false breaks everything, so set it to true, but hide it
+*/
+.cesium-viewer-timelineContainer {
+  display: none !important;
 }
 
 body, .container {
@@ -48,10 +59,10 @@ body, .container {
 
 .bg {
   position: fixed; 
-  top: -50%; 
-  left: -50%; 
-  width: 200%; 
-  height: 200%;
+  top: 0; 
+  left: 0; 
+  width: 100%; 
+  height: 100%;
 }
 
 .bg img {
@@ -61,8 +72,8 @@ body, .container {
   right: 0; 
   bottom: 0; 
   margin: auto; 
-  min-width: 50%;
-  min-height: 50%;
+  min-width: 100%;
+  min-height: 100%;
   width: auto;
 }
 
@@ -280,7 +291,6 @@ input:disabled, select:disabled {
 }
 
 .progress-container {
-  z-index: -2000;
   position: fixed;
   top: 50%;
 }
@@ -288,6 +298,11 @@ input:disabled, select:disabled {
 .centre  {
   text-align: center;
   display:block;
+}
+
+.text1 {
+  line-height:1;
+  color: #BBB;
 }
 
 .text_white {
@@ -322,6 +337,23 @@ input:disabled, select:disabled {
   left: 0;
   height: 100%;
   width: 100%;
+}
+
+md-content {
+  overflow: hidden !important;  
+}
+
+md-sidenav {
+  padding-bottom: 5%;
+}
+
+.plot {
+  overflow: hidden;
+}
+
+/* Keep main content visible while sidenav is open */
+md-backdrop.md-sidenav-backdrop {
+  background-color:transparent;
 }
 
 /* RESULTS */
@@ -461,9 +493,10 @@ input:disabled, select:disabled {
 .right {float: right !important;}
 
 /* Z-INDEXES */
-.bg {z-index: -1000;}
-.progress-container {z-index: -900;}
-form {z-index: -500;}
-nav {z-index: 500;}
-.nav-tabs {z-index: 2000;}
-ul li {z-index: 3000;}
+.bg {z-index: 0;}
+.textBox {z-index: 1;}
+.progress-container {z-index: 1;}
+form {z-index: 2;}
+nav {z-index: 3;}
+.nav-tabs {z-index: 4;}
+ul li {z-index: 5;}
