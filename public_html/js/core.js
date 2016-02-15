@@ -17,8 +17,8 @@
  along with FlightClub.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-//var client = 'http://www.flightclub.io';
-var client = 'http://localhost';
+var client = 'http://www.flightclub.io';
+//var client = 'http://localhost';
 var server = client + ':8080/FlightClub';
 var api_url = server + '/api/v1';
 
@@ -42,29 +42,6 @@ function httpRequest(dest, method, data, successfn, errorfn)
       error: errorfn
     });
 }
-  
-// off canvas menu for mobile. button not visible on desktop
-$(document).on('click', '[data-toggle="offcanvas"]', function () {
-  $('.row-offcanvas').toggleClass('active');
-});
-
-// only show one item at a time in burn and course correction lists
-$(document).on('click', '.slideList>li', function (e) {
-
-  if ($(e.target).is('.slideItem *'))
-    return;
-
-  $(this).siblings().removeClass('active');
-  $(this).addClass('active');
-
-  var list = $(this).children('ul').first();
-  if (list.is(':visible')) {
-    $(this).removeClass('active');
-  }
-  list.slideToggle();
-
-  $(this).siblings().children('ul').slideUp(); // Hide all li siblings child ul's
-});
 
 function parseQueryString(queryString) 
 {

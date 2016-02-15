@@ -229,6 +229,24 @@ $("#home").ready(function ()
     }
   });
 
+// only show one item at a time in burn and course correction lists
+  $(document).on('click', '.slideList>li', function (e) {
+
+    if ($(e.target).is('.slideItem *'))
+      return;
+
+    $(this).siblings().removeClass('active');
+    $(this).addClass('active');
+
+    var list = $(this).children('ul').first();
+    if (list.is(':visible')) {
+      $(this).removeClass('active');
+    }
+    list.slideToggle();
+
+    $(this).siblings().children('ul').slideUp(); // Hide all li siblings child ul's
+  });
+
 });
 
 function numStagesPerVehicle(vehicle) {
