@@ -157,10 +157,14 @@ function world() {
         p_stage.addSample(time, position);
 
         if (focus) {
-          viewer.entities.add({
+          var e = viewer.entities.add({
             availability: new Cesium.TimeIntervalCollection([new Cesium.TimeInterval({start: start, stop: stop})]),
             position: trajectory,
             path: {resolution: 1, material: new Cesium.PolylineGlowMaterialProperty({glowPower: 0.1, color: throttle >= 0.5 ? Cesium.Color.RED : Cesium.Color.YELLOW}), width: 8}
+          });
+          e.position.setInterpolationOptions({
+            interpolationDegree: 5,
+            interpolationAlgorithm: Cesium.LagrangePolynomialApproximation
           });
 
           trajectory = new Cesium.SampledPositionProperty();
@@ -170,10 +174,14 @@ function world() {
 
       }
 
-      viewer.entities.add({
+      var e = viewer.entities.add({
         availability: new Cesium.TimeIntervalCollection([new Cesium.TimeInterval({start: start, stop: stop})]),
         position: trajectory,
         path: {resolution: 1, material: new Cesium.PolylineGlowMaterialProperty({glowPower: 0.1, color: throttle >= 0.5 ? Cesium.Color.RED : Cesium.Color.YELLOW}), width: 8}
+      });
+      e.position.setInterpolationOptions({
+        interpolationDegree: 5,
+        interpolationAlgorithm: Cesium.LagrangePolynomialApproximation
       });
 
       if (w.getProp('watch') !== undefined) {
@@ -185,6 +193,10 @@ function world() {
             image: pinBuilder.fromText(stage+1, Cesium.Color.ROYALBLUE, 32).toDataURL(),
             verticalOrigin: Cesium.VerticalOrigin.BOTTOM
           }
+        });
+        entities[stage].position.setInterpolationOptions({
+          interpolationDegree: 5,
+          interpolationAlgorithm: Cesium.LagrangePolynomialApproximation
         });
       }
 
