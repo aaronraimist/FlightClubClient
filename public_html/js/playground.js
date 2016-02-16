@@ -117,7 +117,7 @@ function setClock(scope, world) {
   var _hour = _minute * 60;
   var _day = _hour * 24;
 
-  if (!scope.cesiumHide) {
+  if (scope.cesiumShow) {
     if(world.getViewer() !== undefined) {
       var now = Cesium.JulianDate.toDate(world.getViewer().clock.currentTime);
       var distance = world.getLaunchTime() - now;
@@ -150,6 +150,14 @@ function setClock(scope, world) {
     }
 
   } else if(scope.displayClock) {
+    
+    var now = new Date();
+    var distance = world.getProp('launchTime') - now;
+    var sign = distance > 0 ? '-' : '+';
+    var days = Math.floor(distance / _day);
+    var hours = Math.abs(Math.floor((distance % _day) / _hour));
+    var minutes = Math.abs(Math.floor((distance % _hour) / _minute));
+    var seconds = Math.abs(Math.floor((distance % _minute) / _second));
 
     document.getElementById('days').innerHTML = days + ' day' + ((days !== 1) ? 's' : '');
     document.getElementById('hours').innerHTML = hours + ' hour' + ((hours !== 1) ? 's' : '');
