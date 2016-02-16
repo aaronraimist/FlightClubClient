@@ -228,8 +228,13 @@ $("#home").ready(function ()
       }
     }
   });
+  
+  // off canvas menu for mobile. button not visible on desktop
+  $(document).on('click', '[data-toggle="offcanvas"]', function () {
+    $('.row-offcanvas').toggleClass('active');
+  });
 
-// only show one item at a time in burn and course correction lists
+  // only show one item at a time in burn and course correction lists
   $(document).on('click', '.slideList>li', function (e) {
 
     if ($(e.target).is('.slideItem *'))

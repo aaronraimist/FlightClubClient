@@ -54,11 +54,6 @@ only screen and (min-width: 768px)  {
   padding-right: 25px;
 }
 
-#headList {
-  margin-right: -25px;
-  padding-right: 13px;
-}
-
   /* LOADING SCREEN */
   .progress-container {
     margin-top: -125px;
@@ -99,7 +94,7 @@ only screen and (min-width: 768px)  {
   }
 
   #results .row-offcanvas-right .sidebar-offcanvas {
-    right: -33%;
+    right: -31%;
   }
 
   #results .row-offcanvas-right.active {
@@ -109,7 +104,7 @@ only screen and (min-width: 768px)  {
   #results .sidebar-offcanvas {
     position: absolute;
     top: 0;
-    width: 33%;
+    width: 31%;
   }
 
   .footer {
