@@ -75,6 +75,7 @@ function world() {
       homeButton: false,
       geocoder: false,
       baseLayerPicker: false,
+      creditContainer: document.getElementById("creditContainer"),
       clock: new Cesium.Clock({
         startTime: Cesium.JulianDate.fromDate(launchDate),
         currentTime: Cesium.JulianDate.fromDate(now),
@@ -209,8 +210,11 @@ function world() {
   }
 
   function getEventsFile(stage) {
-    if (w.getStageName(stage) === undefined)
-      start();
+    if (w.getStageName(stage) === undefined) {
+      setTimeout(function() {
+        start();        
+      }, 500);
+    }
     else {
       var url = client + '/output/' + w.getProp('id') + '_' + w.getStageName(stage) + '_events.dat';
       $.ajax({type: 'GET', url: url, contentType: 'text', data: null,
@@ -274,18 +278,39 @@ function world() {
     }
 
   }
+  
+  this.plotResize = function(considerSidebar) {
+    setTimeout(function () {
+      for (var stage = 0; stage < 2; stage++) {
+        var el = document.getElementsByTagName("md-sidenav")[0];
+        var width = el.clientWidth;
+        $("#altitudePlot" + stage).width(width);
+        $("#velocityPlot" + stage).width(width);
+        $("#altitudePlot" + stage).height(width / 1.6);
+        $("#velocityPlot" + stage).height(width / 1.6);
+      }
+      var w;
+      if(considerSidebar) {
+        w = angular.element(document.querySelectorAll("body")[0])[0].clientWidth - document.getElementsByTagName("md-sidenav")[0].clientWidth;
+      } else {
+        w = angular.element(document.querySelectorAll("body")[0])[0].clientWidth;
+      }
+      $("#cesiumContainer").width(w);
+    }, 500);
+  };
 
   $(window).resize(function () {
-    for (var stage = 0; stage < 2; stage++) {
-      initialisePlot("altitude", stage);
-      initialisePlot("velocity", stage);
-    }
+    w.plotResize(angular.element(document.querySelectorAll("body")[0])[0].clientWidth >= 960);
   });
 
   function initialisePlot(element, stage) {
 
     var placeholder = $("#" + element + "Plot" + stage);
-    placeholder.height(400 / 1.6);
+    var el = document.getElementsByTagName("md-sidenav")[0];
+    var width = el.clientWidth;
+    if(width === 0)
+      width = 320;
+    placeholder.height(width / 1.6);
 
     if (placeholder.length > 0) {
       plot[stage][element + stage] = $.plot(placeholder, [vel[0], vel[1]], {

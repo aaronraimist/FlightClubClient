@@ -57,7 +57,7 @@ $id = $_GET["id"];
     <link rel="manifest" href="images/favicon-round/manifest.json">
 
   </head>
-  <body ng-app="FCWorld">
+  <body ng-app="FCWorld" data-ng-element-ready="">
     <div ng-controller="sideNavCtrl" layout="column" layout-fill ng-cloak>
       <section layout="row" flex>
 
@@ -70,9 +70,24 @@ $id = $_GET["id"];
 
         <md-content ng-show="cesiumShow" flex>
           <div id="cesiumContainer"></div>
+          <div style="position:fixed;">
+            <md-button class="md-icon-button md-primary" hide-gt-sm ng-click="toggle()">
+              <i class="material-icons">menu</i>
+            </md-button>
+            <md-menu md-offset="40 0">
+              <md-button class="md-icon-button md-primary" ng-click="$mdOpenMenu($event)">
+                <i class="material-icons">language</i>
+              </md-button>
+              <md-menu-content width="7">
+                <md-menu-item id="creditContainer">
+                </md-menu-item>
+              </md-menu-content>
+            </md-menu>
+          </div>
         </md-content>
 
-        <md-sidenav ng-show="cesiumShow && sidebarShow" flex layout="column" class="md-sidenav-right md-whiteframe-z2" md-component-id="right" md-is-locked-open="$mdMedia('min-width: 350px')">
+
+        <md-sidenav ng-show="cesiumShow && sidebarShow" flex layout="column" class="md-sidenav-right md-whiteframe-z2" md-component-id="right" md-is-locked-open="$mdMedia('gt-sm')">
           <md-toolbar class="md-theme-indigo">
             <div class="md-toolbar-tools" layout="row" layout-align="space-around center" flex>
               <h1><span>{{missionName}}</span></h1>

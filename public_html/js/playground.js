@@ -2,7 +2,7 @@
 
 angular
         .module('FCWorld', ['ngMaterial'])
-        .controller('sideNavCtrl', function ($scope) {
+        .controller('sideNavCtrl', function ($scope, $mdMedia, $mdSidenav) {
 
           var w = new world();
 
@@ -21,7 +21,12 @@ angular
           $scope.toggleToolbar = function () {
             $scope.toolbar.open = !$scope.toolbar.open;
           };
-
+          
+          $scope.toggle = function() {
+            $mdSidenav('right').toggle();
+            w.plotResize(false);
+          };
+          
           angular.element(document).ready(function () {
             var queryString = window.location.search.substring(1);
             w.setProps(parseQueryString(queryString));
@@ -34,7 +39,7 @@ angular
               setClock($scope, w);
             });
           }, 1000);
-          
+
         });
 
 var fillData = function (w, scope) {
@@ -104,9 +109,14 @@ var fillData = function (w, scope) {
         w.setCameraLookingAt(data.Mission.launchsite);
       }
     }
+    
+    setTimeout(function() {
+      var fullWidth = angular.element(document.querySelectorAll("body")[0])[0].clientWidth;
+      var el = document.getElementsByTagName("md-sidenav")[0];
+      var width = el.clientWidth;
+      document.getElementById("cesiumContainer").style.width = (fullWidth - width) + 'px';
+    }, 1000);
 
-    var fullWidth = angular.element(document.querySelectorAll("body")[0])[0].clientWidth;
-    document.getElementById("cesiumContainer").style.width = (fullWidth - (scope.sidebarShow ? 400 : 0)) + 'px';
   };
 };
         

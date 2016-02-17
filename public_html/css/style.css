@@ -339,6 +339,11 @@ input:disabled, select:disabled {
   width: 100%;
 }
 
+md-menu-content {
+  background: black;
+  padding: 0;
+}
+
 md-content {
   overflow: hidden !important;  
 }
