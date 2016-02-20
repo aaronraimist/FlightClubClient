@@ -138,6 +138,7 @@ function world() {
 
     function errorfn(data) {
       console.log(data);
+      getEventsFile(0);
     }
   }
 
