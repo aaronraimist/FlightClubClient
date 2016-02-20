@@ -97,8 +97,49 @@ function world() {
     viewer.timeline.updateFromClock();
     viewer.timeline.zoomTo(viewer.clock.startTime, viewer.clock.stopTime);
 
-    getEventsFile(0);
+    getHazardMap();
   };
+  
+  function getHazardMap() {
+    
+    var url = server + '/resource/' + w.getProp('code') + '.hazard.txt';
+    $.ajax({type: 'GET', url: url, contentType: 'text', data: null,
+      xhrFields: {withCredentials: false},
+      success: successfn,
+      error: errorfn
+    });
+
+    function successfn(data) {
+
+      var lines = data.split("\n");
+      var array = [];
+      for (var i = 0; i < lines.length; i++) {
+
+        if (lines[i] === "" && array.length>0) {
+          viewer.entities.add({
+            polygon: {
+              hierarchy: Cesium.Cartesian3.fromDegreesArray(array),
+              material: Cesium.Color.RED.withAlpha(0.5),
+              outline: true,
+              outlineColor: Cesium.Color.RED
+            }
+          });
+          array = [];
+        }
+
+        if(lines[i] !== "") {
+          var data = lines[i].split(";");
+          array.push(data[0], data[1]);
+        }
+      }
+
+      getEventsFile(0);
+    }
+
+    function errorfn(data) {
+      console.log(data);
+    }
+  }
 
   function getDataFile(stage) {
 
@@ -259,7 +300,6 @@ function world() {
       console.log(data);
     }
   }
-  ;
 
   function start() {
 
