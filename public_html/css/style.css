@@ -43,6 +43,14 @@ html, body {
   display: none; 
 }
 
+md-grid-tile {
+  padding: 0 !important;
+}
+
+md-grid-list md-grid-tile figure {
+  display: none !important;
+}
+
 /*
   Hack. Setting timeline: false breaks everything, so set it to true, but hide it
 */
