@@ -104,6 +104,27 @@ if(isset($_COOKIE['authToken'])) {
               </div>
             </md-toolbar>
             <md-divider></md-divider>
+            <md-list>
+              <md-subheader class="md-no-sticky">Options</md-subheader>
+              <md-list-item ng-click="goToLive()">
+                <span class="md-secondary">Watch Live!</span>
+              </md-list-item>
+              <md-divider></md-divider>
+              <md-subheader class="md-no-sticky">More Simulation Data</md-subheader>
+              <md-list-item ng-click="doSecondaryAction($event)">
+                <span class="md-secondary">Warnings</span>
+              </md-list-item>
+              <md-list-item ng-click="doSecondaryAction($event)">
+                <span class="md-secondary">Event Log</span>
+              </md-list-item>
+              <md-list-item ng-click="doSecondaryAction($event)">
+                <span class="md-secondary">Landing Params</span>
+              </md-list-item>
+              <md-list-item ng-click="doSecondaryAction($event)">
+                <span class="md-secondary">Orbital Params</span>
+              </md-list-item>
+              <md-divider></md-divider>
+            </md-list>
           </md-sidenav>
 
         </md-content>

@@ -365,7 +365,7 @@ md-sidenav {
 }
 
 /* Keep main content visible while sidenav is open */
-md-backdrop.md-sidenav-backdrop {
+#world md-backdrop.md-sidenav-backdrop {
   background-color:transparent;
 }
 

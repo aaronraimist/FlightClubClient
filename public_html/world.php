@@ -57,7 +57,7 @@ $id = $_GET["id"];
     <link rel="manifest" href="images/favicon-round/manifest.json">
 
   </head>
-  <body ng-app="FCWorld" data-ng-element-ready="">
+  <body id="world" ng-app="FCWorld" data-ng-element-ready="">
     <div ng-controller="sideNavCtrl" layout="column" layout-fill ng-cloak>
       <section layout="row" flex>
 
