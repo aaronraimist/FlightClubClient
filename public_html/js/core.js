@@ -104,18 +104,6 @@ function goHome(data)
   updateSuccess();
 }
 
-function setOverrideSuccess(data)
-{
-  $("#overrideStatus").removeClass();
-  $("#overrideStatus").addClass("fa fa-check");
-}
-
-function setOverrideFailure(data)
-{
-  $("#overrideStatus").removeClass();
-  $("#overrideStatus").addClass("fa fa-close");  
-}
-
 function fillProfile(data) 
 {
   var obj = jQuery.parseJSON(JSON.stringify(data, null, 2));

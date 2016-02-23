@@ -1,14 +1,3 @@
-<?php
-$payload = '';
-if (isset($_GET["code"])) {
-  $payload = $_GET["code"];
-}
-$token = '';
-if(isset($_COOKIE['authToken'])) {
-    $token = $_COOKIE['authToken'];
-}
-?>
-
 <!doctype html>
 <html>
   <head>
@@ -19,6 +8,7 @@ if(isset($_COOKIE['authToken'])) {
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-messages.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-cookies.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.js"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
@@ -57,7 +47,7 @@ if(isset($_COOKIE['authToken'])) {
     <meta name="theme-color" content="#ffffff">
   </head>
   <body ng-app="FCResults" data-ng-element-ready="">
-    <div ng-controller="ResultsCtrl as appCtrl" ng-cloak>
+    <div ng-controller="ResultsCtrl" ng-cloak>
       <section layout="row" flex>
 
         <md-content flex>
@@ -89,7 +79,7 @@ if(isset($_COOKIE['authToken'])) {
               md-row-height="1:1"
               md-gutter-gt-md="16px" md-gutter-md="8px" md-gutter="4px">
               <md-grid-tile
-                ng-repeat="tile in appCtrl.plotTiles"
+                ng-repeat="tile in plotTiles"
                 id="{{tile.title}}"
                 md-colspan="{{tile.colspan}}"
                 md-rowspan="{{tile.rowspan}}">
@@ -111,6 +101,9 @@ if(isset($_COOKIE['authToken'])) {
               <md-subheader class="md-no-sticky">Options</md-subheader>
               <md-list-item ng-click="goToLive()">
                 <span class="md-secondary">Watch Live!</span>
+              </md-list-item>
+              <md-list-item ng-click="overrideLive()" ng-show="authorised">
+                <i class="material-icons" ng-show="overrideAttempted">{{overrideStatus}}</i><span class="md-secondary">Override Live Plot</span>
               </md-list-item>
               <md-divider></md-divider>
               <md-subheader class="md-no-sticky">More Simulation Data</md-subheader>

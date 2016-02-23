@@ -1,12 +1,16 @@
 /* global angular, Plotly */
 
 angular
-        .module('FCResults', ['ngMaterial'])
-        .controller('ResultsCtrl', function($scope, $mdSidenav) {
+        .module('FCResults', ['ngMaterial', 'ngCookies'])
+        .controller('ResultsCtrl', function($scope, $mdSidenav, $cookies) {
+          
+          $scope.token = $cookies.get('authToken');
+          //httpRequest() // check cookie is valid. set variable $scope.authorised with result
+          $scope.authorised = true;
           
           var PLOTS = ['altitude1', 'profile1', 'total-dv', 'velocity1', 'prop', 
             'phase1', 'q', 'accel1', 'aoa', 'aov', 'aop', 'drag'];
-          this.plotTiles = (function() {
+          $scope.plotTiles = (function() {
             var tiles = [];
             for (var i = 0; i < PLOTS.length; i++) {
               tiles.push({title: PLOTS[i], colspan: 3, rowspan: 3});
@@ -19,8 +23,19 @@ angular
           $scope.eventsData = [];
           $scope.stageMap = {};
           $scope.numCols = 17;
+          $scope.overrideAttempted = false;
           
           //////////////////////////////////////
+          
+          angular.element(document).ready(function () {
+            var queryString = window.location.search.substring(1);
+            if(queryString.indexOf('&amp;') !== -1) {
+              window.location = window.location.href.split('&amp;').join('&'); 
+            }
+            $scope.queryParams = parseQueryString(queryString);
+            httpRequest(api_url + '/simulator/results?' + queryString, 'GET', null, fillOutputArray($scope), null);
+            httpRequest(api_url + '/missions/' + $scope.queryParams['code'], 'GET', null, fillData($scope), null);
+          });
           
           $scope.goHome = function() {
             window.location = "/";
@@ -38,16 +53,30 @@ angular
             $mdSidenav(id).toggle();
           };
           
-          angular.element(document).ready(function () {
+          $scope.overrideLive = function () {
             var queryString = window.location.search.substring(1);
-            if(queryString.indexOf('&amp;') !== -1) {
-              window.location = window.location.href.split('&amp;').join('&'); 
-            }
-            $scope.queryParams = parseQueryString(queryString);
-            httpRequest(api_url + '/simulator/results?' + queryString, 'GET', null, fillOutputArray($scope), null);
-            httpRequest(api_url + '/missions/' + $scope.queryParams['code'], 'GET', null, fillData($scope), null);
-          });
+            httpRequest(api_url+'/live/init?'+queryString, 'GET', null, setOverrideSuccess($scope), setOverrideFailure($scope));
+          };
         });
+        
+        
+var setOverrideSuccess = function (scope) {
+  return function (data)
+  {
+    scope.overrideStatus = "check";
+    scope.overrideAttempted = true;
+    scope.$apply();
+  };
+};
+
+var setOverrideFailure = function (scope) {
+  return function (data)
+  {
+    scope.overrideStatus = "close";
+    scope.overrideAttempted = true;
+    scope.$apply();
+  };
+};
 
 var fillData = function (scope) {
   return function (data)
