@@ -40,6 +40,9 @@ angular
           
           angular.element(document).ready(function () {
             var queryString = window.location.search.substring(1);
+            if(queryString.indexOf('&amp;') !== -1) {
+              window.location = window.location.href.split('&amp;').join('&'); 
+            }
             $scope.queryParams = parseQueryString(queryString);
             httpRequest(api_url + '/simulator/results?' + queryString, 'GET', null, fillOutputArray($scope), null);
             httpRequest(api_url + '/missions/' + $scope.queryParams['code'], 'GET', null, fillData($scope), null);
