@@ -6,7 +6,7 @@ angular
           
           $scope.token = $cookies.get('authToken');
           //httpRequest() // check cookie is valid. set variable $scope.authorised with result
-          $scope.authorised = true;
+          $scope.authorised = false;
           
           var PLOTS = ['altitude1', 'profile1', 'total-dv', 'velocity1', 'prop', 
             'phase1', 'q', 'accel1', 'aoa', 'aov', 'aop', 'drag'];

@@ -105,6 +105,7 @@ var fillData = function (w, scope) {
       {
         scope.cesiumShow = true;
         scope.sidebarShow = true;
+        w.setProp('id', data.Mission.livelaunch);
         w.loadDataAndPlot();
         w.setCameraLookingAt(data.Mission.launchsite);
       }
