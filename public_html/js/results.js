@@ -184,7 +184,7 @@ function initialisePlots(scope) {
     y:{axis:5,label:"Velocity (m/s)",type:"linear"}});
   plotMap.push({id:'q',stages:[0],title:"Aerodynamic Pressure",
     x:{axis:0,label:"Time (s)",type:"linear"},
-    y:{axis:7,label:"Pressure (kN)",type:"linear"}});
+    y:{axis:7,label:"Pressure (kN/m^2)",type:"linear"}});
   plotMap.push({id:'accel1',stages:[0,1],title:"Acceleration",
     x:{axis:0,label:"Time (s)",type:"linear"},
     y:{axis:13,label:"Acceleration (g)", type:"linear"}});

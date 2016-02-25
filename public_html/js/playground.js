@@ -16,6 +16,10 @@ angular
             w.trackEntity(stage);
 
           };
+          
+          $scope.goHome = function() {
+            window.location = "/";
+          };
 
           $scope.toggleToolbar = function () {
             $scope.toolbar.open = !$scope.toolbar.open;

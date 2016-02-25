@@ -1,14 +1,3 @@
-<?php
-$payload = '';
-if (isset($_GET["code"])) {
-$payload = $_GET["code"];
-}
-$id = '';
-if (isset($_GET["id"])) {
-$id = $_GET["id"];
-}
-?>
-
 <!doctype html>
 <html>
   <head>
@@ -58,8 +47,8 @@ $id = $_GET["id"];
 
   </head>
   <body id="world" ng-app="FCWorld" data-ng-element-ready="">
-    <div ng-controller="sideNavCtrl" layout="row" flex layout-fill ng-cloak>
-      <section layout="column" flex>
+    <div ng-controller="sideNavCtrl" layout="column" flex layout-fill ng-cloak>
+      <section layout="row" flex>
 
         <md-content ng-show="countdown || finished" flex layout="column" layout-align='space-around center'>
           <md-toolbar>
@@ -72,24 +61,23 @@ $id = $_GET["id"];
               </h2>
             </div>
           </md-toolbar>
-          <md-content flex layout="column" >
-            <md-content flex></md-content>
-            <md-content class='md-primary centre'>
-              <div ng-show="countdown">
-                <h3 class=".md-display-3">{{missionName}} will launch in</h3>
-                <md-divider></md-divider>
-                <h2 class=".md-display-3">{{days}}</h2>
-                <h2 class=".md-display-3">{{hours}}</h2>
-                <h2 class=".md-display-3">{{minutes}}</h2>
-                <h2 class=".md-display-3">{{seconds}}</h2>
-              </div>
-              <div ng-show="finished">
-                <div>{{missionName}} has already launched</div>
-                <a href="{{'world.php?watch=2&code='+missionCode}}">Rewatch the launch here</a>
-              </div>
-            </md-content>
-            <md-content flex></md-content>
+          <md-content flex></md-content>
+          <md-content flex layout-fill class='md-primary centre'>
+            <div ng-show="countdown">
+              <h3 class=".md-display-3">{{missionName}} will launch in</h3>
+              <md-divider></md-divider>
+              <h2 class=".md-display-3">{{days}}</h2>
+              <h2 class=".md-display-3">{{hours}}</h2>
+              <h2 class=".md-display-3">{{minutes}}</h2>
+              <h2 class=".md-display-3">{{seconds}}</h2>
+            </div>
+            <div ng-show="finished">
+              <h3 class=".md-display-3">{{missionName}} has already launched</h3>
+              <md-divider></md-divider>
+              <a class=".md-display-3" ng-href="{{'world.php?watch=2&code='+missionCode}}">Rewatch the launch here</a>
+            </div>
           </md-content>
+          <md-content flex></md-content>
         </md-content>
 
         <md-content ng-show="cesiumShow" flex>
@@ -109,7 +97,6 @@ $id = $_GET["id"];
             </md-menu>
           </div>
         </md-content>
-
 
         <md-sidenav ng-show="cesiumShow && sidebarShow" flex layout="column" class="md-sidenav-right md-whiteframe-z2" md-component-id="right" md-is-locked-open="$mdMedia('gt-sm')">
           <md-toolbar class="md-theme-indigo">
