@@ -96,14 +96,6 @@ function updateError()
   window.location = client+'/error.php';
 }
 
-function goHome(data)
-{
-  var obj = jQuery.parseJSON(JSON.stringify(data, null, 2));
-  $.cookie("authToken", obj.Success.authToken, { expires : obj.Success.maxAge });
-  
-  updateSuccess();
-}
-
 function fillProfile(data) 
 {
   var obj = jQuery.parseJSON(JSON.stringify(data, null, 2));
