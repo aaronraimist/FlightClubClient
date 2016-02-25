@@ -115,19 +115,23 @@ function world() {
       var array = [];
       for (var i = 0; i < lines.length; i++) {
 
-        if (lines[i] === "" && array.length>0) {
-          viewer.entities.add({
-            polygon: {
-              hierarchy: Cesium.Cartesian3.fromDegreesArray(array),
-              material: Cesium.Color.RED.withAlpha(0.5),
-              outline: true,
-              outlineColor: Cesium.Color.RED
-            }
-          });
-          array = [];
+        var x = lines[i];
+        var y = array.length;
+        if (lines[i].indexOf(";")===-1) {
+          if (array.length > 0) {
+            viewer.entities.add({
+              polygon: {
+                hierarchy: Cesium.Cartesian3.fromDegreesArray(array),
+                material: Cesium.Color.RED.withAlpha(0.3),
+                outline: true,
+                outlineColor: Cesium.Color.RED
+              }
+            });
+            array = [];
+          }
         }
 
-        if(lines[i] !== "") {
+        if(lines[i].indexOf(";")>-1) {
           var data = lines[i].split(";");
           array.push(data[0], data[1]);
         }
