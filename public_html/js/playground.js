@@ -6,9 +6,8 @@ angular
 
           var w = new world();
 
-          $scope.backgroundShow = false;
-          $scope.cesiumShow = false;
-          $scope.sidebarShow = false;
+          $scope.countdown = $scope.finished = false;
+          $scope.cesiumShow = $scope.sidebarShow = false;
           $scope.rand5 = 5 * 60 * 1000 * Math.random(); // 5 minute range
 
           $scope.selectedStage = 0;
@@ -54,6 +53,7 @@ var fillData = function (w, scope) {
     }
         
     scope.missionName = w.getProp('missionName');
+    scope.missionCode = w.getProp('code');
     scope.stage0 = w.getStageName(0);
     scope.stage1 = w.getStageName(1);
     scope.stage2 = w.getStageName(2);
@@ -65,7 +65,6 @@ var fillData = function (w, scope) {
 
     var now = new Date();
     var timeUntilLaunch = w.getProp('launchTime') - now;
-    var textBox = $(".textBox");
 
     if (w.getProp('watch') === '2') {
       scope.sidebarShow = true;
@@ -81,25 +80,11 @@ var fillData = function (w, scope) {
     {
       if (timeUntilLaunch > 1 * 60 * 60 * 1000)
       {
-        scope.backgroundShow = true;
-        var html =
-                "<div>" + w.getProp('missionName') + " will launch in</div>\n" +
-                "\t<div id='days'></div>\n" +
-                "\t<div id='hours'></div>\n" +
-                "\t<div id='minutes'></div>\n" +
-                "\t<div id='seconds'></div>\n";
-        textBox.append(html);
-        scope.displayClock = true;
+        scope.countdown = true;
       }
       else if (timeUntilLaunch < -14 * 60 * 1000)
       {
-        scope.backgroundShow = true;
-        var html =
-                "<div class='text_double centre'>\n" +
-                "  <div>" + w.getProp('missionName') + " has already launched.</div>\n" +
-                "  <a href='world.php?code=" + w.getProp('code') + "&watch=2'>Rewatch the launch here</a>\n" +
-                "</div>";
-        textBox.append(html);
+        scope.finished = true;
       }
       else
       {
@@ -160,7 +145,7 @@ function setClock(scope, world) {
       scope.clock = 'T' + sign + hours + ':' + minutes + ':' + seconds;
     }
 
-  } else if(scope.displayClock) {
+  } else if(scope.countdown) {
     
     var now = new Date();
     var distance = world.getProp('launchTime') - now;
@@ -170,11 +155,11 @@ function setClock(scope, world) {
     var minutes = Math.abs(Math.floor((distance % _hour) / _minute));
     var seconds = Math.abs(Math.floor((distance % _minute) / _second));
 
-    document.getElementById('days').innerHTML = days + ' day' + ((days !== 1) ? 's' : '');
-    document.getElementById('hours').innerHTML = hours + ' hour' + ((hours !== 1) ? 's' : '');
-    document.getElementById('minutes').innerHTML = minutes + ' minute' + ((minutes !== 1) ? 's' : '');
-    document.getElementById('seconds').innerHTML = seconds + ' second' + ((seconds !== 1) ? 's' : '');
-
+    scope.days = days + ' day' + ((days !== 1) ? 's' : '');
+    scope.hours = hours + ' hour' + ((hours !== 1) ? 's' : '');
+    scope.minutes = minutes + ' minute' + ((minutes !== 1) ? 's' : '');
+    scope.seconds = seconds + ' second' + ((seconds !== 1) ? 's' : '');
+    
     if (Math.abs((59 * _minute - scope.rand5) - distance) < 1000) // clock -> plots limit between T-59 -> T-54
       window.location.reload(true);
 

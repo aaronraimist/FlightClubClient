@@ -58,14 +58,38 @@ $id = $_GET["id"];
 
   </head>
   <body id="world" ng-app="FCWorld" data-ng-element-ready="">
-    <div ng-controller="sideNavCtrl" layout="column" layout-fill ng-cloak>
-      <section layout="row" flex>
+    <div ng-controller="sideNavCtrl" layout="row" flex layout-fill ng-cloak>
+      <section layout="column" flex>
 
-        <md-content ng-show="backgroundShow" flex>
-          <div class="bg">
-            <img src="images/background.jpg" alt="background"/>
-          </div>
-          <div class='textBox text_double centre text1'></div>
+        <md-content ng-show="countdown || finished" flex layout="column" layout-align='space-around center'>
+          <md-toolbar>
+            <div class="md-toolbar-tools">
+              <md-button class="md-icon-button" aria-label="Home" ng-click="goHome()">
+                <i class="material-icons">home</i>
+              </md-button>
+              <h2>
+                <span>{{missionName + " Live"}}</span>
+              </h2>
+            </div>
+          </md-toolbar>
+          <md-content flex layout="column" >
+            <md-content flex></md-content>
+            <md-content class='md-primary centre'>
+              <div ng-show="countdown">
+                <h3 class=".md-display-3">{{missionName}} will launch in</h3>
+                <md-divider></md-divider>
+                <h2 class=".md-display-3">{{days}}</h2>
+                <h2 class=".md-display-3">{{hours}}</h2>
+                <h2 class=".md-display-3">{{minutes}}</h2>
+                <h2 class=".md-display-3">{{seconds}}</h2>
+              </div>
+              <div ng-show="finished">
+                <div>{{missionName}} has already launched</div>
+                <a href="{{'world.php?watch=2&code='+missionCode}}">Rewatch the launch here</a>
+              </div>
+            </md-content>
+            <md-content flex></md-content>
+          </md-content>
         </md-content>
 
         <md-content ng-show="cesiumShow" flex>
