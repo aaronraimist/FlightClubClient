@@ -2,7 +2,16 @@
 
 angular
         .module('FCLogin', ['ngMaterial', 'ngCookies'])
-        .controller('LoginCtrl', function ($scope, $cookies) {
+        .controller('LoginCtrl', function ($timeout, $document, $scope, $cookies) {
+          
+          // hack to fix password label not detecting input on Chrome 
+          // https://github.com/angular/material/issues/1376
+            $timeout(function () {
+              var elem = angular.element($document[0].querySelector('input[type=password]:-webkit-autofill'));
+              if (elem.length) {
+                elem.parent().addClass('md-input-has-value');
+              }
+            }, 150);
           
           $scope.login=function() {
             var data = JSON.stringify($scope.form);
