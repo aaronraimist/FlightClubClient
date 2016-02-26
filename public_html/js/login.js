@@ -13,6 +13,10 @@ angular
               }
             }, 150);
           
+          $scope.goHome = function() {
+            window.location = "/";
+          };
+          
           $scope.login=function() {
             var data = JSON.stringify($scope.form);
             httpRequest(api_url + '/login', 'POST', data, loginSuccess($cookies), updateError);
