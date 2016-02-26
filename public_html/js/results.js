@@ -233,7 +233,7 @@ function initialisePlot2(scope, plot) {
   var layout = {
     title: plot.title,
     showlegend: false,
-    xaxis: {type: plot.x.type, title: plot.x.label, range: plot.y.axis>13 ? [0,1000] : [null,null]},
+    xaxis: {type: plot.x.type, title: plot.x.label, range: plot.y.axis>12 ? [0,1000] : [null,null]},
     yaxis: {type: plot.y.type, title: plot.y.label}
   };
 
