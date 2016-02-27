@@ -6,12 +6,12 @@ angular
           
           // hack to fix password label not detecting input on Chrome 
           // https://github.com/angular/material/issues/1376
-            $timeout(function () {
-              var elem = angular.element($document[0].querySelector('input[type=password]:-webkit-autofill'));
-              if (elem.length) {
-                elem.parent().addClass('md-input-has-value');
-              }
-            }, 150);
+          $timeout(function () {
+            var elem = angular.element($document[0].querySelector('input[type=password]'));
+            if (elem.length) {
+              elem.parent().addClass('md-input-has-value');
+            }
+          }, 150);            
           
           $scope.goHome = function() {
             window.location = "/";
@@ -33,7 +33,7 @@ var loginSuccess = function (scope, cookies) {
 
       var res = jQuery.parseJSON(JSON.stringify(data, null, 2));
       cookies.put('authToken', res.Success.authToken, {'expires': expiryDate});
-      window.location = "/";
+      scope.goHome();
     }
     else {
       scope.loginError = data.error;
