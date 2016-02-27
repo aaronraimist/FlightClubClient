@@ -4,9 +4,19 @@ angular
         .module('FCResults', ['ngMaterial', 'ngCookies'])
         .controller('ResultsCtrl', function($scope, $mdSidenav, $cookies) {
           
+          $scope.authorised = false;            
           $scope.token = $cookies.get('authToken');
-          //httpRequest() // check cookie is valid. set variable $scope.authorised with result
-          $scope.authorised = false;
+          
+          if($scope.token !== undefined) {
+            var data = JSON.stringify({auth: {token: $scope.token}});
+            httpRequest(api_url + '/auth/', 'POST', data, function (data) {
+              $scope.authorised = data.auth;
+
+              if (!$scope.authorised) {
+                $cookies.remove('authToken');
+              }
+            }, null);
+          }
           
           var PLOTS = ['altitude1', 'profile1', 'total-dv', 'velocity1', 'prop', 
             'phase1', 'q', 'accel1', 'aoa', 'aov', 'aop', 'drag'];
@@ -54,7 +64,11 @@ angular
           };
           
           $scope.overrideLive = function () {
+            if($cookies.get('authToken') === undefined)
+              return;
+            
             var queryString = window.location.search.substring(1);
+            queryString += '&auth='+$cookies.get('authToken');
             httpRequest(api_url+'/live/init?'+queryString, 'GET', null, setOverrideSuccess($scope), setOverrideFailure($scope));
           };
         });
@@ -63,7 +77,7 @@ angular
 var setOverrideSuccess = function (scope) {
   return function (data)
   {
-    scope.overrideStatus = "check";
+    scope.overrideStatus = data.Success ? "check" : "close";
     scope.overrideAttempted = true;
     scope.$apply();
   };

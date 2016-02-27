@@ -17,24 +17,34 @@ angular
             window.location = "/";
           };
           
+          $scope.loginError = "";
           $scope.login=function() {
             var data = JSON.stringify($scope.form);
-            httpRequest(api_url + '/login', 'POST', data, loginSuccess($cookies), updateError);
+            httpRequest(api_url + '/login', 'POST', data, loginSuccess($scope, $cookies), updateError($scope));
           };
         });
         
-var loginSuccess = function (cookies) {
+var loginSuccess = function (scope, cookies) {
   return function (data)
   {
-    var now = new Date();
-    var expiryDate = new Date(now.getTime()+1000*parseInt(data.Success.maxAge));
-    
-    var res = jQuery.parseJSON(JSON.stringify(data, null, 2));
-    cookies.put('authToken', res.Success.authToken, {'expires':expiryDate});
-    window.location = "/";
+    if (data.Success !== undefined) {
+      var now = new Date();
+      var expiryDate = new Date(now.getTime() + 1000 * parseInt(data.Success.maxAge));
+
+      var res = jQuery.parseJSON(JSON.stringify(data, null, 2));
+      cookies.put('authToken', res.Success.authToken, {'expires': expiryDate});
+      window.location = "/";
+    }
+    else {
+      scope.loginError = data.error;
+      scope.$apply();
+    }
   };
 };
 
-var updateError = function(data) {
-  window.location = '/error.php';    
+var updateError = function (scope) {
+  return function (data) {
+    scope.loginError = data.error;
+    scope.$apply();
+  };
 };
