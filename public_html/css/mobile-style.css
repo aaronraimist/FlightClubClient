@@ -1,25 +1,3 @@
-/*
-    This file is part of FlightClub.
-
-    Copyright © 2014-2015 Declan Murphy
-
-    FlightClub is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    FlightClub is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with FlightClub.  If not, see <http://www.gnu.org/licenses/>.
-*/
-
-/* 
-mobile style
-*/
 @media 
 only screen and (max-width: 767px) {
 
@@ -29,21 +7,20 @@ only screen and (max-width: 767px) {
   payloads nav {
     height:50%;
   }
-  
+
   #vehicles {
     top: -35px;
   }
-  
+
   #payloads {
     top: -70px;
   }
-  
+
   #copyInfo,
   #saveInfo {
     display: none;
   }
 
-  /* LOADING SCREEN */
   .progress-container {
     margin-top: -38px;
   }
@@ -58,16 +35,6 @@ only screen and (max-width: 767px) {
     content: url("../images/rocket_small.png");
   }
 
-  /* LIVE */
-  .text_double  {
-    font-size:27px; /* Actually 1.5x */
-  }
-  
-  .textBox {
-    margin-top: 10%;
-  }
-
-  /* MISC */
   .rborder_small { border-right:1px solid #fff}
   .lborder_small { border-left:1px solid #fff}
   .tborder_small { border-top:1px solid #fff}
@@ -77,9 +44,9 @@ only screen and (max-width: 767px) {
   .row-offcanvas {
     position: relative;
     -webkit-transition: all .25s ease-out;
-       -moz-transition: all .25s ease-out;
-         -o-transition: all .25s ease-out;
-            transition: all .25s ease-out;
+    -moz-transition: all .25s ease-out;
+    -o-transition: all .25s ease-out;
+    transition: all .25s ease-out;
   }
 
   .row-offcanvas-right {
@@ -94,25 +61,11 @@ only screen and (max-width: 767px) {
   .row-offcanvas-right.active {
     right: 75%;
   }
-  
+
   .sidebar-offcanvas {
     position: absolute;
     top: 0;
     width: 65%;
-  }
-  
-  .footer {
-    font-size: 12px;
-  }
-
-  @media 
-  only screen and (max-height: 900px) {
-
-    .footer {
-      position: absolute;
-      top: -9999px;
-      left: -9999px;  
-    }
   }
 
 }

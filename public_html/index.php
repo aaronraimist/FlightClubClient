@@ -1,39 +1,24 @@
-<?php
-
-$token = '';
-if(isset($_COOKIE['authToken'])) {
-    $token = $_COOKIE['authToken'];
-}
-
-?>
-
 <!doctype html>
 <html>
   <head>
-    <title>FlightClub</title>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-    <!-- Optional theme -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-
-    <script src="js/jquery.cookie.js"></script>
-    <script src="js/form2js.js"></script>
-    <script src="js/core.js"></script>
-    <script src="js/home.js"></script>
-    
+    <title>Flight Club</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-messages.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-cookies.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
     <link href='https://fonts.googleapis.com/css?family=Quicksand' rel='stylesheet' type='text/css'>
-    
+
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="css/mobile-style.css" />
     <link rel="stylesheet" href="css/large-style.css" />
-    
-    <meta property="og:title" content="Flight Club Home" />
+
+    <meta property="og:title" content="Flight Club" />
     <meta property="og:site_name" content="Flight Club"/>
     <meta property="og:url" content="http://www.flightclub.io" />
     <meta property="og:description" content="Flight Club is a rocket launch + landing simulator 
@@ -41,165 +26,139 @@ if(isset($_COOKIE['authToken'])) {
           checking how likely it is that a booster can return to the launch pad for upcoming missions." />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="en_US" />
-    <meta property="og:image" content="http://www.flightclub.io/images/og_image.png" />          
+    <meta property="og:image" content="http://www.flightclub.io/images/og_image.png" />   
 
-    <link rel="apple-touch-icon" sizes="57x57" href="images/favicon-round/apple-icon-57x57.png">
-    <link rel="apple-touch-icon" sizes="60x60" href="images/favicon-round/apple-icon-60x60.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="images/favicon-round/apple-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="76x76" href="images/favicon-round/apple-icon-76x76.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="images/favicon-round/apple-icon-114x114.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="images/favicon-round/apple-icon-120x120.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="images/favicon-round/apple-icon-144x144.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="images/favicon-round/apple-icon-152x152.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="images/favicon-round/apple-icon-180x180.png">
-    <link rel="icon" type="image/png" sizes="192x192"  href="images/favicon-round/android-icon-192x192.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-round/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="96x96" href="images/favicon-round/favicon-96x96.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-round/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="57x57" href="images/favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="images/favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="images/favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="images/favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="images/favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="images/favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="images/favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="images/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="images/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16x16.png">
     <link rel="manifest" href="images/favicon-round/manifest.json">
-    <meta name="msapplication-TileColor" content="#ffffff">
-    <meta name="msapplication-TileImage" content="images/favicon-round/ms-icon-144x144.png">
-    <meta name="theme-color" content="#ffffff">
   </head>
-  <body id="home">
-    <div class="bg">
-      <img src="images/background.jpg" alt="background"/>
+  <body ng-app="FlightClub" data-ng-element-ready="">
+    <div ng-controller="IndexCtrl" layout="column" flex layout-fill ng-cloak>
+      <section layout="row" flex>
+        
+        <md-content flex layout="column" layout-align='space-around center'>
+          <md-toolbar>
+            <div class="md-toolbar-tools">
+              <md-button class="md-icon-button" aria-label="Home" ng-click="goHome()">
+                <i class="material-icons">home</i>
+              </md-button>
+              <h2>
+                <span>{{'Mission Builder: ' + selected.mission.name}}</span>
+              </h2>
+              <span flex></span>
+              <md-button class="md-icon-button" aria-label="Save" ng-show="authorised" ng-click="save()">
+                <i class="material-icons">save</i>
+              </md-button>
+              <md-button class="md-icon-button" aria-label="Copy" ng-show="authorised" ng-click="copy()">
+                <i class="material-icons">content_copy</i>
+              </md-button>
+              <md-button class="md-icon-button" aria-label="Login" ng-click="toggleLogin()">
+                <i class="material-icons">person</i>
+              </md-button>
+              <md-button class="md-icon-button" aria-label="Docs" ng-click="goToDocs()">
+                <i class="material-icons">description</i>
+              </md-button>
+              <md-button class="md-icon-button" aria-label="Menu" ng-click="toggleNav('sidenav')">
+                <i class="material-icons">menu</i>
+              </md-button>
+            </div>
+          </md-toolbar>
+
+          <md-content layout-fill layout="row" flex>
+            <md-tabs flex md-selected="selectedIndex" md-border-bottom md-autoselect>
+              <md-tab label='{{selected.vehicle.name}}'>
+                <md-content>
+                  <md-grid-list
+                    md-cols-xs="1" md-cols-sm="2" md-cols-md="4" md-cols-gt-md="6"
+                    md-row-height-gt-md="1:1" md-row-height="2:2"
+                    md-gutter="12px" md-gutter-gt-sm="8px">
+                    <md-grid-tile ng-repeat="veh in launchVehicles"
+                                  ng-click='selectVehicle(veh)'
+                                  md-rowspan="1"
+                                  md-colspan="2"
+                                  md-colspan-sm="1" >
+                      <div>{{veh.name}}</div>
+                    </md-grid-tile>
+                  </md-grid-list>
+                </md-content>
+              </md-tab>
+              <md-tab label="{{selected.site.name}}">
+                <md-content>
+                  <md-grid-list
+                    md-cols-xs="1" md-cols-sm="2" md-cols-md="4" md-cols-gt-md="6"
+                    md-row-height-gt-md="1:1" md-row-height="2:2"
+                    md-gutter="12px" md-gutter-gt-sm="8px">
+                    <md-grid-tile ng-repeat="site in launchSites"
+                                  ng-click='selectSite(site)'
+                                  md-rowspan="1"
+                                  md-colspan="2"
+                                  md-colspan-sm="1" >
+                      <div>{{site.name}}</div>
+                    </md-grid-tile>
+                  </md-grid-list>
+                </md-content>
+              </md-tab>
+              <md-tab label='{{selected.payload.name}}'>
+                <md-content>
+                  <md-grid-list
+                    md-cols-xs="1" md-cols-sm="2" md-cols-md="4" md-cols-gt-md="6"
+                    md-row-height-gt-md="1:1" md-row-height="2:2"
+                    md-gutter="12px" md-gutter-gt-sm="8px">
+                    <md-grid-tile ng-repeat="payload in payloads"
+                                  ng-click='selectPayload(payload)'
+                                  md-rowspan="1"
+                                  md-colspan="2"
+                                  md-colspan-sm="1" >
+                      <div>{{payload.name}}</div>
+                    </md-grid-tile>
+                  </md-grid-list>
+                </md-content>
+              </md-tab>
+              <md-tab ng-repeat="stage in stages" label="{{stage.name}}">
+              </md-tab>
+            </md-tabs>
+          </md-content>
+
+          <md-sidenav flex layout="column" class="md-sidenav-right md-whiteframe-z2" md-component-id="sidenav" md-is-locked-open="false">
+            <md-toolbar class="md-theme-indigo" layout="row" layout-align="space-between center" >
+              <div class="md-toolbar-tools" layout="row" layout-align="space-around center" flex>
+                <h1><span>Stock Profiles</span></h1>
+              </div>
+              <md-button class="md-icon-button" aria-label="Menu" ng-click="toggleNav('sidenav')">
+                <i class="material-icons">keyboard_arrow_right</i>
+              </md-button>
+            </md-toolbar>
+            <md-divider></md-divider>
+            <md-list flex="none">
+              <md-subheader class="md-no-sticky">Upcoming Missions</md-subheader>
+              <md-list-item ng-repeat="mission in upcoming" ng-click="selectMission(mission.code)">
+                <span class="md-secondary">{{mission.name}}</span>
+              </md-list-item>
+              <md-subheader class="md-no-sticky">Past Missions</md-subheader>
+              <md-list-item ng-repeat="mission in past" ng-click="selectMission(mission.code)">
+                <span class="md-secondary">{{mission.name}}</span>
+              </md-list-item>
+              <md-divider></md-divider>
+            </md-list>
+          </md-sidenav>
+
+        </md-content>
+
+      </section>
     </div>
-    <div class="container">
-      <div class="row row-offcanvas row-offcanvas-right vfill">
-        <div class="col-xs-12 col-sm-9 vfill rborder">
-          <form id="submitForm" class="vfill">
-            <?php
-            if(isset($token) && $token !== '') {
-              echo '<input type="hidden" name="auth.token" value="'.$token.'"/>'."\n";
-            }
-            ?>
-            <div class="row vfill">
-              <div class="col-xs-12 vfill">
-                <div id="tabs" class="row">
-                  <nav class="col-xs-12">
-                    <ul class="nav nav-tabs">
-                      <li class="visible-xs right" data-toggle="offcanvas"><a href="#" role="tab" data-toggle="tab"><span class="fa fa-bars"></span></a></li>
-                      <li id="launch" class="right"><a href="#" role="tab" data-toggle="tab"><span class="fa fa-play"></span></a></li>
-                      <li id="info" class="hidden-xs right"><a href="docs/"><span class="fa fa-info-circle"></span></a></li>
-                      <?php
-                      if(isset($token) && $token !== '') {
-                        echo '<li id="logout" class="hidden-xs right"><a href="#"><span class="fa fa-sign-out"></span></a></li>'."\n";
-                        echo '<li id="copy" class="hidden-xs right"><a href="#"><span class="fa fa-copy"></span></a></li>'."\n";
-                        echo '<li id="update" class="hidden-xs right"><a href="#"><span class="fa fa-save"></span></a></li>'."\n";
-                      }
-                      else {
-                        echo '<li id="login" class="hidden-xs right"><a href="login.php"><span class="fa fa-sign-in"></span></a></li>'."\n";
-                      }
-                      ?>
-                    </ul>
-                  </nav>
-                </div>
-                <div id="tab-content" class="tab-content">
-                  
-                  <div class="tab-pane fade active in" id="core">
-                    <div class="row tmargin1">
-                      <div id="sites" class="col-sm-4">
-                        <nav class="col-xs-12" style="overflow-y:hidden">
-                          <ul class="slideList nav nav-pills nav-stacked">
-                            <li class="col-xs-12">
-                              <span class="col-xs-12 slideTag header">Launch Sites</span>
-                              <ul class="slideItem col-xs-12 nav nav-pills nav-stacked">
-                              </ul>
-                            </li>
-                          </ul>
-                        </nav>
-                        <select name="Mission.launchsite" style="visibility:hidden">
-                        </select>
-                      </div>
-                      <div id="vehicles" class="col-sm-4">
-                        <nav class="col-xs-12" style="overflow-y:hidden">
-                          <ul class="slideList nav nav-pills nav-stacked">
-                            <li class="col-xs-12">
-                              <span class="col-xs-12 slideTag header">Launch Vehicles</span>
-                              <ul class="slideItem col-xs-12 nav nav-pills nav-stacked">
-                              </ul>
-                            </li>
-                          </ul>
-                        </nav>
-                        <select name="Mission.launchvehicle" style="visibility:hidden">
-                        </select>
-                      </div>
-                      <div id="payloads" class="col-sm-4">
-                        <nav class="col-xs-12" style="overflow-y:hidden">
-                          <ul class="slideList nav nav-pills nav-stacked">
-                            <li class="col-xs-12">
-                              <span class="col-xs-12 slideTag header">Payloads</span>
-                              <ul class="slideItem col-xs-12 nav nav-pills nav-stacked">
-                              </ul>
-                            </li>
-                          </ul>
-                        </nav>
-                        <select name="Mission.Profile.Payload.code" style="visibility:hidden">
-                        </select>
-                      </div>
-                    </div>
-                    
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div id="saveInfo">
-              <div class="row">
-                <div class="col-xs-6">Mission Code</div>
-                <div class="col-xs-6">
-                  <div class="input-group"><input type="text" name="Mission.code" class="form-control" value=""/></div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-xs-6">Launch Date</div>
-                <div class="col-xs-6">
-                  <div class="input-group"><input type="text" name="Mission.date" class="form-control" value=""/></div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-xs-6">Launch Time (UTC)</div>
-                <div class="col-xs-6">
-                  <div class="input-group"><input type="text" name="Mission.time" class="form-control" value=""/></div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-xs-6">Display</div>
-                <div class="col-xs-6">
-                  <div class="input-group"><select name="Mission.display" class="form-control"><option value="true">On</option><option value="false">Off</option></select></select></div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-sm-offset-6 col-sm-6"><a href="#"><span class="fa fa-save"> Save</span></a></div>
-              </div>
-            </div>
-            <div id="copyInfo">
-              <div class="row">
-                <div class="col-xs-6">New Mission Code</div>
-                <div class="col-xs-6">
-                  <div class="input-group"><input type="text" name="Mission.newcode" class="form-control" value=""/></div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-xs-6">Description</div>
-                <div class="col-xs-6">
-                  <div class="input-group"><input type="text" name="Mission.description" class="form-control" value=""/></div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-sm-offset-6 col-sm-6"><a href="#"><span class="fa fa-save"> Save</span></a></div>
-              </div>
-            </div>
-          </form>
-        </div>
-        <nav id="head" class="col-xs-3 col-sm-3 sidebar-offcanvas">
-          <div id="navHeader">Manifested Missions</div>
-          <div id="headList">
-            <ul class="nav nav-pills nav-stacked">
-            </ul>
-          </div>
-        </nav>
-      </div>
-    </div>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="js/core.js"></script>     
+    <script src="js/index.js"></script>     
   </body>
 </html>
