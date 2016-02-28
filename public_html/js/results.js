@@ -23,7 +23,7 @@ angular
           $scope.plotTiles = (function() {
             var tiles = [];
             for (var i = 0; i < PLOTS.length; i++) {
-              tiles.push({title: PLOTS[i], colspan: 3, rowspan: 3});
+              tiles.push({title: PLOTS[i]});
             }
             return tiles;
           })();

@@ -6,10 +6,7 @@
 }
 
 html, body {
-  color: #BBB !important;
-  font-size: 18px;
   font-family: 'Quicksand', sans-serif !important;
-  font-weight: inherit;
 }
 
 .bg {
@@ -76,13 +73,13 @@ html, body {
   width: 100%;
 }
 
-md-menu-content {
+#world md-menu-content {
   background: black;
   padding: 0;
 }
 
-md-content {
-  overflow: hidden !important;  
+#results md-grid-tile {
+  padding: 0 !important;
 }
 
 md-sidenav {

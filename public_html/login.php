@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
   <head>
-    <title>Login</title>
+    <title>Flight Club | Login</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
@@ -18,12 +18,10 @@
     <link rel="stylesheet" href="css/mobile-style.css" />
     <link rel="stylesheet" href="css/large-style.css" />
 
-    <meta property="og:title" content="LiveLaunch!" />
+    <meta property="og:title" content="Login" />
     <meta property="og:site_name" content="Flight Club"/>
     <meta property="og:url" content="http://www.flightclub.io" />
-    <meta property="og:description" content="Flight Club is a rocket launch + landing simulator 
-          and trajectory visualiser. Based on SpaceX's launch vehicles, it serves as a tool for
-          checking how likely it is that a booster can return to the launch pad for upcoming missions." />
+    <meta property="og:description" content="Login to Flight Club" />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="en_US" />
     <meta property="og:image" content="http://www.flightclub.io/images/og_image.png" />   
@@ -55,7 +53,7 @@
                 <i class="material-icons">home</i>
               </md-button>
               <h2>
-                <span>Login</span>
+                <span>Flight Club | Login</span>
               </h2>
             </div>
           </md-toolbar>

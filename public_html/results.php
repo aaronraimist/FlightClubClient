@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
   <head>
-    <title></title>
+    <title>Flight Club</title>
     <meta charset='UTF-8'>
     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
@@ -46,7 +46,7 @@
     <meta name="msapplication-TileImage" content="images/favicon-round/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
   </head>
-  <body ng-app="FCResults" data-ng-element-ready="">
+  <body id="results" ng-app="FCResults" data-ng-element-ready="">
     <div ng-controller="ResultsCtrl" ng-cloak>
       <section layout="row" flex>
 
@@ -57,7 +57,7 @@
                 <i class="material-icons">home</i>
               </md-button>
               <h2>
-                <span>{{missionName + " Results!"}}</span>
+                <span>{{"Flight Club | " + missionName + " Results!"}}</span>
               </h2>
               <span flex></span>
               <md-button class="md-icon-button" aria-label="Home" ng-click="goToWorld()">
@@ -77,12 +77,12 @@
             <md-grid-list
               md-cols="3" md-cols-md="6" md-cols-gt-md="9"
               md-row-height="1:1"
-              md-gutter-gt-md="16px" md-gutter-md="8px" md-gutter="4px">
+              md-gutter-gt-md="16px" md-gutter="8px">
               <md-grid-tile
-                ng-repeat="tile in plotTiles"
-                id="{{tile.title}}"
-                md-colspan="{{tile.colspan}}"
-                md-rowspan="{{tile.rowspan}}">
+                ng-repeat="plot in plotTiles"
+                id="{{plot.title}}"
+                md-colspan="3"
+                md-rowspan="3">
               </md-grid-tile>
             </md-grid-list>
           </md-content>

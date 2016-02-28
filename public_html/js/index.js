@@ -2,7 +2,7 @@
 
 angular
         .module('FlightClub', ['ngMaterial', 'ngCookies'])
-        .controller('IndexCtrl', function ($scope, $mdSidenav, $cookies) {
+        .controller('IndexCtrl', function ($scope, $mdDialog, $mdSidenav, $cookies) {
 
           $scope.authorised = false;
           $scope.token = $cookies.get('authToken');
@@ -14,6 +14,9 @@ angular
 
               if (!$scope.authorised) {
                 $cookies.remove('authToken');
+                $scope.loginLabel = "Login";
+              } else {
+                $scope.loginLabel = "Logout";
               }
 
               var display = $scope.authorised ? '' : '?display=1';
@@ -21,6 +24,7 @@ angular
 
             }, null);
           } else {
+            $scope.loginLabel = "Login";
             httpRequest(api_url + '/missions?display=1', 'GET', null, fillMissions2($scope), null);
           }
 
@@ -31,10 +35,15 @@ angular
           $scope.toggleNav = function (id) {
             $mdSidenav(id).toggle();
           };
+          
+          $scope.openMenu = function ($mdOpenMenu, ev) {
+            $mdOpenMenu(ev);
+          };
 
           $scope.toggleLogin = function () {
-            if (!$scope.authorised)
+            if (!$scope.authorised) {
               window.location = "login.php";
+            }
             else {
               $cookies.remove('authToken');
               window.location.reload();
@@ -44,32 +53,36 @@ angular
           $scope.goToDocs = function () {
             window.location = "/docs";
           };
+          
+          $scope.burnSelected = false;
+          $scope.openBurn = function($event, burn) {
+            $scope.burnSelected = true;
+            $scope.selectedBurn = burn;
+          };
+          
+          $scope.courseSelected = false;
+          $scope.openCourse = function($event, course) {
+            $scope.courseSelected = true;
+            $scope.selectedCourse = course;
+          };
 
-          $scope.selected = {};
           $scope.selectMission = function (code) {
             httpRequest(api_url + '/missions/' + code, 'GET', null, function (data) {
-              $scope.selected.mission = {
-                code: data.Mission.code,
-                name: data.Mission.description
-              };
-              $scope.launchSites.forEach(function(entry) {
-                if(entry.code === data.Mission.launchsite)
-                  $scope.selectSite(entry);
-              });
-              $scope.launchVehicles.forEach(function(entry) {
-                if(entry.code === data.Mission.launchvehicle)
-                  $scope.selectVehicle(entry);
-              });
-              $scope.payloads.forEach(function(entry) {
-                if(entry.code === data.Mission.Profile.Payload.code)
-                  $scope.selectPayload(entry);
-              });
+              $scope.form = JSON.parse(JSON.stringify(data));
+              $scope.missionName = data.Mission.description;
               $scope.$apply();
             }, null);
           };
-          $scope.selectSite = function (site) {$scope.selected.site = site;};
-          $scope.selectVehicle = function (veh) {$scope.selected.vehicle = veh;};
-          $scope.selectPayload = function (payload) {$scope.selected.payload = payload;};
+          $scope.selectSite = function (site) {$scope.form.Mission.launchsite = site.code;$scope.$apply();};
+          $scope.selectVehicle = function (veh) {$scope.form.Mission.launchvehicle = veh.code;};
+          $scope.selectPayload = function (payload) {$scope.form.Mission.Profile.Payload = payload;};
+          
+          $scope.submit = function() {
+            var formAsJSON_string = JSON.stringify($scope.form);
+    
+            var formHash = window.btoa(formAsJSON_string);
+            window.open(client + '/loading.php#' + formHash, '_blank');
+          };
 
         });
 
@@ -96,9 +109,9 @@ var fillMissions2 = function (scope) {
 
 var fill = function (data) {
   var list = data.data;
-  var array = [];
+  var array = {};
   for (var i = list.length; i > 0; i--) {
-    array.push({code: list[i - 1].code, name: list[i - 1].description});
+    array[list[i - 1].code] = {code: list[i - 1].code, name: list[i - 1].description};
   }
   return array;
 };
