@@ -70,7 +70,7 @@
                 </md-menu-content>
               </md-menu>
               <h2>
-                <span>{{'Flight Club | Mission Builder: ' + missionName}}</span>
+                <span>{{'Flight Club | Mission Builder | ' + missionName}}</span>
               </h2>
               <span flex></span>
               <md-button class="md-icon-button" aria-label="Save" ng-show="authorised" ng-click="save()">
@@ -140,99 +140,114 @@
                 <md-tab-content>
                   <md-tabs md-border-bottom md-autoselect layout-fill>
                     <md-tab layout-fill selected ng-repeat="stage in form.Mission.Profile.Stages" label="{{stage.Core.name}}">
-                      <md-tab-content layout-fill layout='column' layout-align='space-between start' layout-gt-sm='row'>
+                      <md-tab-content layout-fill layout='column' layout-gt-sm='row'>
                         <md-content layout-fill flex layout='column'>
                           <md-subheader class="md-no-sticky">Burns</md-subheader>
                           <md-divider></md-divider>
-                          <md-content flex layout='row'>
+                          <md-content flex layout='row' layout-padding layout-margin layout-fill>
                             <md-content flex layout='column'>
-                              <md-list>
-                                <md-list-item ng-click="openBurn($event, burn)" ng-repeat="burn in stage.Burns">
-                                  <md-checkbox ng-model="burn.active"></md-checkbox>
-                                  <p>{{burn.tag}}</p>
-                                  <md-divider></md-divider>
-                                </md-list-item>
-                                <md-divider></md-divider>
-                              </md-list>
+
+                              <md-content flex layout-fill layout='column' layout-align="space-around center">
+                                <md-chips layout-fill ng-model="stage.Burns" md-transform-chip="newBurn($chip)">
+                                  <md-chip-template ng-click="openBurn($chip)">
+                                    <strong>{{$chip.tag}}</strong>
+                                    <em>(Burn)</em>
+                                  </md-chip-template>
+                                </md-chips>
+                              </md-content>
+
+                              <md-content flex layout-fill layout='column' layout-align="space-between center">
+                                <md-list layout-fill>
+                                  <md-content layout="column" layout-gt-sm="row">
+                                    <md-list-item flex>
+                                      <md-input-container flex>
+                                        <label>Tag</label>
+                                        <input ng-model="selectedBurn.tag">
+                                      </md-input-container>
+                                    </md-list-item>
+                                    <md-list-item flex>
+                                      <md-input-container flex>
+                                        <label>Engines</label>
+                                        <input ng-model="selectedBurn.engines">
+                                      </md-input-container>
+                                    </md-list-item>
+                                  </md-content>
+                                  <md-content layout="column" layout-gt-sm="row">
+                                    <md-list-item flex>
+                                      <md-input-container flex>
+                                        <label>Start</label>
+                                        <input ng-model="selectedBurn.start">
+                                      </md-input-container>
+                                    </md-list-item>
+                                    <md-list-item flex>
+                                      <md-input-container flex>
+                                        <label>End</label>
+                                        <input ng-model="selectedBurn.end">
+                                      </md-input-container>
+                                    </md-list-item>
+                                  </md-content>
+                                </md-list>
+                              </md-content>
                             </md-content>
-                            <md-content flex layout='column'>
-                              <md-list ng-show='burnSelected'>
-                                <md-list-item>
-                                  <md-input-container>
-                                    <label>Tag</label>
-                                    <input ng-model="selectedBurn.tag">
-                                  </md-input-container>
-                                </md-list-item>
-                                <md-list-item>
-                                  <md-input-container>
-                                    <label>Engines</label>
-                                    <input ng-model="selectedBurn.engines">
-                                  </md-input-container>
-                                </md-list-item>
-                                <md-list-item>
-                                  <md-input-container>
-                                    <label>Start</label>
-                                    <input ng-model="selectedBurn.start">
-                                  </md-input-container>
-                                </md-list-item>
-                                <md-list-item>
-                                  <md-input-container>
-                                    <label>End</label>
-                                    <input ng-model="selectedBurn.end">
-                                  </md-input-container>
-                                </md-list-item>
-                              </md-list>
-                            </md-content>
-                          <md-divider></md-divider>
+                            <md-divider></md-divider>
                           </md-content>
                         </md-content>
                         <md-content layout-fill flex layout='column'>
                           <md-subheader class="md-no-sticky">Course Corrections</md-subheader>
                           <md-divider></md-divider>
-                          <md-content flex layout='row'>
+                          <md-content flex layout='row' layout-padding layout-margin layout-fill>
                             <md-content flex layout='column'>
-                              <md-list>
-                                <md-list-item ng-click="openCourse($event, course)" ng-repeat="course in stage.Course">
-                                  <md-checkbox ng-model="course.active"></md-checkbox>
-                                  <p>{{course.tag}}</p>
-                                  <md-divider></md-divider>
-                                </md-list-item>
-                                <md-divider></md-divider>
-                              </md-list>
-                            </md-content>
-                            <md-content flex layout='column'>
-                              <md-list ng-show='courseSelected'>
-                                <md-list-item>
-                                  <md-input-container>
-                                    <label>Tag</label>
-                                    <input ng-model="selectedCourse.tag">
-                                  </md-input-container>
-                                </md-list-item>
-                                <md-list-item>
-                                  <md-input-container>
-                                    <label>Start</label>
-                                    <input ng-model="selectedCourse.start">
-                                  </md-input-container>
-                                </md-list-item>
-                                <md-list-item>
-                                  <md-input-container>
-                                    <label>Pitch</label>
-                                    <input ng-model="selectedCourse.Attitude.pitch">
-                                  </md-input-container>
-                                </md-list-item>
-                                <md-list-item>
-                                  <md-input-container>
-                                    <label>Yaw</label>
-                                    <input ng-model="selectedCourse.Attitude.yaw">
-                                  </md-input-container>
-                                </md-list-item>
-                                <md-list-item>
-                                  <md-input-container>
-                                    <label>Gravity Turn</label>
-                                    <input ng-model="selectedCourse.Attitude.gt">
-                                  </md-input-container>
-                                </md-list-item>
-                              </md-list>
+
+                              <md-content flex layout-fill layout='column' layout-align="space-around center">
+                                <md-chips layout-fill ng-model="stage.Course" md-transform-chip="newCourse($chip)">
+                                  <md-chip-template ng-click="openCourse($chip)">
+                                    <strong>{{$chip.tag}}</strong>
+                                    <em>(Course Correction)</em>
+                                  </md-chip-template>
+                                </md-chips>
+                              </md-content>
+
+                              <md-content flex layout-fill layout='column' layout-align="space-between center">
+                                <md-list layout-fill>
+                                  <md-content layout="column" layout-gt-sm="row">
+                                    <md-list-item flex>
+                                      <md-input-container flex>
+                                        <label>Tag</label>
+                                        <input ng-model="selectedCourse.tag">
+                                      </md-input-container>
+                                    </md-list-item>
+                                    <md-list-item flex>
+                                      <md-input-container flex>
+                                        <label>Start</label>
+                                        <input ng-model="selectedCourse.start">
+                                      </md-input-container>
+                                    </md-list-item>
+                                  </md-content>
+                                  <md-content layout="column" layout-gt-sm="row">
+                                    <md-list-item flex>
+                                      <md-input-container flex>
+                                        <label>Pitch</label>
+                                        <input ng-model="selectedCourse.pitch">
+                                      </md-input-container>
+                                    </md-list-item>
+                                    <md-list-item flex>
+                                      <md-input-container flex>
+                                        <label>Yaw</label>
+                                        <input ng-model="selectedCourse.yaw">
+                                      </md-input-container>
+                                    </md-list-item>
+                                  </md-content>
+                                  <md-content layout="column" layout-gt-sm="row">
+                                    <md-list-item flex>
+                                      <md-input-container flex>
+                                        <label>Gravity Turn</label>
+                                        <input ng-model="selectedCourse.gt">
+                                      </md-input-container>
+                                    </md-list-item>
+                                    <md-list-item flex></md-list-item>
+                                  </md-content>
+                                </md-list>
+                              </md-content>
                             </md-content>
                             <md-divider></md-divider>
                           </md-content>
@@ -240,20 +255,23 @@
                         <md-content layout-fill flex layout='column'>
                           <md-subheader class="md-no-sticky">Extra Events</md-subheader>
                           <md-divider></md-divider>
-                          <md-content flex layout='column'>
-                            <md-content layout='column' layout-align='space-around center' layout-gt-sm='row'>
-                              <md-input-container>
-                                <label>Stage Separation</label>
-                                <input ng-model="stage.release">
-                              </md-input-container>
-                              <md-input-container>
-                                <label>Fairing Separation</label>
-                                <input ng-model="stage.Core.fairing_sep">
-                              </md-input-container>
-                            </md-content>
-                            <md-content layout='column' layout-align='space-around center' layout-gt-sm='row'>
-                              <md-switch ng-model="stage.Core.legs">Legs</md-switch>
-                              <md-button type='submit' ng-click='submit()'>Submit</md-button>
+                          <md-content flex layout='row' layout-padding layout-margin layout-fill>
+                            <md-content flex layout='column' layout-align="space-around center">
+                              <md-content flex layout-fill layout='column' layout-align='space-around center' layout-gt-sm='row'>
+                                <md-input-container>
+                                  <label>Stage Separation</label>
+                                  <input ng-model="stage.release">
+                                </md-input-container>
+                                <md-input-container>
+                                  <label>Fairing Separation</label>
+                                  <input ng-model="stage.Core.fairing_sep">
+                                </md-input-container>
+                              </md-content>
+                              <md-content flex layout-fill layout='column' layout-align='space-around center' layout-gt-sm='row'>
+                                <md-switch ng-model="stage.Core.legs">Legs</md-switch>
+                                <md-button class="md-raised" type='submit' ng-click='submit()'>Submit</md-button>
+                              </md-content>
+                              <md-content flex></md-content>
                             </md-content>
                           </md-content>
                         </md-content>

@@ -54,16 +54,34 @@ angular
             window.location = "/docs";
           };
           
-          $scope.burnSelected = false;
-          $scope.openBurn = function($event, burn) {
-            $scope.burnSelected = true;
-            $scope.selectedBurn = burn;
+          $scope.openBurn = function(chip) {
+            $scope.selectedBurn = chip;
           };
           
-          $scope.courseSelected = false;
-          $scope.openCourse = function($event, course) {
-            $scope.courseSelected = true;
-            $scope.selectedCourse = course;
+          $scope.openCourse = function(chip) {
+            $scope.selectedCourse = chip;
+          };
+          
+          $scope.newBurn = function(chip) {
+            return {
+              tag: chip,
+              engines: null,
+              start: null,
+              end: null
+            };
+          };
+          
+          $scope.newCourse = function(chip) {
+            return {
+              tag: chip,
+              start: null,
+              end: null,
+              Attitude: {
+                pitch: null,
+                yaw: null,
+                gt: null
+              }
+            };
           };
 
           $scope.selectMission = function (code) {
