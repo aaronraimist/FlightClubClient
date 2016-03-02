@@ -73,12 +73,6 @@
                 <span>{{'Flight Club | Mission Builder | ' + missionName}}</span>
               </h2>
               <span flex></span>
-              <md-button class="md-icon-button" aria-label="Save" ng-show="authorised" ng-click="save()">
-                <md-icon class="material-icons">save</md-icon>
-              </md-button>
-              <md-button class="md-icon-button" aria-label="Copy" ng-show="authorised" ng-click="copy()">
-                <md-icon class="material-icons">content_copy</md-icon>
-              </md-button>
               <md-button class="md-icon-button" aria-label="sidenav" ng-click="toggleNav('sidenav')">
                 <md-icon class="material-icons">more_vert</md-icon>
               </md-button>
@@ -142,8 +136,6 @@
                     <md-tab layout-fill selected ng-repeat="stage in form.Mission.Profile.Stages" label="{{stage.Core.name}}">
                       <md-tab-content layout-fill layout='column' layout-gt-sm='row'>
                         <md-content layout-fill flex layout='column'>
-                          <md-subheader class="md-no-sticky">Burns</md-subheader>
-                          <md-divider></md-divider>
                           <md-content flex layout='row' layout-padding layout-margin layout-fill>
                             <md-content flex layout='column'>
 
@@ -193,8 +185,6 @@
                           </md-content>
                         </md-content>
                         <md-content layout-fill flex layout='column'>
-                          <md-subheader class="md-no-sticky">Course Corrections</md-subheader>
-                          <md-divider></md-divider>
                           <md-content flex layout='row' layout-padding layout-margin layout-fill>
                             <md-content flex layout='column'>
 
@@ -227,24 +217,30 @@
                                     <md-list-item flex>
                                       <md-input-container flex>
                                         <label>Pitch</label>
-                                        <input ng-model="selectedCourse.pitch">
+                                        <input ng-model="selectedCourse.Attitude.pitch">
                                       </md-input-container>
                                     </md-list-item>
                                     <md-list-item flex>
                                       <md-input-container flex>
                                         <label>Yaw</label>
-                                        <input ng-model="selectedCourse.yaw">
+                                        <input ng-model="selectedCourse.Attitude.yaw">
                                       </md-input-container>
                                     </md-list-item>
                                   </md-content>
                                   <md-content layout="column" layout-gt-sm="row">
                                     <md-list-item flex>
                                       <md-input-container flex>
-                                        <label>Gravity Turn</label>
-                                        <input ng-model="selectedCourse.gt">
+                                        <label>Throttle</label>
+                                        <input ng-model="selectedCourse.Attitude.throttle">
                                       </md-input-container>
                                     </md-list-item>
-                                    <md-list-item flex></md-list-item>
+                                    <md-list-item flex>
+                                      <md-select flex ng-model="gravTurnSelect[selectedCourse.Attitude.gt]">
+                                        <md-option ng-repeat="gt in gravTurnSelect" value="{{gt.code}}">
+                                          {{gt.name}}
+                                        </md-option>
+                                      </md-select>
+                                    </md-list-item>
                                   </md-content>
                                 </md-list>
                               </md-content>
@@ -253,23 +249,44 @@
                           </md-content>
                         </md-content>
                         <md-content layout-fill flex layout='column'>
-                          <md-subheader class="md-no-sticky">Extra Events</md-subheader>
-                          <md-divider></md-divider>
                           <md-content flex layout='row' layout-padding layout-margin layout-fill>
                             <md-content flex layout='column' layout-align="space-around center">
-                              <md-content flex layout-fill layout='column' layout-align='space-around center' layout-gt-sm='row'>
+                              <md-content flex layout-fill layout='column' layout-align='space-between center' layout-gt-sm='row'>
                                 <md-input-container>
                                   <label>Stage Separation</label>
                                   <input ng-model="stage.release">
                                 </md-input-container>
+                                <md-switch ng-model="stage.Core.legs">Legs</md-switch>
+                              </md-content>
+                              <md-content flex layout-fill layout='column' layout-align='space-between center' layout-gt-sm='row'>
                                 <md-input-container>
                                   <label>Fairing Separation</label>
                                   <input ng-model="stage.Core.fairing_sep">
                                 </md-input-container>
-                              </md-content>
-                              <md-content flex layout-fill layout='column' layout-align='space-around center' layout-gt-sm='row'>
-                                <md-switch ng-model="stage.Core.legs">Legs</md-switch>
                                 <md-button class="md-raised" type='submit' ng-click='submit()'>Submit</md-button>
+                              </md-content>
+                              <md-content flex layout-fill layout='column' layout-align="space-around center" ng-show="authorised">
+                                <md-content flex layout-fill layout='column' layout-align='space-between center' layout-gt-sm='row'>
+                                  <md-input-container>
+                                    <label>Code</label>
+                                    <input ng-model="form.Mission.code">
+                                  </md-input-container>
+                                  <md-switch ng-model="form.Mission.display">Display</md-switch>
+                                </md-content>
+                                <md-content flex layout-fill layout='column' layout-align='space-between center' layout-gt-sm='row'>
+                                  <md-input-container>
+                                    <label>Date</label>
+                                    <input ng-model="form.Mission.date">
+                                  </md-input-container>
+                                  <md-button class="md-raised" type='submit' ng-click='save()'>Save</md-button>
+                                </md-content>
+                                <md-content flex layout-fill layout='column' layout-align='space-between center' layout-gt-sm='row'>
+                                  <md-input-container>
+                                    <label>Time</label>
+                                    <input ng-model="form.Mission.time">
+                                  </md-input-container>
+                                  <md-button class="md-raised" type='submit' ng-click='copy()'>Copy</md-button>
+                                </md-content>
                               </md-content>
                               <md-content flex></md-content>
                             </md-content>

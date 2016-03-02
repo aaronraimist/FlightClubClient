@@ -6,6 +6,10 @@ angular
 
           $scope.authorised = false;
           $scope.token = $cookies.get('authToken');
+          
+          $scope.gravTurnSelect = {};
+          $scope.gravTurnSelect['fgt'] = {code: 'fgt', name: 'Forward'};
+          $scope.gravTurnSelect['rgt'] = {code: 'rgt', name: 'Reverse'};
 
           if ($scope.token !== undefined) {
             var data = JSON.stringify({auth: {token: $scope.token}});
@@ -100,6 +104,10 @@ angular
     
             var formHash = window.btoa(formAsJSON_string);
             window.open(client + '/loading.php#' + formHash, '_blank');
+          };
+          
+          $scope.save = function() {
+            var x = 5;
           };
 
         });
