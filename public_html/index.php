@@ -138,7 +138,7 @@
 
                         <md-content flex></md-content>
                         <md-content flex layout-fill layout='row'>
-                          <md-chips flex layout-fill ng-model="stage.Burns" md-transform-chip="newBurn($chip)">
+                          <md-chips flex ng-model="stage.Burns" md-transform-chip="newBurn($chip)">
                             <md-chip-template>
                               <md-menu md-offset="0 50">
                                 <div ng-click="$mdOpenMenu($event)">
@@ -165,7 +165,7 @@
                         </md-content>
 
                         <md-content flex layout-fill layout='row'>
-                          <md-chips flex layout-fill ng-model="stage.Course" md-transform-chip="newCourse($chip)">
+                          <md-chips flex ng-model="stage.Course" md-transform-chip="newCourse($chip)">
                             <md-chip-template>
                               <md-menu md-offset="0 50">
                                 <div ng-click="$mdOpenMenu($event)">
@@ -187,7 +187,7 @@
                                   </md-menu-item>
                                   <md-menu-item>
                                     <label>Gravity Turn</label>
-                                    <md-select flex ng-model="gravTurnSelect[selectedCourse.Attitude.gt]">
+                                    <md-select aria-label="Gravity Turn" flex ng-model="gravTurnSelect[selectedCourse.Attitude.gt]">
                                       <md-option ng-repeat="gt in gravTurnSelect" value="{{gt.code}}">
                                         {{gt.name}}
                                       </md-option>
