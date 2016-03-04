@@ -4,6 +4,7 @@
     <title>Flight Club</title>
     <meta charset='UTF-8'>
     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js"></script>
@@ -12,11 +13,12 @@
     <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.js"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
-    <link href='https://fonts.googleapis.com/css?family=Quicksand' rel='stylesheet' type='text/css'> 
-
+    <link href='https://fonts.googleapis.com/css?family=Quicksand' rel='stylesheet' type='text/css'>
+    
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="js/core.js"></script>     
+    <script src="js/results.js"></script>
     <link rel='stylesheet' href='css/style.css' />
-    <link rel='stylesheet' href='css/mobile-style.css' />
-    <link rel='stylesheet' href='css/large-style.css' />
     
     <meta property="og:title" content="Simulation Results" />
     <meta property="og:site_name" content="Flight Club"/>
@@ -57,7 +59,7 @@
                 <i class="material-icons">home</i>
               </md-button>
               <h2>
-                <span>{{"Flight Club | " + missionName + " Results!"}}</span>
+                <span>{{"Flight Club | Results | " + missionName}}</span>
               </h2>
               <span flex></span>
               <md-button class="md-icon-button" aria-label="Home" ng-click="goToWorld()">
@@ -216,10 +218,6 @@
         </md-content>
 
       </section>
-    </div>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-    <script src="js/core.js"></script>     
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <script src="js/results.js"></script>     
+    </div> 
   </body>
 </html>

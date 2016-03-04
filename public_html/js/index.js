@@ -95,9 +95,18 @@ angular
               $scope.$apply();
             }, null);
           };
-          $scope.selectSite = function (site) {$scope.form.Mission.launchsite = site.code;$scope.$apply();};
-          $scope.selectVehicle = function (veh) {$scope.form.Mission.launchvehicle = veh.code;};
-          $scope.selectPayload = function (payload) {$scope.form.Mission.Profile.Payload = payload;};
+          $scope.selectSite = function (event, site) {
+            setUniqueClass(event.currentTarget, 'md-content', 'button', 'md-primary');
+            $scope.form.Mission.launchsite = site.code;
+          };
+          $scope.selectVehicle = function (event, veh) {
+            setUniqueClass(event.currentTarget, 'md-content', 'button', 'md-primary');
+            $scope.form.Mission.launchvehicle = veh.code;
+          };
+          $scope.selectPayload = function (event, payload) {
+            setUniqueClass(event.currentTarget, 'md-content', 'button', 'md-primary');
+            $scope.form.Mission.Profile.Payload = payload;
+          };
           
           $scope.submit = function() {
             var formAsJSON_string = JSON.stringify($scope.form);
@@ -140,4 +149,14 @@ var fill = function (data) {
     array[list[i - 1].code] = {code: list[i - 1].code, name: list[i - 1].description};
   }
   return array;
+};
+
+var setUniqueClass = function(target, parentType, targetType, className) {
+  
+  var parent = target.closest(parentType);
+  var targets = parent.getElementsByTagName(targetType);
+  for (var i = 0; i < targets.length; i++) {
+    targets[i].classList.remove(className);
+  }
+  target.classList.add(className);
 };

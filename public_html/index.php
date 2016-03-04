@@ -4,6 +4,7 @@
     <title>Flight Club | Mission Builder</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js"></script>
@@ -13,10 +14,10 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.5/angular-material.min.css">
     <link href='https://fonts.googleapis.com/css?family=Quicksand' rel='stylesheet' type='text/css'>
-
+    
+    <script src="js/core.js"></script>     
+    <script src="js/index.js"></script> 
     <link rel="stylesheet" href="css/style.css" />
-    <link rel="stylesheet" href="css/mobile-style.css" />
-    <link rel="stylesheet" href="css/large-style.css" />
 
     <meta property="og:title" content="Flight Club" />
     <meta property="og:site_name" content="Flight Club"/>
@@ -83,49 +84,52 @@
             <!--<form flex>-->
             <md-tabs flex md-selected="3" md-border-bottom md-autoselect>
               <md-tab label='{{launchSites[form.Mission.launchsite].name}}'>
-                <md-content>
-                  <md-grid-list
+                <md-content layout-padding layout-margin layout="row" layout-align="space-around center">
+                  <md-grid-list layout-padding layout-margin layout-fill
                     md-cols-xs="1" md-cols-sm="2" md-cols-md="4" md-cols-gt-md="6"
                     md-row-height-gt-md="1:1" md-row-height="2:2"
                     md-gutter="12px" md-gutter-gt-sm="8px">
                     <md-grid-tile ng-repeat="site in launchSites"
-                                  ng-click='selectSite(site)'
                                   md-rowspan="1"
                                   md-colspan="1"
                                   md-colspan-gt-sm="2">
-                      <div>{{site.name}}</div>
+                      <md-button ng-class="{'md-primary':launchSites[form.Mission.launchsite]===site}" layout-fill class="md-raised" ng-click='selectSite($event, site)'>
+                        {{site.name}}
+                      </md-button>
                     </md-grid-tile>
                   </md-grid-list>
                 </md-content>
               </md-tab>
               <md-tab label='{{launchVehicles[form.Mission.launchvehicle].name}}'>
-                <md-content>
-                  <md-grid-list
+                <md-content layout-padding layout-margin layout="row" layout-align="space-around center">
+                  <md-grid-list layout-padding layout-margin layout-fill
                     md-cols-xs="1" md-cols-sm="2" md-cols-md="4" md-cols-gt-md="6"
                     md-row-height-gt-md="1:1" md-row-height="2:2"
                     md-gutter="12px" md-gutter-gt-sm="8px">
                     <md-grid-tile ng-repeat="veh in launchVehicles"
-                                  ng-click='selectVehicle(veh)'
                                   md-rowspan="1"
                                   md-colspan="1"
                                   md-colspan-gt-sm="2">
-                      <div>{{veh.name}}</div>
+                      <md-button ng-class="{'md-primary':launchVehicles[form.Mission.launchvehicle]===veh}" layout-fill class="md-raised" ng-click='selectVehicle($event, veh)'>
+                        {{veh.name}}
+                      </md-button>
                     </md-grid-tile>
                   </md-grid-list>
                 </md-content>
               </md-tab>
               <md-tab label='{{payloads[form.Mission.Profile.Payload.code].name}}'>
-                <md-content>
-                  <md-grid-list
+                <md-content layout-padding layout-margin layout="row" layout-align="space-around center">
+                  <md-grid-list layout-padding layout-margin layout-fill
                     md-cols-xs="1" md-cols-sm="2" md-cols-md="4" md-cols-gt-md="6"
                     md-row-height-gt-md="1:1" md-row-height="2:2"
                     md-gutter="12px" md-gutter-gt-sm="8px">
                     <md-grid-tile ng-repeat="payload in payloads"
-                                  ng-click='selectPayload(payload)'
                                   md-rowspan="1"
                                   md-colspan="1"
                                   md-colspan-gt-sm="2">
-                      <div>{{payload.name}}</div>
+                      <md-button ng-class="{'md-primary':payloads[form.Mission.Profile.Payload.code]===payload}" layout-fill class="md-raised" ng-click='selectPayload($event, payload)'>
+                        {{payload.name}}
+                      </md-button>
                     </md-grid-tile>
                   </md-grid-list>
                 </md-content>
@@ -134,7 +138,7 @@
                 <md-tab-content>
                   <md-tabs md-border-bottom md-autoselect layout-fill>
                     <md-tab layout-fill selected ng-repeat="stage in form.Mission.Profile.Stages" label="{{stage.Core.name}}">
-                      <md-tab-content flex layout='column' layout-align="space-between center">
+                      <md-tab-content layout-padding layout-margin flex layout='column' layout-align="space-between center">
 
                         <md-content flex></md-content>
                         <md-content flex layout-fill layout='row'>
@@ -145,7 +149,7 @@
                                   <strong>{{$chip.tag}}</strong>
                                   <em>(Burn)</em>
                                 </div>
-                                <md-menu-content width="6">
+                                <md-menu-content width="4">
                                   <md-menu-item>
                                     <label>Tag</label><input ng-model="$chip.tag">
                                   </md-menu-item>
@@ -274,9 +278,6 @@
         </md-content>
 
       </section>
-    </div>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-    <script src="js/core.js"></script>     
-    <script src="js/index.js"></script>     
+    </div>    
   </body>
 </html>

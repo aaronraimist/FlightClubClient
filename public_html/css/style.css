@@ -9,6 +9,10 @@ html, body {
   font-family: 'Quicksand', sans-serif !important;
 }
 
+md-menu-item {
+  padding: 0 8px;
+}
+
 .bg {
   position: fixed; 
   top: 0; 
@@ -45,24 +49,12 @@ html, body {
   top: 50%;
 }
 
-.centre  {
-  text-align: center;
-  display:block;
+#results md-grid-tile {
+  padding: 0 !important;
 }
 
-.text1 {
-  line-height:1;
-  color: #BBB;
-}
-
-.text_white {
-  line-height:1;
-  color: white;
-}
-
-.text_black {
-  line-height:1;
-  color: black;
+#results figure {
+  display: none !important;
 }
 
 #cesiumContainer {
@@ -78,15 +70,49 @@ html, body {
   padding: 0;
 }
 
-#results md-grid-tile {
-  padding: 0 !important;
-}
-
-md-sidenav {
+#world md-sidenav {
   padding-bottom: 5%;
 }
 
 /* Keep main content visible while sidenav is open */
 #world md-backdrop.md-sidenav-backdrop {
   background-color:transparent;
+}
+
+@media 
+only screen and (min-width: 768px)  {
+
+  /* LOADING SCREEN */
+  .progress-container {
+    margin-top: -125px;
+  }
+
+  #rocket {
+    margin-left: -125px;
+    height: 249px;
+    width: 249px;
+  }
+
+  #rocket > img {
+    content: url("../images/rocket_large.png");
+  }
+}
+
+@media 
+only screen and (max-width: 767px) {
+
+  .progress-container {
+    margin-top: -38px;
+  }
+
+  #rocket {
+    margin-left: -38px;
+    min-height: 75px;
+    min-width: 75px;
+  }
+
+  #rocket > img {
+    content: url("../images/rocket_small.png");
+  }
+
 }

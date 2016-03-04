@@ -19,8 +19,6 @@
     <link href='https://fonts.googleapis.com/css?family=Quicksand' rel='stylesheet' type='text/css'>
     
     <link rel="stylesheet" href="css/style.css" />
-    <link rel="stylesheet" href="css/mobile-style.css" />
-    <link rel="stylesheet" href="css/large-style.css" />
     
     <meta property="og:title" content="Loading..." />
     <meta property="og:site_name" content="Flight Club"/>
