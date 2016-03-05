@@ -19,9 +19,12 @@
 
 $("#load").ready(function () 
 {
+  
+    setTimeout(10000);
+
   var formHash = window.location.hash.substring(1);
   var formData = window.atob(formHash);
-  
+    
   httpRequest(api_url + '/simulator/new', 'POST', formData, completeSim, errorSim);
   animate_rocket(30);
 });

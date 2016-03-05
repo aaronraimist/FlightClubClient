@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.5/angular-material.min.css">
     <link href='https://fonts.googleapis.com/css?family=Quicksand' rel='stylesheet' type='text/css'>
-    
+
     <script src="js/core.js"></script>     
     <script src="js/index.js"></script> 
     <link rel="stylesheet" href="css/style.css" />
@@ -80,20 +80,19 @@
             </div>
           </md-toolbar>
 
-          <md-content layout-fill layout="row" flex>
-            <!--<form flex>-->
+          <form layout-fill layout="row" flex name="profileForm">
             <md-tabs flex md-selected="3" md-border-bottom md-autoselect>
               <md-tab label='{{launchSites[form.Mission.launchsite].name}}'>
                 <md-content layout-padding layout-margin layout="row" layout-align="space-around center">
                   <md-grid-list layout-padding layout-margin layout-fill
-                    md-cols-xs="1" md-cols-sm="2" md-cols-md="4" md-cols-gt-md="6"
-                    md-row-height-gt-md="1:1" md-row-height="2:2"
-                    md-gutter="12px" md-gutter-gt-sm="8px">
+                                md-cols-xs="1" md-cols-sm="2" md-cols-md="4" md-cols-gt-md="6"
+                                md-row-height-gt-md="1:1" md-row-height="2:2"
+                                md-gutter="12px" md-gutter-gt-sm="8px">
                     <md-grid-tile ng-repeat="site in launchSites"
                                   md-rowspan="1"
                                   md-colspan="1"
                                   md-colspan-gt-sm="2">
-                      <md-button ng-class="{'md-primary':launchSites[form.Mission.launchsite]===site}" layout-fill class="md-raised" ng-click='selectSite($event, site)'>
+                      <md-button ng-class="{'md-primary':launchSites[form.Mission.launchsite] === site}" layout-fill class="md-raised" ng-click='selectSite($event, site)'>
                         {{site.name}}
                       </md-button>
                     </md-grid-tile>
@@ -103,31 +102,31 @@
               <md-tab label='{{launchVehicles[form.Mission.launchvehicle].name}}'>
                 <md-content layout-padding layout-margin layout="row" layout-align="space-around center">
                   <md-grid-list layout-padding layout-margin layout-fill
-                    md-cols-xs="1" md-cols-sm="2" md-cols-md="4" md-cols-gt-md="6"
-                    md-row-height-gt-md="1:1" md-row-height="2:2"
-                    md-gutter="12px" md-gutter-gt-sm="8px">
+                                md-cols-xs="1" md-cols-sm="2" md-cols-md="4" md-cols-gt-md="6"
+                                md-row-height-gt-md="1:1" md-row-height="2:2"
+                                md-gutter="12px" md-gutter-gt-sm="8px">
                     <md-grid-tile ng-repeat="veh in launchVehicles"
                                   md-rowspan="1"
                                   md-colspan="1"
                                   md-colspan-gt-sm="2">
-                      <md-button ng-class="{'md-primary':launchVehicles[form.Mission.launchvehicle]===veh}" layout-fill class="md-raised" ng-click='selectVehicle($event, veh)'>
+                      <md-button ng-class="{'md-primary':launchVehicles[form.Mission.launchvehicle] === veh}" layout-fill class="md-raised" ng-click='selectVehicle($event, veh)'>
                         {{veh.name}}
                       </md-button>
                     </md-grid-tile>
                   </md-grid-list>
                 </md-content>
               </md-tab>
-              <md-tab label='{{payloads[form.Mission.Profile.Payload.code].name}}'>
+              <md-tab label='{{payloads[form.Mission.Payload.code].name}}'>
                 <md-content layout-padding layout-margin layout="row" layout-align="space-around center">
                   <md-grid-list layout-padding layout-margin layout-fill
-                    md-cols-xs="1" md-cols-sm="2" md-cols-md="4" md-cols-gt-md="6"
-                    md-row-height-gt-md="1:1" md-row-height="2:2"
-                    md-gutter="12px" md-gutter-gt-sm="8px">
+                                md-cols-xs="1" md-cols-sm="2" md-cols-md="4" md-cols-gt-md="6"
+                                md-row-height-gt-md="1:1" md-row-height="2:2"
+                                md-gutter="12px" md-gutter-gt-sm="8px">
                     <md-grid-tile ng-repeat="payload in payloads"
                                   md-rowspan="1"
                                   md-colspan="1"
                                   md-colspan-gt-sm="2">
-                      <md-button ng-class="{'md-primary':payloads[form.Mission.Profile.Payload.code]===payload}" layout-fill class="md-raised" ng-click='selectPayload($event, payload)'>
+                      <md-button ng-class="{'md-primary':payloads[form.Mission.Payload.code] === payload}" layout-fill class="md-raised" ng-click='selectPayload($event, payload)'>
                         {{payload.name}}
                       </md-button>
                     </md-grid-tile>
@@ -136,122 +135,131 @@
               </md-tab>
               <md-tab label='Flight Profile'>
                 <md-tab-content>
-                  <md-tabs md-border-bottom md-autoselect layout-fill>
-                    <md-tab layout-fill selected ng-repeat="stage in form.Mission.Profile.Stages" label="{{stage.Core.name}}">
-                      <md-tab-content layout-padding layout-margin flex layout='column' layout-align="space-between center">
+                  <md-content layout-padding layout-fill flex layout='column' layout-gt-sm='row' layout-align='space-between start'>
 
-                        <md-content flex></md-content>
-                        <md-content flex layout-fill layout='row'>
-                          <md-chips flex ng-model="stage.Burns" md-transform-chip="newBurn($chip)">
-                            <md-chip-template>
-                              <md-menu md-offset="0 50">
-                                <div ng-click="$mdOpenMenu($event)">
-                                  <strong>{{$chip.tag}}</strong>
-                                  <em>(Burn)</em>
-                                </div>
-                                <md-menu-content width="4">
-                                  <md-menu-item>
-                                    <label>Tag</label><input ng-model="$chip.tag">
-                                  </md-menu-item>
-                                  <md-menu-item>
-                                    <label>Engines</label><input ng-model="$chip.engines">
-                                  </md-menu-item>
-                                  <md-menu-item>
-                                    <label>Start</label><input ng-model="$chip.start">
-                                  </md-menu-item>
-                                  <md-menu-item>
-                                    <label>End</label><input ng-model="$chip.end">
-                                  </md-menu-item>
-                                </md-menu-content>
-                              </md-menu>
-                            </md-chip-template>
-                          </md-chips>
-                        </md-content>
-
-                        <md-content flex layout-fill layout='row'>
-                          <md-chips flex ng-model="stage.Course" md-transform-chip="newCourse($chip)">
-                            <md-chip-template>
-                              <md-menu md-offset="0 50">
-                                <div ng-click="$mdOpenMenu($event)">
-                                  <strong>{{$chip.tag}}</strong>
-                                  <em>(Course Correction)</em>
-                                </div>
-                                <md-menu-content width="4">
-                                  <md-menu-item>
-                                    <label>Tag</label><input ng-model="$chip.tag">
-                                  </md-menu-item>
-                                  <md-menu-item>
-                                    <label>Start</label><input ng-model="$chip.start">
-                                  </md-menu-item>
-                                  <md-menu-item>
-                                    <label>Pitch</label><input ng-model="$chip.Attitude.pitch">
-                                  </md-menu-item>
-                                  <md-menu-item>
-                                    <label>Yaw</label><input ng-model="$chip.Attitude.yaw">
-                                  </md-menu-item>
-                                  <md-menu-item>
-                                    <label>Gravity Turn</label>
-                                    <md-select aria-label="Gravity Turn" flex ng-model="gravTurnSelect[selectedCourse.Attitude.gt]">
-                                      <md-option ng-repeat="gt in gravTurnSelect" value="{{gt.code}}">
-                                        {{gt.name}}
-                                      </md-option>
-                                    </md-select>
-                                  </md-menu-item>
-                                  <md-menu-item>
-                                    <label>Throttle</label><input ng-model="$chip.Attitude.throttle">
-                                  </md-menu-item>
-                                </md-menu-content>
-                              </md-menu>
-                            </md-chip-template>
-                          </md-chips>
-                        </md-content>
-
-                        <md-content flex layout-fill layout='row'>
-                          <md-input-container>
-                            <label>Stage Separation</label>
-                            <input ng-model="stage.release">
+                    <md-content class="perfectHeight" style="background-color:#eee" flex layout-fill>
+                      <md-list layout='column'>
+                        <md-subheader style="background-color:#eee" class="md-no-sticky">Events</md-subheader>
+                        <md-divider></md-divider>
+                        <md-list-item layout='row' layout-align='space-between center' ng-repeat="event in form.Mission.Events" ng-click="selectEvent($event, event)">
+                          <div flex class="md-secondary eventLabel">{{"T" + (event.time < 0 ? '' : '+') + event.time}}</div>
+                          <div class="md-secondary eventLabel">{{event.name}}</div>
+                          <md-divider></md-divider>
+                        </md-list-item>
+                      </md-list>
+                    </md-content>
+                    
+                    <md-content flex layout-fill>
+                      <md-content ng-show="selectedEvent !== undefined">
+                        <md-content layout="row" layout-align="space-around center">
+                          <md-input-container flex class="md-block">
+                            <label>Event Type</label>
+                            <md-select ng-model="selectedEvent.type" name="type" required>
+                              <md-option ng-repeat="obj in type" value="{{obj.code}}">{{obj.name}}</md-option>
+                            </md-select>
+                            <div ng-messages="profileForm.type.$error" multiple md-auto-hide="true">
+                              <div ng-message="required">
+                                What type of event do you want to create?
+                              </div>
+                            </div>
                           </md-input-container>
-                          <md-switch ng-model="stage.Core.legs">Legs</md-switch>
-                        </md-content>
-                        <md-content flex layout='row'>
-                          <md-input-container>
-                            <label>Fairing Separation</label>
-                            <input ng-model="stage.Core.fairing_sep">
+                          <md-input-container flex class="md-block">
+                            <label>Name</label>
+                            <input ng-model="selectedEvent.name" name="name" required>
+                            <div ng-messages="profileForm.name.$error" multiple md-auto-hide="true">
+                              <div ng-message="required">
+                                This can be whatever you want, but make it descriptive!
+                              </div>
+                            </div>
                           </md-input-container>
-                          <md-button class="md-raised" type='submit' ng-click='submit()'>Submit</md-button>
                         </md-content>
-                        <md-content flex layout='row' ng-show="authorised">
-                          <md-content flex layout-fill layout='column' layout-align='space-between center' layout-gt-sm='row'>
-                            <md-input-container>
-                              <label>Code</label>
-                              <input ng-model="form.Mission.code">
-                            </md-input-container>
-                            <md-switch ng-model="form.Mission.display">Display</md-switch>
-                          </md-content>
-                          <md-content flex layout-fill layout='column' layout-align='space-between center' layout-gt-sm='row'>
-                            <md-input-container>
-                              <label>Date</label>
-                              <input ng-model="form.Mission.date">
-                            </md-input-container>
-                            <md-button class="md-raised" type='submit' ng-click='save()'>Save</md-button>
-                          </md-content>
-                          <md-content flex layout-fill layout='column' layout-align='space-between center' layout-gt-sm='row'>
-                            <md-input-container>
-                              <label>Time</label>
-                              <input ng-model="form.Mission.time">
-                            </md-input-container>
-                            <md-button class="md-raised" type='submit' ng-click='copy()'>Copy</md-button>
-                          </md-content>
+                        <md-content layout="row" layout-align="space-around center">
+                          <md-input-container flex class="md-block">
+                            <label>Stage</label>
+                            <md-select ng-model="selectedEvent.stage" name="stage" required>
+                              <md-option ng-repeat="obj in form.Mission.Stages" value="{{obj.id}}">{{obj.name}}</md-option>
+                            </md-select>
+                            <div ng-messages="profileForm.stage.$error" multiple md-auto-hide="true">
+                              <div ng-message="required">
+                                The event has to apply to one stage in particular
+                              </div>
+                            </div>
+                          </md-input-container>
+                          <md-input-container flex class="md-block">
+                            <label>Time (seconds from T-0)</label>
+                            <input ng-model="selectedEvent.time" ng-change="sortEvents()" name="time" required>
+                            <div ng-messages="profileForm.time.$error" multiple md-auto-hide="true">
+                              <div ng-message="required">
+                                What time should this event take place?
+                              </div>
+                            </div>
+                          </md-input-container>
                         </md-content>
-                        <md-content flex></md-content>
-                      </md-tab-content>
-                    </md-tab>
-                  </md-tabs>
+                        <md-content ng-show="selectedEvent.type==='IGNITION'"
+                                    layout="row" layout-align="space-around center">
+                          <md-input-container flex class="md-block">
+                            <label>Engines</label>
+                            <input ng-model="selectedEvent.engines" name="engines" required/>
+                            <div ng-messages="profileForm.engines.$error" multiple md-auto-hide="true">
+                              <div ng-message="required">
+                                You can't do a burn with no engines...
+                              </div>
+                            </div>
+                          </md-input-container>
+                          <md-input-container flex class="md-block"></md-input-container>
+                        </md-content>
+                        <md-content ng-show="selectedEvent.type==='IGNITION' || selectedEvent.type==='GUIDANCE'"
+                                    layout="row" layout-align="space-around center">
+                          <md-input-container flex class="md-block">
+                            <label>Pitch</label>
+                            <input ng-model="selectedEvent.Attitude.pitch">
+                          </md-input-container>
+                          <md-input-container flex class="md-block">
+                            <label>Yaw</label>
+                            <input ng-model="selectedEvent.Attitude.yaw">
+                          </md-input-container>
+                        </md-content>
+                        <md-content ng-show="selectedEvent.type==='IGNITION' || selectedEvent.type==='GUIDANCE'"
+                                    layout="row" layout-align="space-around center">
+                          <md-input-container flex class="md-block">
+                            <label>Throttle</label>
+                            <input ng-model="selectedEvent.Attitude.throttle">
+                          </md-input-container>
+                          <md-input-container flex class="md-block">
+                            <label>Gravity Turn</label>
+                            <md-select ng-model="selectedEvent.Attitude.gt">
+                              <md-option ng-repeat="obj in gravTurnSelect" value="{{obj.code}}">{{obj.name}}</md-option>
+                            </md-select>
+                          </md-input-container>
+                        </md-content>
+                      </md-content>
+                    </md-content>
+                    
+                    <md-content flex layout-fill>
+                      <md-content layout="row" layout-align="space-around center">
+                        <md-input-container flex class="md-block">
+                          <label>{{form.Mission.Stages[0].name}} Legs</label>
+                          <md-switch ng-model="form.Mission.Stages[0].legs" aria-label="{{form.Mission.Stages[0].name}} legs"></md-switch>
+                        </md-input-container>
+                        <md-input-container flex class="md-block">
+                          <label>Payload Mass (kg)</label>
+                          <input ng-model="form.Mission.Payload.mass">
+                        </md-input-container>
+                      </md-content>
+                      <md-content ng-show="form.Mission.Stages.length===3" layout="row" layout-align="space-around center">
+                        <md-input-container flex class="md-block">
+                          <label>{{form.Mission.Stages[1].name}} Legs</label>
+                          <md-switch ng-model="form.Mission.Stages[1].legs" aria-label="{{form.Mission.Stages[1].name}} legs"></md-switch>
+                        </md-input-container>
+                      </md-content>
+                      <md-button class="md-raised" type="submit" ng-click="submit()">Submit</md-button>
+                    </md-content>
+                    
+                  </md-content>
                 </md-tab-content>
               </md-tab>
             </md-tabs>
-            <!--</form>-->
-          </md-content>
+            </form>
 
           <md-sidenav flex layout="column" class="md-sidenav-right md-whiteframe-z2" md-component-id="sidenav" md-is-locked-open="false">
             <md-toolbar class="md-theme-indigo" layout="row" layout-align="space-between center" >

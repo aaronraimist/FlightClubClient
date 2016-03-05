@@ -96,8 +96,8 @@ var fillData = function (scope) {
   return function (data)
   {
     if (data.Mission !== undefined) {
-      $.each(data.Mission.Profile.Stages, function (key, val) {
-        scope.stageMap[val.Core.id] = val.Core.name;
+      $.each(data.Mission.Stages, function (key, val) {
+        scope.stageMap[val.id] = val.name;
       });
     }
     else { // guess two stage

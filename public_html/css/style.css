@@ -13,6 +13,19 @@ md-menu-item {
   padding: 0 8px;
 }
 
+.eventLabel {
+  position: relative !important;
+  top: 18px !important;
+}
+
+.perfectHeight {
+  height: 100% !important;
+}
+
+md-select, md-switch {
+  margin-bottom: 24px !important; // input has error div below. This makes select line up
+}
+
 .bg {
   position: fixed; 
   top: 0; 

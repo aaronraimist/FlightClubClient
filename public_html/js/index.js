@@ -1,15 +1,25 @@
 /* global angular, Plotly */
 
 angular
-        .module('FlightClub', ['ngMaterial', 'ngCookies'])
+        .module('FlightClub', ['ngMaterial', 'ngCookies', 'ngMessages'])
         .controller('IndexCtrl', function ($scope, $mdDialog, $mdSidenav, $cookies) {
 
           $scope.authorised = false;
           $scope.token = $cookies.get('authToken');
           
-          $scope.gravTurnSelect = {};
-          $scope.gravTurnSelect['fgt'] = {code: 'fgt', name: 'Forward'};
-          $scope.gravTurnSelect['rgt'] = {code: 'rgt', name: 'Reverse'};
+          $scope.gravTurnSelect = [
+            {code: null, name: null},
+            {code: 'fgt', name: 'Forward'},
+            {code: 'rgt', name: 'Reverse'}
+          ];
+          
+          $scope.type = [
+            {code: 'IGNITION',    name: 'Ignition'},
+            {code: 'CUTOFF',      name: 'Cutoff'},
+            {code: 'GUIDANCE',    name: 'Guidance'},
+            {code: 'SEPARATION',  name: 'Launch/Separation'},
+            {code: 'FAIRING_SEP', name: 'Fairing Separation'}
+          ];
 
           if ($scope.token !== undefined) {
             var data = JSON.stringify({auth: {token: $scope.token}});
@@ -24,12 +34,12 @@ angular
               }
 
               var display = $scope.authorised ? '' : '?display=1';
-              httpRequest(api_url + '/missions' + display, 'GET', null, fillMissions2($scope), null);
+              httpRequest(api_url + '/missions' + display, 'GET', null, fillMissions($scope), null);
 
             }, null);
           } else {
             $scope.loginLabel = "Login";
-            httpRequest(api_url + '/missions?display=1', 'GET', null, fillMissions2($scope), null);
+            httpRequest(api_url + '/missions?display=1', 'GET', null, fillMissions($scope), null);
           }
 
           httpRequest(api_url + '/launchsites', 'GET', null, function (data) {$scope.launchSites = fill(data);}, null);
@@ -58,39 +68,16 @@ angular
             window.location = "/docs";
           };
           
-          $scope.openBurn = function(chip) {
-            $scope.selectedBurn = chip;
-          };
-          
-          $scope.openCourse = function(chip) {
-            $scope.selectedCourse = chip;
-          };
-          
-          $scope.newBurn = function(chip) {
-            return {
-              tag: chip,
-              engines: null,
-              start: null,
-              end: null
-            };
-          };
-          
-          $scope.newCourse = function(chip) {
-            return {
-              tag: chip,
-              start: null,
-              end: null,
-              Attitude: {
-                pitch: null,
-                yaw: null,
-                gt: null
-              }
-            };
+          $scope.sortEvents = function() {
+              $scope.form.Mission.Events.sort(function(a,b) {
+                return parseFloat(a.time) - parseFloat(b.time);
+              });
           };
 
           $scope.selectMission = function (code) {
             httpRequest(api_url + '/missions/' + code, 'GET', null, function (data) {
               $scope.form = JSON.parse(JSON.stringify(data));
+              $scope.sortEvents();
               $scope.missionName = data.Mission.description;
               $scope.$apply();
             }, null);
@@ -107,6 +94,10 @@ angular
             setUniqueClass(event.currentTarget, 'md-content', 'button', 'md-primary');
             $scope.form.Mission.Profile.Payload = payload;
           };
+          $scope.selectEvent = function (trigger, event) {
+            setUniqueClass(trigger.currentTarget, 'md-content', 'button', 'md-primary');
+            $scope.selectedEvent = event;
+          };
           
           $scope.submit = function() {
             var formAsJSON_string = JSON.stringify($scope.form);
@@ -114,14 +105,10 @@ angular
             var formHash = window.btoa(formAsJSON_string);
             window.open(client + '/loading.php#' + formHash, '_blank');
           };
-          
-          $scope.save = function() {
-            var x = 5;
-          };
 
         });
 
-var fillMissions2 = function (scope) {
+var fillMissions = function (scope) {
   return function (data)
   {
     var list = data.data;
@@ -138,7 +125,11 @@ var fillMissions2 = function (scope) {
         scope.past.push({code: mission.code, name: mission.description});
       }
     }
-    scope.selectMission(scope.upcoming[0].code);
+    if(scope.upcoming[0]!==undefined)
+      scope.selectMission(scope.upcoming[0].code);
+    else
+      scope.selectMission(scope.past[0].code);
+      
   };
 };
 
