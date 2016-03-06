@@ -59,7 +59,7 @@
             </div>
           </md-toolbar>
           <md-content flex></md-content>
-          <form flex layout-fill class="md-inline-form centre">
+          <form flex layout="column" layout-align="center center" layout-fill class="md-inline-form centre">
             <div>
               <md-input-container>
                 <label>Username</label>

@@ -79,6 +79,7 @@ angular
               $scope.form = JSON.parse(JSON.stringify(data));
               $scope.sortEvents();
               $scope.missionName = data.Mission.description;
+              $scope.selectedEvent = null;
               $scope.$apply();
             }, null);
           };
@@ -88,15 +89,45 @@ angular
           };
           $scope.selectVehicle = function (event, veh) {
             setUniqueClass(event.currentTarget, 'md-content', 'button', 'md-primary');
-            $scope.form.Mission.launchvehicle = veh.code;
+            
+            if($scope.form.Mission.launchvehicle!==veh.code
+                    && (veh.code==='FNH' || $scope.form.Mission.launchvehicle==='FNH')) {
+              $scope.form.Mission.Events = [];
+            }
+            $scope.form.Mission.launchvehicle = veh.code;            
           };
           $scope.selectPayload = function (event, payload) {
             setUniqueClass(event.currentTarget, 'md-content', 'button', 'md-primary');
-            $scope.form.Mission.Profile.Payload = payload;
+            $scope.form.Mission.Payload = payload;
           };
           $scope.selectEvent = function (trigger, event) {
             setUniqueClass(trigger.currentTarget, 'md-content', 'button', 'md-primary');
             $scope.selectedEvent = event;
+          };
+          $scope.addEvent = function() {
+            var newEvent = {
+              type: null,
+              stage: null,
+              name: null,
+              engines: null,
+              time: null,
+              dynamic: null,
+              Attitude: {
+                pitch: null,
+                yaw: null,
+                gt: null,
+                throttle: null
+              }
+            };
+            $scope.form.Mission.Events.push(newEvent);
+            $scope.selectedEvent = newEvent;
+          };
+          $scope.removeEvent = function() {
+            var index = $scope.form.Mission.Events.indexOf($scope.selectedEvent);
+            if (index > -1) {
+              $scope.form.Mission.Events.splice(index, 1);
+              $scope.selectedEvent = null;
+            }
           };
           
           $scope.submit = function() {

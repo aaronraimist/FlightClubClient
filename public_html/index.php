@@ -139,7 +139,10 @@
 
                     <md-content class="perfectHeight" style="background-color:#eee" flex layout-fill>
                       <md-list layout='column'>
-                        <md-subheader style="background-color:#eee" class="md-no-sticky">Events</md-subheader>
+                        <md-content style="background-color:#eee" layout="row" layout-align="space-between center">
+                          <md-subheader style="background-color:#eee" class="md-no-sticky">Events</md-subheader>
+                          <md-button class="md-raised md-secondary" ng-click="addEvent()">Add</md-button>
+                        </md-content>
                         <md-divider></md-divider>
                         <md-list-item layout='row' layout-align='space-between center' ng-repeat="event in form.Mission.Events" ng-click="selectEvent($event, event)">
                           <div flex class="md-secondary eventLabel">{{"T" + (event.time < 0 ? '' : '+') + event.time}}</div>
@@ -155,7 +158,8 @@
                           <md-input-container flex class="md-block">
                             <label>Event Type</label>
                             <md-select ng-model="selectedEvent.type" name="type" required>
-                              <md-option ng-repeat="obj in type" value="{{obj.code}}">{{obj.name}}</md-option>
+                              <md-option ng-repeat="obj in type" value="{{obj.code}}" 
+                                         ng-disabled="obj.code==='FAIRING_SEP' && form.Mission.Payload.code!=='SATL'">{{obj.name}}</md-option>
                             </md-select>
                             <div ng-messages="profileForm.type.$error" multiple md-auto-hide="true">
                               <div ng-message="required">
@@ -234,6 +238,9 @@
                               <md-option ng-repeat="obj in gravTurnSelect" value="{{obj.code}}">{{obj.name}}</md-option>
                             </md-select>
                           </md-input-container>
+                        </md-content>
+                        <md-content layout="row" layout-align="space-between center">
+                          <md-button class="md-raised md-secondary" ng-disabled="selectedEvent===null" ng-click="removeEvent()">Remove</md-button>
                         </md-content>
                       </md-content>
                     </md-content>
