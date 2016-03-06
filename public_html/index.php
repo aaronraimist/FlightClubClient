@@ -206,7 +206,10 @@
                               </div>
                             </div>
                           </md-input-container>
-                          <md-input-container flex class="md-block"></md-input-container>
+                          <md-input-container flex class="md-block">
+                            <label>Dynamic Burn</label>
+                            <md-switch ng-model="selectedEvent.dynamic" aria-label="Hoverslam"></md-switch>
+                          </md-input-container>
                         </md-content>
                         <md-content ng-show="selectedEvent.type==='IGNITION' || selectedEvent.type==='GUIDANCE'"
                                     layout="row" layout-align="space-around center">

@@ -8,9 +8,9 @@ angular
           $scope.token = $cookies.get('authToken');
           
           $scope.gravTurnSelect = [
-            {code: null, name: null},
-            {code: 'fgt', name: 'Forward'},
-            {code: 'rgt', name: 'Reverse'}
+            {code: 'NONE', name: null},
+            {code: 'FORWARD', name: 'Forward'},
+            {code: 'REVERSE', name: 'Reverse'}
           ];
           
           $scope.type = [
