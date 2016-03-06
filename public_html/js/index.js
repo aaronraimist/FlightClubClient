@@ -136,6 +136,14 @@ angular
             var formHash = window.btoa(formAsJSON_string);
             window.open(client + '/loading.php#' + formHash, '_blank');
           };
+          $scope.save = function() {
+            var formAsJSON_string = JSON.stringify($scope.form);
+            httpRequest(api_url + '/missions', 'PUT', formAsJSON_string, updateSuccess, updateError);
+          };
+          $scope.copy = function() {
+            var formAsJSON_string = JSON.stringify($scope.form);
+            httpRequest(api_url+'/missions/new', 'PUT', formAsJSON_string, updateSuccess, updateError);
+          };
 
         });
 

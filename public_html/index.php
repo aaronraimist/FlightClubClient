@@ -248,22 +248,48 @@
                     <md-content flex layout-fill>
                       <md-content layout="row" layout-align="space-around center">
                         <md-input-container flex class="md-block">
-                          <label>{{form.Mission.Stages[0].name}} Legs</label>
-                          <md-switch ng-model="form.Mission.Stages[0].legs" aria-label="{{form.Mission.Stages[0].name}} legs"></md-switch>
-                        </md-input-container>
-                        <md-input-container flex class="md-block">
                           <label>Payload Mass (kg)</label>
                           <input ng-model="form.Mission.Payload.mass">
                         </md-input-container>
+                        <md-button flex class="md-raised" type="submit" ng-click="submit()">Submit</md-button>
                       </md-content>
-                      <md-content ng-show="form.Mission.Stages.length===3" layout="row" layout-align="space-around center">
+                      <md-content layout="row" layout-align="space-around center">
                         <md-input-container flex class="md-block">
+                          <label>{{form.Mission.Stages[0].name}} Legs</label>
+                          <md-switch ng-model="form.Mission.Stages[0].legs" aria-label="{{form.Mission.Stages[0].name}} legs"></md-switch>
+                        </md-input-container>
+                        <md-input-container flex class="md-block" flex ng-show="form.Mission.Stages.length===3">
                           <label>{{form.Mission.Stages[1].name}} Legs</label>
                           <md-switch ng-model="form.Mission.Stages[1].legs" aria-label="{{form.Mission.Stages[1].name}} legs"></md-switch>
                         </md-input-container>
                       </md-content>
-                      <md-button class="md-raised" type="submit" ng-click="submit()">Submit</md-button>
-                    </md-content>
+                      <md-content ng-show="authorised">
+                        <md-divider></md-divider>
+                        <md-content layout="row" layout-align="space-around center">
+                          <md-input-container flex class="md-block">
+                            <label>Code</label>
+                            <input ng-model="form.Mission.code">
+                          </md-input-container>
+                          <md-input-container flex class="md-block">
+                            <label>Date</label>
+                            <input ng-model="form.Mission.date">
+                          </md-input-container>
+                        </md-content>
+                        <md-content layout="row" layout-align="space-around center">
+                          <md-input-container flex class="md-block">
+                            <label>Time</label>
+                            <input ng-model="form.Mission.time">
+                          </md-input-container>
+                          <md-input-container flex class="md-block">
+                            <label>Display</label>
+                            <md-switch ng-model="form.Mission.display" aria-label="Display"></md-switch>
+                          </md-input-container>
+                        </md-content>
+                        <md-content layout="row" layout-align="space-around center">
+                          <md-button flex class="md-raised" type="submit" ng-click="save()">Save</md-button>
+                          <md-button flex class="md-raised" type="submit" ng-click="copy()">Copy</md-button>
+                        </md-content>
+                      </md-content>
                     
                   </md-content>
                 </md-tab-content>
