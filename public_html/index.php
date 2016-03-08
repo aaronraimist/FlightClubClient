@@ -289,8 +289,8 @@
                           </md-input-container>
                         </md-content>
                         <md-content layout="row" layout-align="space-around center">
-                          <md-button flex class="md-raised" type="submit" ng-click="save()">Save</md-button>
-                          <md-button flex class="md-raised" type="submit" ng-click="copy()">Copy</md-button>
+                          <md-button flex class="md-raised" type="submit" ng-click="save($event)">Save</md-button>
+                          <md-content flex></md-content>
                         </md-content>
                       </md-content>
                     
