@@ -25,7 +25,6 @@ angular
             var data = JSON.stringify({auth: {token: $scope.token}});
             httpRequest(api_url + '/auth/', 'POST', data, function (data) {
               $scope.authorised = data.auth;
-
               if (!$scope.authorised) {
                 $cookies.remove('authToken');
                 $scope.loginLabel = "Login";
@@ -77,6 +76,7 @@ angular
           $scope.selectMission = function (code) {
             httpRequest(api_url + '/missions/' + code, 'GET', null, function (data) {
               $scope.form = JSON.parse(JSON.stringify(data));
+              $scope.form.auth = {token: $scope.token};
               $scope.sortEvents();
               $scope.missionName = data.Mission.description;
               $scope.selectedEvent = null;
@@ -136,43 +136,43 @@ angular
             var formHash = window.btoa(formAsJSON_string);
             window.open(client + '/loading.php#' + formHash, '_blank');
           };
-          $scope.save = function(event) {
-            var exists = false;
-            $scope.upcoming.forEach(function(key, value) {
-              if(key.code === $scope.form.Mission.code && key.description === $scope.form.Mission.description) {
-                exists = true;
-              }
-            });
-            $scope.past.forEach(function(key, value) {
-              if(key.code === $scope.form.Mission.code && key.description === $scope.form.Mission.description) {
-                exists = true;
-              }
-            });
-            
-            if(exists) {
-              var confirm = $mdDialog.confirm()
-                      .title($scope.form.Mission.code + " already exists")
-                      .textContent('This will update ' + $scope.form.Mission.description)
-                      .ariaLabel('Update Confirmation')
-                      .targetEvent(event)
-                      .ok('Ok')
-                      .cancel('Cancel');
-              $mdDialog.show(confirm).then(doSave(), null);
-            } else {
-              var confirm = $mdDialog.confirm()
-                      .title($scope.form.Mission.code + " doesn't exist yet")
-                      .textContent("This will create a new mission called '" + $scope.form.Mission.description + "'")
-                      .ariaLabel('Create Confirmation')
-                      .targetEvent(event)
-                      .ok('Ok')
-                      .cancel('Cancel');
-              $mdDialog.show(confirm).then(doSave(), null);
-            }
-          };
-           
-          $scope.doSave = function() {
-            var formAsJSON_string = JSON.stringify($scope.form);
-            httpRequest(api_url + '/missions', 'PUT', formAsJSON_string, updateSuccess, updateError);
+          
+          $scope.save = function (event)
+          {
+            httpRequest(api_url + '/missions/' + $scope.form.Mission.code, 'GET', null,
+                    function (data) {
+                      var exists = false;
+                      if (data.error === undefined)
+                        exists = true;
+                      var formAsJSON_string = JSON.stringify($scope.form);
+                      if (exists)
+                      {
+                        var confirm = $mdDialog.confirm()
+                                .title($scope.form.Mission.code + " already exists")
+                                .textContent('This will update ' + $scope.form.Mission.description)
+                                .ariaLabel('Update Confirmation')
+                                .targetEvent(event)
+                                .ok('Ok')
+                                .cancel('Cancel');
+                        $mdDialog.show(confirm).then(function () {
+                          httpRequest(api_url + '/missions/' + $scope.form.Mission.code, 'PUT', formAsJSON_string, null, null);
+                        }, null);
+                      }
+                      else
+                      {
+                        var confirm = $mdDialog.confirm()
+                                .title($scope.form.Mission.code + " doesn't exist yet")
+                                .textContent("This will create a new mission called '" + $scope.form.Mission.description + "'")
+                                .ariaLabel('Create Confirmation')
+                                .targetEvent(event)
+                                .ok('Ok')
+                                .cancel('Cancel');
+                        $mdDialog.show(confirm).then(function () {
+                          httpRequest(api_url + '/missions/', 'POST', formAsJSON_string, null, null);
+                        }, null);
+                      }
+                    }, null);
+
           };
 
         });
