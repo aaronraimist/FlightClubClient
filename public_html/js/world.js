@@ -148,7 +148,7 @@ function world() {
 
   function getDataFile(stage) {
 
-    var url = client + '/output/' + w.getProp('id') + '_' + w.getStageName(stage) + '.dat';
+    var url = base + '/output/' + w.getProp('id') + '_' + w.getStageName(stage) + '.dat';
     $.ajax({type: 'GET', url: url, contentType: 'text', data: null,
       xhrFields: {withCredentials: false},
       success: successfn,
@@ -262,7 +262,7 @@ function world() {
       }, 500);
     }
     else {
-      var url = client + '/output/' + w.getProp('id') + '_' + w.getStageName(stage) + '_events.dat';
+      var url = base + '/output/' + w.getProp('id') + '_' + w.getStageName(stage) + '_events.dat';
       $.ajax({type: 'GET', url: url, contentType: 'text', data: null,
         xhrFields: {withCredentials: false},
         success: successfn,

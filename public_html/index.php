@@ -13,7 +13,7 @@
     <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.js"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.5/angular-material.min.css">
-    <link href='https://fonts.googleapis.com/css?family=Quicksand' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Quicksand:400' rel='stylesheet' type='text/css'>
 
     <script src="js/core.js"></script>     
     <script src="js/index.js"></script> 
@@ -95,7 +95,7 @@
                                   md-rowspan="1"
                                   md-colspan="1"
                                   md-colspan-gt-sm="2">
-                      <md-button ng-class="{'md-primary':launchSites[form.Mission.launchsite] === site}" layout-fill class="md-raised" ng-click='selectSite($event, site)'>
+                      <md-button ng-class="{'md-primary':launchSites[form.Mission.launchsite] === site}" layout-fill class="bolder md-raised" ng-click='selectSite($event, site)'>
                         {{site.name}}
                       </md-button>
                     </md-grid-tile>
@@ -112,7 +112,7 @@
                                   md-rowspan="1"
                                   md-colspan="1"
                                   md-colspan-gt-sm="2">
-                      <md-button ng-class="{'md-primary':launchVehicles[form.Mission.launchvehicle] === veh}" layout-fill class="md-raised" ng-click='selectVehicle($event, veh)'>
+                      <md-button ng-class="{'md-primary':launchVehicles[form.Mission.launchvehicle] === veh}" layout-fill class="bolder md-raised" ng-click='selectVehicle($event, veh)'>
                         {{veh.name}}
                       </md-button>
                     </md-grid-tile>
@@ -129,7 +129,7 @@
                                   md-rowspan="1"
                                   md-colspan="1"
                                   md-colspan-gt-sm="2">
-                      <md-button ng-class="{'md-primary':payloads[form.Mission.Payload.code] === payload}" layout-fill class="md-raised" ng-click='selectPayload($event, payload)'>
+                      <md-button ng-class="{'md-primary':payloads[form.Mission.Payload.code] === payload}" layout-fill class="bolder md-raised" ng-click='selectPayload($event, payload)'>
                         {{payload.name}}
                       </md-button>
                     </md-grid-tile>

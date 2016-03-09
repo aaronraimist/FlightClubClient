@@ -1,6 +1,6 @@
-//var client = 'http://www.flightclub.io';
-var client = 'http://localhost';
-var server = client + ':8080/FlightClub';
+var base = 'http://www.flightclub.io';
+var client = base+'/FS';
+var server = base + ':8080/FlightSchool';
 var api_url = server + '/api/v1';
 
 function httpRequest(dest, method, data, successfn, errorfn) 

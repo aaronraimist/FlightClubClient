@@ -14,7 +14,7 @@ angular
           }, 150);            
           
           $scope.goHome = function() {
-            window.location = "/";
+            window.location = client;
           };
           
           $scope.loginError = "";

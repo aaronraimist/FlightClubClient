@@ -1,12 +1,10 @@
-@font-face {
-  font-family: "Quicksand";
-  font-style: normal;
-  font-weight: 300;
-  src: local("Quicksand Light"), local("Quicksand-Light"), url("https://fonts.gstatic.com/l/font?kit=qhfoJiLu10kFjChCCTvGlI-dKQzmQ2KGHRrJPWMxpTDsPXYqTGLZ2U8sggWmBN11vY_KnrbECKVYwT5jML176E-hCdHeAh1EypZggr0U53BuXxQghSWdr5fKRAiL7DYm&skey=2d4bb97196ce133f") format("woff2");
+
+html {
+  font-family: 'Quicksand', sans-serif !important;
 }
 
-html, body {
-  font-family: 'Quicksand', sans-serif !important;
+.md-button, .md-tab, .md-list-item-inner, .md-select-value {
+    font-weight: 900;
 }
 
 md-menu-item {

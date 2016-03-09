@@ -121,7 +121,7 @@ function getDataFile(scope, stage) {
   if (scope.stageMap[stage] === undefined) {
     initialisePlots(scope);
   } else {
-    var url = client + '/output/' + scope.queryParams['id'] + '_' + scope.stageMap[stage] + '.dat';
+    var url = base + '/output/' + scope.queryParams['id'] + '_' + scope.stageMap[stage] + '.dat';
     $.ajax({type: 'GET', url: url, contentType: 'text', data: null,
       xhrFields: {withCredentials: false},
       success: successfn,
@@ -149,7 +149,7 @@ function getDataFile(scope, stage) {
 }
 
 function getEventsFile(scope, stage) {
-  var url = client + '/output/' + scope.queryParams['id'] + '_' + scope.stageMap[stage] + '_events.dat';
+  var url = base + '/output/' + scope.queryParams['id'] + '_' + scope.stageMap[stage] + '_events.dat';
   $.ajax({type: 'GET', url: url, contentType: 'text', data: null,
     xhrFields: {withCredentials: false},
     success: successfn,
