@@ -96,7 +96,8 @@
                                   md-colspan="1"
                                   md-colspan-gt-sm="2">
                       <md-button ng-class="{'md-primary':launchSites[form.Mission.launchsite] === site}" layout-fill class="bolder md-raised" ng-click='selectSite($event, site)'>
-                        {{site.name}}
+                        <md-icon flex style="height:96px;width:96px" md-svg-src="{{'images/' +site.code+ '.svg'}}"></md-icon>
+                        <div flex>{{site.name}}</div>
                       </md-button>
                     </md-grid-tile>
                   </md-grid-list>
@@ -113,7 +114,8 @@
                                   md-colspan="1"
                                   md-colspan-gt-sm="2">
                       <md-button ng-class="{'md-primary':launchVehicles[form.Mission.launchvehicle] === veh}" layout-fill class="bolder md-raised" ng-click='selectVehicle($event, veh)'>
-                        {{veh.name}}
+                        <md-icon flex style="height:96px;width:96px" md-svg-src="{{'images/' +veh.code+ '.svg'}}"></md-icon>
+                        <div flex>{{veh.name}}</div>
                       </md-button>
                     </md-grid-tile>
                   </md-grid-list>
@@ -130,7 +132,8 @@
                                   md-colspan="1"
                                   md-colspan-gt-sm="2">
                       <md-button ng-class="{'md-primary':payloads[form.Mission.Payload.code] === payload}" layout-fill class="bolder md-raised" ng-click='selectPayload($event, payload)'>
-                        {{payload.name}}
+                        <md-icon flex style="height:96px;width:96px" md-svg-src="{{'images/' +payload.code+ '.svg'}}"></md-icon>
+                        <div flex>{{payload.name}}</div>
                       </md-button>
                     </md-grid-tile>
                   </md-grid-list>
