@@ -1,38 +1,24 @@
-<?php
-$payload = '';
-if (isset($_GET["code"])) {
-  $payload = $_GET["code"];
-}
-$token = '';
-if(isset($_COOKIE['authToken'])) {
-    $token = $_COOKIE['authToken'];
-}
-?>
-
 <!doctype html>
 <html>
   <head>
-    <title></title>
+    <title>Flight Club</title>
     <meta charset='UTF-8'>
     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-    <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js'></script>
-    <!-- Latest compiled and minified CSS -->
-    <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css'>
-    <!-- Optional theme -->
-    <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css'>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-    <!-- Latest compiled and minified JavaScript -->
-    <script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js'></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-messages.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-cookies.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
     <link href='https://fonts.googleapis.com/css?family=Quicksand' rel='stylesheet' type='text/css'>
-
-    <script src="js/jquery.cookie.js"></script>
+    
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <script src="js/core.js"></script>
-    <script src="js/results_v2.js"></script>    
-
+    <script src="js/core.js"></script>     
+    <script src="js/results.js"></script>
     <link rel='stylesheet' href='css/style.css' />
-    <link rel='stylesheet' href='css/mobile-style.css' />
-    <link rel='stylesheet' href='css/large-style.css' />
     
     <meta property="og:title" content="Simulation Results" />
     <meta property="og:site_name" content="Flight Club"/>
@@ -44,83 +30,194 @@ if(isset($_COOKIE['authToken'])) {
     <meta property="og:locale" content="en_US" />
     <meta property="og:image" content="http://www.flightclub.io/images/og_image.png" />   
 
-    <link rel="apple-touch-icon" sizes="57x57" href="images/favicon-round/apple-icon-57x57.png">
-    <link rel="apple-touch-icon" sizes="60x60" href="images/favicon-round/apple-icon-60x60.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="images/favicon-round/apple-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="76x76" href="images/favicon-round/apple-icon-76x76.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="images/favicon-round/apple-icon-114x114.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="images/favicon-round/apple-icon-120x120.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="images/favicon-round/apple-icon-144x144.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="images/favicon-round/apple-icon-152x152.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="images/favicon-round/apple-icon-180x180.png">
-    <link rel="icon" type="image/png" sizes="192x192"  href="images/favicon-round/android-icon-192x192.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-round/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="96x96" href="images/favicon-round/favicon-96x96.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-round/favicon-16x16.png">
-    <link rel="manifest" href="images/favicon-round/manifest.json">
+    <link rel="apple-touch-icon" sizes="57x57" href="images/favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="images/favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="images/favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="images/favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="images/favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="images/favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="images/favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="images/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="images/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16x16.png">
+    <link rel="manifest" href="images/favicon/manifest.json">
     <meta name="msapplication-TileColor" content="#ffffff">
-    <meta name="msapplication-TileImage" content="images/favicon-round/ms-icon-144x144.png">
+    <meta name="msapplication-TileImage" content="images/favicon/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
   </head>
-  <body id="results">
-    <div class="bg">
-      <img src="images/background.jpg" alt="background"/>
-    </div>
-    <div class='container'>
-      <div class="row row-offcanvas row-offcanvas-right vfill">
-        <nav class='navbar navbar-default'>
-          <!-- Brand and toggle get grouped for better mobile display -->
-          <div class="left lmargin0 navbar-brand">
-            <a href="index.php"><span class="fa fa-home"></span></a>
+  <body id="results" ng-app="FCResults" data-ng-element-ready="">
+    <div ng-controller="ResultsCtrl" ng-cloak>
+      <section layout="row" flex>
+
+        <md-content flex>
+          <md-toolbar>
+            <div class="md-toolbar-tools">
+              <md-button class="md-icon-button" aria-label="Home" ng-click="goHome()">
+                <i class="material-icons">home</i>
+              </md-button>
+              <h2>
+                <span>{{"Flight Club | Results | " + missionName}}</span>
+              </h2>
+              <span flex></span>
+              <md-button class="md-icon-button" aria-label="Home" ng-click="goToWorld()">
+                <i class="material-icons">language</i>
+              </md-button>
+              <md-button class="md-icon-button" aria-label="Menu" ng-click="toggleNav('sidenav')">
+                <i class="material-icons">menu</i>
+              </md-button>
+            </div>
+          </md-toolbar>
+
+          <div ng-show="isLoading" layout="row" layout-fill layout-align="center center">
+            <md-progress-circular md-mode="indeterminate"></md-progress-circular>
           </div>
-          <span id="missionTag" class='rborder navbar-brand'></span>
-          <div id="world_option" class="navbar-brand">
-            <a href="#"><span class="fa fa-globe"></span></a>
-          </div>
-          <span class='navbar-brand rborder'>World</span>
-          <div class="right rmargin0 navbar-brand" data-toggle="offcanvas">
-            <a href="#" role="tab" data-toggle="tab"><span class="fa fa-bars"></span></a>
-          </div>
-        </nav>
-        <div id="resultsOffCanvas" class="col-xs-9 col-sm-3 sidebar-offcanvas">
-          <ul class="slideList nav nav-pills nav-stacked">
-            <?php
-            if ($payload !== '') {
-              echo '<li id="watchButton" class="col-xs-12"><a href="world.php?code=' . $payload . '&watch=1"><span>Watch Live</span></a></li>' . "\n";
-            }
-            if(isset($token) && $token !== '') {
-              echo '<li id="liveInitButton" class="col-xs-12"><span class="col-xs-10 slideTag">Override Live Plots</span><span id="overrideStatus"/></li>' . "\n";
-            }
-            ?>
-            <li class="col-xs-12 warnings"><span class="col-xs-10 slideTag">Warnings</span></li>
-            <li class="col-xs-12 events"><span class="col-xs-10 slideTag">Event Log</span></li>
-            <li class="col-xs-12 landing"><span class="col-xs-10 slideTag">Landing</span><ul class="slideItem col-xs-12 nav nav-pills nav-stacked" style="display:none"></ul></li>
-            <li class="col-xs-12 orbit"><span class="col-xs-10 slideTag">Orbit</span></li>
-          </ul>
-        </div>
-        <div class="resultGrid" style="background-color:white">
-          <div class="row">
-            <div class="col-sm-4"><div class="plot" id="altitude1"></div></div>
-            <div class="col-sm-4"><div class="plot" id="velocity1"></div></div>
-            <div class="col-sm-4"><div class="plot" id="profile1"></div></div>
-          </div>
-          <div class="row">
-            <div class="col-sm-4"><div class="plot" id="phase1"></div></div>
-            <div class="col-sm-4"><div class="plot" id="q"></div></div>
-            <div class="col-sm-4"><div class="plot" id="prop"></div></div>
-          </div>
-          <div class="row">
-            <div class="col-sm-4"><div class="plot" id="aoa"></div></div>
-            <div class="col-sm-4"><div class="plot" id="aov"></div></div>
-            <div class="col-sm-4"><div class="plot" id="aop"></div></div>
-          </div>
-          <div class="row">
-            <div class="col-sm-4"><div class="plot" id="total-dv"></div></div>
-            <div class="col-sm-4"><div class="plot" id="accel1"></div></div>
-            <div class="col-sm-4"><div class="plot" id="drag"></div></div>
-          </div>
-        </div>
-      </div>
-    </div>
+
+          <md-content style="overflow:hidden">
+            <md-grid-list
+              md-cols="3" md-cols-md="6" md-cols-gt-md="9"
+              md-row-height="1:1"
+              md-gutter-gt-md="16px" md-gutter="8px">
+              <md-grid-tile
+                ng-repeat="plot in plotTiles"
+                id="{{plot.title}}"
+                md-colspan="3"
+                md-rowspan="3">
+              </md-grid-tile>
+            </md-grid-list>
+          </md-content>
+
+          <md-sidenav flex layout="column" class="md-sidenav-right md-whiteframe-z2" md-component-id="sidenav" md-is-locked-open="false">
+            <md-toolbar class="md-theme-indigo" layout="row" layout-align="space-between center" >
+              <div class="md-toolbar-tools" layout="row" layout-align="space-around center" flex>
+                <h1><span>{{missionName}}</span></h1>
+              </div>
+              <md-button class="md-icon-button" aria-label="Menu" ng-click="toggleNav('sidenav')">
+                <i class="material-icons">keyboard_arrow_right</i>
+              </md-button>
+            </md-toolbar>
+            <md-divider></md-divider>
+            <md-list>
+              <md-subheader class="md-no-sticky">Options</md-subheader>
+              <md-list-item ng-click="goToLive()">
+                <span class="md-secondary">Watch Live!</span>
+              </md-list-item>
+              <md-list-item ng-click="overrideLive()" ng-show="authorised">
+                <i class="material-icons" ng-show="overrideAttempted">{{overrideStatus}}</i><span class="md-secondary">Override Live Plot</span>
+              </md-list-item>
+              <md-divider></md-divider>
+              <md-subheader class="md-no-sticky">More Simulation Data</md-subheader>
+              <md-list-item ng-click="toggleNav('warnings')" ng-show="{{warnings.length>0}}">
+                <span class="md-secondary">Warnings</span>
+              </md-list-item>
+              <md-list-item ng-click="toggleNav('events')">
+                <span class="md-secondary">Event Log</span>
+              </md-list-item>
+              <md-list-item ng-click="toggleNav('landing')">
+                <span class="md-secondary">Landing Params</span>
+              </md-list-item>
+              <md-list-item ng-click="toggleNav('orbit')">
+                <span class="md-secondary">Orbital Params</span>
+              </md-list-item>
+              <md-divider></md-divider>
+            </md-list>
+          </md-sidenav>
+          
+          <md-sidenav flex layout="column" class="md-sidenav-right md-whiteframe-z2" md-component-id="warnings" md-is-locked-open="false">
+            <md-toolbar class="md-theme-indigo" layout="row" layout-align="space-between center" >
+              <div class="md-toolbar-tools" layout="row" layout-align="space-around center" flex>
+                <h1><span>Warnings</span></h1>
+              </div>
+              <md-button class="md-icon-button" aria-label="Menu" ng-click="toggleNav('warnings')">
+                <i class="material-icons">keyboard_arrow_right</i>
+              </md-button>
+            </md-toolbar>
+            <md-divider></md-divider>
+            <md-content flex layout-padding>
+              <md-list>
+                <md-list-item class="md-3-line" ng-repeat="item in warnings">
+                  <div class="md-list-item-text" layout="column">
+                    <h3>{{ item }}</h3>
+                  </div>
+                </md-list-item>
+              </md-list>            
+            </md-content>
+          </md-sidenav>
+          
+          <md-sidenav flex layout="column" class="md-sidenav-right md-whiteframe-z2" md-component-id="events" md-is-locked-open="false">
+            <md-toolbar class="md-theme-indigo" layout="row" layout-align="space-between center" >
+              <div class="md-toolbar-tools" layout="row" layout-align="space-around center" flex>
+                <h1><span>Event Log</span></h1>
+              </div>
+              <md-button class="md-icon-button" aria-label="Menu" ng-click="toggleNav('events')">
+                <i class="material-icons">keyboard_arrow_right</i>
+              </md-button>
+            </md-toolbar>
+              <md-divider></md-divider>
+            <md-content flex layout-padding>
+              <md-list>
+                <md-list-item class="md-3-line" ng-repeat="item in events">
+                  <div class="md-list-item-text" layout="column">
+                    <h3>{{ item.when }}</h3>
+                    <h4>{{ item.what }}</h4>
+                  </div>
+                </md-list-item>
+              </md-list>
+            </md-content>
+            </md-list>
+          </md-sidenav>
+          
+          <md-sidenav flex layout="column" class="md-sidenav-right md-whiteframe-z2" md-component-id="landing" md-is-locked-open="false">
+            <md-toolbar class="md-theme-indigo" layout="row" layout-align="space-between center" >
+              <div class="md-toolbar-tools" layout="row" layout-align="space-around center" flex>
+                <h1><span>Landing Params</span></h1>
+              </div>
+              <md-button class="md-icon-button" aria-label="Menu" ng-click="toggleNav('landing')">
+                <i class="material-icons">keyboard_arrow_right</i>
+              </md-button>
+            </md-toolbar>
+            <md-divider></md-divider>
+            <md-content flex layout-padding>
+              <md-list>
+                <md-list-item class="md-3-line" ng-repeat="item in landing">
+                  <div class="md-list-item-text" layout="column">
+                    <h3>{{ item.when }}</h3>
+                    <h4>{{ item.what }}</h4>
+                  </div>
+                </md-list-item>
+              </md-list>            
+            </md-content>
+            </md-list>
+          </md-sidenav>
+          
+          <md-sidenav flex layout="column" class="md-sidenav-right md-whiteframe-z2" md-component-id="orbit" md-is-locked-open="false">
+            <md-toolbar class="md-theme-indigo" layout="row" layout-align="space-between center" >
+              <div class="md-toolbar-tools" layout="row" layout-align="space-around center" flex>
+                <h1><span>Orbital Params</span></h1>
+              </div>
+              <md-button class="md-icon-button" aria-label="Menu" ng-click="toggleNav('orbit')">
+                <i class="material-icons">keyboard_arrow_right</i>
+              </md-button>
+            </md-toolbar>
+            <md-divider></md-divider>
+            <md-content flex layout-padding>
+              <md-list>
+                <md-list-item class="md-3-line" ng-repeat="item in orbit">
+                  <div class="md-list-item-text" layout="column">
+                    <h3>{{ item.when }}</h3>
+                    <h4>{{ item.what }}</h4>
+                  </div>
+                </md-list-item>
+              </md-list>            
+            </md-content>
+            </md-list>
+          </md-sidenav>
+
+        </md-content>
+
+      </section>
+    </div> 
   </body>
 </html>

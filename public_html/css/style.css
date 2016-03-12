@@ -1,319 +1,54 @@
-/*
-    This file is part of FlightClub.
 
-    Copyright Ãƒâ€šÃ‚Â© 2014-2015 Declan Murphy
-
-    FlightClub is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    FlightClub is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with FlightClub.  If not, see <http://www.gnu.org/licenses/>.
-*/
-
-/* ---------------- @font-face definitions ----------------- */
-
-@font-face {
-  font-family: "Quicksand";
-  font-style: normal;
-  font-weight: 300;
-  src: local("Quicksand Light"), local("Quicksand-Light"), url("https://fonts.gstatic.com/l/font?kit=qhfoJiLu10kFjChCCTvGlI-dKQzmQ2KGHRrJPWMxpTDsPXYqTGLZ2U8sggWmBN11vY_KnrbECKVYwT5jML176E-hCdHeAh1EypZggr0U53BuXxQghSWdr5fKRAiL7DYm&skey=2d4bb97196ce133f") format("woff2");
-}
-
-/* 
-Generic Styling, for Desktops/Laptops 
-*/
-html, body {
-  min-height: 100vh;
-  width: 100%;
-  overflow-x: hidden;
-  color: #BBB;
-  font-size: 18px;
+html {
   font-family: 'Quicksand', sans-serif !important;
-  font-weight: 900;
 }
 
-body, .container {
-  width: 100%;
-  height: 100vh;
-  margin: 0;
-  padding: 0;
-}
-
-.bg {
-  position: fixed; 
-  top: -50%; 
-  left: -50%; 
-  width: 200%; 
-  height: 200%;
-}
-
-.bg img {
-  position: absolute; 
-  top: 0; 
-  left: 0; 
-  right: 0; 
-  bottom: 0; 
-  margin: auto; 
-  min-width: 50%;
-  min-height: 50%;
-  width: auto;
-}
-
-.tab-content {
-  margin: 2%;
-}
-
-form {
-  padding: 4%;
-  color: white !important;
-}
-
-nav {
-  width: auto;
-  list-style: none;
-  position: relative;
-  padding: 0px;
-  margin: 0px;
-}
-
-#navHeader {
-  color: white;
-  background-color: #1F3F54;
+.centre {
   text-align: center;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  margin-top: 5px;
-  margin-bottom: 5px;
-  border-radius: 4px;
 }
 
-/* nav tab styling */
-nav li {
-  display: inline-block;
-  float: none;
-  padding-bottom: 3px;
+.md-button, .md-tab, .md-list-item-inner, .md-select-value {
+    font-weight: 900;
 }
 
-nav li>a {
-  display: block;
-  padding: 10px 20px; 
-  border-radius: 2px 2px 0 0;
-  color: #444;
-  background-color:rgba(0,0,0,0.0) !important;
-  cursor: pointer;
-  position: relative;
-  top: 3px;
-  border: 1px solid #444;
-  -webkit-transition: all 0.2s ease-in-out;
-  -moz-transition: all 0.2s ease-in-out;
-  -o-transition: all 0.2s ease-in-out;
-  transition: all 0.2s ease-in-out;
+md-menu-item {
+  padding: 0 8px;
 }
 
-nav li[id^='tab']>a {
-  border: 1px solid #444 !important;
-  border-bottom-color: white !important; 
+md-input-container {
+  margin-bottom: 0;
 }
 
-/* Put white border/text on active/hover tabs */
-nav li>a:hover,
-nav li>a:active,
-nav li.active>a {
-  border: 1px solid white !important;
-  color: white !important;
+.eventLabel {
+  position: relative !important;
+  top: 18px !important;
 }
 
-/* Turns tabs list into finite height scrollable list */
-#tabs {
-  overflow-y: hidden;
+.perfectHeight {
+  height: 100% !important;
 }
 
-/* This rubs out the bottom border of the active stage tab */
-#tabs nav li>a:active,
-#tabs nav li.active>a {
-  border-bottom-color: #000011 !important;
+md-select, md-switch {
+  margin-bottom: 24px !important; // input has error div below. This makes select line up
 }
 
-#head {
-  height: 100%;
-  overflow: hidden;
+::-webkit-scrollbar { 
+  display: none; 
 }
 
-#headList {
-  overflow-y: scroll;
+/*
+  Hack. Setting timeline: false breaks everything, so set it to true, but hide it
+*/
+.cesium-viewer-timelineContainer {
+  display: none !important;
 }
 
-#headList ul {
-  padding-bottom: 10px;
+#results md-grid-tile {
+  padding: 0 !important;
 }
 
-#sites,
-#payloads,
-#vehicles {
-  padding-left: 0px;
-  padding-right: 0px;
-}
-
-#sites select,
-#payloads select,
-#vehicles select {
-  max-height: 0px;
-}
-
-#sites nav,
-#payloads nav,
-#vehicles nav {
-  overflow-y: scroll;
-  padding-left: 0px;
-  padding-right: 0px;
-}
-
-/* Styled like nav li>a */
-#sites span,
-#payloads span,
-#vehicles span {
-  color: white;
-  border-radius: 4px;
-  padding: 10px 20px;
-}
-
-/* Force equal width input boxes */ 
-.input-group {
-  margin-left: 0;
-  margin-right: auto;
-  width: 100%;
-}
-
-select {
-  cursor: pointer !important;
-}
-
-input:disabled, select:disabled {
-  background: rgba(200,200,200,0.4) !important;
-  border: none;
-  cursor: default !important;
-}
-
-.form-control {
-  color: #000;
-}
-
-.slideList {
-  list-style: none;
-  position: relative;
-  padding: 0px;
-  padding-top: 10px;
-  margin: 0px;
-  margin-left: 0px;
-  display: block;
-}
-
-.slideList>li {
-  background: rgba(0,0,0,0.0);
-  color: #444;
-  border: 1px solid #444;
-}
-
-.slideList>li, .header {
-  display: inline-block;
-  float: none;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  border-radius: 4px;
-  position: relative;
-  cursor: pointer;
-  -webkit-transition: all 0.2s ease-in-out;
-  -moz-transition: all 0.2s ease-in-out;
-  -o-transition: all 0.2s ease-in-out;
-  transition: all 0.2s ease-in-out;
-}
-
-.header:hover,
-.slideList>li:hover,
-.slideList>li.active {
-  color: white;
-  border: 1px solid white;
-}
-
-#sites .slideList>li,
-#payloads .slideList>li,
-#vehicles .slideList>li {
-  border: none;
-}
-
-.addbutton:hover,
-.removebutton:hover {
-  color: #507B90 !important;
-}
-
-.header {
-  border: 1px solid #1F3F54;
-  background: #1F3F54;
-  border-radius: 4px;
-  float: left;
-}
-
-.slideItem {
-  cursor:default;    
-  padding: 10px;
-}
-
-  #vehicles .slideItem,
-  #payloads .slideItem,
-  #sites .slideItem {
-    padding: 0px;
-  }
-
-.slideItem li {
-  display: inline !important;
-}
-
-.emptyrow {
-  min-height: 34px;
-}
-
-.progress-container {
-  z-index: -2000;
-  position: fixed;
-  top: 50%;
-}
-
-.centre  {
-  text-align: center;
-  display:block;
-}
-
-.text_white {
-  line-height:1;
-  color: white;
-}
-
-.text_black {
-  line-height:1;
-  color: black;
-}
-
-/* LIVE */
-.text_small  {
-  font-size:12px;
-}
-.text_normal  {
-  font-size:18px;
-}
-.text_double  {
-  font-size:36px; /* Actually 1.5x */
-}
-
-#clock, #velocity, #altitude {
-  display:block;
-  text-align:center;
+#results figure {
+  display: none !important;
 }
 
 #cesiumContainer {
@@ -324,146 +59,45 @@ input:disabled, select:disabled {
   width: 100%;
 }
 
-/* RESULTS */
-#results-info {
-  background: #000;
-  padding: 20px;
-  position: absolute;
-  top: -100%;
-  -webkit-transition: all 0.5s ease-in-out;
-     -moz-transition: all 0.5s ease-in-out;
-       -o-transition: all 0.5s ease-in-out;
-          transition: all 0.5s ease-in-out;  
+#world md-menu-content {
+  background: black;
+  padding: 0;
 }
 
-#missionTag {
-  padding-left: 0px;
+#world md-sidenav {
+  padding-bottom: 5%;
 }
 
-.paneHolder .row {
-  position: absolute;
+/* Keep main content visible while sidenav is open */
+#world md-backdrop.md-sidenav-backdrop {
+  background-color:transparent;
 }
 
-.paneHolder .row:nth-child(1) {margin-top:0px;}
-.paneHolder .row:nth-child(2) {margin-top:20px;}
-.paneHolder .row:nth-child(3) {margin-top:40px;}
-.paneHolder .row:nth-child(4) {margin-top:60px;}
-.paneHolder .row:nth-child(5) {margin-top:80px;}
-.paneHolder .row:nth-child(6) {margin-top:100px;}
-.paneHolder .row:nth-child(7) {margin-top:120px;}
-.paneHolder .row:nth-child(8) {margin-top:140px;}
-.paneHolder .row:nth-child(9) {margin-top:160px;}
-.paneHolder .row:nth-child(10) {margin-top:180px;}
-.paneHolder .row:nth-child(11) {margin-top:200px;}
-.paneHolder .row:nth-child(12) {margin-top:220px;}
+@media 
+only screen and (min-width: 768px)  {
 
-.resultGrid {
-  background: #fff;
-  width: 100% !important;
-  padding-left: 30px;
-  padding-right: 30px;
+  #rocket {
+    margin-left: -125px;
+    height: 249px;
+    width: 249px;
+  }
+
+  #rocket > img {
+    content: url("../images/rocket_large.png");
+  }
 }
 
-.resultGrid .col-sm-4 {
-  padding: 0px;
+@media 
+only screen and (max-width: 767px) {
+
+  #rocket {
+    margin-left: -38px;
+    min-height: 75px;
+    min-width: 75px;
+  }
+
+  #rocket > img {
+    content: url("../images/rocket_small.png");
+  }
+
 }
-
-.resultGrid img {
-  width: 100%;
-  border: 1px solid #eee;
-}
-
-#results .navbar {
-  margin-bottom: 0px;
-}
-
-#results .slideItem {
-  padding: 0px;
-}
-
-#watchButton {
-  margin-bottom: 2%;
-}
-
-#watchButton a {
-  padding-top: 0px;
-  padding-bottom: 0px;
-}
-
-/* FOOTER */
-.footer {
-  color: lightskyblue;
-  position: fixed;
-  bottom: 15px;
-  text-align: right;
-  width: 100%;
-}
-
-/* MISC */
-.tmargin1 { margin-top: 5%; }
-.tmargin2 { margin-top: 10%; }
-.tmargin3 { margin-top: 15%; }
-.tmargin4 { margin-top: 20%; }
-
-.bmargin1 { margin-bottom: 5%; }
-.bmargin2 { margin-bottom: 10%; }
-.bmargin3 { margin-bottom: 15%; }
-.bmargin4 { margin-bottom: 20%; }
-
-.lmargin0 { margin-left: 2%; }
-.lmargin1 { margin-left: 5%; }
-.lmargin2 { margin-left: 10%; }
-.lmargin3 { margin-left: 15%; }
-.lmargin4 { margin-left: 20%; }
-
-.rmargin0 { margin-right: 2%; }
-.rmargin1 { margin-right: 5%; }
-.rmargin2 { margin-right: 10%; }
-.rmargin3 { margin-right: 15%; }
-.rmargin4 { margin-right: 20%; }
-
-.nopadding { padding: 0px; }
-
-.tpadding1 { padding-top: 5%; }
-.tpadding2 { padding-top: 10%; }
-.tpadding3 { padding-top: 15%; }
-.tpadding4 { padding-top: 20%; }
-
-.bpadding1 { padding-bottom: 5%; }
-.bpadding2 { padding-bottom: 10%; }
-.bpadding3 { padding-bottom: 15%; }
-.bpadding4 { padding-bottom: 20%; }
-
-.lpadding0 { padding-left: 2%; }
-.lpadding1 { padding-left: 5%; }
-.lpadding2 { padding-left: 10%; }
-.lpadding3 { padding-left: 15%; }
-.lpadding4 { padding-left: 20%; }
-
-.rpadding0 { padding-right: 2%; }
-.rpadding1 { padding-right: 5%; }
-.rpadding2 { padding-right: 10%; }
-.rpadding3 { padding-right: 15%; }
-.rpadding4 { padding-right: 20%; }
-
-.rborder { border-right:1px solid #aaa}
-.lborder { border-left:1px solid #aaa}
-.tborder { border-top:1px solid #aaa}
-.bborder { border-bottom:1px solid #aaa}
-
-.textright {text-align: right;}
-.textleft {text-align: left;}
-
-.wfill {height: 100vh;}
-.vfill {height: 100%;}
-
-.left {float: left !important;}
-.right {float: right !important;}
-
-/* Z-INDEXES */
-.bg {z-index: -1000;}
-.progress-container {z-index: -900;}
-form {z-index: -500;}
-nav {z-index: 500;}
-.nav-tabs {z-index: 2000;}
-ul li {z-index: 3000;}

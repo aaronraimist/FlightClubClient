@@ -8,12 +8,14 @@ var viewer = new Cesium.Viewer('cesiumContainer', {
 	fullscreenButton: false,
 	homeButton: false,
 	geocoder: false,
-  baseLayerPicker: true
+  baseLayerPicker: false
   
 });
 
+viewer.scene.globe.enableLighting = true;
 var terrainProvider = new Cesium.CesiumTerrainProvider({
     url : '//assets.agi.com/stk-terrain/world',
-    requestWaterMask: true
+    requestWaterMask: true,
+    requestVertexNormals : true
 });
 viewer.terrainProvider = terrainProvider;
