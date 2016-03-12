@@ -97,7 +97,7 @@
                                     md-colspan="1"
                                     md-colspan-gt-sm="2">
                         <md-button ng-class="{'md-primary':launchSites[form.Mission.launchsite] === site}" layout-fill class="bolder md-raised" ng-click='selectSite($event, site)'>
-                          <md-icon flex style="height:96px;width:96px" md-svg-src="{{'images/' +site.code+ '.svg'}}"></md-icon>
+                          <md-icon flex style="height:96px;width:96px" md-svg-src="{{'images/' + site.code + '.svg'}}"></md-icon>
                           <div flex>{{site.name}}</div>
                         </md-button>
                       </md-grid-tile>
@@ -117,7 +117,7 @@
                                     md-colspan="1"
                                     md-colspan-gt-sm="2">
                         <md-button ng-class="{'md-primary':launchVehicles[form.Mission.launchvehicle] === veh}" layout-fill class="bolder md-raised" ng-click='selectVehicle($event, veh)'>
-                          <md-icon flex style="height:96px;width:96px" md-svg-src="{{'images/' +veh.code+ '.svg'}}"></md-icon>
+                          <md-icon flex style="height:96px;width:96px" md-svg-src="{{'images/' + veh.code + '.svg'}}"></md-icon>
                           <div flex>{{veh.name}}</div>
                         </md-button>
                       </md-grid-tile>
@@ -137,7 +137,7 @@
                                     md-colspan="1"
                                     md-colspan-gt-sm="2">
                         <md-button ng-class="{'md-primary':payloads[form.Mission.Payload.code] === payload}" layout-fill class="bolder md-raised" ng-click='selectPayload($event, payload)'>
-                          <md-icon flex style="height:96px;width:96px" md-svg-src="{{'images/' +payload.code+ '.svg'}}"></md-icon>
+                          <md-icon flex style="height:96px;width:96px" md-svg-src="{{'images/' + payload.code + '.svg'}}"></md-icon>
                           <div flex>{{payload.name}}</div>
                         </md-button>
                       </md-grid-tile>
@@ -163,7 +163,7 @@
                         </md-list-item>
                       </md-list>
                     </md-content>
-                    
+
                     <md-content flex layout-fill>
                       <md-content ng-show="selectedEvent !== undefined">
                         <md-content layout="row" layout-align="space-around center">
@@ -171,7 +171,7 @@
                             <label>Event Type</label>
                             <md-select ng-model="selectedEvent.type" name="type" required>
                               <md-option ng-repeat="obj in type" value="{{obj.code}}" 
-                                         ng-disabled="obj.code==='FAIRING_SEP' && form.Mission.Payload.code!=='SATL'">{{obj.name}}</md-option>
+                                         ng-disabled="obj.code === 'FAIRING_SEP' && form.Mission.Payload.code !== 'SATL'">{{obj.name}}</md-option>
                             </md-select>
                             <div ng-messages="profileForm.type.$error" multiple md-auto-hide="true">
                               <div ng-message="required">
@@ -211,7 +211,7 @@
                             </div>
                           </md-input-container>
                         </md-content>
-                        <md-content ng-show="selectedEvent.type==='IGNITION'"
+                        <md-content ng-show="selectedEvent.type === 'IGNITION'"
                                     layout="row" layout-align="space-around center">
                           <md-input-container flex class="md-block">
                             <label>Engines</label>
@@ -227,7 +227,7 @@
                             <md-switch ng-model="selectedEvent.dynamic" aria-label="Hoverslam"></md-switch>
                           </md-input-container>
                         </md-content>
-                        <md-content ng-show="selectedEvent.type==='IGNITION' || selectedEvent.type==='GUIDANCE'"
+                        <md-content ng-show="selectedEvent.type === 'IGNITION' || selectedEvent.type === 'GUIDANCE'"
                                     layout="row" layout-align="space-around center">
                           <md-input-container flex class="md-block">
                             <label>Pitch</label>
@@ -238,7 +238,7 @@
                             <input ng-model="selectedEvent.Attitude.yaw">
                           </md-input-container>
                         </md-content>
-                        <md-content ng-show="selectedEvent.type==='IGNITION' || selectedEvent.type==='GUIDANCE'"
+                        <md-content ng-show="selectedEvent.type === 'IGNITION' || selectedEvent.type === 'GUIDANCE'"
                                     layout="row" layout-align="space-around center">
                           <md-input-container flex class="md-block">
                             <label>Throttle</label>
@@ -252,11 +252,11 @@
                           </md-input-container>
                         </md-content>
                         <md-content layout="row" layout-align="space-between center">
-                          <md-button class="md-raised md-secondary" ng-disabled="selectedEvent===null" ng-click="removeEvent()">Remove</md-button>
+                          <md-button class="md-raised md-secondary" ng-disabled="selectedEvent === null" ng-click="removeEvent()">Remove</md-button>
                         </md-content>
                       </md-content>
                     </md-content>
-                    
+
                     <md-content flex layout-fill>
                       <md-content layout="row" layout-align="space-around center">
                         <md-input-container flex class="md-block">
@@ -270,7 +270,7 @@
                           <label>{{form.Mission.Stages[0].name}} Legs</label>
                           <md-switch ng-model="form.Mission.Stages[0].legs" aria-label="{{form.Mission.Stages[0].name}} legs"></md-switch>
                         </md-input-container>
-                        <md-input-container flex class="md-block" flex ng-show="form.Mission.Stages.length===3">
+                        <md-input-container flex class="md-block" flex ng-show="form.Mission.Stages.length === 3">
                           <label>{{form.Mission.Stages[1].name}} Legs</label>
                           <md-switch ng-model="form.Mission.Stages[1].legs" aria-label="{{form.Mission.Stages[1].name}} legs"></md-switch>
                         </md-input-container>
@@ -283,31 +283,34 @@
                             <input ng-model="form.Mission.code">
                           </md-input-container>
                           <md-input-container flex class="md-block">
-                            <label>Date</label>
-                            <input ng-model="form.Mission.date">
+                            <label>Description</label>
+                            <input ng-model="form.Mission.description">
                           </md-input-container>
                         </md-content>
                         <md-content layout="row" layout-align="space-around center">
+                          <md-input-container flex class="md-block">
+                            <label>Date</label>
+                            <input ng-model="form.Mission.date">
+                          </md-input-container>
                           <md-input-container flex class="md-block">
                             <label>Time</label>
                             <input ng-model="form.Mission.time">
                           </md-input-container>
+                        </md-content>
+                        <md-content layout="row" layout-align="space-around center">
                           <md-input-container flex class="md-block">
                             <label>Display</label>
                             <md-switch ng-model="form.Mission.display" aria-label="Display"></md-switch>
                           </md-input-container>
-                        </md-content>
-                        <md-content layout="row" layout-align="space-around center">
                           <md-button flex class="md-raised" type="submit" ng-click="save($event)">Save</md-button>
-                          <md-content flex></md-content>
                         </md-content>
                       </md-content>
-                    
-                  </md-content>
+
+                    </md-content>
                 </md-tab-content>
               </md-tab>
             </md-tabs>
-            </form>
+          </form>
 
           <md-sidenav flex layout="column" class="md-sidenav-right md-whiteframe-z2" md-component-id="sidenav" md-is-locked-open="false">
             <md-toolbar class="md-theme-indigo" layout="row" layout-align="space-between center" >

@@ -3,6 +3,10 @@ html {
   font-family: 'Quicksand', sans-serif !important;
 }
 
+.centre {
+  text-align: center;
+}
+
 .md-button, .md-tab, .md-list-item-inner, .md-select-value {
     font-weight: 900;
 }
@@ -28,26 +32,6 @@ md-select, md-switch {
   margin-bottom: 24px !important; // input has error div below. This makes select line up
 }
 
-.bg {
-  position: fixed; 
-  top: 0; 
-  left: 0; 
-  width: 100%; 
-  height: 100%;
-}
-
-.bg img {
-  position: absolute; 
-  top: 0; 
-  left: 0; 
-  right: 0; 
-  bottom: 0; 
-  margin: auto; 
-  min-width: 100%;
-  min-height: 100%;
-  width: auto;
-}
-
 ::-webkit-scrollbar { 
   display: none; 
 }
@@ -57,11 +41,6 @@ md-select, md-switch {
 */
 .cesium-viewer-timelineContainer {
   display: none !important;
-}
-
-.progress-container {
-  position: fixed;
-  top: 50%;
 }
 
 #results md-grid-tile {
@@ -97,11 +76,6 @@ md-select, md-switch {
 @media 
 only screen and (min-width: 768px)  {
 
-  /* LOADING SCREEN */
-  .progress-container {
-    margin-top: -125px;
-  }
-
   #rocket {
     margin-left: -125px;
     height: 249px;
@@ -115,10 +89,6 @@ only screen and (min-width: 768px)  {
 
 @media 
 only screen and (max-width: 767px) {
-
-  .progress-container {
-    margin-top: -38px;
-  }
 
   #rocket {
     margin-left: -38px;

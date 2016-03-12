@@ -148,14 +148,14 @@ angular
                       if (exists)
                       {
                         var confirm = $mdDialog.confirm()
-                                .title($scope.form.Mission.code + " already exists")
+                                .title("Update " + $scope.form.Mission.code)
                                 .textContent('This will update ' + $scope.form.Mission.description)
                                 .ariaLabel('Update Confirmation')
                                 .targetEvent(event)
                                 .ok('Ok')
                                 .cancel('Cancel');
                         $mdDialog.show(confirm).then(function () {
-                          httpRequest(api_url + '/missions/' + $scope.form.Mission.code, 'PUT', formAsJSON_string, null, null);
+                          httpRequest(api_url + '/missions/' + $scope.form.Mission.code, 'PUT', formAsJSON_string, saveSuccess($mdDialog), saveError($mdDialog));
                         }, null);
                       }
                       else
@@ -168,7 +168,7 @@ angular
                                 .ok('Ok')
                                 .cancel('Cancel');
                         $mdDialog.show(confirm).then(function () {
-                          httpRequest(api_url + '/missions/', 'POST', formAsJSON_string, null, null);
+                          httpRequest(api_url + '/missions/', 'POST', formAsJSON_string, saveSuccess($mdDialog), saveError($mdDialog));
                         }, null);
                       }
                     }, null);
@@ -199,6 +199,32 @@ var fillMissions = function (scope) {
     else
       scope.selectMission(scope.past[0].code);
       
+  };
+};
+
+var saveSuccess = function(mdDialog) {
+  return function(data) {
+    mdDialog.show(
+            mdDialog.alert()
+            .clickOutsideToClose(true)
+            .title("That's a bingo!")
+            .textContent('Mission was updated successfully')
+            .ariaLabel('Update Success')
+            .ok('Ok')
+            );
+  };
+};
+
+var saveError = function(mdDialog) {
+  return function(data) {
+    mdDialog.show(
+            mdDialog.alert()
+            .clickOutsideToClose(true)
+            .title("I always hated you the most")
+            .textContent('There was an error updating.')
+            .ariaLabel('Update Failure')
+            .ok('Ok')
+            );
   };
 };
 

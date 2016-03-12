@@ -45,6 +45,17 @@ angular
 
         });
 
+function parseQueryString(queryString) 
+{
+  var pairs = queryString.split("&");
+  var paramMap = {};
+  for (var i = 0; i < pairs.length; i++) {
+    var pair = pairs[i].split("=");
+    paramMap[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || '');
+  }
+  return paramMap;
+}
+
 var fillData = function (w, scope) {
   return function (data)
   {

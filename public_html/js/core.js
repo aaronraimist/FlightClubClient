@@ -1,6 +1,6 @@
 var base = 'http://www.flightclub.io';
-var client = base+'/FS';
-var server = base + ':8080/FlightSchool';
+var client = base;
+var server = base + ':8080/FlightClub';
 var api_url = server + '/api/v1';
 
 function httpRequest(dest, method, data, successfn, errorfn) 
@@ -21,28 +21,3 @@ function httpRequest(dest, method, data, successfn, errorfn)
     });
 }
 
-function completeSim(data) 
-{
-  var obj = jQuery.parseJSON(JSON.stringify(data, null, 2));
-  if(obj.Mission.success === true) {
-    var queryString = obj.Mission.output.split('?')[1];
-    window.location = client+'/results.php?' + queryString;
-  } else {
-    var errors = obj.Mission.errors;
-    var errorsHash = window.btoa(errors);
-
-    window.location = client + '/error.php#' + errorsHash;
-  }
-  
-}
-
-function errorSim(data)
-{
-  var errors, errorsHash='';
-  if(data.responseJSON!==undefined) {
-    errors = data.responseJSON.Mission.errors;
-    errorsHash = window.btoa(errors);
-  }
-  
-  window.location = client+'/error.php#'+errorsHash;
-}
