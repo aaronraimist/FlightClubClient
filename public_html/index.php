@@ -86,58 +86,64 @@
           <form layout-fill layout="row" flex name="profileForm">
             <md-tabs flex md-selected="3" md-border-bottom md-autoselect>
               <md-tab label='{{launchSites[form.Mission.launchsite].name}}'>
-                <md-content layout-padding layout-margin layout="row" layout-align="space-around center">
-                  <md-grid-list layout-padding layout-margin layout-fill
-                                md-cols-xs="1" md-cols-sm="2" md-cols-md="4" md-cols-gt-md="6"
-                                md-row-height-gt-md="1:1" md-row-height="2:2"
-                                md-gutter="12px" md-gutter-gt-sm="8px">
-                    <md-grid-tile ng-repeat="site in launchSites"
-                                  md-rowspan="1"
-                                  md-colspan="1"
-                                  md-colspan-gt-sm="2">
-                      <md-button ng-class="{'md-primary':launchSites[form.Mission.launchsite] === site}" layout-fill class="bolder md-raised" ng-click='selectSite($event, site)'>
-                        <md-icon flex style="height:96px;width:96px" md-svg-src="{{'images/' +site.code+ '.svg'}}"></md-icon>
-                        <div flex>{{site.name}}</div>
-                      </md-button>
-                    </md-grid-tile>
-                  </md-grid-list>
-                </md-content>
+                <md-tab-content>
+                  <md-content layout-fill flex layout-padding layout-margin layout="row" layout-align="space-around center">
+                    <md-grid-list layout-padding layout-margin layout-fill
+                                  md-cols-xs="1" md-cols-sm="2" md-cols-md="4" md-cols-gt-md="6"
+                                  md-row-height-gt-md="1:1" md-row-height="2:2"
+                                  md-gutter="12px" md-gutter-gt-sm="8px">
+                      <md-grid-tile ng-repeat="site in launchSites"
+                                    md-rowspan="1"
+                                    md-colspan="1"
+                                    md-colspan-gt-sm="2">
+                        <md-button ng-class="{'md-primary':launchSites[form.Mission.launchsite] === site}" layout-fill class="bolder md-raised" ng-click='selectSite($event, site)'>
+                          <md-icon flex style="height:96px;width:96px" md-svg-src="{{'images/' +site.code+ '.svg'}}"></md-icon>
+                          <div flex>{{site.name}}</div>
+                        </md-button>
+                      </md-grid-tile>
+                    </md-grid-list>
+                  </md-content>
+                </md-tab-content>
               </md-tab>
               <md-tab label='{{launchVehicles[form.Mission.launchvehicle].name}}'>
-                <md-content layout-padding layout-margin layout="row" layout-align="space-around center">
-                  <md-grid-list layout-padding layout-margin layout-fill
-                                md-cols-xs="1" md-cols-sm="2" md-cols-md="4" md-cols-gt-md="6"
-                                md-row-height-gt-md="1:1" md-row-height="2:2"
-                                md-gutter="12px" md-gutter-gt-sm="8px">
-                    <md-grid-tile ng-repeat="veh in launchVehicles"
-                                  md-rowspan="1"
-                                  md-colspan="1"
-                                  md-colspan-gt-sm="2">
-                      <md-button ng-class="{'md-primary':launchVehicles[form.Mission.launchvehicle] === veh}" layout-fill class="bolder md-raised" ng-click='selectVehicle($event, veh)'>
-                        <md-icon flex style="height:96px;width:96px" md-svg-src="{{'images/' +veh.code+ '.svg'}}"></md-icon>
-                        <div flex>{{veh.name}}</div>
-                      </md-button>
-                    </md-grid-tile>
-                  </md-grid-list>
-                </md-content>
+                <md-tab-content>
+                  <md-content layout-fill flex layout-padding layout-margin layout="row" layout-align="space-around center">
+                    <md-grid-list layout-padding layout-margin layout-fill
+                                  md-cols-xs="1" md-cols-sm="2" md-cols-md="4" md-cols-gt-md="6"
+                                  md-row-height-gt-md="1:1" md-row-height="2:2"
+                                  md-gutter="12px" md-gutter-gt-sm="8px">
+                      <md-grid-tile ng-repeat="veh in launchVehicles"
+                                    md-rowspan="1"
+                                    md-colspan="1"
+                                    md-colspan-gt-sm="2">
+                        <md-button ng-class="{'md-primary':launchVehicles[form.Mission.launchvehicle] === veh}" layout-fill class="bolder md-raised" ng-click='selectVehicle($event, veh)'>
+                          <md-icon flex style="height:96px;width:96px" md-svg-src="{{'images/' +veh.code+ '.svg'}}"></md-icon>
+                          <div flex>{{veh.name}}</div>
+                        </md-button>
+                      </md-grid-tile>
+                    </md-grid-list>
+                  </md-content>
+                </md-tab-content>
               </md-tab>
               <md-tab label='{{payloads[form.Mission.Payload.code].name}}'>
-                <md-content layout-padding layout-margin layout="row" layout-align="space-around center">
-                  <md-grid-list layout-padding layout-margin layout-fill
-                                md-cols-xs="1" md-cols-sm="2" md-cols-md="4" md-cols-gt-md="6"
-                                md-row-height-gt-md="1:1" md-row-height="2:2"
-                                md-gutter="12px" md-gutter-gt-sm="8px">
-                    <md-grid-tile ng-repeat="payload in payloads"
-                                  md-rowspan="1"
-                                  md-colspan="1"
-                                  md-colspan-gt-sm="2">
-                      <md-button ng-class="{'md-primary':payloads[form.Mission.Payload.code] === payload}" layout-fill class="bolder md-raised" ng-click='selectPayload($event, payload)'>
-                        <md-icon flex style="height:96px;width:96px" md-svg-src="{{'images/' +payload.code+ '.svg'}}"></md-icon>
-                        <div flex>{{payload.name}}</div>
-                      </md-button>
-                    </md-grid-tile>
-                  </md-grid-list>
-                </md-content>
+                <md-tab-content>
+                  <md-content layout-fill flex layout-padding layout-margin layout="row" layout-align="space-around center">
+                    <md-grid-list layout-padding layout-margin layout-fill
+                                  md-cols-xs="1" md-cols-sm="2" md-cols-md="4" md-cols-gt-md="6"
+                                  md-row-height-gt-md="1:1" md-row-height="2:2"
+                                  md-gutter="12px" md-gutter-gt-sm="8px">
+                      <md-grid-tile ng-repeat="payload in payloads"
+                                    md-rowspan="1"
+                                    md-colspan="1"
+                                    md-colspan-gt-sm="2">
+                        <md-button ng-class="{'md-primary':payloads[form.Mission.Payload.code] === payload}" layout-fill class="bolder md-raised" ng-click='selectPayload($event, payload)'>
+                          <md-icon flex style="height:96px;width:96px" md-svg-src="{{'images/' +payload.code+ '.svg'}}"></md-icon>
+                          <div flex>{{payload.name}}</div>
+                        </md-button>
+                      </md-grid-tile>
+                    </md-grid-list>
+                  </md-content>
+                </md-tab-content>
               </md-tab>
               <md-tab label='Flight Profile'>
                 <md-tab-content>

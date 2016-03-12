@@ -61,8 +61,7 @@
               </h2>
             </div>
           </md-toolbar>
-          <md-content flex></md-content>
-          <form flex layout="column" layout-align="center center" layout-fill class="md-inline-form centre">
+          <form flex layout="column" layout-align="center center" class="md-inline-form centre">
             <div>
               <md-input-container>
                 <label>Username</label>
@@ -76,7 +75,6 @@
             <md-button class="md-raised" type="submit" ng-click="login()">Log in</md-button>
           </form>
           <div>{{loginError}}</div>
-          <md-content flex></md-content>
         </md-content>
         
       </section>

@@ -75,7 +75,7 @@
             <md-progress-circular md-mode="indeterminate"></md-progress-circular>
           </div>
 
-          <md-content>
+          <md-content style="overflow:hidden">
             <md-grid-list
               md-cols="3" md-cols-md="6" md-cols-gt-md="9"
               md-row-height="1:1"
