@@ -71,6 +71,14 @@
                       <span>Flight Club API Docs</span>
                     </md-button>
                   </md-menu-item>
+                  <!--
+                  <md-menu-item>
+                    <md-button ng-click="goToDocs()">
+                      <md-icon class="material-icons">description</md-icon>
+                      <span>Flight Club API Docs</span>
+                    </md-button>
+                  </md-menu-item>
+                  -->
                 </md-menu-content>
               </md-menu>
               <h2>
