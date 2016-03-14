@@ -11,6 +11,13 @@ html {
     font-weight: 900;
 }
 
+/*
+  tabs content was starting way above the tab content
+*/
+#home md-grid-list {
+  padding-bottom: 0 !important;
+}
+
 md-menu-item {
   padding: 0 8px;
 }
