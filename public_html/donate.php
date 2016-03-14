@@ -17,30 +17,6 @@
 
     <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
     <script type="text/javascript" src="js/donate.js"></script>
-    
-    <script type="text/javascript">
-      Stripe.setPublishableKey('pk_test_AHzw9GreVMENAVkw9J2hhPaJ');
-      
-    var stripeResponseHandler = function(status, response) {
-      var $form = $('#payment-form');
-      if (response.error) {
-        $form.find('.payment-errors').text(response.error.message);
-        $form.find('button').prop('disabled', false);
-      } else {
-        var token = response.id;
-        $form.append($('<input type="hidden" name="stripeToken" />').val(token));
-        $form.get(0).submit();
-      }
-    };
-    jQuery(function($) {
-      $('#payment-form').submit(function(e) {
-          var $form = $(this);
-          $form.find('button').prop('disabled', true);
-          Stripe.card.createToken($form, stripeResponseHandler);
-          return false;
-        });
-      });
-    </script>
 
     <meta property="og:title" content="Login" />
     <meta property="og:site_name" content="Flight Club"/>
@@ -70,7 +46,7 @@
 
   </head>
   <body ng-app="FCDonate" data-ng-element-ready="">
-    <div layout="column" flex layout-fill ng-cloak>
+    <div ng-controller="DonateCtrl" layout="column" flex layout-fill ng-cloak>
       <section layout="row" flex>
         
         <md-content flex layout="column" layout-align='space-around center'>
@@ -95,14 +71,15 @@
               </md-content>
               <md-content flex></md-content>
             </md-content>
-            <form flex action="http://localhost:8080/FlightClub/api/v1/Donate" method="POST">
+            <form action="http://localhost:8080/FlightClub/api/v1/donate" method="POST" flex>
               <script
                 src="https://checkout.stripe.com/checkout.js" class="stripe-button"
                 data-key="pk_test_AHzw9GreVMENAVkw9J2hhPaJ"
+                data-image="images/favicon/android-icon-192x192.png"
+                data-name="flightclub.io"
+                data-description="Donation"
+                data-currency="eur"
                 data-amount="500"
-                data-name="Flight Club Donation"
-                data-description="Powered by Stripe"
-                data-image="images/favicon/apple-icon-120x120.png"
                 data-locale="auto">
               </script>
             </form>

@@ -1,3 +1,8 @@
-/* global angular */
+/* global angular, Stripe */
 
-angular.module('FCDonate', ['ngMaterial', 'ngCookies']);
+angular
+        .module('FCDonate', ['ngMaterial'])
+        .controller('DonateCtrl', function ($scope) {
+
+        });
+
