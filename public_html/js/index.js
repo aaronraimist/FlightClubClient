@@ -63,6 +63,10 @@ angular
             }
           };
 
+          $scope.goToDonate = function () {
+            window.location = "/donate.php";
+          };
+
           $scope.goToDocs = function () {
             window.location = "/docs";
           };

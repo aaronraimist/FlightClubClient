@@ -47,7 +47,7 @@
     <meta name="msapplication-TileImage" content="images/favicon/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
   </head>
-  <body ng-app="FlightClub" data-ng-element-ready="">
+  <body id="home" ng-app="FlightClub" data-ng-element-ready="">
     <div ng-controller="IndexCtrl" layout="column" flex layout-fill ng-cloak>
       <section layout="row" flex>
 
@@ -71,6 +71,14 @@
                       <span>Flight Club API Docs</span>
                     </md-button>
                   </md-menu-item>
+                  <!--
+                  <md-menu-item>
+                    <md-button ng-click="goToDocs()">
+                      <md-icon class="material-icons">description</md-icon>
+                      <span>Flight Club API Docs</span>
+                    </md-button>
+                  </md-menu-item>
+                  -->
                 </md-menu-content>
               </md-menu>
               <h2>

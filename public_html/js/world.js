@@ -353,8 +353,10 @@ function world() {
     var placeholder = $("#" + element + "Plot" + stage);
     var el = document.getElementsByTagName("md-sidenav")[0];
     var width = el.clientWidth;
-    if(width === 0)
+    if(width === 0) {
       width = 320;
+      placeholder.width(width);
+    }
     placeholder.height(width / 1.6);
 
     if (placeholder.length > 0) {
