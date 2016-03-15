@@ -15,8 +15,9 @@
     <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
     <link href='https://fonts.googleapis.com/css?family=Quicksand' rel='stylesheet' type='text/css'>
 
-    <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
-    <script type="text/javascript" src="js/donate.js"></script>
+    <script src="https://checkout.stripe.com/checkout.js"></script>
+    <script src="js/core.js"></script>     
+    <script src="js/donate.js"></script>
 
     <meta property="og:title" content="Login" />
     <meta property="og:site_name" content="Flight Club"/>
@@ -61,29 +62,27 @@
             </div>
           </md-toolbar>
           <md-content flex layout="column" layout-align="space-around center" layout-fill layout-padding>
-            <md-content flex layout="row" layout-align="space-around center">
-              <md-content flex></md-content>
-              <md-content flex>
-                <p>You're donating! Thank you!</p>
-                <p>Donations to Flight Club help me pay for my server costs and any other related charges.</p>
-                <p>In the unlikely event I ever get more donations per month than my servers cost, I can buy more CPU power which means
-                  more, faster simulations. Woo! Science!</p>
+            <md-content flex layout="column" layout-align="space-around center">
+              <md-content layout="row">
+                <md-content flex></md-content>
+                <md-content flex>
+                  <p>You're donating! Thank you!</p>
+                  <p>Donations to Flight Club help me pay for my server costs and any other related charges.</p>
+                  <p>In the unlikely event I ever get more donations per month than my servers cost, I can buy more CPU power which means
+                    more, faster simulations. Woo! Science!</p>
+                </md-content>
+                <md-content flex></md-content>
               </md-content>
+              <md-content layout="row" layout-align="space-around center">
+                <div fle>€</div>
+                <md-input-container flex>
+                  <label>Amount</label>
+                  <input ng-model="amountEuro">
+                </md-input-container>
+              </md-content>
+              <button ng-click="click()">Purchase</button>
               <md-content flex></md-content>
             </md-content>
-            <form action="http://localhost:8080/FlightClub/api/v1/donate" method="POST" flex>
-              <script
-                src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-                data-key="pk_test_AHzw9GreVMENAVkw9J2hhPaJ"
-                data-image="images/favicon/android-icon-192x192.png"
-                data-name="flightclub.io"
-                data-description="Donation"
-                data-currency="eur"
-                data-amount="500"
-                data-locale="auto">
-              </script>
-            </form>
-            <md-content flex></md-content>
           </md-content>
         </md-content>
         
