@@ -1,6 +1,6 @@
-var base = 'http://www.flightclub.io';
+var base = '//www.flightclub.io';
 var client = base;
-var server = base + ':8080/FlightClub';
+var server = base + ':8443/FlightClub';
 var api_url = server + '/api/v1';
 
 function httpRequest(dest, method, data, successfn, errorfn) 
