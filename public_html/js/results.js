@@ -2,7 +2,7 @@
 
 angular
         .module('FCResults', ['ngMaterial', 'ngCookies'])
-        .controller('ResultsCtrl', function($scope, $mdSidenav, $cookies) {
+        .controller('ResultsCtrl', function($window, $scope, $mdSidenav, $cookies) {
           
           $scope.authorised = false;            
           $scope.token = $cookies.get('authToken');
@@ -46,9 +46,9 @@ angular
             httpRequest(api_url + '/simulator/results?' + queryString, 'GET', null, fillOutputArray($scope), null);
             httpRequest(api_url + '/missions/' + $scope.queryParams['code'], 'GET', null, fillData($scope), null);
           });
-          
-          $scope.goHome = function() {
-            window.location = "/";
+
+          $scope.redirect = function (url) {
+            $window.location.href = url;
           };
           
           $scope.goToWorld = function() {

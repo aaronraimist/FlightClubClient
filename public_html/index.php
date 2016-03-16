@@ -48,7 +48,7 @@
     <meta name="theme-color" content="#ffffff">
   </head>
   <body id="home" ng-app="FlightClub" data-ng-element-ready="">
-    <div ng-controller="IndexCtrl" layout="column" flex layout-fill ng-cloak>
+    <div ng-controller="IndexCtrl" layout="column" flex ng-cloak style='min-height: 100%'>
       <section layout="row" flex>
 
         <md-content flex layout="column" layout-align='space-around center'>
@@ -66,21 +66,21 @@
                     </md-button>
                   </md-menu-item>
                   <md-menu-item>
-                    <md-button ng-click="goToDocs()">
+                    <md-button ng-click="redirect('/docs')">
                       <md-icon class="material-icons">description</md-icon>
                       <span>Flight Club API Docs</span>
                     </md-button>
                   </md-menu-item>
                   <!--
                   <md-menu-item>
-                    <md-button ng-click="goToDonate()">
+                    <md-button ng-click="redirect('/donate.php')">
                       <md-icon class="material-icons">euro_symbol</md-icon>
                       <span>Donate</span>
                     </md-button>
                   </md-menu-item>
                   -->
                   <md-menu-item>
-                    <md-button ng-click="goToContact()">
+                    <md-button ng-click="redirect('/contact.php')">
                       <md-icon class="material-icons">mail_outline</md-icon>
                       <span>Contact</span>
                     </md-button>
@@ -321,6 +321,7 @@
                       </md-content>
 
                     </md-content>
+                  </md-content>
                 </md-tab-content>
               </md-tab>
             </md-tabs>

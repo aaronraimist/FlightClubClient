@@ -2,7 +2,7 @@
 
 angular
         .module('FCLogin', ['ngMaterial', 'ngCookies'])
-        .controller('LoginCtrl', function ($timeout, $document, $scope, $cookies) {
+        .controller('LoginCtrl', function ($window, $timeout, $document, $scope, $cookies) {
           
           // hack to fix password label not detecting input on Chrome 
           // https://github.com/angular/material/issues/1376
@@ -11,10 +11,10 @@ angular
             if (elem.length) {
               elem.parent().addClass('md-input-has-value');
             }
-          }, 150);            
-          
-          $scope.goHome = function() {
-            window.location = "/";
+          }, 150);
+
+          $scope.redirect = function (url) {
+            $window.location.href = url;
           };
           
           $scope.loginError = "";

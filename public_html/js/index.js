@@ -2,7 +2,7 @@
 
 angular
         .module('FlightClub', ['ngMaterial', 'ngCookies', 'ngMessages'])
-        .controller('IndexCtrl', function ($scope, $mdDialog, $mdSidenav, $cookies) {
+        .controller('IndexCtrl', function ($window, $scope, $mdDialog, $mdSidenav, $cookies) {
 
           $scope.authorised = false;
           $scope.token = $cookies.get('authToken');
@@ -55,7 +55,7 @@ angular
 
           $scope.toggleLogin = function () {
             if (!$scope.authorised) {
-              window.location = "login.php";
+              $window.location.href = "/login.php";
             }
             else {
               $cookies.remove('authToken');
@@ -63,16 +63,8 @@ angular
             }
           };
 
-          $scope.goToDonate = function () {
-            window.location = "/donate.php";
-          };
-
-          $scope.goToContact = function () {
-            window.location = "/contact.php";
-          };
-
-          $scope.goToDocs = function () {
-            window.location = "/docs";
+          $scope.redirect = function (url) {
+            $window.location.href = url;
           };
           
           $scope.sortEvents = function() {

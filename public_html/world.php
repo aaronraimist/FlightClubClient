@@ -9,9 +9,9 @@
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-messages.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.js"></script>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
-    <link href='https://fonts.googleapis.com/css?family=Quicksand' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Quicksand' rel='stylesheet' type='text/css'>
 
     <script src="//cesiumjs.org/releases/1.17/Build/Cesium/Cesium.js"></script>
     <link rel="stylesheet" href="//cesiumjs.org/releases/1.17/Build/Cesium/Widgets/widgets.css" /> 

@@ -2,7 +2,7 @@
 
 angular
         .module('FCDonate', ['ngMaterial'])
-        .controller('DonateCtrl', function ($scope) {
+        .controller('DonateCtrl', function ($window, $scope) {
           
           $scope.processed = false;
           $scope.handler = StripeCheckout.configure({
@@ -27,9 +27,9 @@ angular
               );
             }
           });
-          
-          $scope.goHome = function() {
-            window.location="/";
+
+          $scope.redirect = function (url) {
+            $window.location.href = url;
           };
           
           $scope.click = function () {

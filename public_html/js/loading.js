@@ -2,7 +2,11 @@
 
 angular
         .module('FCLoad', ['ngMaterial', 'ngCookies'])
-        .controller('LoadCtrl', function ($scope) {
+        .controller('LoadCtrl', function ($window, $scope) {
+
+          $scope.redirect = function (url) {
+            $window.location.href = url;
+          };
 
           var formHash = window.location.hash.substring(1);
           var formData = window.atob(formHash);

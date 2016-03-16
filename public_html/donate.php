@@ -11,11 +11,11 @@
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-messages.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-cookies.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.js"></script>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
-    <link href='https://fonts.googleapis.com/css?family=Quicksand' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Quicksand' rel='stylesheet' type='text/css'>
 
-    <script src="https://checkout.stripe.com/checkout.js"></script>
+    <script src="//checkout.stripe.com/checkout.js"></script>
     <script src="js/core.js"></script>     
     <script src="js/donate.js"></script>
 
@@ -53,7 +53,7 @@
         <md-content flex layout="column" layout-align='space-around center'>
           <md-toolbar>
             <div class="md-toolbar-tools">
-              <md-button class="md-icon-button" aria-label="Home" ng-click="goHome()">
+              <md-button class="md-icon-button" aria-label="Home" ng-click="redirect('/')">
                 <i class="material-icons">home</i>
               </md-button>
               <h2>
@@ -81,7 +81,7 @@
                 </md-input-container>
               </md-content>
               <div flex>{{error}}</div>
-              <md-button class="md-raised" ng-disabled="!valid" ng-click="click()">Donate</md-button>
+              <md-button class="md-primary md-raised" ng-disabled="!valid" ng-click="click()">Donate</md-button>
               <md-content flex></md-content>
               <md-content flex></md-content>
             </md-content>
