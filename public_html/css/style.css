@@ -7,8 +7,8 @@ html {
   text-align: center;
 }
 
-.md-button, .md-tab, .md-list-item-inner, .md-select-value {
-    font-weight: 900;
+.md-button, .md-tab, .md-list-item-inner, .md-select-value, p, label {
+  font-weight: 900;
 }
 
 /*

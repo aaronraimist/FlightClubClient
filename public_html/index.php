@@ -73,12 +73,18 @@
                   </md-menu-item>
                   <!--
                   <md-menu-item>
-                    <md-button ng-click="goToDocs()">
-                      <md-icon class="material-icons">description</md-icon>
-                      <span>Flight Club API Docs</span>
+                    <md-button ng-click="goToDonate()">
+                      <md-icon class="material-icons">euro_symbol</md-icon>
+                      <span>Donate</span>
                     </md-button>
                   </md-menu-item>
                   -->
+                  <md-menu-item>
+                    <md-button ng-click="goToContact()">
+                      <md-icon class="material-icons">mail_outline</md-icon>
+                      <span>Contact</span>
+                    </md-button>
+                  </md-menu-item>
                 </md-menu-content>
               </md-menu>
               <h2>
@@ -271,7 +277,7 @@
                           <label>Payload Mass (kg)</label>
                           <input ng-model="form.Mission.Payload.mass">
                         </md-input-container>
-                        <md-button flex class="md-raised" type="submit" ng-click="submit()">Submit</md-button>
+                        <md-button flex class="md-raised md-primary" type="submit" ng-click="submit()">Submit</md-button>
                       </md-content>
                       <md-content layout="row" layout-align="space-around center">
                         <md-input-container flex class="md-block">

@@ -72,7 +72,7 @@
                 <input type="password" ng-model="form.Login.password">
               </md-input-container>
             </div>
-            <md-button class="md-raised" type="submit" ng-click="login()">Log in</md-button>
+            <md-button class="md-raised md-primary" type="submit" ng-click="login()">Log in</md-button>
           </form>
           <div>{{loginError}}</div>
         </md-content>

@@ -67,6 +67,10 @@ angular
             window.location = "/donate.php";
           };
 
+          $scope.goToContact = function () {
+            window.location = "/contact.php";
+          };
+
           $scope.goToDocs = function () {
             window.location = "/docs";
           };

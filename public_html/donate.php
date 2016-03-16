@@ -4,15 +4,15 @@
     <title>Flight Club | Login</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-messages.min.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-cookies.min.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-messages.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-cookies.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.js"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
+    <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
     <link href='https://fonts.googleapis.com/css?family=Quicksand' rel='stylesheet' type='text/css'>
 
     <script src="https://checkout.stripe.com/checkout.js"></script>
@@ -21,11 +21,11 @@
 
     <meta property="og:title" content="Login" />
     <meta property="og:site_name" content="Flight Club"/>
-    <meta property="og:url" content="http://www.flightclub.io" />
+    <meta property="og:url" content="//www.flightclub.io" />
     <meta property="og:description" content="Login to Flight Club" />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="en_US" />
-    <meta property="og:image" content="http://www.flightclub.io/images/og_image.png" />   
+    <meta property="og:image" content="//www.flightclub.io/images/og_image.png" />   
 
      <link rel="apple-touch-icon" sizes="57x57" href="images/favicon/apple-icon-57x57.png">
     <link rel="apple-touch-icon" sizes="60x60" href="images/favicon/apple-icon-60x60.png">
@@ -63,7 +63,8 @@
           </md-toolbar>
           <md-content flex layout="column" layout-align="space-around center" layout-fill layout-padding>
             <md-content flex layout="column" layout-align="space-around center">
-              <md-content layout="row">
+              <md-content flex></md-content>
+              <md-content flex layout="row">
                 <md-content flex></md-content>
                 <md-content flex>
                   <p>You're donating! Thank you!</p>
@@ -73,14 +74,15 @@
                 </md-content>
                 <md-content flex></md-content>
               </md-content>
-              <md-content layout="row" layout-align="space-around center">
-                <div fle>€</div>
+              <md-content flex layout="row" layout-align="space-around center">
                 <md-input-container flex>
-                  <label>Amount</label>
-                  <input ng-model="amountEuro">
+                  <label>Amount (€)</label>
+                  <input ng-change="validate()" ng-model="amountEuro">
                 </md-input-container>
               </md-content>
-              <button ng-click="click()">Purchase</button>
+              <div flex>{{error}}</div>
+              <md-button class="md-raised" ng-disabled="!valid" ng-click="click()">Donate</md-button>
+              <md-content flex></md-content>
               <md-content flex></md-content>
             </md-content>
           </md-content>
