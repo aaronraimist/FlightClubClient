@@ -7,7 +7,7 @@ html {
   text-align: center;
 }
 
-.md-button, .md-tab, .md-list-item-inner, .md-select-value, p, label {
+* {
   font-weight: 900;
 }
 
@@ -69,10 +69,6 @@ md-select, md-switch {
 #world md-menu-content {
   background: black;
   padding: 0;
-}
-
-#world md-sidenav {
-  padding-bottom: 5%;
 }
 
 /* Keep main content visible while sidenav is open */

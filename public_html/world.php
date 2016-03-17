@@ -110,19 +110,17 @@
             </div>
           </md-toolbar>
           <md-content>
-            <div layout="column" layout-align="space-around center">
-              <p>{{clock}}</p>
-            </div>
+            <p class="centre">{{clock}}</p>
           </md-content>
           <md-divider></md-divider>
-          <md-content flex layout="column" layout-align="space-around center">
-            <div layout-fill layout="column" layout-align="center center">
-              <span id="altitudeTel{{selectedStage}}"></span>
-              <div class="plot" id="altitudePlot{{selectedStage}}"></div>
+          <md-content flex layout-fill layout-padding layout="column" layout-align="space-around center">
+            <div flex layout="column" layout-align="center center">
+              <span id="altitudeTel"></span>
+              <div class="plot" id="altitudePlot"></div>
             </div>
-            <div layout-fill layout="column" layout-align="center center">
-              <span id="velocityTel{{selectedStage}}"></span>
-              <div class="plot" id="velocityPlot{{selectedStage}}"></div>
+            <div flex layout="column" layout-align="center center">
+              <span id="velocityTel"></span>
+              <div class="plot" id="velocityPlot"></div>
             </div>
           </md-content>
         </md-sidenav>

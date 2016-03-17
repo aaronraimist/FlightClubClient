@@ -28,8 +28,10 @@ function world() {
     }
   };
 
+  var trackedStage = 0;
   this.trackEntity = function (stage) {
     if(viewer.trackedEntity !== entities[stage]) {
+      trackedStage = stage;
       viewer.trackedEntity = entities[stage];
       viewer.camera.zoomOut();
     }
@@ -55,7 +57,6 @@ function world() {
       future[i]["alt"] = [];
       future[i]["vel"] = [];
 
-      plot[i] = {};
       max[i] = {};
     }
 
@@ -257,9 +258,7 @@ function world() {
 
   function getEventsFile(stage) {
     if (w.getStageName(stage) === undefined) {
-      setTimeout(function() {
-        start();        
-      }, 500);
+      start();        
     }
     else {
       var url = base + '/output/' + w.getProp('id') + '_' + w.getStageName(stage) + '_events.dat';
@@ -309,14 +308,8 @@ function world() {
   function start() {
 
     if (w.getProp('watch') !== undefined) {
-      w.trackEntity(0);
 
       displayClock(false);
-
-      for (var stage = 0; stage < 2; stage++) {
-        initialisePlot("altitude", stage);
-        initialisePlot("velocity", stage);
-      }
 
       fillFutureArray();
       update();
@@ -325,42 +318,43 @@ function world() {
   }
   
   this.plotResize = function(considerSidebar) {
+      
     setTimeout(function () {
       for (var stage = 0; stage < 2; stage++) {
-        var el = document.getElementsByTagName("md-sidenav")[0];
-        var width = el.clientWidth;
-        $("#altitudePlot" + stage).width(width);
-        $("#velocityPlot" + stage).width(width);
-        $("#altitudePlot" + stage).height(width / 1.6);
-        $("#velocityPlot" + stage).height(width / 1.6);
+        var width = $("md-sidenav")[0].clientWidth;
+        $("#altitudePlot").width(width);
+        $("#velocityPlot").width(width);
+        $("#altitudePlot").height(width / 1.6);
+        $("#velocityPlot").height(width / 1.6);
       }
       var w;
       if(considerSidebar) {
-        w = angular.element(document.querySelectorAll("body")[0])[0].clientWidth - document.getElementsByTagName("md-sidenav")[0].clientWidth;
+        w.initialisePlot("altitude", getTrackedStage());
+        w.initialisePlot("velocity", getTrackedStage());
+        w = $(document.body)[0].clientWidth - $("md-sidenav")[0].clientWidth;
       } else {
-        w = angular.element(document.querySelectorAll("body")[0])[0].clientWidth;
+        w = $(document.body)[0].clientWidth;
       }
       $("#cesiumContainer").width(w);
     }, 500);
   };
 
   $(window).resize(function () {
-    w.plotResize(angular.element(document.querySelectorAll("body")[0])[0].clientWidth >= 960);
+    w.plotResize($(document.body)[0].clientWidth >= 960);
   });
 
-  function initialisePlot(element, stage) {
+  this.initialisePlot = function(element, stage) {
 
-    var placeholder = $("#" + element + "Plot" + stage);
-    var el = document.getElementsByTagName("md-sidenav")[0];
-    var width = el.clientWidth;
-    if(width === 0) {
+    var width = $("md-sidenav")[0].clientWidth;
+    if(width===0) // sidenav is collapsed on mobile, but width is 320 when expanded
       width = 320;
-      placeholder.width(width);
-    }
+
+    var placeholder = $("#" + element + "Plot");
+    placeholder.width(width);
     placeholder.height(width / 1.6);
 
     if (placeholder.length > 0) {
-      plot[stage][element + stage] = $.plot(placeholder, [vel[0], vel[1]], {
+      plot[element] = $.plot(placeholder, [[], []], {
         series: {
           shadowSize: 0	// Drawing is faster without shadows
         },
@@ -374,7 +368,7 @@ function world() {
         }
       });
     }
-  }
+  };
 
 //////////////////////////////////////
 //              CLOCK               //
@@ -463,117 +457,110 @@ function world() {
     }
     for (var stage = 0; stage < w.getProp('numStages'); stage++) { 
       
-      $("#altitudeTel" + stage).html('ALT: 0 KM');
-      $("#velocityTel" + stage).html('VEL: 0 M/S');   
+      $("#altitudeTel").html('ALTITUDE: 0 KM');
+      $("#velocityTel").html('VELOCITY: 0 M/S');   
 
-      if ($("#altitudePlot" + stage).length > 0) { // only one ever exists at a time
-        if (plot[stage]["altitude" + stage] === undefined) {
-          initialisePlot("altitude", stage);
-        }
-        plot[stage]["altitude" + stage].setData([
-          {data: future[0]["alt"], color: '#aaaaaa', lineWidth: 1, lines: {show: true, fill: false}},
-          {data: future[1]["alt"], color: '#aaaaaa', lineWidth: 1, lines: {show: true, fill: false}}
-        ]);
-        plot[stage]["altitude" + stage].draw();
-      }
-
-      if ($("#velocityPlot" + stage).length > 0) {
-        if (plot[stage]["velocity" + stage] === undefined) {
-          initialisePlot("velocity", stage);
-        }
-        plot[stage]["velocity" + stage].setData([
-          {data: future[0]["vel"], color: '#aaaaaa', lineWidth: 1, lines: {show: true, fill: false}},
-          {data: future[1]["vel"], color: '#aaaaaa', lineWidth: 1, lines: {show: true, fill: false}}
-        ]);
-        plot[stage]["velocity" + stage].draw();
-      }
     }
+  }
+  
+  function getTrackedStage() {
+    return trackedStage;
   }
 
   function update() {
 
     var currentTime = Cesium.JulianDate.toDate(viewer.clock.currentTime);
     var time = (currentTime - w.getProp('launchTime')) / 1000;
+    time = parseInt(time);
+    
+    if (time >= -10) { // only execute this code after T-00:00:10
+      
+      if(time===-10) {
+        w.trackEntity(0);
+      }
 
-    if (time > -10) { // only execute this code after T-00:00:10
-      for (var stage = 0; stage < w.getProp('numStages'); stage++) {
-        vel[stage][0] = [];
-        vel[stage][1] = [];
-        alt[stage][0] = [];
-        alt[stage][1] = [];
-        for (var i = -5; i <= time; i++) {
+      var stage = getTrackedStage();
+      for(var i=0;i<w.getProp('numStages');i++) {
+        vel[i][0] = [];
+        vel[i][1] = [];
+        alt[i][0] = [];
+        alt[i][1] = [];
+      }
+      for (var i = -5; i <= time; i++) {
 
-
-          if (fullData[stage][i] === undefined)
+        if (fullData[stage][i] === undefined) {
+          if (fullData[stage - 1] !== undefined)
           {
-            if (fullData[stage - 1] !== undefined && fullData[stage - 1][i] !== undefined) {
+            if (eventsData[stage - 1][i] !== undefined)
+            {
               var tel = fullData[stage - 1][i].split(":");
-              $("#altitudeTel" + stage).html('ALT: ' + (tel[1] < 1 ? 1000 * tel[1] + ' M' : Math.floor(10 * tel[1]) / 10 + ' KM'));
-              $("#velocityTel" + stage).html('VEL: ' + Math.floor(tel[2]) + ' M/S');
-            } else {
-              $("#altitudeTel" + stage).html('ALT: 0 KM');
-              $("#velocityTel" + stage).html('VEL: 0 M/S');
+              vel[stage][0].push([i, tel[2]]);
+              vel[stage][1].push([i, tel[2]]);
+              alt[stage][0].push([i, tel[1]]);
+              alt[stage][1].push([i, tel[1]]);
             }
-            continue;
+            else if (fullData[stage - 1][i] !== undefined)
+            {
+              var tel = fullData[stage - 1][i].split(":");
+              vel[stage][0].push([i, tel[2]]);
+              alt[stage][0].push([i, tel[1]]);
+            }
           }
-          else if (eventsData[stage][i] !== undefined)
-          {
-            var tel = fullData[stage][i].split(":");
-            vel[stage][0].push([i, tel[2]]);
-            vel[stage][1].push([i, tel[2]]);
-            alt[stage][0].push([i, tel[1]]);
-            alt[stage][1].push([i, tel[1]]);
-
-            $("#altitudeTel" + stage).html('ALT: ' + (tel[1] < 1 ? 1000 * tel[1] + ' M' : Math.floor(10 * tel[1]) / 10 + ' KM'));
-            $("#velocityTel" + stage).html('VEL: ' + Math.floor(tel[2]) + ' M/S');
-          }
-          else
-          {
-            var tel = fullData[stage][i].split(":");
-            vel[stage][0].push([i, tel[2]]);
-            alt[stage][0].push([i, tel[1]]);
-
-            $("#altitudeTel" + stage).html('ALT: ' + (tel[1] < 1 ? 1000 * tel[1] + ' M' : Math.floor(10 * tel[1]) / 10 + ' KM'));
-            $("#velocityTel" + stage).html('VEL: ' + Math.floor(tel[2]) + ' M/S');
-          }
+        }
+        else if (eventsData[stage][i] !== undefined)
+        {
+          var tel = fullData[stage][i].split(":");
+          vel[stage][0].push([i, tel[2]]);
+          vel[stage][1].push([i, tel[2]]);
+          alt[stage][0].push([i, tel[1]]);
+          alt[stage][1].push([i, tel[1]]);
+        }
+        else
+        {
+          var tel = fullData[stage][i].split(":");
+          vel[stage][0].push([i, tel[2]]);
+          alt[stage][0].push([i, tel[1]]);
         }
       }
-
-      for (var stage = 0; stage < w.getProp('numStages'); stage++) {
-
-        if ($("#altitudePlot" + stage).length > 0) { // only one ever exists at a time
-          if (plot[stage]["altitude" + stage] === undefined) {
-            initialisePlot("altitude", stage);
-          }
-          plot[stage]["altitude" + stage].setData([
-            {data: future[0]["alt"], color: '#aaaaaa', lineWidth: 1, lines: {show: true, fill: false}},
-            {data: alt[0][0], color: '#ff0000', lineWidth: 1, lines: {show: true, fill: stage===0}},
-            {data: alt[0][1], lines: {show: false}, points: {show: true}},
-            {data: future[1]["alt"], color: '#aaaaaa', lineWidth: 1, lines: {show: true, fill: false}},
-            {data: alt[1][0], lineWidth: 1, lines: {show: true, fill: stage===1}},
-            {data: alt[1][1], color: '#ff0000', lines: {show: false}, points: {show: true}}
-          ]);
-          plot[stage]["altitude" + stage].draw();
-        }
-
-        if ($("#velocityPlot" + stage).length > 0) {
-          if (plot[stage]["velocity" + stage] === undefined) {
-            initialisePlot("velocity", stage);
-          }
-          plot[stage]["velocity" + stage].setData([
-            {data: future[0]["vel"], color: '#aaaaaa', lineWidth: 1, lines: {show: true, fill: false}},
-            {data: vel[0][0], color: '#ff0000', lineWidth: 1, lines: {show: true, fill: stage===0}},
-            {data: vel[0][1], lines: {show: false}, points: {show: true}},
-            {data: future[1]["vel"], color: '#aaaaaa', lineWidth: 1, lines: {show: true, fill: false}},
-            {data: vel[1][0], lineWidth: 1, lines: {show: true, fill: stage===1}},
-            {data: vel[1][1], color: '#ff0000', lines: {show: false}, points: {show: true}}
-          ]);
-          plot[stage]["velocity" + stage].draw();
-        }
-
-        // Since the axes don't change, we don't need to call plot.setupGrid()
-
+      
+      if(fullData[stage] !== undefined && fullData[stage][time] !== undefined) 
+      {
+        var tel = fullData[stage][time].split(":");
+        $("#altitudeTel").html('ALTITUDE: ' + (tel[1] < 1 ? 1000 * tel[1] + ' M' : Math.floor(10 * tel[1]) / 10 + ' KM'));
+        $("#velocityTel").html('VELOCITY: ' + Math.floor(tel[2]) + ' M/S');
+      } 
+      else if (fullData[stage - 1] !== undefined && fullData[stage - 1][time] !== undefined) 
+      {
+        var tel = fullData[stage - 1][time].split(":");
+        $("#altitudeTel").html('ALTITUDE: ' + (tel[1] < 1 ? 1000 * tel[1] + ' M' : Math.floor(10 * tel[1]) / 10 + ' KM'));
+        $("#velocityTel").html('VELOCITY: ' + Math.floor(tel[2]) + ' M/S');
+      } 
+      else 
+      {
+        $("#altitudeTel").html('ALTITUDE: 0 KM');
+        $("#velocityTel").html('VELOCITY: 0 M/S');
       }
+
+      plot["altitude"].setData([
+        {data: future[0]["alt"], color: '#aaaaaa', lineWidth: 1, lines: {show: true, fill: false}},
+        {data: alt[0][0], color: '#ff0000', lineWidth: 1, lines: {show: true, fill: stage === 0}},
+        {data: alt[0][1], lines: {show: false}, points: {show: true}},
+        {data: future[1]["alt"], color: '#aaaaaa', lineWidth: 1, lines: {show: true, fill: false}},
+        {data: alt[1][0], lineWidth: 1, lines: {show: true, fill: stage===1}},
+        {data: alt[1][1], color: '#ff0000', lines: {show: false}, points: {show: true}}
+      ]);
+      plot["altitude"].draw();
+
+      plot["velocity"].setData([
+        {data: future[0]["vel"], color: '#aaaaaa', lineWidth: 1, lines: {show: true, fill: false}},
+        {data: vel[0][0], color: '#ff0000', lineWidth: 1, lines: {show: true, fill: stage === 0}},
+        {data: vel[0][1], lines: {show: false}, points: {show: true}},
+        {data: future[1]["vel"], color: '#aaaaaa', lineWidth: 1, lines: {show: true, fill: false}},
+        {data: vel[1][0], lineWidth: 1, lines: {show: true, fill: stage===1}},
+        {data: vel[1][1], color: '#ff0000', lines: {show: false}, points: {show: true}}
+      ]);
+      plot["velocity"].draw();
+
     }
 
     setTimeout(update, 500);
@@ -597,7 +584,7 @@ function world() {
   var focusPoints = []; // timestamps for specific points of interest. everything is plotted at these times
 
   var entities = {}; // map of Cesium stage entities
-  var plot = [];
+  var plot = {};
   var max = [];
 
   var rand5 = 5 * 60 * 1000 * Math.random(); // 5 minute range

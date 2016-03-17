@@ -33,7 +33,7 @@ var loginSuccess = function (scope, cookies) {
 
       var res = jQuery.parseJSON(JSON.stringify(data, null, 2));
       cookies.put('authToken', res.Success.authToken, {'expires': expiryDate});
-      scope.goHome();
+      scope.redirect('/');
     }
     else {
       scope.loginError = data.error;

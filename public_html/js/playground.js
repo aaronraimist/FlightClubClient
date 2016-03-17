@@ -112,10 +112,14 @@ var fillData = function (w, scope) {
     }
     
     setTimeout(function() {
-      var fullWidth = angular.element(document.querySelectorAll("body")[0])[0].clientWidth;
-      var el = document.getElementsByTagName("md-sidenav")[0];
-      var width = el.clientWidth;
-      document.getElementById("cesiumContainer").style.width = (fullWidth - width) + 'px';
+      var fullWidth = $(document.body)[0].clientWidth;
+      var width = $("md-sidenav")[0].clientWidth;
+      $("#cesiumContainer").width((fullWidth - width) + 'px');
+
+      for (var stage = 0; stage < 2; stage++) {
+        w.initialisePlot("altitude", stage);
+        w.initialisePlot("velocity", stage);
+      }
     }, 1000);
 
   };
