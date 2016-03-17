@@ -49,38 +49,40 @@
 
   </head>
   <body ng-app="FCDonate" data-ng-element-ready="">
-    <div ng-controller="DonateCtrl" layout="column" flex layout-fill ng-cloak>
-      <section layout="row" flex>
-        
-        <md-content flex layout="column">
-          <md-toolbar>
-            <div class="md-toolbar-tools">
-              <md-button class="md-icon-button" aria-label="Home" ng-click="redirect('/')">
-                <i class="material-icons">home</i>
-              </md-button>
-              <h2>
-                <span>Flight Club | Donate</span>
-              </h2>
-            </div>
-          </md-toolbar>
-          <md-content layout="column" layout-align="center center" layout-padding>
-            <md-content>
+    <div ng-controller="DonateCtrl" style="min-height:100%" ng-cloak>
+      <section layout="column" flex>
+
+        <md-toolbar>
+          <div class="md-toolbar-tools">
+            <md-button class="md-icon-button" aria-label="Home" ng-click="redirect('/')">
+              <i class="material-icons">home</i>
+            </md-button>
+            <h2>
+              <span>Flight Club | Donate</span>
+            </h2>
+          </div>
+        </md-toolbar>
+        <md-content layout="column" layout-align="center center" layout-padding>
+          <md-content layout="row">
+            <md-content flex="5" flex-gt-sm="25"></md-content>
+            <md-content flex>
               <p>You're donating! Thank you!</p>
               <p>Donations to Flight Club help me pay for my server costs and any other related charges.</p>
               <p>In the unlikely event I ever get more donations per month than my servers cost, I can buy more CPU power which means
                 more, faster simulations. Woo! Science!</p>
             </md-content>
-            <md-content>
-              <md-input-container>
-                <label>Amount (€)</label>
-                <input ng-change="validate()" ng-model="amountEuro">
-              </md-input-container>
-            </md-content>
-            <div>{{error}}</div>
-            <md-button class="md-primary md-raised" ng-disabled="!valid" ng-click="click()">Donate</md-button>
+            <md-content flex="5" flex-gt-sm="25"></md-content>
           </md-content>
+          <md-content>
+            <md-input-container>
+              <label>Amount (€)</label>
+              <input ng-change="validate()" ng-model="amountEuro">
+            </md-input-container>
+          </md-content>
+          <div>{{error}}</div>
+          <md-button class="md-primary md-raised" ng-disabled="!valid" ng-click="click()">Donate</md-button>
         </md-content>
-        
+
       </section>
     </div>
   </body>
