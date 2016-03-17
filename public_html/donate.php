@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
   <head>
-    <title>Flight Club | Login</title>
+    <title>Flight Club | Donate</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
@@ -9,20 +9,22 @@
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-messages.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-cookies.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.js"></script>
     <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
     <link href='//fonts.googleapis.com/css?family=Quicksand' rel='stylesheet' type='text/css'>
 
     <script src="//checkout.stripe.com/checkout.js"></script>
     <script src="js/core.js"></script>     
     <script src="js/donate.js"></script>
+    
+    <link rel="stylesheet" href="css/style.css" />
 
-    <meta property="og:title" content="Login" />
+    <meta property="og:title" content="Donate" />
     <meta property="og:site_name" content="Flight Club"/>
     <meta property="og:url" content="//www.flightclub.io" />
-    <meta property="og:description" content="Login to Flight Club" />
+    <meta property="og:description" content="Donate to Flight Club" />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="en_US" />
     <meta property="og:image" content="//www.flightclub.io/images/og_image.png" />   
@@ -50,7 +52,7 @@
     <div ng-controller="DonateCtrl" layout="column" flex layout-fill ng-cloak>
       <section layout="row" flex>
         
-        <md-content flex layout="column" layout-align='space-around center'>
+        <md-content flex layout="column">
           <md-toolbar>
             <div class="md-toolbar-tools">
               <md-button class="md-icon-button" aria-label="Home" ng-click="redirect('/')">
@@ -61,30 +63,21 @@
               </h2>
             </div>
           </md-toolbar>
-          <md-content flex layout="column" layout-align="space-around center" layout-fill layout-padding>
-            <md-content flex layout="column" layout-align="space-around center">
-              <md-content flex></md-content>
-              <md-content flex layout="row">
-                <md-content flex></md-content>
-                <md-content flex>
-                  <p>You're donating! Thank you!</p>
-                  <p>Donations to Flight Club help me pay for my server costs and any other related charges.</p>
-                  <p>In the unlikely event I ever get more donations per month than my servers cost, I can buy more CPU power which means
-                    more, faster simulations. Woo! Science!</p>
-                </md-content>
-                <md-content flex></md-content>
-              </md-content>
-              <md-content flex layout="row" layout-align="space-around center">
-                <md-input-container flex>
-                  <label>Amount (€)</label>
-                  <input ng-change="validate()" ng-model="amountEuro">
-                </md-input-container>
-              </md-content>
-              <div flex>{{error}}</div>
-              <md-button class="md-primary md-raised" ng-disabled="!valid" ng-click="click()">Donate</md-button>
-              <md-content flex></md-content>
-              <md-content flex></md-content>
+          <md-content layout="column" layout-align="center center" layout-padding>
+            <md-content>
+              <p>You're donating! Thank you!</p>
+              <p>Donations to Flight Club help me pay for my server costs and any other related charges.</p>
+              <p>In the unlikely event I ever get more donations per month than my servers cost, I can buy more CPU power which means
+                more, faster simulations. Woo! Science!</p>
             </md-content>
+            <md-content>
+              <md-input-container>
+                <label>Amount (€)</label>
+                <input ng-change="validate()" ng-model="amountEuro">
+              </md-input-container>
+            </md-content>
+            <div>{{error}}</div>
+            <md-button class="md-primary md-raised" ng-disabled="!valid" ng-click="click()">Donate</md-button>
           </md-content>
         </md-content>
         
