@@ -34,6 +34,11 @@ function world() {
       trackedStage = stage;
       viewer.trackedEntity = entities[stage];
       viewer.camera.zoomOut();
+      plot["altitude"].getOptions().yaxes[0].max = max[stage]["altitude"];
+      plot["altitude"].setupGrid();
+      plot["velocity"].getOptions().yaxes[0].max = max[stage]["velocity"];
+      plot["velocity"].setupGrid();
+      
     }
   };
 

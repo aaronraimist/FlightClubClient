@@ -17,8 +17,6 @@
     <link rel="stylesheet" href="//cesiumjs.org/releases/1.17/Build/Cesium/Widgets/widgets.css" /> 
     
     <link rel="stylesheet" href="css/style.css" />
-    <link rel="stylesheet" href="css/mobile-style.css" />
-    <link rel="stylesheet" href="css/large-style.css" />
 
     <meta property="og:title" content="LiveLaunch!" />
     <meta property="og:site_name" content="Flight Club"/>
