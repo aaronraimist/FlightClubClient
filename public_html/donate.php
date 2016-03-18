@@ -49,8 +49,8 @@
 
   </head>
   <body ng-app="FCDonate" data-ng-element-ready="">
-    <div ng-controller="DonateCtrl" style="min-height:100%" ng-cloak>
-      <section layout="column" flex>
+    <div ng-controller="DonateCtrl" layout="column" flex style="min-height:100%" ng-cloak>
+      <section layout-fill layout="column" flex>
 
         <md-toolbar>
           <div class="md-toolbar-tools">
@@ -62,8 +62,9 @@
             </h2>
           </div>
         </md-toolbar>
-        <md-content layout="column" layout-align="center center" layout-padding>
-          <md-content layout="row">
+        <md-content ng-show="!processed" layout-fill flex layout="column" layout-align="center center" layout-padding>
+          <md-content flex="5"></md-content>
+          <md-content flex layout="row">
             <md-content flex="5" flex-gt-sm="25"></md-content>
             <md-content flex>
               <p>You're donating! Thank you!</p>
@@ -73,14 +74,27 @@
             </md-content>
             <md-content flex="5" flex-gt-sm="25"></md-content>
           </md-content>
-          <md-content>
+          <md-content flex>
             <md-input-container>
               <label>Amount (€)</label>
               <input ng-change="validate()" ng-model="amountEuro">
             </md-input-container>
           </md-content>
-          <div>{{error}}</div>
           <md-button class="md-primary md-raised" ng-disabled="!valid" ng-click="click()">Donate</md-button>
+          <md-content flex="10"></md-content>
+        </md-content>
+        
+        <md-content ng-show="processed" layout-fill flex layout="column" layout-align="center center" layout-padding>
+          <md-content flex></md-content>
+          <md-content ng-show="success">
+            <p>Thank you :)</p>
+          </md-content>
+          <md-content ng-show="!success">
+            <p>{{error}}</p>
+            <p>{{errorDetail}}</p>
+          </md-content>
+          <md-content flex></md-content>
+          <md-content flex></md-content>
         </md-content>
 
       </section>
