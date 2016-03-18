@@ -71,14 +71,12 @@
                       <span>Flight Club API Docs</span>
                     </md-button>
                   </md-menu-item>
-                  <!--
                   <md-menu-item>
                     <md-button ng-click="redirect('/donate.php')">
                       <md-icon class="material-icons">euro_symbol</md-icon>
                       <span>Donate</span>
                     </md-button>
                   </md-menu-item>
-                  -->
                   <md-menu-item>
                     <md-button ng-click="redirect('/contact.php')">
                       <md-icon class="material-icons">mail_outline</md-icon>

@@ -69,7 +69,7 @@
             <md-content flex>
               <p>You're donating! Thank you!</p>
               <p>Donations to Flight Club help me pay for my server costs and any other related charges.</p>
-              <p>In the unlikely event I ever get more donations per month than my servers cost, I can buy more CPU power which means
+              <p>In the unlikely event I ever get more donations per month than my servers cost, I can buy more CPU time which means
                 more, faster simulations. Woo! Science!</p>
             </md-content>
             <md-content flex="5" flex-gt-sm="25"></md-content>

@@ -7,7 +7,7 @@ angular
           $scope.processed = false;
           $scope.success = false;
           $scope.handler = StripeCheckout.configure({
-            key: 'pk_test_AHzw9GreVMENAVkw9J2hhPaJ',
+            key: 'pk_live_s4EXO3kyuZktYh40Mbed0IFi',
             image: 'images/favicon/android-icon-192x192.png',
             locale: 'auto',
             token: function (token) {
