@@ -80,7 +80,7 @@
               <input ng-change="validate()" ng-model="amountEuro">
             </md-input-container>
           </md-content>
-          <md-button class="md-primary md-raised" ng-disabled="!valid" ng-click="click()">Donate</md-button>
+          <md-button class="md-primary md-raised" ng-disabled="!valid" ng-click="click()">Proceed</md-button>
           <md-content flex="10"></md-content>
         </md-content>
         
@@ -90,8 +90,10 @@
             <p>Thank you :)</p>
           </md-content>
           <md-content ng-show="!success">
-            <p>{{error}}</p>
-            <p>{{errorDetail}}</p>
+            <md-content flex>
+              <p>{{error}}</p>
+              <p>{{errorDetail}}</p>
+            </md-content>
           </md-content>
           <md-content flex></md-content>
           <md-content flex></md-content>
