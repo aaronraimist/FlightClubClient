@@ -26,6 +26,18 @@ md-input-container {
   margin-bottom: 0;
 }
 
+.fixie {
+  position:fixed;
+  top:0;
+  left:0;
+  z-index:1;
+  min-width:100%;
+}
+
+.fullHeight {
+  min-height: 100%;
+}
+
 .eventLabel {
   position: relative !important;
   top: 18px !important;
@@ -56,6 +68,10 @@ md-select, md-switch {
 
 #results figure {
   display: none !important;
+}
+
+md-sidenav, md-backdrop {
+  position: fixed !important;
 }
 
 #cesiumContainer {

@@ -1,0 +1,147 @@
+<md-content layout-fill flex layout="column">
+
+  <div ng-show="isLoading" flex layout="column" layout-align="center center" layout-padding>
+    <h2>{{loadMessage}}</h2>
+    <md-content style="width:100%">
+      <div id="rocket"><img alt="rocket"/></div>
+    </md-content>
+  </div>
+
+  <md-grid-list ng-hide="isLoading" id="results" style="overflow:hidden"
+                md-cols="1" md-cols-md="2" md-cols-gt-md="3"
+                md-row-height="1:1"
+                md-gutter-gt-md="16px" md-gutter="8px">
+    <md-grid-tile
+      ng-repeat="plot in plotTiles"
+      id="{{plot.title}}"
+      md-colspan="1"
+      md-rowspan="1">
+    </md-grid-tile>
+  </md-grid-list>
+
+  <md-sidenav flex layout="column" class="md-sidenav-right md-whiteframe-z2" md-component-id="sidenav" md-is-locked-open="false">
+    <md-toolbar class="md-theme-indigo" layout="row" layout-align="space-between center" >
+      <div class="md-toolbar-tools" layout="row" layout-align="space-around center" flex>
+        <h1><span>{{missionName}}</span></h1>
+      </div>
+      <md-button class="md-icon-button" aria-label="Menu" ng-click="toggleNav('sidenav')">
+        <i class="material-icons">keyboard_arrow_right</i>
+      </md-button>
+    </md-toolbar>
+    <md-divider></md-divider>
+    <md-list>
+      <md-subheader class="md-no-sticky">Options</md-subheader>
+      <md-list-item ng-click="goToLive()">
+        <span class="md-secondary">Watch Live!</span>
+      </md-list-item>
+      <md-list-item ng-click="overrideLive()" ng-show="authorised">
+        <i class="material-icons" ng-show="overrideAttempted">{{overrideStatus}}</i><span class="md-secondary">Override Live Plot</span>
+      </md-list-item>
+      <md-divider></md-divider>
+      <md-subheader class="md-no-sticky">More Simulation Data</md-subheader>
+      <md-list-item ng-click="toggleNav('warnings')" ng-show="{{warnings.length > 0}}">
+        <span class="md-secondary">Warnings</span>
+      </md-list-item>
+      <md-list-item ng-click="toggleNav('events')">
+        <span class="md-secondary">Event Log</span>
+      </md-list-item>
+      <md-list-item ng-click="toggleNav('landing')">
+        <span class="md-secondary">Landing Params</span>
+      </md-list-item>
+      <md-list-item ng-click="toggleNav('orbit')">
+        <span class="md-secondary">Orbital Params</span>
+      </md-list-item>
+      <md-divider></md-divider>
+    </md-list>
+  </md-sidenav>
+
+  <md-sidenav flex layout="column" class="md-sidenav-right md-whiteframe-z2" md-component-id="warnings" md-is-locked-open="false">
+    <md-toolbar class="md-theme-indigo" layout="row" layout-align="space-between center" >
+      <div class="md-toolbar-tools" layout="row" layout-align="space-around center" flex>
+        <h1><span>Warnings</span></h1>
+      </div>
+      <md-button class="md-icon-button" aria-label="Menu" ng-click="toggleNav('warnings')">
+        <i class="material-icons">keyboard_arrow_right</i>
+      </md-button>
+    </md-toolbar>
+    <md-divider></md-divider>
+    <md-content flex layout-padding>
+      <md-list>
+        <md-list-item class="md-3-line" ng-repeat="item in warnings">
+          <div class="md-list-item-text" layout="column">
+            <h3>{{ item}}</h3>
+          </div>
+        </md-list-item>
+      </md-list>            
+    </md-content>
+  </md-sidenav>
+
+  <md-sidenav flex layout="column" class="md-sidenav-right md-whiteframe-z2" md-component-id="events" md-is-locked-open="false">
+    <md-toolbar class="md-theme-indigo" layout="row" layout-align="space-between center" >
+      <div class="md-toolbar-tools" layout="row" layout-align="space-around center" flex>
+        <h1><span>Event Log</span></h1>
+      </div>
+      <md-button class="md-icon-button" aria-label="Menu" ng-click="toggleNav('events')">
+        <i class="material-icons">keyboard_arrow_right</i>
+      </md-button>
+    </md-toolbar>
+    <md-divider></md-divider>
+    <md-content flex layout-padding>
+      <md-list>
+        <md-list-item class="md-3-line" ng-repeat="item in events">
+          <div class="md-list-item-text" layout="column">
+            <h3>{{ item.when}}</h3>
+            <h4>{{ item.what}}</h4>
+          </div>
+        </md-list-item>
+      </md-list>
+    </md-content>
+    </md-list>
+  </md-sidenav>
+
+  <md-sidenav flex layout="column" class="md-sidenav-right md-whiteframe-z2" md-component-id="landing" md-is-locked-open="false">
+    <md-toolbar class="md-theme-indigo" layout="row" layout-align="space-between center" >
+      <div class="md-toolbar-tools" layout="row" layout-align="space-around center" flex>
+        <h1><span>Landing Params</span></h1>
+      </div>
+      <md-button class="md-icon-button" aria-label="Menu" ng-click="toggleNav('landing')">
+        <i class="material-icons">keyboard_arrow_right</i>
+      </md-button>
+    </md-toolbar>
+    <md-divider></md-divider>
+    <md-content flex layout-padding>
+      <md-list>
+        <md-list-item class="md-3-line" ng-repeat="item in landing">
+          <div class="md-list-item-text" layout="column">
+            <h3>{{ item.when}}</h3>
+            <h4>{{ item.what}}</h4>
+          </div>
+        </md-list-item>
+      </md-list>            
+    </md-content>
+    </md-list>
+  </md-sidenav>
+
+  <md-sidenav flex layout="column" class="md-sidenav-right md-whiteframe-z2" md-component-id="orbit" md-is-locked-open="false">
+    <md-toolbar class="md-theme-indigo" layout="row" layout-align="space-between center" >
+      <div class="md-toolbar-tools" layout="row" layout-align="space-around center" flex>
+        <h1><span>Orbital Params</span></h1>
+      </div>
+      <md-button class="md-icon-button" aria-label="Menu" ng-click="toggleNav('orbit')">
+        <i class="material-icons">keyboard_arrow_right</i>
+      </md-button>
+    </md-toolbar>
+    <md-divider></md-divider>
+    <md-content flex layout-padding>
+      <md-list>
+        <md-list-item class="md-3-line" ng-repeat="item in orbit">
+          <div class="md-list-item-text" layout="column">
+            <h3>{{ item.when}}</h3>
+            <h4>{{ item.what}}</h4>
+          </div>
+        </md-list-item>
+      </md-list>            
+    </md-content>
+    </md-list>
+  </md-sidenav>
+</md-content>

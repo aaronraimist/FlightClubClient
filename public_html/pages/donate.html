@@ -1,0 +1,38 @@
+<md-content layout-fill flex layout="column">
+  <md-content ng-show="!processed" flex layout="column" layout-align="center center" layout-padding>
+    <md-content flex="5"></md-content>
+    <md-content flex layout="row">
+      <md-content flex="5" flex-gt-sm="25"></md-content>
+      <md-content flex>
+        <p>You're donating! Thank you!</p>
+        <p>Donations to Flight Club help me pay for my server costs and any other related charges.</p>
+        <p>In the unlikely event I ever get more donations per month than my servers cost, I can buy more CPU time which means
+          more, faster simulations. Woo! Science!</p>
+      </md-content>
+      <md-content flex="5" flex-gt-sm="25"></md-content>
+    </md-content>
+    <md-content flex>
+      <md-input-container>
+        <label>Amount (€)</label>
+        <input ng-change="validate()" ng-model="amountEuro">
+      </md-input-container>
+    </md-content>
+    <md-button class="md-primary md-raised" ng-disabled="!valid" ng-click="click()">Proceed</md-button>
+    <md-content flex="10"></md-content>
+  </md-content>
+
+  <md-content ng-show="processed" flex layout="column" layout-align="center center" layout-padding>
+    <md-content flex></md-content>
+    <md-content ng-show="success">
+      <p>Thank you :)</p>
+    </md-content>
+    <md-content ng-show="!success">
+      <md-content flex>
+        <p>{{error}}</p>
+        <p>{{errorDetail}}</p>
+      </md-content>
+    </md-content>
+    <md-content flex></md-content>
+    <md-content flex></md-content>
+  </md-content>
+</md-content>
