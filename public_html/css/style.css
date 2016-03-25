@@ -28,6 +28,9 @@ md-input-container {
 
 .fixie {
   position:fixed;
+}
+
+.fullPage {
   top:0;
   left:0;
   z-index:1;
@@ -36,6 +39,10 @@ md-input-container {
 
 .fullHeight {
   min-height: 100%;
+}
+
+.hide {
+  display: none;
 }
 
 .eventLabel {
@@ -71,7 +78,11 @@ md-select, md-switch {
 }
 
 md-sidenav, md-backdrop {
-  position: fixed !important;
+  position: fixed;
+}
+
+#world md-backdrop {
+  display: none;
 }
 
 #cesiumContainer {
@@ -85,11 +96,6 @@ md-sidenav, md-backdrop {
 #world md-menu-content {
   background: black;
   padding: 0;
-}
-
-/* Keep main content visible while sidenav is open */
-#world md-backdrop.md-sidenav-backdrop {
-  background-color:transparent;
 }
 
 @media 

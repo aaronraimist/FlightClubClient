@@ -311,7 +311,7 @@ app.controller('HomeCtrl', function ($scope, $mdDialog) {
 
 app.controller('LoginCtrl', function ($timeout, $document, $scope, $cookies, $location) {
 
-  $scope.$parent.toolbarClass = "fixie";
+  $scope.$parent.toolbarClass = "fullPage fixie";
   $scope.$parent.toolbarTitle = 'Login';
 
   // hack to fix password label not detecting input on Chrome 
@@ -354,7 +354,7 @@ app.controller('LoginCtrl', function ($timeout, $document, $scope, $cookies, $lo
 
 app.controller('ContactCtrl', function ($scope, $http, $mdDialog) {
 
-  $scope.$parent.toolbarClass = "fixie";
+  $scope.$parent.toolbarClass = "fullPage fixie";
   $scope.$parent.toolbarTitle = 'Contact';
   $scope.mailSuccess = false;
   $scope.form = {
@@ -396,7 +396,7 @@ app.controller('ContactCtrl', function ($scope, $http, $mdDialog) {
 
 app.controller('DonateCtrl', function ($scope) {
 
-  $scope.$parent.toolbarClass = "fixie";
+  $scope.$parent.toolbarClass = "fullPage fixie";
   $scope.$parent.toolbarTitle = 'Donate';
   $scope.processed = false;
   $scope.success = false;
@@ -465,7 +465,7 @@ app.controller('DonateCtrl', function ($scope) {
 
 });
 
-app.controller('ResultsCtrl', function ($scope, $location, $mdSidenav, $cookies) {
+app.controller('ResultsCtrl', function ($scope, $cookies) {
   
   $scope.$parent.toolbarClass = "";
   $scope.$parent.toolbarTitle = 'Results';
@@ -645,7 +645,7 @@ app.controller('ResultsCtrl', function ($scope, $location, $mdSidenav, $cookies)
   };
 
   $scope.goToLive = function () {
-    window.location = "/world?watch=1&code=" + $scope.queryParams['code'];
+    $scope.$parent.redirect("/world?watch=1&code=" + $scope.queryParams['code']);
   };
 
   $scope.overrideLive = function () {
@@ -807,116 +807,47 @@ app.controller('ResultsCtrl', function ($scope, $location, $mdSidenav, $cookies)
   };
 });
 
-app.controller('WorldCtrl', function ($scope, $mdSidenav) {
+app.controller('WorldCtrl', function ($scope) {
 
-  $scope.$parent.toolbarTitle = 'Live';
+  $scope.$parent.toolbarClass = "";
+  $scope.$parent.toolbarTitle = "Live";
   var w = new world();
+
+  var fullData = []; // all data from output files - filled at start
+  var eventsData = []; // all data from events files - filled at start
+  var vel = []; // vel vs. time - grows in real time
+  var alt = []; // alt v. time - grows in real time
+  var future = []; // full alt and vel data
+  var focusPoints = []; // timestamps for specific points of interest. everything is plotted at these times
+
+  var plot = {};
+  var max = [];
+
+  var rand5 = 5 * 60 * 1000 * Math.random(); // 5 minute range
 
   $scope.countdown = $scope.finished = false;
   $scope.cesiumShow = $scope.sidebarShow = false;
-  $scope.rand5 = 5 * 60 * 1000 * Math.random(); // 5 minute range
 
   $scope.selectedStage = 0;
   $scope.clickStage = function (stage) {
     $scope.selectedStage = stage;
     w.trackEntity(stage);
-
+    plot["altitude"].getOptions().yaxes[0].max = max[stage]["altitude"];
+    plot["altitude"].setupGrid();
+    plot["velocity"].getOptions().yaxes[0].max = max[stage]["velocity"];
+    plot["velocity"].setupGrid();
   };
 
-  $scope.toggleToolbar = function () {
-    $scope.toolbar.open = !$scope.toolbar.open;
-  };
-
-  $scope.toggle = function () {
-    $mdSidenav('right').toggle();
-    w.plotResize(false);
-  };
-
-  setInterval(function () {
-    $scope.$apply(function () {
-      setClock($scope, w);
-    });
-  }, 1000);
-  
-  $scope.fillData = function (w) {
-    return function (data)
-    {
-      w.setProp('missionName', data.Mission.description);
-      w.setProp('vehicle', data.Mission.launchvehicle);
-      if (w.getProp('vehicle') === 'FNH') {
-        w.setProp('numStages', 3);
-      } else {
-        w.setProp('numStages', 2);
-      }
-
-      $scope.missionName = w.getProp('missionName');
-      $scope.missionCode = w.getProp('code');
-      $scope.stage0 = w.getStageName(0);
-      $scope.stage1 = w.getStageName(1);
-      $scope.stage2 = w.getStageName(2);
-      document.title = w.getProp('missionName') + ' Live!';
-      var tempDate = data.Mission.date.replace(/-/g, "/") + ' ' + data.Mission.time + ' UTC';
-      w.setProp('launchTime', Date.parse(tempDate));
-      var now = new Date();
-      var timeUntilLaunch = w.getProp('launchTime') - now;
-      if (w.getProp('watch') === '2') {
-        $scope.sidebarShow = true;
-        $scope.cesiumShow = true;
-        w.setProp('id', data.Mission.livelaunch);
-        w.loadDataAndPlot();
-      } else if (w.getProp('id') !== undefined) {
-        $scope.cesiumShow = true;
-        w.loadDataAndPlot();
-        w.setCameraLookingAt(data.Mission.launchsite);
-      }
-      else if (w.getProp('watch') === '1')
-      {
-        if (timeUntilLaunch > 1 * 60 * 60 * 1000)
-        {
-          $scope.countdown = true;
-        }
-        else if (timeUntilLaunch < -14 * 60 * 1000)
-        {
-          $scope.finished = true;
-        }
-        else
-        {
-          $scope.cesiumShow = true;
-          $scope.sidebarShow = true;
-          w.setProp('id', data.Mission.livelaunch);
-          w.loadDataAndPlot();
-          w.setCameraLookingAt(data.Mission.launchsite);
-        }
-      }
-
-      setTimeout(function () {
-        var fullWidth = $(document.body)[0].clientWidth;
-        var width = $("md-sidenav")[0].clientWidth;
-        $("#cesiumContainer").width((fullWidth - width) + 'px');
-        for (var stage = 0; stage < 2; stage++) {
-          w.initialisePlot("altitude", stage);
-          w.initialisePlot("velocity", stage);
-        }
-      }, 1000);
-    };
-  };
-
-  angular.element(document).ready(function () {
-    var queryString = window.location.search.substring(1);
-    w.setProps($scope.$parent.parseQueryString(queryString));
-    $scope.$parent.httpRequest('/missions/' + w.getProp('code'), 'GET', null, $scope.fillData(w), null);
-  });
-
-  function setClock(scope, world) {
+  $scope.setClock = function (world) {
 
     var _second = 1000;
     var _minute = _second * 60;
     var _hour = _minute * 60;
     var _day = _hour * 24;
 
-    if (scope.cesiumShow) {
-      if (world.getViewer() !== undefined) {
-        var now = Cesium.JulianDate.toDate(world.getViewer().clock.currentTime);
+    if ($scope.cesiumShow) {
+      if (world.viewer !== undefined) {
+        var now = Cesium.JulianDate.toDate(world.viewer.clock.currentTime);
         var distance = world.getLaunchTime() - now;
         var sign = distance > 0 ? '-' : '+';
         var days = Math.floor(distance / _day);
@@ -936,17 +867,17 @@ app.controller('WorldCtrl', function ($scope, $mdSidenav) {
         if (seconds < 10)
           seconds = '0' + seconds;
 
-        if (Math.abs((5 * _minute - scope.rand5) - distance) < 1000)  // polls for aborts between T-5 -> T-0
-          world.pollLaunchTime();
-        if (Math.abs(scope.rand5 + distance) < 1000 && world.getProp('watch') !== '2') // poll for aborts between T-0 -> T+5
-          world.pollLaunchTime();
-        if (Math.abs((15 * _minute + 2 * scope.rand5) + distance) < 1000 && world.getProp('watch') !== '2') // plots -> over limit between T+15 -> T+25
+        if (Math.abs((5 * _minute - rand5) - distance) < 1000)  // polls for aborts between T-5 -> T-0
+          $scope.pollLaunchTime();
+        if (Math.abs(rand5 + distance) < 1000 && world.getProp('watch') !== '2') // poll for aborts between T-0 -> T+5
+          $scope.pollLaunchTime();
+        if (Math.abs((15 * _minute + 2 * rand5) + distance) < 1000 && world.getProp('watch') !== '2') // plots -> over limit between T+15 -> T+25
           window.location.reload(true);
 
-        scope.clock = 'T' + sign + hours + ':' + minutes + ':' + seconds;
+        $scope.clock = 'T' + sign + hours + ':' + minutes + ':' + seconds;
       }
 
-    } else if (scope.countdown) {
+    } else if ($scope.countdown) {
 
       var now = new Date();
       var distance = world.getProp('launchTime') - now;
@@ -956,15 +887,571 @@ app.controller('WorldCtrl', function ($scope, $mdSidenav) {
       var minutes = Math.abs(Math.floor((distance % _hour) / _minute));
       var seconds = Math.abs(Math.floor((distance % _minute) / _second));
 
-      scope.days = days + ' day' + ((days !== 1) ? 's' : '');
-      scope.hours = hours + ' hour' + ((hours !== 1) ? 's' : '');
-      scope.minutes = minutes + ' minute' + ((minutes !== 1) ? 's' : '');
-      scope.seconds = seconds + ' second' + ((seconds !== 1) ? 's' : '');
+      $scope.days = days + ' day' + ((days !== 1) ? 's' : '');
+      $scope.hours = hours + ' hour' + ((hours !== 1) ? 's' : '');
+      $scope.minutes = minutes + ' minute' + ((minutes !== 1) ? 's' : '');
+      $scope.seconds = seconds + ' second' + ((seconds !== 1) ? 's' : '');
 
-      if (Math.abs((59 * _minute - scope.rand5) - distance) < 1000) // clock -> plots limit between T-59 -> T-54
+      if (Math.abs((59 * _minute - rand5) - distance) < 1000) // clock -> plots limit between T-59 -> T-54
         window.location.reload(true);
 
     }
-  }
+  };
+
+  $scope.pollLaunchTime = function() {
+    $scope.$parent.httpRequest('/missions/' + w.getProp('code'), 'GET', null,
+            function (data) {
+              var tempDate = data.Mission.date.replace(/-/g, "/") + ' ' + data.Mission.time + ' UTC';
+              var newTime = Date.parse(tempDate);
+
+              if (newTime !== w.getProp('launchTime'))
+                window.location.reload(true);
+            },
+            null);
+  };
+
+  angular.element(document).ready(function () {
+    var queryString = window.location.search.substring(1);
+    w.setProps($scope.$parent.parseQueryString(queryString));
+
+    $scope.$parent.httpRequest('/missions/' + w.getProp('code'), 'GET', null, function (data) {$scope.fillData(data);}, null);
+
+    setInterval(function () {
+      $scope.$apply(function () {
+        $scope.setClock(w);
+      });
+    }, 1000);
+  });
+
+  $scope.fillData = function (data) {
+
+      w.setProp('missionName', data.Mission.description);
+      w.setProp('vehicle', data.Mission.launchvehicle);
+      if (w.getProp('vehicle') === 'FNH') {
+        w.setProp('numStages', 3);
+      } else {
+        w.setProp('numStages', 2);
+      }
+
+      $scope.missionName = w.getProp('missionName');
+      $scope.missionCode = w.getProp('code');
+      $scope.stage0 = $scope.getStageName(0);
+      $scope.stage1 = $scope.getStageName(1);
+      $scope.stage2 = $scope.getStageName(2);
+
+      var tempDate = data.Mission.date.replace(/-/g, "/") + ' ' + data.Mission.time + ' UTC';
+      w.setProp('launchTime', Date.parse(tempDate));
+
+      var now = new Date();
+      var timeUntilLaunch = w.getProp('launchTime') - now;
+
+      if (w.getProp('watch') === '2') {
+        $scope.sidebarShow = true;
+        $scope.cesiumShow = true;
+        $scope.$parent.toolbarClass = "hide";
+        w.setProp('id', data.Mission.livelaunch);
+        $scope.loadDataAndPlot();
+      } else if (w.getProp('id') !== undefined) {
+        $scope.cesiumShow = true;
+        $scope.$parent.toolbarClass = "hide";
+        $scope.loadDataAndPlot();
+        w.setCameraLookingAt(data.Mission.launchsite);
+      }
+      else if (w.getProp('watch') === '1')
+      {
+        if (timeUntilLaunch > 1 * 60 * 60 * 1000)
+        {
+          $scope.countdown = true;
+        }
+        else if (timeUntilLaunch < -14 * 60 * 1000)
+        {
+          $scope.finished = true;
+        }
+        else
+        {
+          $scope.cesiumShow = true;
+          $scope.sidebarShow = true;
+          $scope.$parent.toolbarClass = "hide";
+          w.setProp('id', data.Mission.livelaunch);
+          $scope.loadDataAndPlot();
+          w.setCameraLookingAt(data.Mission.launchsite);
+        }
+      }
+
+      setTimeout(function () {
+        var fullWidth = $(document.body)[0].clientWidth;
+        var width = $("md-sidenav")[0].clientWidth;
+        $("#cesiumContainer").width((fullWidth - width) + 'px');
+
+        for (var stage = 0; stage < 2; stage++) {
+          $scope.initialisePlot("altitude", stage);
+          $scope.initialisePlot("velocity", stage);
+        }
+      }, 1000);
+  };
+
+  $scope.initialisePlot = function(element, stage) {
+
+    var width = $("md-sidenav")[0].clientWidth;
+    if(width===0) // sidenav is collapsed on mobile, but width is 320 when expanded
+      width = 320;
+
+    var placeholder = $("#" + element + "Plot");
+    placeholder.width(width);
+    placeholder.height(width / 1.6);
+
+    if (placeholder.length > 0) {
+      plot[element] = $.plot(placeholder, [[], []], {
+        series: {
+          shadowSize: 0	// Drawing is faster without shadows
+        },
+        yaxis: {
+          min: 0,
+          max: max[stage][element]
+        },
+        xaxis: {
+          min: -2,
+          max: 600
+        }
+      });
+    }
+  };
+
+  $scope.getStageName = function (stageNum) {
+    switch (stageNum) {
+      case 0:
+        return "Booster";
+      case 1:
+        return w.getProp('vehicle') === "FNH" ? "Core" : "UpperStage";
+      case 2:
+        return w.getProp('vehicle') === "FNH" ? "UpperStage" : undefined;
+      default:
+        return undefined;
+    }
+  };
+
+  $scope.loadDataAndPlot = function () {
+
+    for (var i = 0; i < w.getProp('numStages'); i++) {
+
+      fullData[i] = [];
+
+      if (alt[i] === undefined)
+        alt[i] = [];
+      alt[i][0] = [];
+      alt[i][1] = [];
+
+      if (vel[i] === undefined)
+        vel[i] = [];
+      vel[i][0] = [];
+      vel[i][1] = [];
+
+      future[i] = {};
+      future[i]["alt"] = [];
+      future[i]["vel"] = [];
+
+      max[i] = {};
+    }
+
+    var launchDate = new Date(w.getProp('launchTime'));
+    var end = new Date(w.getProp('launchTime') + 600e3);
+    var now;
+    if (w.getProp('watch') === '1')
+      now = new Date();
+    else
+      now = new Date(w.getProp('launchTime') - 30e3);
+
+    w.entities = [];
+    w.viewer = new Cesium.Viewer('cesiumContainer', {
+      timeline: true,
+      animation: false,
+      scene3DOnly: true,
+      fullscreenButton: false,
+      homeButton: false,
+      geocoder: false,
+      baseLayerPicker: false,
+      creditContainer: document.getElementById("creditContainer"),
+      clock: new Cesium.Clock({
+        startTime: Cesium.JulianDate.fromDate(launchDate),
+        currentTime: Cesium.JulianDate.fromDate(now),
+        stopTime: Cesium.JulianDate.fromDate(end),
+        clockRange: Cesium.ClockRange.UNBOUNDED,
+        clockStep: Cesium.ClockStep.SYSTEM_CLOCK_MULTIPLIER
+      })
+
+    });
+
+    w.viewer.scene.globe.enableLighting = true;
+    var terrainProvider = new Cesium.CesiumTerrainProvider({
+      url: '//assets.agi.com/stk-terrain/world',
+      requestWaterMask: true,
+      requestVertexNormals: true
+    });
+    w.viewer.terrainProvider = terrainProvider;
+
+    w.viewer.timeline.updateFromClock();
+    w.viewer.timeline.zoomTo(w.viewer.clock.startTime, w.viewer.clock.stopTime);
+
+    $scope.getHazardMap();
+  };
+
+  $scope.getHazardMap = function () {
+
+    var url = $scope.$parent.client + '/resource/' + w.getProp('code') + '.hazard.txt';
+    $.ajax({type: 'GET', url: url, contentType: 'text', data: null,
+      xhrFields: {withCredentials: false},
+      success: successfn,
+      error: errorfn
+    });
+
+    function successfn(data) {
+
+      var lines = data.split("\n");
+      var array = [];
+      for (var i = 0; i < lines.length; i++) {
+
+        if (lines[i].indexOf(";") === -1) {
+          if (array.length > 0) {
+            w.viewer.entities.add({
+              polygon: {
+                hierarchy: Cesium.Cartesian3.fromDegreesArray(array),
+                material: Cesium.Color.RED.withAlpha(0.3),
+                outline: true,
+                outlineColor: Cesium.Color.RED
+              }
+            });
+            array = [];
+          }
+        }
+
+        if (lines[i].indexOf(";") > -1) {
+          var data = lines[i].split(";");
+          array.push(data[0], data[1]);
+        }
+      }
+
+      $scope.getEventsFile(0);
+    }
+
+    function errorfn(data) {
+      console.log(data);
+      $scope.getEventsFile(0);
+    }
+  };
+
+  $scope.getDataFile = function (stage) {
+
+    var url = $scope.$parent.client + '/output/' + w.getProp('id') + '_' + $scope.getStageName(stage) + '.dat';
+    $.ajax({type: 'GET', url: url, contentType: 'text', data: null,
+      xhrFields: {withCredentials: false},
+      success: successfn,
+      error: errorfn
+    });
+
+    function successfn(data) {
+
+      var lines = data.split("\n");
+
+      var p_stage = new Cesium.SampledPositionProperty();
+      var trajectory = new Cesium.SampledPositionProperty();
+
+      var launchDate = new Date(w.getProp('launchTime'));
+
+      var start = Cesium.JulianDate.fromDate(launchDate);
+      var stop = Cesium.JulianDate.addSeconds(start, 7200, new Cesium.JulianDate());
+
+      var t = 0, throttle = 0;
+      for (var i = 1; i < lines.length; i++) {
+
+        if (lines[i] === "")
+          continue;
+
+        var data = lines[i].split("\t");
+        fullData[stage][parseInt(data[0])] = parseFloat(data[6]) + ":" + parseFloat(data[4]) + ":" + parseFloat(data[5]);
+
+        if (t < 600 && parseFloat(data[4]) > max[stage]["altitude"] || max[stage]["altitude"] === undefined)
+          max[stage]["altitude"] = Math.ceil(parseFloat(data[4]) / 100) * 100;
+        if (t < 600 && parseFloat(data[5]) > max[stage]["velocity"] || max[stage]["velocity"] === undefined)
+          max[stage]["velocity"] = Math.ceil(parseFloat(data[5]) / 500) * 500;
+
+        var focus = false;
+        for (var j = 0; j < focusPoints.length; j++) {
+          if (Math.abs(data[0] - focusPoints[j]) <= 0.5) {
+            focus = true;
+            break;
+          }
+        }
+
+        t = parseInt(data[0]);
+        var x = parseFloat(data[1]);
+        var y = parseFloat(data[2]);
+        var z = parseFloat(data[3]);
+        var h = parseFloat(data[4]) * 1e3;
+
+        var lat = 180 * Math.atan(z / Math.sqrt(x * x + y * y)) / Math.PI;
+        var lon = 180 * Math.atan2(y, x) / Math.PI;
+
+        var time = Cesium.JulianDate.addSeconds(start, t, new Cesium.JulianDate());
+        var position = Cesium.Cartesian3.fromDegrees(lon, lat, h);
+        trajectory.addSample(time, position);
+        p_stage.addSample(time, position);
+
+        if (focus) {
+          var e = w.viewer.entities.add({
+            availability: new Cesium.TimeIntervalCollection([new Cesium.TimeInterval({start: start, stop: stop})]),
+            position: trajectory,
+            path: {resolution: 1, material: new Cesium.PolylineGlowMaterialProperty({glowPower: 0.1, color: throttle >= 0.5 ? Cesium.Color.RED : Cesium.Color.YELLOW}), width: 8}
+          });
+          e.position.setInterpolationOptions({
+            interpolationDegree: 5,
+            interpolationAlgorithm: Cesium.LagrangePolynomialApproximation
+          });
+
+          trajectory = new Cesium.SampledPositionProperty();
+          trajectory.addSample(time, position);
+        }
+        throttle = parseFloat(data[12]);
+
+      }
+
+      var e = w.viewer.entities.add({
+        availability: new Cesium.TimeIntervalCollection([new Cesium.TimeInterval({start: start, stop: stop})]),
+        position: trajectory,
+        path: {resolution: 1, material: new Cesium.PolylineGlowMaterialProperty({glowPower: 0.1, color: throttle >= 0.5 ? Cesium.Color.RED : Cesium.Color.YELLOW}), width: 8}
+      });
+      e.position.setInterpolationOptions({
+        interpolationDegree: 5,
+        interpolationAlgorithm: Cesium.LagrangePolynomialApproximation
+      });
+
+      if (w.getProp('watch') !== undefined) {
+        var pinBuilder = new Cesium.PinBuilder();
+        w.entities[stage] = w.viewer.entities.add({
+          position: p_stage,
+          path: {resolution: 1, material: new Cesium.PolylineGlowMaterialProperty({glowPower: 0.1, color: Cesium.Color.TRANSPARENT}), width: 1},
+          billboard: {
+            image: pinBuilder.fromText(stage + 1, Cesium.Color.ROYALBLUE, 32).toDataURL(),
+            verticalOrigin: Cesium.VerticalOrigin.BOTTOM
+          }
+        });
+        w.entities[stage].position.setInterpolationOptions({
+          interpolationDegree: 5,
+          interpolationAlgorithm: Cesium.LagrangePolynomialApproximation
+        });
+      }
+
+      $scope.getEventsFile(stage + 1);
+    }
+
+    function errorfn(data) {
+      console.log(data);
+    }
+  };
+
+  $scope.getEventsFile = function (stage) {
+    if ($scope.getStageName(stage) === undefined) {
+      $scope.start();
+    }
+    else {
+      var url = $scope.$parent.client + '/output/' + w.getProp('id') + '_' + $scope.getStageName(stage) + '_events.dat';
+      $.ajax({type: 'GET', url: url, contentType: 'text', data: null,
+        xhrFields: {withCredentials: false},
+        success: successfn,
+        error: errorfn
+      });
+    }
+
+    function successfn(data) {
+      var lines = data.split("\n");
+      eventsData[stage] = [];
+
+      focusPoints = [];
+      for (var i = 1; i < lines.length; i++) {
+        var data = lines[i].split("\t");
+
+        if (data.length === 1)
+          continue;
+
+        eventsData[stage][parseInt(data[0])] = parseFloat(data[12]); // eventsData[time] = throttle
+        focusPoints.push(parseFloat(data[0]));
+
+        var x = parseFloat(data[1]);
+        var y = parseFloat(data[2]);
+        var z = parseFloat(data[3]);
+        var h = parseFloat(data[4]) * 1e3;
+
+        var lat = 180 * Math.atan(z / Math.sqrt(x * x + y * y)) / Math.PI;
+        var lon = 180 * Math.atan2(y, x) / Math.PI;
+
+        w.viewer.entities.add({
+          position: Cesium.Cartesian3.fromDegrees(lon, lat, h),
+          point: {pixelSize: 5, color: Cesium.Color.TRANSPARENT, outlineColor: Cesium.Color.RED, outlineWidth: 1}
+        });
+      }
+
+      $scope.getDataFile(stage);
+    }
+
+    function errorfn(data) {
+      console.log(data);
+    }
+  };
+
+  $scope.start = function () {
+
+    if (w.getProp('watch') !== undefined) {
+      $scope.fillFutureArray();
+      $scope.update();
+    }
+
+  };
+
+  $scope.update = function() {
+
+    var currentTime = Cesium.JulianDate.toDate(w.viewer.clock.currentTime);
+    var time = (currentTime - w.getProp('launchTime')) / 1000;
+    time = parseInt(time);
+    
+    if (time >= -10) { // only execute this code after T-00:00:10
+      
+      if(w.getTrackedStage()===undefined) {
+        w.trackEntity(0);
+      }
+
+      var stage = w.getTrackedStage();
+      for(var i=0;i<w.getProp('numStages');i++) {
+        vel[i][0] = [];
+        vel[i][1] = [];
+        alt[i][0] = [];
+        alt[i][1] = [];
+      }
+      for (var i = -5; i <= time; i++) {
+
+        if (fullData[stage][i] === undefined) {
+          if (fullData[stage - 1] !== undefined)
+          {
+            if (eventsData[stage - 1][i] !== undefined)
+            {
+              var tel = fullData[stage - 1][i].split(":");
+              vel[stage][0].push([i, tel[2]]);
+              vel[stage][1].push([i, tel[2]]);
+              alt[stage][0].push([i, tel[1]]);
+              alt[stage][1].push([i, tel[1]]);
+            }
+            else if (fullData[stage - 1][i] !== undefined)
+            {
+              var tel = fullData[stage - 1][i].split(":");
+              vel[stage][0].push([i, tel[2]]);
+              alt[stage][0].push([i, tel[1]]);
+            }
+          }
+        }
+        else if (eventsData[stage][i] !== undefined)
+        {
+          var tel = fullData[stage][i].split(":");
+          vel[stage][0].push([i, tel[2]]);
+          vel[stage][1].push([i, tel[2]]);
+          alt[stage][0].push([i, tel[1]]);
+          alt[stage][1].push([i, tel[1]]);
+        }
+        else
+        {
+          var tel = fullData[stage][i].split(":");
+          vel[stage][0].push([i, tel[2]]);
+          alt[stage][0].push([i, tel[1]]);
+        }
+      }
+      
+      if(fullData[stage] !== undefined && fullData[stage][time] !== undefined) 
+      {
+        var tel = fullData[stage][time].split(":");
+        $("#altitudeTel").html('ALTITUDE: ' + (tel[1] < 1 ? 1000 * tel[1] + ' M' : Math.floor(10 * tel[1]) / 10 + ' KM'));
+        $("#velocityTel").html('VELOCITY: ' + Math.floor(tel[2]) + ' M/S');
+      } 
+      else if (fullData[stage - 1] !== undefined && fullData[stage - 1][time] !== undefined) 
+      {
+        var tel = fullData[stage - 1][time].split(":");
+        $("#altitudeTel").html('ALTITUDE: ' + (tel[1] < 1 ? 1000 * tel[1] + ' M' : Math.floor(10 * tel[1]) / 10 + ' KM'));
+        $("#velocityTel").html('VELOCITY: ' + Math.floor(tel[2]) + ' M/S');
+      } 
+      else 
+      {
+        $("#altitudeTel").html('ALTITUDE: 0 KM');
+        $("#velocityTel").html('VELOCITY: 0 M/S');
+      }
+
+      plot["altitude"].setData([
+        {data: future[0]["alt"], color: '#aaaaaa', lineWidth: 1, lines: {show: true, fill: false}},
+        {data: alt[0][0], color: '#ff0000', lineWidth: 1, lines: {show: true, fill: stage === 0}},
+        {data: alt[0][1], lines: {show: false}, points: {show: true}},
+        {data: future[1]["alt"], color: '#aaaaaa', lineWidth: 1, lines: {show: true, fill: false}},
+        {data: alt[1][0], lineWidth: 1, lines: {show: true, fill: stage===1}},
+        {data: alt[1][1], color: '#ff0000', lines: {show: false}, points: {show: true}}
+      ]);
+      plot["altitude"].draw();
+
+      plot["velocity"].setData([
+        {data: future[0]["vel"], color: '#aaaaaa', lineWidth: 1, lines: {show: true, fill: false}},
+        {data: vel[0][0], color: '#ff0000', lineWidth: 1, lines: {show: true, fill: stage === 0}},
+        {data: vel[0][1], lines: {show: false}, points: {show: true}},
+        {data: future[1]["vel"], color: '#aaaaaa', lineWidth: 1, lines: {show: true, fill: false}},
+        {data: vel[1][0], lineWidth: 1, lines: {show: true, fill: stage===1}},
+        {data: vel[1][1], color: '#ff0000', lines: {show: false}, points: {show: true}}
+      ]);
+      plot["velocity"].draw();
+
+    }
+
+    setTimeout($scope.update, 500);
+  };
+  
+
+  $scope.fillFutureArray = function () {
+
+    for (var stage = 0; stage < w.getProp('numStages'); stage++) {
+
+      for (var i = -5; i < fullData[stage].length; i++) {
+
+        if (fullData[stage][i] === undefined)
+          continue;
+
+        var tel = fullData[stage][i].split(":");
+        future[stage]["alt"].push([i, tel[1]]);
+        future[stage]["vel"].push([i, tel[2]]);
+      }
+    }
+    for (var stage = 0; stage < w.getProp('numStages'); stage++) {
+
+      $("#altitudeTel").html('ALTITUDE: 0 KM');
+      $("#velocityTel").html('VELOCITY: 0 M/S');
+
+    }
+  };
+  
+  $scope.plotResize = function(considerSidebar) {
+      
+    setTimeout(function () {
+      for (var stage = 0; stage < 2; stage++) {
+        var width = $("md-sidenav")[0].clientWidth;
+        $("#altitudePlot").width(width);
+        $("#velocityPlot").width(width);
+        $("#altitudePlot").height(width / 1.6);
+        $("#velocityPlot").height(width / 1.6);
+      }
+      var w2;
+      if(considerSidebar) {
+        $scope.initialisePlot("altitude", w.getTrackedStage());
+        $scope.initialisePlot("velocity", w.getTrackedStage());
+        w2 = $(document.body)[0].clientWidth - $("md-sidenav")[0].clientWidth;
+      } else {
+        w2 = $(document.body)[0].clientWidth;
+      }
+      $("#cesiumContainer").width(w2);
+    }, 500);
+  };
+
+  $(window).resize(function () {
+    $scope.plotResize($(document.body)[0].clientWidth >= 960);
+  });
 
 });
