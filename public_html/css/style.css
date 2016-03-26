@@ -1,5 +1,5 @@
 
-html {
+html, input, textarea, select {
   font-family: 'Quicksand', sans-serif !important;
 }
 
@@ -7,8 +7,8 @@ html {
   text-align: center;
 }
 
-.md-button, .md-tab, .md-list-item-inner, .md-select-value {
-    font-weight: 900;
+* {
+  font-weight: 900;
 }
 
 /*
@@ -24,6 +24,25 @@ md-menu-item {
 
 md-input-container {
   margin-bottom: 0;
+}
+
+.fixie {
+  position:fixed;
+}
+
+.fullPage {
+  top:0;
+  left:0;
+  z-index:1;
+  min-width:100%;
+}
+
+.fullHeight {
+  min-height: 100%;
+}
+
+.hide {
+  display: none;
 }
 
 .eventLabel {
@@ -58,6 +77,14 @@ md-select, md-switch {
   display: none !important;
 }
 
+md-sidenav, md-backdrop {
+  position: fixed;
+}
+
+#world md-backdrop {
+  display: none;
+}
+
 #cesiumContainer {
   position: fixed;
   top: 0;
@@ -69,15 +96,6 @@ md-select, md-switch {
 #world md-menu-content {
   background: black;
   padding: 0;
-}
-
-#world md-sidenav {
-  padding-bottom: 5%;
-}
-
-/* Keep main content visible while sidenav is open */
-#world md-backdrop.md-sidenav-backdrop {
-  background-color:transparent;
 }
 
 @media 

@@ -1,0 +1,16 @@
+<md-content layout-fill flex layout="column">
+  <form flex layout="column" layout-align="center center" class="md-inline-form centre">
+    <div>
+      <md-input-container>
+        <label>Username</label>
+        <input ng-model="form.Login.username">
+      </md-input-container>
+      <md-input-container>
+        <label>Password</label>
+        <input type="password" ng-model="form.Login.password">
+      </md-input-container>
+    </div>
+    <md-button class="md-raised md-primary" type="submit" ng-click="login()">Log in</md-button>
+  </form>
+  <div>{{loginError}}</div>
+</md-content>

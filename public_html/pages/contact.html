@@ -1,0 +1,46 @@
+<md-content layout-fill flex layout="column">
+  <md-content flex layout-padding layout="column" layout-gt-sm="row" layout-align="space-around center">
+    <md-content hide-gt-sm flex></md-content>
+    <md-content hide-gt-sm flex></md-content>
+    <md-content flex layout-fill layout-padding layout="column" layout-align="space-around center">
+      <md-content flex>
+        <p>Hi! I'm Declan, the creator of Flight Club. Hope you liked it!</p>
+        <p>If you want to contact me with any bug reports, feature requests 
+          or just to say hi, the form on this page will mail me directly. 
+          I've also left links to my GitHub and LinkedIn down below if you're 
+          thinking of offering me a job.</p>
+        <p>Thanks for checking out the site!</p>
+      </md-content>
+      <md-content flex></md-content>
+      <md-content layout-fill layout='row' layout-align='space-around center'>
+        <md-button flex layout-padding class='md-raised' ng-click='redirect("https://github.com/murphd37")'><i class="fa fa-2x fa-github"></i><br>GitHub</md-button>
+        <md-button flex layout-padding class='md-raised' ng-click='redirect("https://ie.linkedin.com/in/declan-murphy-b9245787")'><i class="fa fa-2x fa-linkedin"></i><br>LinkedIn</md-button>
+      </md-content>
+    </md-content>
+    <md-content layout-fill layout-padding flex>
+      <form id="mailForm" layout-padding layout='column' layout-align='space-around center'>
+        <div flex layout-fill layout-padding layout='column' layout-gt-sm='row' layout-align='space-between center'>
+          <md-input-container flex>
+            <label>Name</label>
+            <input ng-change="validate()" ng-model="form.name">
+          </md-input-container>
+          <md-input-container flex>
+            <label>Email</label>
+            <input ng-change="validate()" type="email" name="email" ng-model="form.email" ng-pattern="/^.+@.+\..+$/" />
+            <div ng-messages="mailForm.email.$error" role="alert">
+              <div ng-message-exp="['pattern']">
+                That doesn't look like an email address...
+              </div>
+            </div>
+          </md-input-container>
+        </div>
+        <div flex layout-fill layout-padding>
+          <label>Message</label>
+          <textarea ng-change="validate()" style='min-height:100px' layout-fill ng-model="form.message"></textarea>
+        </div>
+        <md-button ng-disabled="formDisabled" class="md-raised md-primary" type="submit" ng-click="sendMail()">Send Mail!</md-button>
+        <md-icon ng-show="mailSuccess">done</md-icon>
+      </form>
+    </md-content>
+  </md-content>
+</md-content>
