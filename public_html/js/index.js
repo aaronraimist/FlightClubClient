@@ -867,12 +867,14 @@ app.controller('WorldCtrl', function ($scope) {
         if (seconds < 10)
           seconds = '0' + seconds;
 
-        if (Math.abs((5 * _minute - rand5) - distance) < 1000)  // polls for aborts between T-5 -> T-0
-          $scope.pollLaunchTime();
-        if (Math.abs(rand5 + distance) < 1000 && world.getProp('watch') !== '2') // poll for aborts between T-0 -> T+5
-          $scope.pollLaunchTime();
-        if (Math.abs((15 * _minute + 2 * rand5) + distance) < 1000 && world.getProp('watch') !== '2') // plots -> over limit between T+15 -> T+25
-          window.location.reload(true);
+        if (world.getProp('watch') !== '2') {
+          if (Math.abs((5 * _minute - rand5) - distance) < 1000)  // polls for aborts between T-5 -> T-0
+            $scope.pollLaunchTime();
+          if (Math.abs(rand5 + distance) < 1000) // poll for aborts between T-0 -> T+5
+            $scope.pollLaunchTime();
+          if (Math.abs((15 * _minute + 2 * rand5) + distance) < 1000) // plots -> over limit between T+15 -> T+25
+            window.location.reload(true);
+        }
 
         $scope.clock = 'T' + sign + hours + ':' + minutes + ':' + seconds;
       }
@@ -1316,6 +1318,10 @@ app.controller('WorldCtrl', function ($scope) {
       
       if(w.getTrackedStage()===undefined) {
         w.trackEntity(0);
+        plot["altitude"].getOptions().yaxes[0].max = max[0]["altitude"];
+        plot["altitude"].setupGrid();
+        plot["velocity"].getOptions().yaxes[0].max = max[0]["velocity"];
+        plot["velocity"].setupGrid();
       }
 
       var stage = w.getTrackedStage();
@@ -1402,7 +1408,7 @@ app.controller('WorldCtrl', function ($scope) {
 
     }
 
-    setTimeout($scope.update, 500);
+    setTimeout($scope.update, 1000);
   };
   
 
@@ -1447,7 +1453,7 @@ app.controller('WorldCtrl', function ($scope) {
         w2 = $(document.body)[0].clientWidth;
       }
       $("#cesiumContainer").width(w2);
-    }, 500);
+    }, 100);
   };
 
   $(window).resize(function () {
