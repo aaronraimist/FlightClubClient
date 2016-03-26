@@ -17,12 +17,12 @@ app.config(function ($routeProvider, $locationProvider) {
 
 app.controller('IndexCtrl', function ($scope, $mdSidenav, $cookies, $location) {
 
-  var base = 'http://localhost', port = ':8080';
-  //var base = '//www.flightclub.io', port = ':8443';
+  //var base = 'http://localhost', port = ':8080';
+  var base = '//www.flightclub.io', port = ':8443';
   $scope.toolbarClass = "";
   $scope.client = base;
-  var server = base + port + '/FlightClub';
-  var api_url = server + '/api/v1';
+  $scope.server = base + port + '/FlightClub';
+  var api_url = $scope.server + '/api/v1';
 
   $scope.httpRequest = function (dest, method, data, successfn, errorfn) {
     $.ajax({type: method, url: api_url + dest, contentType: 'application/json', data: data,
@@ -1099,7 +1099,7 @@ app.controller('WorldCtrl', function ($scope) {
 
   $scope.getHazardMap = function () {
 
-    var url = $scope.$parent.client + '/resource/' + w.getProp('code') + '.hazard.txt';
+    var url = $scope.$parent.server + '/resource/' + w.getProp('code') + '.hazard.txt';
     $.ajax({type: 'GET', url: url, contentType: 'text', data: null,
       xhrFields: {withCredentials: false},
       success: successfn,
