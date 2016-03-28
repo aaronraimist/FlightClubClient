@@ -17,8 +17,8 @@ app.config(function ($routeProvider, $locationProvider) {
 
 app.controller('IndexCtrl', function ($scope, $mdSidenav, $cookies, $location) {
 
-  //var base = 'http://localhost', port = ':8080';
-  var base = '//www.flightclub.io', port = ':8443';
+  var base = 'http://localhost', port = ':8080';
+  //var base = '//www.flightclub.io', port = ':8443';
   $scope.toolbarClass = "";
   $scope.client = base;
   $scope.server = base + port + '/FlightClub';
@@ -333,6 +333,7 @@ app.controller('LoginCtrl', function ($timeout, $document, $scope, $cookies, $lo
 
         var res = jQuery.parseJSON(JSON.stringify(data, null, 2));
         $cookies.put('authToken', res.Success.authToken, {'expires': expiryDate});
+        $scope.$parent.token = res.Success.authToken;
         $scope.$parent.loginLabel = "Logout";
         $scope.$parent.authorised = true;
         $scope.$parent.$apply(function () {
@@ -603,7 +604,7 @@ app.controller('ResultsCtrl', function ($scope, $cookies) {
                 var errors = obj.Mission.errors;
                 var errorsHash = window.btoa(errors);
 
-                window.location = client + '/error#' + errorsHash;
+                window.location = $scope.$parent.client + '/error#' + errorsHash;
               }
 
             },
@@ -614,7 +615,7 @@ app.controller('ResultsCtrl', function ($scope, $cookies) {
                 errorsHash = window.btoa(errors);
               }
 
-              window.location = client + '/error#' + errorsHash;
+              window.location = $scope.$parent.client + '/error#' + errorsHash;
             });
   }
   else if(queryString) {

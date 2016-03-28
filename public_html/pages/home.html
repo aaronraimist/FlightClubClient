@@ -117,6 +117,9 @@
                       </div>
                     </div>
                   </md-input-container>
+                  <div flex></div>
+                </md-content>
+                <md-content layout="row" layout-align="space-around center">
                   <md-input-container flex class="md-block">
                     <label>Time (seconds from T-0)</label>
                     <input ng-model="selectedEvent.time" ng-change="sortEvents()" name="time" required>
@@ -126,6 +129,12 @@
                       </div>
                     </div>
                   </md-input-container>
+                  <div flex>
+                    <md-input-container flex class="md-block" ng-show="selectedEvent.type === 'GUIDANCE'">
+                      <label>End (seconds from T-0)</label>
+                      <input ng-model="selectedEvent.end" name="end">
+                    </md-input-container>
+                  </div>
                 </md-content>
                 <md-content ng-show="selectedEvent.type === 'IGNITION'"
                             layout="row" layout-align="space-around center">
