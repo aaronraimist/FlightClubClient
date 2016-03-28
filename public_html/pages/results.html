@@ -39,7 +39,7 @@
       </md-list-item>
       <md-divider></md-divider>
       <md-subheader class="md-no-sticky">More Simulation Data</md-subheader>
-      <md-list-item ng-click="toggleNav('warnings')" ng-show="{{warnings.length > 0}}">
+      <md-list-item ng-click="toggleNav('warnings')" ng-show="warnings.length>0">
         <span class="md-secondary">Warnings</span>
       </md-list-item>
       <md-list-item ng-click="toggleNav('events')">
@@ -69,7 +69,7 @@
       <md-list>
         <md-list-item class="md-3-line" ng-repeat="item in warnings">
           <div class="md-list-item-text" layout="column">
-            <h3>{{ item}}</h3>
+            <span>{{item}}</span>
           </div>
         </md-list-item>
       </md-list>            

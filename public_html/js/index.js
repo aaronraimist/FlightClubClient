@@ -513,7 +513,8 @@ app.controller('ResultsCtrl', function ($scope, $cookies) {
 
                 $scope.warnings = [];
                 for (var i = 0; i < warnings.length; i++) {
-                  $scope.warnings.push(warnings[i]);
+                  if(warnings[i].length>0)
+                    $scope.warnings.push(warnings[i]);
                 }
 
               });
