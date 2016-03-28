@@ -23,16 +23,35 @@
   <md-content layout="row">
     <md-content ng-show="cesiumShow" flex>
       <div id="cesiumContainer"></div>
-      <div style="position:fixed;">
-        <md-button class="md-icon-button md-primary" hide-gt-sm ng-click="toggleNav('sidenav')">
-          <i class="material-icons">menu</i>
-        </md-button>
-        <md-menu md-offset="40 0">
-          <md-button class="md-icon-button md-primary" ng-click="$mdOpenMenu($event)">
-            <i class="material-icons">language</i>
+      <div style="position:fixed">
+        <md-menu>
+          <md-button class="md-icon-button md-primary" aria-label="Menu" ng-click='$mdOpenMenu()'>
+            <md-icon class="material-icons">menu</md-icon>
           </md-button>
-          <md-menu-content width="7" style="background:black;padding:0">
-            <md-menu-item id="creditContainer">
+          <md-menu-content width="4">
+            <md-menu-item>
+              <md-button ng-click="changeView()">
+                <md-icon class="material-icons">language</md-icon>
+                <span>Change View</span>
+              </md-button>
+            </md-menu-item>
+            <md-menu-item ng-show="cesiumShow && sidebarShow">
+              <md-button hide-gt-sm ng-click="toggleNav('sidenav')">
+                <md-icon class="material-icons">timeline</md-icon>
+                <span>Telemetry</span>
+              </md-button>
+            </md-menu-item>
+            <md-menu-item>
+              <md-menu>
+                <md-button ng-click='$mdOpenMenu()'>
+                  <md-icon class="material-icons">info_outline</md-icon>
+                  Credits
+                </md-button>
+                <md-menu-content width="7" style="background:black;padding:0">
+                  <md-menu-item id="creditContainer">
+                  </md-menu-item>
+                </md-menu-content>
+              </md-menu>
             </md-menu-item>
           </md-menu-content>
         </md-menu>

@@ -3,10 +3,6 @@
 
 function world() {
 
-  this.getLaunchTime = function () {
-    return w.getProp('launchTime');
-  };
-
   this.setCameraLookingAt = function (site) {
     w.viewer.camera.flyTo(launchPadViews[site]);
   };
@@ -34,8 +30,14 @@ function world() {
   this.setProp = function (name, value) {
     w.props[name] = value;
   };
-  this.getProp = function (name) {
-    return w.props[name];
+  this.getProp = function (key) {
+    if (w.props.hasOwnProperty(key)) {
+      return w.props[key];
+    }
+    return undefined;
+  };
+  this.getProps = function() {
+    return w.props;
   };
 
   var viewer;

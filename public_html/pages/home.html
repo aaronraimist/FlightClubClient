@@ -200,6 +200,16 @@
                   <md-switch ng-model="form.Mission.Stages[1].legs" aria-label="{{form.Mission.Stages[1].name}} legs"></md-switch>
                 </md-input-container>
               </md-content>
+              <md-content>
+                <md-divider></md-divider>
+                <md-content layout="row" layout-align="space-around center">
+                  <md-input-container flex class="md-block">
+                    <label>Orbits</label>
+                    <input ng-model="form.Mission.orbits" ng-disabled="!authorised">
+                  </md-input-container>
+                  <div flex></div>
+                </md-content>
+              </md-content>
               <md-content ng-show="authorised">
                 <md-divider></md-divider>
                 <md-content layout="row" layout-align="space-around center">
