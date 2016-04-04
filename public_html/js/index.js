@@ -464,6 +464,10 @@ app.controller('DonateCtrl', function ($scope) {
     }
   };
 
+  angular.element(document).ready(function () {
+    $.getScript("//checkout.stripe.com/checkout.js", null);
+  });
+
 });
 
 app.controller('ResultsCtrl', function ($scope, $cookies) {
@@ -941,6 +945,9 @@ app.controller('WorldCtrl', function ($scope, $location) {
   angular.element(document).ready(function () {
     var queryString = window.location.search.substring(1);
     window.CESIUM_BASE_URL = '//cesiumjs.org/releases/1.17/Build/Cesium/';
+    
+    // world object doesn't need to be created unless using Cesium. can put launchtime as its own variable
+    // then can move these getScript+new world() calls later in the code to only execute if showing Cesium.
     $.getScript("//cesiumjs.org/releases/1.17/Build/Cesium/Cesium.js", function ()
     {
       $.getScript("js/worldObj.js", function ()
