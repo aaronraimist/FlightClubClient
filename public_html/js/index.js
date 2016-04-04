@@ -18,7 +18,7 @@ app.config(function ($routeProvider, $locationProvider) {
 app.controller('IndexCtrl', function ($scope, $mdSidenav, $cookies, $location) {
 
   //var base = 'http://localhost', port = ':8080';
-  var base = '//www.flightclub.io', port = ':8443';
+  var base = '//flightclub.io', port = ':8443';
   $scope.toolbarClass = "";
   $scope.client = base;
   $scope.server = base + port + '/FlightClub';
@@ -813,7 +813,7 @@ app.controller('WorldCtrl', function ($scope, $location) {
 
   $scope.$parent.toolbarClass = "";
   $scope.$parent.toolbarTitle = "Live";
-  var w = new world();
+  var w;
 
   var fullData = []; // all data from output files - filled at start
   var eventsData = []; // all data from events files - filled at start
@@ -937,25 +937,35 @@ app.controller('WorldCtrl', function ($scope, $location) {
 
   angular.element(document).ready(function () {
     var queryString = window.location.search.substring(1);
-    w.setProps($scope.$parent.parseQueryString(queryString));
-    
-    switch(w.getProp('view')) {
-      case 'space':
-        offset = 17;
-        break;
-      case 'earth':
-      default:
-        offset = 0;
-        break;
-    }
+    window.CESIUM_BASE_URL = '//cesiumjs.org/releases/1.17/Build/Cesium/';
+    $.getScript("//cesiumjs.org/releases/1.17/Build/Cesium/Cesium.js", function ()
+    {
+      $.getScript("js/worldObj.js", function ()
+      {
+        w = new world();
+        w.setProps($scope.$parent.parseQueryString(queryString));
 
-    $scope.$parent.httpRequest('/missions/' + w.getProp('code'), 'GET', null, function (data) {$scope.fillData(data);}, null);
+        switch (w.getProp('view')) {
+          case 'space':
+            offset = 17;
+            break;
+          case 'earth':
+          default:
+            offset = 0;
+            break;
+        }
 
-    setInterval(function () {
-      $scope.$apply(function () {
-        $scope.setClock(w);
+        $scope.$parent.httpRequest('/missions/' + w.getProp('code'), 'GET', null, function (data) {
+          $scope.fillData(data);
+        }, null);
+
+        setInterval(function () {
+          $scope.$apply(function () {
+            $scope.setClock(w);
+          });
+        }, 1000);
       });
-    }, 1000);
+    });
   });
 
   $scope.fillData = function (data) {

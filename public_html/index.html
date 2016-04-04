@@ -19,16 +19,9 @@
     <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/angular_material/1.0.5/angular-material.min.css">
     <link href='//fonts.googleapis.com/css?family=Quicksand:400' rel='stylesheet' type='text/css'>
 
-    <script src="//cesiumjs.org/releases/1.17/Build/Cesium/Cesium.js"></script>
-    <link rel="stylesheet" href="//cesiumjs.org/releases/1.17/Build/Cesium/Widgets/widgets.css" /> 
-
-    <script src="js/flot.min.js"></script>
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <script src="js/worldObj.js"></script>  
     <script src="js/index.js"></script>  
-    <script src="//checkout.stripe.com/checkout.js"></script>
-
     <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/cesium-widgets.css" /> 
 
     <meta property="og:title" content="Flight Club" />
     <meta property="og:site_name" content="Flight Club"/>
@@ -112,5 +105,31 @@
         <md-content ng-view layout-fill layout="column" flex></md-content>
       </section>
     </div>    
+    
+    <script type="text/javascript">
+
+      // Add a script element as a child of the body
+      function downloadJSAtOnload() {
+        var scripts = [
+            "//checkout.stripe.com/checkout.js", 
+            "js/flot.min.js", 
+            "js/plotly.min.js"
+        ];
+        for(var i=0;i<scripts.length;i++) {
+          var element = document.createElement("script");
+          element.src = scripts[i];
+          document.body.appendChild(element); 
+        }
+      }
+
+      // Check for browser support of event handling capability
+      if (window.addEventListener)
+        window.addEventListener("load", downloadJSAtOnload, false);
+      else if (window.attachEvent)
+        window.attachEvent("onload", downloadJSAtOnload);
+      else 
+        window.onload = downloadJSAtOnload;
+
+    </script>
   </body>
 </html>
