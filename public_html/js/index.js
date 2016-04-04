@@ -401,38 +401,6 @@ app.controller('DonateCtrl', function ($scope) {
   $scope.$parent.toolbarTitle = 'Donate';
   $scope.processed = false;
   $scope.success = false;
-  $scope.handler = StripeCheckout.configure({
-    key: 'pk_live_s4EXO3kyuZktYh40Mbed0IFi',
-    image: 'images/favicon/android-icon-192x192.png',
-    locale: 'auto',
-    token: function (token) {
-      var data = {
-        amount: 100 * parseFloat($scope.amountEuro),
-        stripeToken: token.id,
-        email: token.email,
-        client_ip: token.client_ip
-      };
-      $scope.processed = true;
-      $scope.$parent.httpRequest('/donate', 'POST', JSON.stringify(data),
-              function (res) {
-                var data = JSON.parse(JSON.stringify(res));
-                if (data.error === undefined) {
-                  $scope.success = true;
-                } else {
-                  $scope.error = "Oops! There was an error of some sort. Your card has not been charged.";
-                  $scope.errorDetail = data.error;
-                }
-                $scope.$apply();
-              },
-              function (res) {
-                var data = JSON.parse(JSON.stringify(res));
-                $scope.error = "Oops! Looks like FlightClub isn't responding. You will not be charged.";
-                $scope.errorDetail = data.error;
-                $scope.$apply();
-              }
-      );
-    }
-  });
 
   $scope.click = function () {
     // Open Checkout with further options
@@ -465,7 +433,41 @@ app.controller('DonateCtrl', function ($scope) {
   };
 
   angular.element(document).ready(function () {
-    $.getScript("//checkout.stripe.com/checkout.js", null);
+    $.getScript("//checkout.stripe.com/checkout.js", function ()
+    {
+      $scope.handler = StripeCheckout.configure({
+        key: 'pk_live_s4EXO3kyuZktYh40Mbed0IFi',
+        image: 'images/favicon/android-icon-192x192.png',
+        locale: 'auto',
+        token: function (token) {
+          var data = {
+            amount: 100 * parseFloat($scope.amountEuro),
+            stripeToken: token.id,
+            email: token.email,
+            client_ip: token.client_ip
+          };
+          $scope.processed = true;
+          $scope.$parent.httpRequest('/donate', 'POST', JSON.stringify(data),
+                  function (res) {
+                    var data = JSON.parse(JSON.stringify(res));
+                    if (data.error === undefined) {
+                      $scope.success = true;
+                    } else {
+                      $scope.error = "Oops! There was an error of some sort. Your card has not been charged.";
+                      $scope.errorDetail = data.error;
+                    }
+                    $scope.$apply();
+                  },
+                  function (res) {
+                    var data = JSON.parse(JSON.stringify(res));
+                    $scope.error = "Oops! Looks like FlightClub isn't responding. You will not be charged.";
+                    $scope.errorDetail = data.error;
+                    $scope.$apply();
+                  }
+          );
+        }
+      });
+    });
   });
 
 });
