@@ -577,7 +577,10 @@ app.controller('ResultsCtrl', function ($scope, $cookies) {
                 $scope.stageMap[1] = "UpperStage";
               }
               $scope.missionName = data.Mission.description;
-              $scope.getDataFile(0);
+              
+              $.getScript("js/plotly.min.js", function () {
+                $scope.getDataFile(0);
+              });
 
             }, null);
   };
@@ -942,6 +945,8 @@ app.controller('WorldCtrl', function ($scope, $location) {
     {
       $.getScript("js/worldObj.js", function ()
       {
+        $.getScript("js/flot.min.js", null);
+
         w = new world();
         w.setProps($scope.$parent.parseQueryString(queryString));
 
