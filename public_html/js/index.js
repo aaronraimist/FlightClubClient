@@ -7,10 +7,12 @@ app.config(function ($routeProvider, $locationProvider) {
   $routeProvider
           .when("/", {templateUrl: "/pages/home.html", controller: "HomeCtrl"})
           .when("/login/", {templateUrl: "/pages/login.html", controller: "LoginCtrl"})
-          .when("/docs/", {controller: function () {window.location.replace('/docs/');},template: "<div></div>"})
+          .when("/docs/", {controller: function () {
+              window.location.replace('/docs/');
+            }, template: "<div></div>"})
           .when("/contact/", {templateUrl: "/pages/contact.html", controller: "ContactCtrl"})
           .when("/donate/", {templateUrl: "/pages/donate.html", controller: "DonateCtrl"})
-          .when("/results/", {templateUrl: "/pages/results.html", controller: "ResultsCtrl", reloadOnSearch:false})
+          .when("/results/", {templateUrl: "/pages/results.html", controller: "ResultsCtrl", reloadOnSearch: false})
           .when("/world/", {templateUrl: "/pages/world.html", controller: "WorldCtrl", reloadOnSearch: false})
           .otherwise({redirectTo: '/'});
 });
@@ -80,11 +82,10 @@ app.controller('IndexCtrl', function ($scope, $mdSidenav, $cookies, $location) {
   } else {
     $scope.loginLabel = "Login";
   }
+});
 
-  /*
-   * From here down should belong to HomeCtrl, but I don't want to do the Ajax calls
-   * every time the page changes. Once is fine. Resulting in bad practise code
-   */
+app.controller('HomeCtrl', function ($scope, $mdDialog) {
+
   $scope.httpRequest('/missions', 'GET', null, function (data) {
     fillMissions(data);
   }, null);
@@ -97,6 +98,21 @@ app.controller('IndexCtrl', function ($scope, $mdSidenav, $cookies, $location) {
   $scope.httpRequest('/payloads', 'GET', null, function (data) {
     $scope.payloads = fill(data);
   }, null);
+
+  $scope.$parent.toolbarClass = "";
+  $scope.gravTurnSelect = [
+    {code: 'NONE', name: null},
+    {code: 'FORWARD', name: 'Forward'},
+    {code: 'REVERSE', name: 'Reverse'}
+  ];
+
+  $scope.type = [
+    {code: 'IGNITION', name: 'Ignition'},
+    {code: 'CUTOFF', name: 'Cutoff'},
+    {code: 'GUIDANCE', name: 'Guidance'},
+    {code: 'SEPARATION', name: 'Launch/Separation'},
+    {code: 'FAIRING_SEP', name: 'Fairing Separation'}
+  ];
 
   var fillMissions = function (data) {
     var list = data.data;
@@ -116,7 +132,7 @@ app.controller('IndexCtrl', function ($scope, $mdSidenav, $cookies, $location) {
       }
 
       if ($scope.selectedMission === undefined && (missionObj.display || $scope.authorised)) {
-        $scope.$broadcast('selectMission', missionObj);
+        $scope.selectMission(missionObj.code);
         $scope.selectedMission = missionObj;
       }
     }
@@ -131,25 +147,6 @@ app.controller('IndexCtrl', function ($scope, $mdSidenav, $cookies, $location) {
     }
     return array;
   };
-
-});
-
-app.controller('HomeCtrl', function ($scope, $mdDialog) {
-
-  $scope.$parent.toolbarClass = "";
-  $scope.gravTurnSelect = [
-    {code: 'NONE', name: null},
-    {code: 'FORWARD', name: 'Forward'},
-    {code: 'REVERSE', name: 'Reverse'}
-  ];
-
-  $scope.type = [
-    {code: 'IGNITION', name: 'Ignition'},
-    {code: 'CUTOFF', name: 'Cutoff'},
-    {code: 'GUIDANCE', name: 'Guidance'},
-    {code: 'SEPARATION', name: 'Launch/Separation'},
-    {code: 'FAIRING_SEP', name: 'Fairing Separation'}
-  ];
 
   $scope.selectMission = function (code) {
     $scope.httpRequest('/missions/' + code, 'GET', null, function (data) {
@@ -166,10 +163,6 @@ app.controller('HomeCtrl', function ($scope, $mdDialog) {
   if ($scope.$parent.selectedMission !== undefined) {
     $scope.selectMission($scope.$parent.selectedMission.code);
   }
-  // this handles page refresh
-  $scope.$on('selectMission', function (event, data) {
-    $scope.selectMission(data.code);
-  });
 
   $scope.selectSite = function (event, site) {
     setUniqueClass(event.currentTarget, 'md-content', 'button', 'md-primary');
@@ -473,12 +466,12 @@ app.controller('DonateCtrl', function ($scope) {
 });
 
 app.controller('ResultsCtrl', function ($scope, $cookies) {
-  
+
   $scope.$parent.toolbarClass = "";
   $scope.$parent.toolbarTitle = 'Results';
   $scope.loadPos = 30;
   $scope.loadMessage = "Building plots...";
-  $scope.animate_rocket = function() {
+  $scope.animate_rocket = function () {
 
     var windowWidth = $(document).width();
     var margin = 0.01 * $scope.loadPos * windowWidth + 'px';
@@ -486,18 +479,18 @@ app.controller('ResultsCtrl', function ($scope, $cookies) {
       $scope.loadPos += 0.5 * (100 - $scope.loadPos);
       $("#rocket").animate(
               {marginLeft: margin},
-              1500,
+      1500,
               "linear",
               $scope.animate_rocket
               );
     } else {
       $scope.loadPos = 30;
     }
-      
+
   };
-  
-  $scope.load = function(queryString) {
-        
+
+  $scope.load = function (queryString) {
+
     if (queryString.indexOf('&amp;') !== -1) {
       window.location = window.location.href.split('&amp;').join('&');
     }
@@ -519,7 +512,7 @@ app.controller('ResultsCtrl', function ($scope, $cookies) {
 
                 $scope.warnings = [];
                 for (var i = 0; i < warnings.length; i++) {
-                  if(warnings[i].length>0)
+                  if (warnings[i].length > 0)
                     $scope.warnings.push(warnings[i]);
                 }
 
@@ -583,14 +576,14 @@ app.controller('ResultsCtrl', function ($scope, $cookies) {
                 $scope.stageMap[1] = "UpperStage";
               }
               $scope.missionName = data.Mission.description;
-              
+
               $.getScript("js/plotly.min.js", function () {
                 $scope.getDataFile(0);
               });
 
             }, null);
   };
-  
+
   $scope.animate_rocket();
   var formHash = window.location.hash.substring(1);
   var queryString = window.location.search.substring(1);
@@ -604,11 +597,11 @@ app.controller('ResultsCtrl', function ($scope, $cookies) {
               var obj = jQuery.parseJSON(JSON.stringify(data, null, 2));
               if (obj.Mission.success === true) {
                 var queryString = obj.Mission.output.split('?')[1];
-                
+
                 $scope.loadMessage = "Building plots...";
                 $scope.$apply();
-                
-                window.history.pushState({},"", '/results/?' + queryString);
+
+                window.history.pushState({}, "", '/results/?' + queryString);
                 $scope.load(queryString);
               } else {
                 var errors = obj.Mission.errors;
@@ -628,7 +621,7 @@ app.controller('ResultsCtrl', function ($scope, $cookies) {
               window.location = $scope.$parent.client + '/error#' + errorsHash;
             });
   }
-  else if(queryString) {
+  else if (queryString) {
     $scope.load(queryString);
   }
 
@@ -678,7 +671,7 @@ app.controller('ResultsCtrl', function ($scope, $cookies) {
             });
   };
 
-  $scope.getDataFile = function(stage) {
+  $scope.getDataFile = function (stage) {
     if ($scope.stageMap[stage] === undefined) {
       $scope.initialisePlots();
     } else {
@@ -709,7 +702,7 @@ app.controller('ResultsCtrl', function ($scope, $cookies) {
     }
   };
 
-  $scope.getEventsFile = function(stage) {
+  $scope.getEventsFile = function (stage) {
     var url = $scope.$parent.client + '/output/' + $scope.queryParams['id'] + '_' + $scope.stageMap[stage] + '_events.dat';
     $.ajax({type: 'GET', url: url, contentType: 'text', data: null,
       xhrFields: {withCredentials: false},
@@ -736,7 +729,7 @@ app.controller('ResultsCtrl', function ($scope, $cookies) {
     }
   };
 
-  $scope.initialisePlots = function() {
+  $scope.initialisePlots = function () {
 
     var plotMap = [];
     plotMap.push({id: 'altitude1', stages: [0, 1], title: "Altitude",
@@ -775,7 +768,7 @@ app.controller('ResultsCtrl', function ($scope, $cookies) {
     plotMap.push({id: 'drag', stages: [0], title: "Drag Coefficient",
       x: {axis: 0, label: "Time (s)", type: "linear"},
       y: {axis: 17, label: "Cd", type: "linear"}});
-    
+
     $scope.isLoading = false;
     $scope.$apply();
 
@@ -784,7 +777,7 @@ app.controller('ResultsCtrl', function ($scope, $cookies) {
     }
   };
 
-  $scope.initialisePlot2 = function(plot) {
+  $scope.initialisePlot2 = function (plot) {
 
     var data = [];
     for (var i = 0; i < plot.stages.length; i++) {
@@ -835,7 +828,7 @@ app.controller('WorldCtrl', function ($scope, $location) {
   var max = [];
 
   var offset;
-  var rand5 = 5 * 60 * 1000 * Math.random(); // 5 minute range
+  var rand5 = 1 * 60 * 1000 * Math.random(); // 1 minute range
 
   $scope.countdown = $scope.finished = false;
   $scope.cesiumShow = $scope.sidebarShow = false;
@@ -849,10 +842,10 @@ app.controller('WorldCtrl', function ($scope, $location) {
     plot["velocity"].getOptions().yaxes[0].max = max[stage]["velocity"];
     plot["velocity"].setupGrid();
   };
-  
-  $scope.changeView = function() {
-    
-    switch(w.getProp('view')) {
+
+  $scope.changeView = function () {
+
+    switch (w.getProp('view')) {
       case 'space':
         w.setProp('view', 'earth');
         $location.search('view', 'earth');
@@ -867,7 +860,7 @@ app.controller('WorldCtrl', function ($scope, $location) {
     }
     w.viewer.entities.removeAll();
     $scope.loadDataAndPlot();
-    
+
   };
 
   $scope.setClock = function (world) {
@@ -877,7 +870,7 @@ app.controller('WorldCtrl', function ($scope, $location) {
     var _hour = _minute * 60;
     var _day = _hour * 24;
 
-    if ($scope.cesiumShow) {
+    if ($scope.cesiumShow && world !== undefined) {
       if (world.viewer !== undefined) {
         var now = Cesium.JulianDate.toDate(world.viewer.clock.currentTime);
         var distance = $scope.launchTime - now;
@@ -900,11 +893,11 @@ app.controller('WorldCtrl', function ($scope, $location) {
           seconds = '0' + seconds;
 
         if (world.getProp('watch') !== '2') {
-          if (Math.abs((5 * _minute - rand5) - distance) < 1000)  // polls for aborts between T-5 -> T-0
+          if (Math.abs((_minute - rand5) - distance) < 1000)  // polls for aborts between T-5 -> T-0
             $scope.pollLaunchTime();
           if (Math.abs(rand5 + distance) < 1000) // poll for aborts between T-0 -> T+5
             $scope.pollLaunchTime();
-          if (Math.abs((15 * _minute + 2 * rand5) + distance) < 1000) // plots -> over limit between T+15 -> T+25
+          if (Math.abs((15 * _minute + 10 * rand5) + distance) < 1000) // plots -> over limit between T+15 -> T+25
             window.location.reload(true);
         }
 
@@ -932,125 +925,135 @@ app.controller('WorldCtrl', function ($scope, $location) {
     }
   };
 
-  $scope.pollLaunchTime = function() {
+  $scope.pollLaunchTime = function () {
     $scope.$parent.httpRequest('/missions/' + w.getProp('code'), 'GET', null,
             function (data) {
               var tempDate = data.Mission.date.replace(/-/g, "/") + ' ' + data.Mission.time + ' UTC';
               var newTime = Date.parse(tempDate);
 
-              if (newTime !== $scope.launchTime)
-                window.location.reload(true);
+              if (newTime !== $scope.launchTime) {
+                // if scrubbed until tomorrow, full reset. else just reset clock
+                if(newTime - $scope.launchTime > 24*60*60*1000)
+                  $scope.fillData(data);
+                else {
+                  $scope.launchTime = newTime;
+                  $scope.getHazardMap();
+                }
+              }              
             },
             null);
   };
 
   angular.element(document).ready(function () {
+
     var queryString = window.location.search.substring(1);
-    window.CESIUM_BASE_URL = '//cesiumjs.org/releases/1.17/Build/Cesium/';
-    
+    $scope.queryParams = $scope.$parent.parseQueryString(queryString);
+
     // world object doesn't need to be created unless using Cesium. can put launchtime as its own variable
     // then can move these getScript+new world() calls later in the code to only execute if showing Cesium.
-    $.getScript("//cesiumjs.org/releases/1.17/Build/Cesium/Cesium.js", function ()
-    {
-      $.getScript("js/worldObj.js", function ()
-      {
-        $.getScript("js/flot.min.js", null);
 
-        w = new world();
-        w.setProps($scope.$parent.parseQueryString(queryString));
+    switch ($scope.queryParams['view']) {
+      case 'space':
+        offset = 17;
+        break;
+      case 'earth':
+      default:
+        offset = 0;
+        break;
+    }
 
-        switch (w.getProp('view')) {
-          case 'space':
-            offset = 17;
-            break;
-          case 'earth':
-          default:
-            offset = 0;
-            break;
-        }
+    $scope.$parent.httpRequest('/missions/' + $scope.queryParams['code'], 'GET', null, function (data) {
+      $scope.fillData(data);
+    }, null);
 
-        $scope.$parent.httpRequest('/missions/' + w.getProp('code'), 'GET', null, function (data) {
-          $scope.fillData(data);
-        }, null);
-
-        setInterval(function () {
-          $scope.$apply(function () {
-            $scope.setClock(w);
-          });
-        }, 1000);
+    setInterval(function () {
+      $scope.$apply(function () {
+        $scope.setClock(w);
       });
-    });
+    }, 1000);
   });
 
   $scope.fillData = function (data) {
 
-      $scope.vehicle = data.Mission.launchvehicle;
-      if ($scope.vehicle === 'FNH') {
-        $scope.numStages = 3;
-      } else {
-        $scope.numStages = 2;
-      }
+    $scope.vehicle = data.Mission.launchvehicle;
+    if ($scope.vehicle === 'FNH') {
+      $scope.numStages = 3;
+    } else {
+      $scope.numStages = 2;
+    }
 
-      $scope.missionName = data.Mission.description;
-      $scope.missionCode = w.getProp('code');
-      $scope.stage0 = $scope.getStageName(0);
-      $scope.stage1 = $scope.getStageName(1);
-      $scope.stage2 = $scope.getStageName(2);
+    $scope.missionName = data.Mission.description;
+    $scope.missionCode = $scope.queryParams['code'];
+    $scope.stage0 = $scope.getStageName(0);
+    $scope.stage1 = $scope.getStageName(1);
+    $scope.stage2 = $scope.getStageName(2);
 
-      var tempDate = data.Mission.date.replace(/-/g, "/") + ' ' + data.Mission.time + ' UTC';
-      $scope.launchTime = Date.parse(tempDate);
+    var tempDate = data.Mission.date.replace(/-/g, "/") + ' ' + data.Mission.time + ' UTC';
+    $scope.launchTime = Date.parse(tempDate);
 
-      var now = new Date();
-      var timeUntilLaunch = $scope.launchTime - now;
+    var now = new Date();
+    var timeUntilLaunch = $scope.launchTime - now;
 
-      if (w.getProp('watch') === '2') {
-        $scope.sidebarShow = true;
+    $scope.$parent.toolbarClass = "";
+    $scope.cesiumShow = $scope.countdown = $scope.finished = $scope.sidebarShow = false;
+    if ($scope.queryParams['watch'] === '2') {
+
+      $scope.loadCesium(function () {
         w.setProp('id', data.Mission.livelaunch);
-        $scope.loadCesium();
         $scope.loadDataAndPlot();
-      } else if (w.getProp('id') !== undefined) {
-        $scope.loadCesium();
+        $scope.loadFlot();
+      });
+
+    } else if ($scope.queryParams['id'] !== undefined) {
+
+      $scope.loadCesium(function () {
+        w.setProp('id', $scope.queryParams['id']);
         $scope.loadDataAndPlot();
-        if(w.getProp('view')!=='space')
+        if ($scope.queryParams['view'] !== 'space')
           w.setCameraLookingAt(data.Mission.launchsite);
-      }
-      else if (w.getProp('watch') === '1')
+      });
+
+    }
+    else if ($scope.queryParams['watch'] === '1')
+    {
+      if (timeUntilLaunch > 1 * 60 * 60 * 1000)
       {
-        if (timeUntilLaunch > 1 * 60 * 60 * 1000)
-        {
-          $scope.countdown = true;
-        }
-        else if (timeUntilLaunch < -14 * 60 * 1000)
-        {
-          $scope.finished = true;
-        }
-        else
-        {
-          $scope.cesiumShow = true;
-          $scope.sidebarShow = true;
-          $scope.$parent.toolbarClass = "hide";
+        $scope.countdown = true;
+      }
+      else if (timeUntilLaunch < -14 * 60 * 1000)
+      {
+        $scope.finished = true;
+      }
+      else
+      {
+        $scope.loadCesium(function () {
           w.setProp('id', data.Mission.livelaunch);
           $scope.loadDataAndPlot();
           w.setCameraLookingAt(data.Mission.launchsite);
-        }
+          $scope.loadFlot();
+        });
       }
+    }
+  };
+  
+  $scope.loadFlot = function() {
+    $.getScript("js/flot.min.js", function () {
+      var fullWidth = $(document.body)[0].clientWidth;
+      var width = $("md-sidenav")[0].clientWidth;
+      $("#cesiumContainer").width((fullWidth - width) + 'px');
 
-      setTimeout(function () {
-        var fullWidth = $(document.body)[0].clientWidth;
-        var width = $("md-sidenav")[0].clientWidth;
-        $("#cesiumContainer").width((fullWidth - width) + 'px');
-
-        for (var stage = 0; stage < 2; stage++) {
-          $scope.initialisePlot("altitude", stage);
-          $scope.initialisePlot("velocity", stage);
-        }
-      }, 1000);
+      for (var stage = 0; stage < 2; stage++) {
+        $scope.initialisePlot("altitude", stage);
+        $scope.initialisePlot("velocity", stage);
+      }
+    });
+    $scope.sidebarShow = true;
   };
 
-  $scope.initialisePlot = function(element, stage) {
+  $scope.initialisePlot = function (element, stage) {
 
     var width = $("md-sidenav")[0].clientWidth;
-    if(width===0) // sidenav is collapsed on mobile, but width is 320 when expanded
+    if (width === 0) // sidenav is collapsed on mobile, but width is 320 when expanded
       width = 320;
 
     var placeholder = $("#" + element + "Plot");
@@ -1086,50 +1089,65 @@ app.controller('WorldCtrl', function ($scope, $location) {
         return undefined;
     }
   };
-  
-  $scope.loadCesium = function() {
-    
-    $scope.cesiumShow = true;
-    $scope.$parent.toolbarClass = "hide";
 
-    var launchDate = new Date($scope.launchTime);
-    var end = new Date($scope.launchTime + 600e3);
-    var now;
-    if (w.getProp('watch') === '1')
-      now = new Date();
-    else
-      now = new Date($scope.launchTime - 30e3);
+  $scope.loadCesium = function (otherFunction) {
 
-    w.entities = [];
-    w.viewer = new Cesium.Viewer('cesiumContainer', {
-      timeline: true,
-      animation: false,
-      scene3DOnly: true,
-      fullscreenButton: false,
-      homeButton: false,
-      geocoder: false,
-      baseLayerPicker: false,
-      creditContainer: document.getElementById("creditContainer"),
-      clock: new Cesium.Clock({
-        startTime: Cesium.JulianDate.fromDate(launchDate),
-        currentTime: Cesium.JulianDate.fromDate(now),
-        stopTime: Cesium.JulianDate.fromDate(end),
-        clockRange: Cesium.ClockRange.UNBOUNDED,
-        clockStep: Cesium.ClockStep.SYSTEM_CLOCK_MULTIPLIER
-      })
+    window.CESIUM_BASE_URL = '//cesiumjs.org/releases/1.17/Build/Cesium/';
+    $.getScript("//cesiumjs.org/releases/1.17/Build/Cesium/Cesium.js", function ()
+    {
+      $.getScript("js/worldObj.js", function ()
+      {
 
+        w = new world();
+
+        var queryString = window.location.search.substring(1);
+        w.setProps($scope.$parent.parseQueryString(queryString));
+
+        $scope.cesiumShow = true;
+        $scope.$parent.toolbarClass = "hide";
+
+        var launchDate = new Date($scope.launchTime);
+        var end = new Date($scope.launchTime + 600e3);
+        var now;
+        if (w.getProp('watch') === '1')
+          now = new Date();
+        else
+          now = new Date($scope.launchTime - 30e3);
+
+        w.entities = [];
+        w.viewer = new Cesium.Viewer('cesiumContainer', {
+          timeline: true,
+          animation: false,
+          scene3DOnly: true,
+          fullscreenButton: false,
+          homeButton: false,
+          geocoder: false,
+          baseLayerPicker: false,
+          creditContainer: document.getElementById("creditContainer"),
+          clock: new Cesium.Clock({
+            startTime: Cesium.JulianDate.fromDate(launchDate),
+            currentTime: Cesium.JulianDate.fromDate(now),
+            stopTime: Cesium.JulianDate.fromDate(end),
+            clockRange: Cesium.ClockRange.UNBOUNDED,
+            clockStep: Cesium.ClockStep.SYSTEM_CLOCK_MULTIPLIER
+          })
+
+        });
+
+        w.viewer.scene.globe.enableLighting = true;
+        var terrainProvider = new Cesium.CesiumTerrainProvider({
+          url: '//assets.agi.com/stk-terrain/world',
+          requestWaterMask: true,
+          requestVertexNormals: true
+        });
+        w.viewer.terrainProvider = terrainProvider;
+
+        w.viewer.timeline.updateFromClock();
+        w.viewer.timeline.zoomTo(w.viewer.clock.startTime, w.viewer.clock.stopTime);
+        
+        otherFunction();
+      });
     });
-
-    w.viewer.scene.globe.enableLighting = true;
-    var terrainProvider = new Cesium.CesiumTerrainProvider({
-      url: '//assets.agi.com/stk-terrain/world',
-      requestWaterMask: true,
-      requestVertexNormals: true
-    });
-    w.viewer.terrainProvider = terrainProvider;
-
-    w.viewer.timeline.updateFromClock();
-    w.viewer.timeline.zoomTo(w.viewer.clock.startTime, w.viewer.clock.stopTime);
   };
 
   $scope.loadDataAndPlot = function () {
@@ -1149,8 +1167,6 @@ app.controller('WorldCtrl', function ($scope, $location) {
       vel[i][1] = [];
 
       future[i] = {};
-      future[i]["alt"] = [];
-      future[i]["vel"] = [];
 
       max[i] = {};
     }
@@ -1159,8 +1175,11 @@ app.controller('WorldCtrl', function ($scope, $location) {
   };
 
   $scope.getHazardMap = function () {
+    
+    w.entities = [];
+    w.viewer.entities.removeAll();
 
-    var url = $scope.$parent.server + '/resource/' + w.getProp('code') + '.hazard.txt';
+    var url = $scope.$parent.server + '/resource/' + $scope.queryParams['code'] + '.hazard.txt';
     $.ajax({type: 'GET', url: url, contentType: 'text', data: null,
       xhrFields: {withCredentials: false},
       success: successfn,
@@ -1224,26 +1243,28 @@ app.controller('WorldCtrl', function ($scope, $location) {
       var stop = Cesium.JulianDate.addSeconds(start, 60000, new Cesium.JulianDate());
 
       var t = 0, throttle = 0;
+      fullData[stage] = [];
+      max[stage] = [];
       for (var i = 1; i < lines.length; i++) {
 
         if (lines[i] === "")
           continue;
 
         var data = lines[i].split("\t");
-        
+
         var focus = false;
         var ign = false;
         for (var j = 0; j < focusPoints.length; j++) {
           if (Math.abs(data[0] - focusPoints[j][0]) <= 0.5) {
             focus = true;
-            ign = focusPoints[j][1]>0.1;
+            ign = focusPoints[j][1] > 0.1;
             break;
           }
         }
-        
-        if(!focus && data[0]>1000 && i%100!==0)
+
+        if (!focus && data[0] > 1000 && i % 100 !== 0)
           continue;
-        
+
         fullData[stage][parseInt(data[0])] = parseFloat(data[6]) + ":" + parseFloat(data[4]) + ":" + parseFloat(data[5]);
 
         if (t < 600 && parseFloat(data[4]) > max[stage]["altitude"] || max[stage]["altitude"] === undefined)
@@ -1253,9 +1274,9 @@ app.controller('WorldCtrl', function ($scope, $location) {
 
 
         t = parseInt(data[0]);
-        var x = parseFloat(data[1+offset]);
-        var y = parseFloat(data[2+offset]);
-        var z = parseFloat(data[3+offset]);
+        var x = parseFloat(data[1 + offset]);
+        var y = parseFloat(data[2 + offset]);
+        var z = parseFloat(data[3 + offset]);
         var h = parseFloat(data[4]) * 1e3;
 
         var lat = 180 * Math.atan(z / Math.sqrt(x * x + y * y)) / Math.PI;
@@ -1345,9 +1366,9 @@ app.controller('WorldCtrl', function ($scope, $location) {
         eventsData[stage][parseInt(data[0])] = parseFloat(data[12]); // eventsData[time] = throttle
         focusPoints.push([parseFloat(data[0]), parseFloat(data[12])]);
 
-        var x = parseFloat(data[1+offset]); //offset=17
-        var y = parseFloat(data[2+offset]);
-        var z = parseFloat(data[3+offset]);
+        var x = parseFloat(data[1 + offset]); //offset=17
+        var y = parseFloat(data[2 + offset]);
+        var z = parseFloat(data[3 + offset]);
         var h = parseFloat(data[4]) * 1e3;
 
         var lat = 180 * Math.atan(z / Math.sqrt(x * x + y * y)) / Math.PI;
@@ -1369,22 +1390,22 @@ app.controller('WorldCtrl', function ($scope, $location) {
 
   $scope.start = function () {
 
-    if (w.getProp('watch') !== undefined) {
+    if ($scope.queryParams['watch'] !== undefined) {
       $scope.fillFutureArray();
       $scope.update();
     }
 
   };
 
-  $scope.update = function() {
+  $scope.update = function () {
 
     var currentTime = Cesium.JulianDate.toDate(w.viewer.clock.currentTime);
     var time = (currentTime - $scope.launchTime) / 1000;
     time = parseInt(time);
-    
+
     if (time >= -10) { // only execute this code after T-00:00:10
-      
-      if(w.getTrackedStage()===undefined) {
+
+      if (w.getTrackedStage() === undefined) {
         w.trackEntity(0);
         plot["altitude"].getOptions().yaxes[0].max = max[0]["altitude"];
         plot["altitude"].setupGrid();
@@ -1393,7 +1414,7 @@ app.controller('WorldCtrl', function ($scope, $location) {
       }
 
       var stage = w.getTrackedStage();
-      for(var i=0;i<$scope.numStages;i++) {
+      for (var i = 0; i < $scope.numStages; i++) {
         vel[i][0] = [];
         vel[i][1] = [];
         alt[i][0] = [];
@@ -1435,20 +1456,20 @@ app.controller('WorldCtrl', function ($scope, $location) {
           alt[stage][0].push([i, tel[1]]);
         }
       }
-      
-      if(fullData[stage] !== undefined && fullData[stage][time] !== undefined) 
+
+      if (fullData[stage] !== undefined && fullData[stage][time] !== undefined)
       {
         var tel = fullData[stage][time].split(":");
         $("#altitudeTel").html('ALTITUDE: ' + (tel[1] < 1 ? 1000 * tel[1] + ' M' : Math.floor(10 * tel[1]) / 10 + ' KM'));
         $("#velocityTel").html('VELOCITY: ' + Math.floor(tel[2]) + ' M/S');
-      } 
-      else if (fullData[stage - 1] !== undefined && fullData[stage - 1][time] !== undefined) 
+      }
+      else if (fullData[stage - 1] !== undefined && fullData[stage - 1][time] !== undefined)
       {
         var tel = fullData[stage - 1][time].split(":");
         $("#altitudeTel").html('ALTITUDE: ' + (tel[1] < 1 ? 1000 * tel[1] + ' M' : Math.floor(10 * tel[1]) / 10 + ' KM'));
         $("#velocityTel").html('VELOCITY: ' + Math.floor(tel[2]) + ' M/S');
-      } 
-      else 
+      }
+      else
       {
         $("#altitudeTel").html('ALTITUDE: 0 KM');
         $("#velocityTel").html('VELOCITY: 0 M/S');
@@ -1459,7 +1480,7 @@ app.controller('WorldCtrl', function ($scope, $location) {
         {data: alt[0][0], color: '#ff0000', lineWidth: 1, lines: {show: true, fill: stage === 0}},
         {data: alt[0][1], lines: {show: false}, points: {show: true}},
         {data: future[1]["alt"], color: '#aaaaaa', lineWidth: 1, lines: {show: true, fill: false}},
-        {data: alt[1][0], lineWidth: 1, lines: {show: true, fill: stage===1}},
+        {data: alt[1][0], lineWidth: 1, lines: {show: true, fill: stage === 1}},
         {data: alt[1][1], color: '#ff0000', lines: {show: false}, points: {show: true}}
       ]);
       plot["altitude"].draw();
@@ -1469,7 +1490,7 @@ app.controller('WorldCtrl', function ($scope, $location) {
         {data: vel[0][0], color: '#ff0000', lineWidth: 1, lines: {show: true, fill: stage === 0}},
         {data: vel[0][1], lines: {show: false}, points: {show: true}},
         {data: future[1]["vel"], color: '#aaaaaa', lineWidth: 1, lines: {show: true, fill: false}},
-        {data: vel[1][0], lineWidth: 1, lines: {show: true, fill: stage===1}},
+        {data: vel[1][0], lineWidth: 1, lines: {show: true, fill: stage === 1}},
         {data: vel[1][1], color: '#ff0000', lines: {show: false}, points: {show: true}}
       ]);
       plot["velocity"].draw();
@@ -1478,16 +1499,19 @@ app.controller('WorldCtrl', function ($scope, $location) {
 
     setTimeout($scope.update, 1000);
   };
-  
+
 
   $scope.fillFutureArray = function () {
 
     for (var stage = 0; stage < $scope.numStages; stage++) {
-
+      future[stage] = [];
       for (var i = -5; i < fullData[stage].length; i++) {
-
+        
         if (fullData[stage][i] === undefined)
           continue;
+        
+        future[stage]["alt"] = [];
+        future[stage]["vel"] = [];
 
         var tel = fullData[stage][i].split(":");
         future[stage]["alt"].push([i, tel[1]]);
@@ -1501,9 +1525,9 @@ app.controller('WorldCtrl', function ($scope, $location) {
 
     }
   };
-  
-  $scope.plotResize = function(considerSidebar) {
-      
+
+  $scope.plotResize = function (considerSidebar) {
+
     setTimeout(function () {
       for (var stage = 0; stage < 2; stage++) {
         var width = $("md-sidenav")[0].clientWidth;
@@ -1513,7 +1537,7 @@ app.controller('WorldCtrl', function ($scope, $location) {
         $("#velocityPlot").height(width / 1.6);
       }
       var w2;
-      if(considerSidebar) {
+      if (considerSidebar) {
         $scope.initialisePlot("altitude", w.getTrackedStage());
         $scope.initialisePlot("velocity", w.getTrackedStage());
         w2 = $(document.body)[0].clientWidth - $("md-sidenav")[0].clientWidth;
