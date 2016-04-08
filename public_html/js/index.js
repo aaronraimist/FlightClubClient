@@ -947,6 +947,9 @@ app.controller('WorldCtrl', function ($scope, $location) {
   angular.element(document).ready(function () {
 
     var queryString = window.location.search.substring(1);
+    if (queryString.indexOf('&amp;') !== -1) {
+      window.location = window.location.href.split('&amp;').join('&');
+    }
     $scope.queryParams = $scope.$parent.parseQueryString(queryString);
 
     // world object doesn't need to be created unless using Cesium. can put launchtime as its own variable
