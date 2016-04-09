@@ -1004,7 +1004,7 @@ app.controller('WorldCtrl', function ($scope, $location) {
       $scope.loadCesium(function () {
         w.setProp('id', data.Mission.livelaunch);
         $scope.loadDataAndPlot();
-        $scope.loadFlot();
+        $scope.loadFlot();          
       });
 
     } else if ($scope.queryParams['id'] !== undefined) {
@@ -1033,7 +1033,7 @@ app.controller('WorldCtrl', function ($scope, $location) {
           w.setProp('id', data.Mission.livelaunch);
           $scope.loadDataAndPlot();
           w.setCameraLookingAt(data.Mission.launchsite);
-          $scope.loadFlot();
+          $scope.loadFlot();            
         });
       }
     }
@@ -1041,14 +1041,16 @@ app.controller('WorldCtrl', function ($scope, $location) {
   
   $scope.loadFlot = function() {
     $.getScript("js/flot.min.js", function () {
-      var fullWidth = $(document.body)[0].clientWidth;
-      var width = $("md-sidenav")[0].clientWidth;
-      $("#cesiumContainer").width((fullWidth - width) + 'px');
+      setTimeout(function () {
+        var fullWidth = $(document.body)[0].clientWidth;
+        var width = $("md-sidenav")[0].clientWidth;
+        $("#cesiumContainer").width((fullWidth - width) + 'px');
 
-      for (var stage = 0; stage < 2; stage++) {
-        $scope.initialisePlot("altitude", stage);
-        $scope.initialisePlot("velocity", stage);
-      }
+        for (var stage = 0; stage < 2; stage++) {
+          $scope.initialisePlot("altitude", stage);
+          $scope.initialisePlot("velocity", stage);
+        }
+      }, 1500);
     });
     $scope.sidebarShow = true;
   };
@@ -1508,13 +1510,12 @@ app.controller('WorldCtrl', function ($scope, $location) {
 
     for (var stage = 0; stage < $scope.numStages; stage++) {
       future[stage] = [];
+      future[stage]["alt"] = [];
+      future[stage]["vel"] = [];
       for (var i = -5; i < fullData[stage].length; i++) {
         
         if (fullData[stage][i] === undefined)
           continue;
-        
-        future[stage]["alt"] = [];
-        future[stage]["vel"] = [];
 
         var tel = fullData[stage][i].split(":");
         future[stage]["alt"].push([i, tel[1]]);
