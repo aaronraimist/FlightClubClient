@@ -18,9 +18,9 @@ app.config(function ($routeProvider, $locationProvider) {
 });
 
 app.controller('IndexCtrl', function ($scope, $mdSidenav, $cookies, $location) {
-
+  
   //var base = 'http://localhost', port = ':8080';
-  var base = '//flightclub.io', port = ':8443';
+  var base = '//'+$location.host(), port = ':8443';
   $scope.toolbarClass = "";
   $scope.client = base;
   $scope.server = base + port + '/FlightClub';
@@ -1104,6 +1104,7 @@ app.controller('WorldCtrl', function ($scope, $location) {
       {
 
         w = new world();
+        w.plottedTime = -5;
 
         var queryString = window.location.search.substring(1);
         w.setProps($scope.$parent.parseQueryString(queryString));
@@ -1410,58 +1411,6 @@ app.controller('WorldCtrl', function ($scope, $location) {
 
     if (time >= -10) { // only execute this code after T-00:00:10
 
-      if (w.getTrackedStage() === undefined) {
-        w.trackEntity(0);
-        plot["altitude"].getOptions().yaxes[0].max = max[0]["altitude"];
-        plot["altitude"].setupGrid();
-        plot["velocity"].getOptions().yaxes[0].max = max[0]["velocity"];
-        plot["velocity"].setupGrid();
-      }
-
-      var stage = w.getTrackedStage();
-      for (var i = 0; i < $scope.numStages; i++) {
-        vel[i][0] = [];
-        vel[i][1] = [];
-        alt[i][0] = [];
-        alt[i][1] = [];
-      }
-      for (var i = -5; i <= time; i++) {
-
-        if (fullData[stage][i] === undefined) {
-          if (fullData[stage - 1] !== undefined)
-          {
-            if (eventsData[stage - 1][i] !== undefined)
-            {
-              var tel = fullData[stage - 1][i].split(":");
-              vel[stage][0].push([i, tel[2]]);
-              vel[stage][1].push([i, tel[2]]);
-              alt[stage][0].push([i, tel[1]]);
-              alt[stage][1].push([i, tel[1]]);
-            }
-            else if (fullData[stage - 1][i] !== undefined)
-            {
-              var tel = fullData[stage - 1][i].split(":");
-              vel[stage][0].push([i, tel[2]]);
-              alt[stage][0].push([i, tel[1]]);
-            }
-          }
-        }
-        else if (eventsData[stage][i] !== undefined)
-        {
-          var tel = fullData[stage][i].split(":");
-          vel[stage][0].push([i, tel[2]]);
-          vel[stage][1].push([i, tel[2]]);
-          alt[stage][0].push([i, tel[1]]);
-          alt[stage][1].push([i, tel[1]]);
-        }
-        else
-        {
-          var tel = fullData[stage][i].split(":");
-          vel[stage][0].push([i, tel[2]]);
-          alt[stage][0].push([i, tel[1]]);
-        }
-      }
-
       if (fullData[stage] !== undefined && fullData[stage][time] !== undefined)
       {
         var tel = fullData[stage][time].split(":");
@@ -1479,27 +1428,76 @@ app.controller('WorldCtrl', function ($scope, $location) {
         $("#altitudeTel").html('ALTITUDE: 0 KM');
         $("#velocityTel").html('VELOCITY: 0 M/S');
       }
+      
+      if (time <= 600) {
 
-      plot["altitude"].setData([
-        {data: future[0]["alt"], color: '#aaaaaa', lineWidth: 1, lines: {show: true, fill: false}},
-        {data: alt[0][0], color: '#ff0000', lineWidth: 1, lines: {show: true, fill: stage === 0}},
-        {data: alt[0][1], lines: {show: false}, points: {show: true}},
-        {data: future[1]["alt"], color: '#aaaaaa', lineWidth: 1, lines: {show: true, fill: false}},
-        {data: alt[1][0], lineWidth: 1, lines: {show: true, fill: stage === 1}},
-        {data: alt[1][1], color: '#ff0000', lines: {show: false}, points: {show: true}}
-      ]);
-      plot["altitude"].draw();
+        if (w.getTrackedStage() === undefined) {
+          w.trackEntity(0);
+          plot["altitude"].getOptions().yaxes[0].max = max[0]["altitude"];
+          plot["altitude"].setupGrid();
+          plot["velocity"].getOptions().yaxes[0].max = max[0]["velocity"];
+          plot["velocity"].setupGrid();
+        }
 
-      plot["velocity"].setData([
-        {data: future[0]["vel"], color: '#aaaaaa', lineWidth: 1, lines: {show: true, fill: false}},
-        {data: vel[0][0], color: '#ff0000', lineWidth: 1, lines: {show: true, fill: stage === 0}},
-        {data: vel[0][1], lines: {show: false}, points: {show: true}},
-        {data: future[1]["vel"], color: '#aaaaaa', lineWidth: 1, lines: {show: true, fill: false}},
-        {data: vel[1][0], lineWidth: 1, lines: {show: true, fill: stage === 1}},
-        {data: vel[1][1], color: '#ff0000', lines: {show: false}, points: {show: true}}
-      ]);
-      plot["velocity"].draw();
+        var stage = w.getTrackedStage();
+        for (var i = w.plottedTime; i <= time; i++) {
 
+          if (fullData[stage][i] === undefined) {
+            if (fullData[stage - 1] !== undefined)
+            {
+              if (eventsData[stage - 1][i] !== undefined)
+              {
+                var tel = fullData[stage - 1][i].split(":");
+                vel[stage][0].push([i, tel[2]]);
+                vel[stage][1].push([i, tel[2]]);
+                alt[stage][0].push([i, tel[1]]);
+                alt[stage][1].push([i, tel[1]]);
+              }
+              else if (fullData[stage - 1][i] !== undefined)
+              {
+                var tel = fullData[stage - 1][i].split(":");
+                vel[stage][0].push([i, tel[2]]);
+                alt[stage][0].push([i, tel[1]]);
+              }
+            }
+          }
+          else if (eventsData[stage][i] !== undefined)
+          {
+            var tel = fullData[stage][i].split(":");
+            vel[stage][0].push([i, tel[2]]);
+            vel[stage][1].push([i, tel[2]]);
+            alt[stage][0].push([i, tel[1]]);
+            alt[stage][1].push([i, tel[1]]);
+          }
+          else
+          {
+            var tel = fullData[stage][i].split(":");
+            vel[stage][0].push([i, tel[2]]);
+            alt[stage][0].push([i, tel[1]]);
+          }
+        }
+        w.plottedTime = time + 1;
+
+        plot["altitude"].setData([
+          {data: future[0]["alt"], color: '#aaaaaa', lineWidth: 1, lines: {show: true, fill: false}},
+          {data: alt[0][0], color: '#ff0000', lineWidth: 1, lines: {show: true, fill: stage === 0}},
+          {data: alt[0][1], lines: {show: false}, points: {show: true}},
+          {data: future[1]["alt"], color: '#aaaaaa', lineWidth: 1, lines: {show: true, fill: false}},
+          {data: alt[1][0], lineWidth: 1, lines: {show: true, fill: stage === 1}},
+          {data: alt[1][1], color: '#ff0000', lines: {show: false}, points: {show: true}}
+        ]);
+        plot["altitude"].draw();
+
+        plot["velocity"].setData([
+          {data: future[0]["vel"], color: '#aaaaaa', lineWidth: 1, lines: {show: true, fill: false}},
+          {data: vel[0][0], color: '#ff0000', lineWidth: 1, lines: {show: true, fill: stage === 0}},
+          {data: vel[0][1], lines: {show: false}, points: {show: true}},
+          {data: future[1]["vel"], color: '#aaaaaa', lineWidth: 1, lines: {show: true, fill: false}},
+          {data: vel[1][0], lineWidth: 1, lines: {show: true, fill: stage === 1}},
+          {data: vel[1][1], color: '#ff0000', lines: {show: false}, points: {show: true}}
+        ]);
+        plot["velocity"].draw();
+      }
     }
 
     setTimeout($scope.update, 1000);
@@ -1512,7 +1510,7 @@ app.controller('WorldCtrl', function ($scope, $location) {
       future[stage] = [];
       future[stage]["alt"] = [];
       future[stage]["vel"] = [];
-      for (var i = -5; i < fullData[stage].length; i++) {
+      for (var i = -5; i < 600; i++) {
         
         if (fullData[stage][i] === undefined)
           continue;
