@@ -1002,6 +1002,12 @@ app.controller('WorldCtrl', function ($scope, $location) {
     if ($scope.queryParams['watch'] === '2') {
 
       $scope.loadCesium(function () {
+        if(w.getProp('watch')!=='2') {
+          var animation = document.getElementsByClassName("cesium-viewer-animationContainer")[0];
+          animation.className += " hidden";
+          var timeline = document.getElementsByClassName("cesium-viewer-timelineContainer")[0];
+          timeline.className += " hidden";
+        }
         w.setProp('id', data.Mission.livelaunch);
         $scope.loadDataAndPlot();
         $scope.loadFlot();          
@@ -1010,6 +1016,12 @@ app.controller('WorldCtrl', function ($scope, $location) {
     } else if ($scope.queryParams['id'] !== undefined) {
 
       $scope.loadCesium(function () {
+        if(w.getProp('watch')!=='2') {
+          var animation = document.getElementsByClassName("cesium-viewer-animationContainer")[0];
+          animation.className += " hidden";
+          var timeline = document.getElementsByClassName("cesium-viewer-timelineContainer")[0];
+          timeline.className += " hidden";
+        }
         w.setProp('id', $scope.queryParams['id']);
         $scope.loadDataAndPlot();
         if ($scope.queryParams['view'] !== 'space')
@@ -1030,6 +1042,12 @@ app.controller('WorldCtrl', function ($scope, $location) {
       else
       {
         $scope.loadCesium(function () {
+          if (w.getProp('watch') !== '2') {
+            var animation = document.getElementsByClassName("cesium-viewer-animationContainer")[0];
+            animation.className += " hidden";
+            var timeline = document.getElementsByClassName("cesium-viewer-timelineContainer")[0];
+            timeline.className += " hidden";
+          }
           w.setProp('id', data.Mission.livelaunch);
           $scope.loadDataAndPlot();
           w.setCameraLookingAt(data.Mission.launchsite);
@@ -1097,8 +1115,8 @@ app.controller('WorldCtrl', function ($scope, $location) {
 
   $scope.loadCesium = function (otherFunction) {
 
-    window.CESIUM_BASE_URL = '//cesiumjs.org/releases/1.17/Build/Cesium/';
-    $.getScript("//cesiumjs.org/releases/1.17/Build/Cesium/Cesium.js", function ()
+    window.CESIUM_BASE_URL = '//cesiumjs.org/releases/1.20/Build/Cesium/';
+    $.getScript("//cesiumjs.org/releases/1.20/Build/Cesium/Cesium.js", function ()
     {
       $.getScript("js/worldObj.js", function ()
       {
@@ -1123,7 +1141,7 @@ app.controller('WorldCtrl', function ($scope, $location) {
         w.entities = [];
         w.viewer = new Cesium.Viewer('cesiumContainer', {
           timeline: true,
-          animation: false,
+          animation: true,
           scene3DOnly: true,
           fullscreenButton: false,
           homeButton: false,
@@ -1150,7 +1168,7 @@ app.controller('WorldCtrl', function ($scope, $location) {
 
         w.viewer.timeline.updateFromClock();
         w.viewer.timeline.zoomTo(w.viewer.clock.startTime, w.viewer.clock.stopTime);
-        
+
         otherFunction();
       });
     });

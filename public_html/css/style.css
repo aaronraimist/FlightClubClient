@@ -94,10 +94,7 @@ md-select, md-switch {
   display: none; 
 }
 
-/*
-  Hack. Setting timeline: false breaks everything, so set it to true, but hide it
-*/
-.cesium-viewer-timelineContainer {
+.hidden {
   display: none !important;
 }
 
