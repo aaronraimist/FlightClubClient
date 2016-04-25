@@ -626,7 +626,7 @@ app.controller('ResultsCtrl', function ($scope, $cookies) {
   }
 
   var PLOTS = ['altitude1', 'profile1', 'total-dv', 'velocity1', 'prop',
-    'phase1', 'q', 'accel1', 'aoa', 'aov', 'aop', 'drag'];
+    'phase1', 'q', 'throttle', 'accel1', 'aoa', 'aov', 'aop', 'drag'];
   $scope.plotTiles = (function () {
     var tiles = [];
     for (var i = 0; i < PLOTS.length; i++) {
@@ -753,6 +753,9 @@ app.controller('ResultsCtrl', function ($scope, $cookies) {
     plotMap.push({id: 'q', stages: [0], title: "Aerodynamic Pressure",
       x: {axis: 0, label: "Time (s)", type: "linear"},
       y: {axis: 7, label: "Pressure (kN/m^2)", type: "linear"}});
+    plotMap.push({id: 'throttle', stages: [0, 1], title: "Throttle",
+      x: {axis: 0, label: "Time (s)", type: "linear"},
+      y: {axis: 12, label: "Throttle", type: "linear"}});
     plotMap.push({id: 'accel1', stages: [0, 1], title: "Acceleration",
       x: {axis: 0, label: "Time (s)", type: "linear"},
       y: {axis: 13, label: "Acceleration (g)", type: "linear"}});
@@ -802,7 +805,7 @@ app.controller('ResultsCtrl', function ($scope, $cookies) {
     var layout = {
       title: plot.title,
       showlegend: false,
-      xaxis: {type: plot.x.type, title: plot.x.label, range: plot.y.axis > 12 ? [0, 1000] : [null, null]},
+      xaxis: {type: plot.x.type, title: plot.x.label, range: plot.y.axis > 11 ? [0, 1000] : [null, null]},
       yaxis: {type: plot.y.type, title: plot.y.label}
     };
 
