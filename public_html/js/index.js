@@ -17,7 +17,7 @@ app.config(function ($routeProvider, $locationProvider) {
           .otherwise({redirectTo: '/'});
 });
 
-app.controller('IndexCtrl', function ($scope, $mdSidenav, $cookies, $location) {
+app.controller('IndexCtrl', function ($scope, $mdSidenav, $cookies, $location, $window) {
   
   //var base = 'http://localhost', port = ':8080';
   var base = '//'+$location.host(), port = ':8443';
@@ -49,6 +49,10 @@ app.controller('IndexCtrl', function ($scope, $mdSidenav, $cookies, $location) {
 
   $scope.redirect = function (path) {
     $location.url(path);
+  };
+
+  $scope.redirectExternal = function (path) {
+    $window.location.href = path;
   };
 
   $scope.toggleNav = function (id) {
