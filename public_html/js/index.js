@@ -507,7 +507,7 @@ app.controller('ResultsCtrl', function ($scope, $cookies) {
               var files = data.Mission.Output.Files;
               $.each(files, function (key, val)
               {
-                fileMap[val.desc] = val.url;
+                fileMap[val.desc] = $scope.$parent.client + val.url;
               });
 
               var warningsFile = fileMap['warnings'];
@@ -574,6 +574,9 @@ app.controller('ResultsCtrl', function ($scope, $cookies) {
                 $.each(data.Mission.Stages, function (key, val) {
                   $scope.stageMap[val.id] = val.name;
                 });
+                if($scope.queryParams['id'] === undefined) {
+                  $scope.queryParams['id'] = data.Mission.livelaunch;
+                }
               }
               else { // guess two stage
                 $scope.stageMap[0] = "Booster";
@@ -973,6 +976,9 @@ app.controller('WorldCtrl', function ($scope, $location) {
     }
 
     $scope.$parent.httpRequest('/missions/' + $scope.queryParams['code'], 'GET', null, function (data) {
+      if ($scope.queryParams['id'] === undefined) {
+        $scope.queryParams['id'] = data.Mission.livelaunch;
+      }
       $scope.fillData(data);
     }, null);
 
@@ -1015,24 +1021,8 @@ app.controller('WorldCtrl', function ($scope, $location) {
           var timeline = document.getElementsByClassName("cesium-viewer-timelineContainer")[0];
           timeline.className += " hidden";
         }
-        w.setProp('id', data.Mission.livelaunch);
         $scope.loadDataAndPlot();
         $scope.loadFlot();          
-      });
-
-    } else if ($scope.queryParams['id'] !== undefined) {
-
-      $scope.loadCesium(function () {
-        if(w.getProp('watch')!=='2') {
-          var animation = document.getElementsByClassName("cesium-viewer-animationContainer")[0];
-          animation.className += " hidden";
-          var timeline = document.getElementsByClassName("cesium-viewer-timelineContainer")[0];
-          timeline.className += " hidden";
-        }
-        w.setProp('id', $scope.queryParams['id']);
-        $scope.loadDataAndPlot();
-        if ($scope.queryParams['view'] !== 'space')
-          w.setCameraLookingAt(data.Mission.launchsite);
       });
 
     }
@@ -1055,12 +1045,26 @@ app.controller('WorldCtrl', function ($scope, $location) {
             var timeline = document.getElementsByClassName("cesium-viewer-timelineContainer")[0];
             timeline.className += " hidden";
           }
-          w.setProp('id', data.Mission.livelaunch);
           $scope.loadDataAndPlot();
           w.setCameraLookingAt(data.Mission.launchsite);
           $scope.loadFlot();            
         });
       }
+    }
+    else if ($scope.queryParams['id'] !== undefined) {
+
+      $scope.loadCesium(function () {
+        if(w.getProp('watch')!=='2') {
+          var animation = document.getElementsByClassName("cesium-viewer-animationContainer")[0];
+          animation.className += " hidden";
+          var timeline = document.getElementsByClassName("cesium-viewer-timelineContainer")[0];
+          timeline.className += " hidden";
+        }
+        $scope.loadDataAndPlot();
+        if ($scope.queryParams['view'] !== 'space')
+          w.setCameraLookingAt(data.Mission.launchsite);
+      });
+
     }
   };
   
@@ -1131,8 +1135,7 @@ app.controller('WorldCtrl', function ($scope, $location) {
         w = new world();
         w.plottedTime = -5;
 
-        var queryString = window.location.search.substring(1);
-        w.setProps($scope.$parent.parseQueryString(queryString));
+        w.setProps($scope.queryParams);
 
         $scope.cesiumShow = true;
         $scope.$parent.toolbarClass = "hide";
