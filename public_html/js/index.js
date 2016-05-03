@@ -525,8 +525,8 @@ app.controller('ResultsCtrl', function ($scope, $cookies) {
               var telemetryFile = fileMap['telemetry'];
               $.get(telemetryFile, function (txt) {
 
-                var stage = 0;
                 var lines = txt.split("\n");
+                $scope.landing = [];
                 for (var i = 0; i < lines.length; i++)
                 {
                   // time-event map
@@ -540,29 +540,27 @@ app.controller('ResultsCtrl', function ($scope, $cookies) {
                       }
                     }
                   } else {
-                    // landing info
                     var map = lines[i].split(':');
                     var infoMap = map[1].split(';');
-                    if (map[0] === 'Landing') {
-                      stage++;
-                      $scope.landing = [];
-                      for (var j = 0; j < infoMap.length; j++) {
-                        var pair = infoMap[j].split('=');
-                        if (pair[0] !== undefined && pair[1] !== undefined) {
-                          $scope.landing.push({when: pair[0], what: pair[1]});
+                    
+                    switch(map[0]) {
+                      case 'Landing':
+                        for (var j = 0; j < infoMap.length; j++) {
+                          var pair = infoMap[j].split('=');
+                          if (pair[0] !== undefined && pair[1] !== undefined) {
+                            $scope.landing.push({when: pair[0], what: pair[1]});
+                          }
                         }
-                      }
-                    }
-                    // orbit info
-                    else if (map[0] === 'Orbit') {
-                      $scope.orbit = [];
-                      for (var j = 0; j < infoMap.length; j++) {
-                        var pair = infoMap[j].split('=');
-                        if (pair[0] !== undefined && pair[1] !== undefined) {
-                          $scope.orbit.push({when: pair[0], what: pair[1]});
+                        break;
+                      case 'Orbit':
+                        $scope.orbit = [];
+                        for (var j = 0; j < infoMap.length; j++) {
+                          var pair = infoMap[j].split('=');
+                          if (pair[0] !== undefined && pair[1] !== undefined) {
+                            $scope.orbit.push({when: pair[0], what: pair[1]});
+                          }
                         }
-                      }
-
+                        break;
                     }
                   }
                 }
