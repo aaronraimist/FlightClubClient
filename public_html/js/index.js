@@ -88,7 +88,7 @@ app.controller('IndexCtrl', function ($scope, $mdSidenav, $cookies, $location, $
   }
 });
 
-app.controller('HomeCtrl', function ($scope, $mdDialog) {
+app.controller('HomeCtrl', function ($scope, $mdDialog, $mdSidenav) {
 
   $scope.httpRequest('/missions', 'GET', null, function (data) {
     fillMissions(data);
@@ -154,6 +154,7 @@ app.controller('HomeCtrl', function ($scope, $mdDialog) {
 
   $scope.selectMission = function (code) {
     $scope.httpRequest('/missions/' + code, 'GET', null, function (data) {
+      $mdSidenav("sidenav").close();
       $scope.form = JSON.parse(JSON.stringify(data));
       $scope.sortEvents();
       $scope.missionName = data.Mission.description;
