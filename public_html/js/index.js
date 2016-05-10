@@ -19,8 +19,8 @@ app.config(function ($routeProvider, $locationProvider) {
 
 app.controller('IndexCtrl', function ($scope, $mdSidenav, $cookies, $location, $window) {
   
-  //var base = 'http://localhost', port = ':8080';
-  var base = '//'+$location.host(), port = ':8443';
+  var base = 'http://localhost', port = ':8080';
+  //var base = '//'+$location.host(), port = ':8443';
   $scope.toolbarClass = "";
   $scope.client = base;
   $scope.server = base + port + '/FlightClub';
@@ -829,6 +829,7 @@ app.controller('WorldCtrl', function ($scope, $location) {
   $scope.$parent.toolbarTitle = "Live";
   var w;
 
+  var stageMap = {};
   var fullData = []; // all data from output files - filled at start
   var eventsData = []; // all data from events files - filled at start
   var vel = []; // vel vs. time - grows in real time
@@ -978,10 +979,17 @@ app.controller('WorldCtrl', function ($scope, $location) {
     }
 
     $scope.$parent.httpRequest('/missions/' + $scope.queryParams['code'], 'GET', null, function (data) {
-      if ($scope.queryParams['id'] === undefined) {
-        $scope.queryParams['id'] = data.Mission.livelaunch;
+      if (data.Mission !== undefined) {
+        $scope.numStages = 0;
+        $.each(data.Mission.Stages, function (key, val) {
+          stageMap[val.id] = val.name;
+          $scope.numStages++;
+        });
+        if ($scope.queryParams['id'] === undefined) {
+          $scope.queryParams['id'] = data.Mission.livelaunch;
+        }
+        $scope.fillData(data);
       }
-      $scope.fillData(data);
     }, null);
 
     setInterval(function () {
@@ -993,18 +1001,8 @@ app.controller('WorldCtrl', function ($scope, $location) {
 
   $scope.fillData = function (data) {
 
-    $scope.vehicle = data.Mission.launchvehicle;
-    if ($scope.vehicle === 'FNH') {
-      $scope.numStages = 3;
-    } else {
-      $scope.numStages = 2;
-    }
-
     $scope.missionName = data.Mission.description;
     $scope.missionCode = $scope.queryParams['code'];
-    $scope.stage0 = $scope.getStageName(0);
-    $scope.stage1 = $scope.getStageName(1);
-    $scope.stage2 = $scope.getStageName(2);
 
     var tempDate = data.Mission.date.replace(/-/g, "/") + ' ' + data.Mission.time + ' UTC';
     $scope.launchTime = Date.parse(tempDate);
@@ -1110,19 +1108,6 @@ app.controller('WorldCtrl', function ($scope, $location) {
           max: 600
         }
       });
-    }
-  };
-
-  $scope.getStageName = function (stageNum) {
-    switch (stageNum) {
-      case 0:
-        return "Booster";
-      case 1:
-        return $scope.vehicle === "FNH" ? "Core" : "UpperStage";
-      case 2:
-        return $scope.vehicle === "FNH" ? "UpperStage" : undefined;
-      default:
-        return undefined;
     }
   };
 
@@ -1259,7 +1244,7 @@ app.controller('WorldCtrl', function ($scope, $location) {
 
   $scope.getDataFile = function (stage) {
 
-    var url = $scope.$parent.client + '/output/' + w.getProp('id') + '_' + $scope.getStageName(stage) + '.dat';
+    var url = $scope.$parent.client + '/output/' + w.getProp('id') + '_' + stageMap[stage] + '.dat';
     $.ajax({type: 'GET', url: url, contentType: 'text', data: null,
       xhrFields: {withCredentials: false},
       success: successfn,
@@ -1376,11 +1361,11 @@ app.controller('WorldCtrl', function ($scope, $location) {
   };
 
   $scope.getEventsFile = function (stage) {
-    if ($scope.getStageName(stage) === undefined) {
+    if (stageMap[stage] === undefined) {
       $scope.start();
     }
     else {
-      var url = $scope.$parent.client + '/output/' + w.getProp('id') + '_' + $scope.getStageName(stage) + '_events.dat';
+      var url = $scope.$parent.client + '/output/' + w.getProp('id') + '_' + stageMap[stage] + '_events.dat';
       $.ajax({type: 'GET', url: url, contentType: 'text', data: null,
         xhrFields: {withCredentials: false},
         success: successfn,
