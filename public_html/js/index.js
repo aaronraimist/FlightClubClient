@@ -736,45 +736,48 @@ app.controller('ResultsCtrl', function ($scope, $cookies) {
   };
 
   $scope.initialisePlots = function () {
+    
+    var lowerStages = $scope.stageMap.length === 2 ? [0] : [0, 1];
+    var allStages = $scope.stageMap.length === 2 ? [0, 1] : [0, 1, 2];
 
     var plotMap = [];
-    plotMap.push({id: 'altitude1', stages: [0, 1], title: "Altitude",
+    plotMap.push({id: 'altitude1', stages: allStages, title: "Altitude",
       x: {axis: 0, label: "Time (s)", type: "linear"},
       y: {axis: 4, label: "Altitude (km)", type: "linear"}});
-    plotMap.push({id: 'profile1', stages: [0, 1], title: "Profile",
+    plotMap.push({id: 'profile1', stages: allStages, title: "Profile",
       x: {axis: 6, label: "Downrange (km)", type: "linear"},
       y: {axis: 4, label: "Altitude (km)", type: "linear"}});
-    plotMap.push({id: 'total-dv', stages: [0, 1], title: "Total dV Expended",
+    plotMap.push({id: 'total-dv', stages: allStages, title: "Total dV Expended",
       x: {axis: 0, label: "Time (s)", type: "log"},
       y: {axis: 9, label: "dV (m/s)", type: "log"}});
-    plotMap.push({id: 'velocity1', stages: [0, 1], title: "Velocity",
+    plotMap.push({id: 'velocity1', stages: allStages, title: "Velocity",
       x: {axis: 0, label: "Time (s)", type: "linear"},
       y: {axis: 5, label: "Velocity (m/s)", type: "linear"}});
-    plotMap.push({id: 'prop', stages: [0, 1], title: "Propellant Mass",
+    plotMap.push({id: 'prop', stages: allStages, title: "Propellant Mass",
       x: {axis: 0, label: "Time (s)", type: "log"},
       y: {axis: 8, label: "Mass (t)", type: "log"}});
-    plotMap.push({id: 'phase1', stages: [0], title: "Booster Phasespace",
+    plotMap.push({id: 'phase1', stages: lowerStages, title: "Booster Phasespace",
       x: {axis: 4, label: "Altitude (km)", type: "linear"},
       y: {axis: 5, label: "Velocity (m/s)", type: "linear"}});
-    plotMap.push({id: 'q', stages: [0], title: "Aerodynamic Pressure",
+    plotMap.push({id: 'q', stages: lowerStages, title: "Aerodynamic Pressure",
       x: {axis: 0, label: "Time (s)", type: "linear"},
       y: {axis: 7, label: "Pressure (kN/m^2)", type: "linear"}});
-    plotMap.push({id: 'throttle', stages: [0, 1], title: "Throttle",
+    plotMap.push({id: 'throttle', stages: allStages, title: "Throttle",
       x: {axis: 0, label: "Time (s)", type: "linear"},
       y: {axis: 12, label: "Throttle", type: "linear"}});
-    plotMap.push({id: 'accel1', stages: [0, 1], title: "Acceleration",
+    plotMap.push({id: 'accel1', stages: allStages, title: "Acceleration",
       x: {axis: 0, label: "Time (s)", type: "linear"},
       y: {axis: 13, label: "Acceleration (g)", type: "linear"}});
-    plotMap.push({id: 'aoa', stages: [0, 1], title: "Angle of Attack",
+    plotMap.push({id: 'aoa', stages: allStages, title: "Angle of Attack",
       x: {axis: 0, label: "Time (s)", type: "linear"},
       y: {axis: 14, label: "Angle (degrees)", type: "linear"}});
-    plotMap.push({id: 'aov', stages: [0, 1], title: "Velocity Angle",
+    plotMap.push({id: 'aov', stages: allStages, title: "Velocity Angle",
       x: {axis: 0, label: "Time (s)", type: "linear"},
       y: {axis: 15, label: "Angle (degrees)", type: "linear"}});
-    plotMap.push({id: 'aop', stages: [0, 1], title: "Pitch Angle",
+    plotMap.push({id: 'aop', stages: allStages, title: "Pitch Angle",
       x: {axis: 0, label: "Time (s)", type: "linear"},
       y: {axis: 16, label: "Angle (degrees)", type: "linear"}});
-    plotMap.push({id: 'drag', stages: [0], title: "Drag Coefficient",
+    plotMap.push({id: 'drag', stages: lowerStages, title: "Drag Coefficient",
       x: {axis: 0, label: "Time (s)", type: "linear"},
       y: {axis: 17, label: "Cd", type: "linear"}});
 
