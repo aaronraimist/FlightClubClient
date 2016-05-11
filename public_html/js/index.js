@@ -1293,6 +1293,12 @@ app.controller('WorldCtrl', function ($scope, $location) {
         if (!focus && data[0] > 1000 && i % 100 !== 0)
           continue;
 
+        if (!focus && data[5] < 100) {
+          var f = 10;
+          if(i % f !== 0)
+              continue;
+        }
+
         fullData[stage][parseInt(data[0])] = parseFloat(data[6]) + ":" + parseFloat(data[4]) + ":" + parseFloat(data[5]);
 
         if (t < 600 && parseFloat(data[4]) > max[stage]["altitude"] || max[stage]["altitude"] === undefined)
