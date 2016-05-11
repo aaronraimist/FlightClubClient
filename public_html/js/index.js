@@ -1145,24 +1145,31 @@ app.controller('WorldCtrl', function ($scope, $location) {
           geocoder: false,
           baseLayerPicker: false,
           creditContainer: document.getElementById("creditContainer"),
+          /* remove to revert to old (include stars + atmosphere) */
+          skyAtmosphere: false,
+          skyBox: new Cesium.SkyBox({
+            show: false
+          }),
+          /**/
           clock: new Cesium.Clock({
             startTime: Cesium.JulianDate.fromDate(launchDate),
             currentTime: Cesium.JulianDate.fromDate(now),
             stopTime: Cesium.JulianDate.fromDate(end),
             clockRange: Cesium.ClockRange.UNBOUNDED,
             clockStep: Cesium.ClockStep.SYSTEM_CLOCK_MULTIPLIER
+          }),
+          terrainProvider: new Cesium.CesiumTerrainProvider({
+            url: '//assets.agi.com/stk-terrain/world',
+            requestWaterMask: true,
+            requestVertexNormals: true
           })
 
         });
 
-        w.viewer.scene.globe.enableLighting = true;
-        var terrainProvider = new Cesium.CesiumTerrainProvider({
-          url: '//assets.agi.com/stk-terrain/world',
-          requestWaterMask: true,
-          requestVertexNormals: true
-        });
-        w.viewer.terrainProvider = terrainProvider;
-
+        /* add to revert to old (include sun) */
+        //w.viewer.scene.globe.enableLighting = false;
+        /**/
+        
         w.viewer.timeline.updateFromClock();
         w.viewer.timeline.zoomTo(w.viewer.clock.startTime, w.viewer.clock.stopTime);
 
@@ -1415,7 +1422,21 @@ app.controller('WorldCtrl', function ($scope, $location) {
       $scope.fillFutureArray();
       $scope.update();
     }
-
+    /*
+    setInterval(function () {
+      var heading = 180.0 * viewer.camera.heading / Math.PI;
+      var pitch = 180.0 * viewer.camera.pitch / Math.PI;
+      var roll = 180.0 * viewer.camera.roll / Math.PI;
+      var matrix = viewer.camera.inverseViewMatrix;
+      var pos1 = Math.sqrt(matrix[12] * matrix[12] + matrix[13] * matrix[13]);
+      var pos2 = matrix[14];
+      var lat = 180.0 * Math.atan(pos2 / pos1) / Math.PI;
+      var lon = 180.0 * Math.atan(matrix[12] / matrix[13]) / Math.PI;
+      var radius = Math.sqrt(matrix[12] * matrix[12] + matrix[13] * matrix[13] + matrix[14] * matrix[14]);
+      var height = radius - 6378137;
+      var x = 1;
+    }, 10000);
+    */
   };
 
   $scope.update = function () {

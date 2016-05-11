@@ -43,23 +43,7 @@ function world() {
   var viewer;
 
   var launchPadViews = {};
-
-  /*
-   setInterval(function() {
-   var heading = 180.0*viewer.camera.heading/Math.PI;
-   var pitch = 180.0*viewer.camera.pitch/Math.PI;
-   var roll = 180.0*viewer.camera.roll/Math.PI;
-   var matrix = viewer.camera.inverseViewMatrix;
-   var pos1 = Math.sqrt(matrix[12]*matrix[12]+matrix[13]*matrix[13]);
-   var pos2 = matrix[14];
-   var lat = 180.0*Math.atan(pos2/pos1)/Math.PI;
-   var lon = 180.0*Math.atan(matrix[12]/matrix[13])/Math.PI;
-   var radius = Math.sqrt(matrix[12]*matrix[12]+matrix[13]*matrix[13]+matrix[14]*matrix[14]);
-   var height = radius - 6378137;
-   var x = 1;
-   }, 10000);  
-   */
-
+  
   launchPadViews['LC4E'] = {
     destination: Cesium.Cartesian3.fromDegrees(-128.654, 27.955, 772000.0),
     orientation: {
