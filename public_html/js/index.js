@@ -1293,9 +1293,7 @@ app.controller('WorldCtrl', function ($scope, $location) {
         if (!focus && data[0] > 1000 && i % 100 !== 0)
           continue;
 
-        if (!focus && data[5] < 100) {
-          var f = 10;
-          if(i % f !== 0)
+        if (!focus && data[5] < 100 && i % 10 !== 0) {
               continue;
         }
 
