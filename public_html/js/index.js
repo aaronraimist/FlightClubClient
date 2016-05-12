@@ -1290,13 +1290,14 @@ app.controller('WorldCtrl', function ($scope, $location) {
           continue;
 
         var data = lines[i].split("\t");
+        fullData[stage][parseInt(data[0])] = parseFloat(data[6]) + ":" + parseFloat(data[4]) + ":" + parseFloat(data[5]);
 
         var focus = false;
         var ign = false;
-        for (var j = 0; j < focusPoints.length; j++) {
+        for (var j = 1; j < focusPoints.length; j++) {
           if (Math.abs(data[0] - focusPoints[j][0]) <= 0.5) {
             focus = true;
-            ign = focusPoints[j][1] > 0.1;
+            ign = focusPoints[j-1][1] > 0.1;
             break;
           }
         }
@@ -1304,17 +1305,10 @@ app.controller('WorldCtrl', function ($scope, $location) {
         if (!focus && data[0] > 1000 && i % 100 !== 0)
           continue;
 
-        if (!focus && data[5] < 100 && i % 10 !== 0) {
-              continue;
-        }
-
-        fullData[stage][parseInt(data[0])] = parseFloat(data[6]) + ":" + parseFloat(data[4]) + ":" + parseFloat(data[5]);
-
         if (t < 600 && parseFloat(data[4]) > max[stage]["altitude"] || max[stage]["altitude"] === undefined)
           max[stage]["altitude"] = Math.ceil(parseFloat(data[4]) / 100) * 100;
         if (t < 600 && parseFloat(data[5]) > max[stage]["velocity"] || max[stage]["velocity"] === undefined)
           max[stage]["velocity"] = Math.ceil(parseFloat(data[5]) / 500) * 500;
-
 
         t = parseInt(data[0]);
         var x = parseFloat(data[1 + offset]);
@@ -1334,7 +1328,7 @@ app.controller('WorldCtrl', function ($scope, $location) {
           var e = w.viewer.entities.add({
             availability: new Cesium.TimeIntervalCollection([new Cesium.TimeInterval({start: start, stop: stop})]),
             position: trajectory,
-            path: {resolution: 1, material: new Cesium.PolylineGlowMaterialProperty({glowPower: 0.1, color: ign ? Cesium.Color.YELLOW : Cesium.Color.RED}), width: 8}
+            path: {resolution: 1, material: new Cesium.PolylineGlowMaterialProperty({glowPower: 0.1, color: ign ? Cesium.Color.RED : Cesium.Color.YELLOW}), width: 8}
           });
           e.position.setInterpolationOptions({
             interpolationDegree: 5,
@@ -1348,10 +1342,11 @@ app.controller('WorldCtrl', function ($scope, $location) {
 
       }
 
+      var ign = focusPoints[focusPoints.length-1][1] > 0.1;
       var e = w.viewer.entities.add({
         availability: new Cesium.TimeIntervalCollection([new Cesium.TimeInterval({start: start, stop: stop})]),
         position: trajectory,
-        path: {resolution: 1, material: new Cesium.PolylineGlowMaterialProperty({glowPower: 0.1, color: throttle >= 0.5 ? Cesium.Color.RED : Cesium.Color.YELLOW}), width: 8}
+        path: {resolution: 1, material: new Cesium.PolylineGlowMaterialProperty({glowPower: 0.1, color: ign ? Cesium.Color.RED : Cesium.Color.YELLOW}), width: 8}
       });
       e.position.setInterpolationOptions({
         interpolationDegree: 5,
