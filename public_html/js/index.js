@@ -988,9 +988,12 @@ app.controller('WorldCtrl', function ($scope, $location) {
         if ($scope.queryParams['id'] === undefined) {
           $scope.queryParams['id'] = data.Mission.livelaunch;
         }
-        $scope.fillData(data);
       }
-    }, null);
+      $scope.fillData(data);
+    }, 
+    function(data) {
+      $scope.fillData(data);
+    });
 
     setInterval(function () {
       $scope.$apply(function () {
@@ -1001,14 +1004,18 @@ app.controller('WorldCtrl', function ($scope, $location) {
 
   $scope.fillData = function (data) {
 
-    $scope.missionName = data.Mission.description;
-    $scope.missionCode = $scope.queryParams['code'];
+    if (data.Mission !== undefined) {
+      $scope.missionName = data.Mission.description;
+      $scope.missionCode = $scope.queryParams['code'];
 
-    var tempDate = data.Mission.date.replace(/-/g, "/") + ' ' + data.Mission.time + ' UTC';
-    $scope.launchTime = Date.parse(tempDate);
+      var tempDate = data.Mission.date.replace(/-/g, "/") + ' ' + data.Mission.time + ' UTC';
+      $scope.launchTime = Date.parse(tempDate);
 
-    var now = new Date();
-    var timeUntilLaunch = $scope.launchTime - now;
+      var now = new Date();
+      var timeUntilLaunch = $scope.launchTime - now;
+    } else {
+      $scope.launchTime = new Date();
+    }
 
     $scope.$parent.toolbarClass = "";
     $scope.cesiumShow = $scope.countdown = $scope.finished = $scope.sidebarShow = false;
@@ -1065,6 +1072,9 @@ app.controller('WorldCtrl', function ($scope, $location) {
           w.setCameraLookingAt(data.Mission.launchsite);
       });
 
+    }
+    else {
+      $scope.loadCesium();
     }
   };
   
@@ -1173,7 +1183,8 @@ app.controller('WorldCtrl', function ($scope, $location) {
         w.viewer.timeline.updateFromClock();
         w.viewer.timeline.zoomTo(w.viewer.clock.startTime, w.viewer.clock.stopTime);
 
-        otherFunction();
+        if(otherFunction)
+          otherFunction();
       });
     });
   };
