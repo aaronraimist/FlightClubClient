@@ -12,6 +12,7 @@ app.config(function ($routeProvider, $locationProvider) {
             }, template: "<div></div>"})
           .when("/contact/", {templateUrl: "/pages/contact.html", controller: "ContactCtrl"})
           .when("/donate/", {templateUrl: "/pages/donate.html", controller: "DonateCtrl"})
+          .when("/error/", {templateUrl: "/pages/error.html", controller: "ErrorCtrl"})
           .when("/results/", {templateUrl: "/pages/results.html", controller: "ResultsCtrl", reloadOnSearch: false})
           .when("/world/", {templateUrl: "/pages/world.html", controller: "WorldCtrl", reloadOnSearch: false})
           .otherwise({redirectTo: '/'});
@@ -470,6 +471,30 @@ app.controller('DonateCtrl', function ($scope) {
 
 });
 
+app.controller('ErrorCtrl', function ($http, $scope) {
+  
+  $scope.$parent.toolbarClass = "";
+  $scope.$parent.toolbarTitle = 'Error';
+  $scope.mailSuccess = $scope.mailError = $scope.formDisabled = false;
+  
+  var hash = window.location.hash.substring(1);    
+  $scope.data = {errors: window.atob(hash).split(",")};
+  
+  $scope.reportError = function() {
+    
+    $scope.formDisabled = true;
+    $http({url: '/report.php', data: $.param($scope.data), method: 'POST',
+      headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
+    }).then(function () {
+      $scope.mailSuccess = true;
+    }, function () {
+      $scope.mailError = true;
+    });
+  };
+    
+});
+
+
 app.controller('ResultsCtrl', function ($scope, $cookies) {
 
   $scope.$parent.toolbarClass = "";
@@ -571,15 +596,11 @@ app.controller('ResultsCtrl', function ($scope, $cookies) {
             function (data) {
               if (data.Mission !== undefined) {
                 $.each(data.Mission.Stages, function (key, val) {
-                  $scope.stageMap[val.id] = val.name;
+                  $scope.stageMap.push({id: val.id, name: val.name});
                 });
                 if($scope.queryParams['id'] === undefined) {
                   $scope.queryParams['id'] = data.Mission.livelaunch;
                 }
-              }
-              else { // guess two stage
-                $scope.stageMap[0] = "Booster";
-                $scope.stageMap[1] = "UpperStage";
               }
               $scope.missionName = data.Mission.description;
 
@@ -613,7 +634,7 @@ app.controller('ResultsCtrl', function ($scope, $cookies) {
                 var errors = obj.Mission.errors;
                 var errorsHash = window.btoa(errors);
 
-                window.location = $scope.$parent.client + '/error#' + errorsHash;
+                window.location = $scope.$parent.client + '/error/#' + errorsHash;
               }
 
             },
@@ -624,7 +645,7 @@ app.controller('ResultsCtrl', function ($scope, $cookies) {
                 errorsHash = window.btoa(errors);
               }
 
-              window.location = $scope.$parent.client + '/error#' + errorsHash;
+              window.location = $scope.$parent.client + '/error/#' + errorsHash;
             });
   }
   else if (queryString) {
@@ -644,7 +665,7 @@ app.controller('ResultsCtrl', function ($scope, $cookies) {
   $scope.isLoading = true;
   $scope.fullData = [];
   $scope.eventsData = [];
-  $scope.stageMap = {};
+  $scope.stageMap = [];
   $scope.numCols = 17;
   $scope.overrideAttempted = false;
 
@@ -681,7 +702,7 @@ app.controller('ResultsCtrl', function ($scope, $cookies) {
     if ($scope.stageMap[stage] === undefined) {
       $scope.initialisePlots();
     } else {
-      var url = $scope.$parent.client + '/output/' + $scope.queryParams['id'] + '_' + $scope.stageMap[stage] + '.dat';
+      var url = $scope.$parent.client + '/output/' + $scope.queryParams['id'] + '_' + $scope.stageMap[stage].name + '.dat';
       $.ajax({type: 'GET', url: url, contentType: 'text', data: null,
         xhrFields: {withCredentials: false},
         success: successfn,
@@ -709,7 +730,7 @@ app.controller('ResultsCtrl', function ($scope, $cookies) {
   };
 
   $scope.getEventsFile = function (stage) {
-    var url = $scope.$parent.client + '/output/' + $scope.queryParams['id'] + '_' + $scope.stageMap[stage] + '_events.dat';
+    var url = $scope.$parent.client + '/output/' + $scope.queryParams['id'] + '_' + $scope.stageMap[stage].name + '_events.dat';
     $.ajax({type: 'GET', url: url, contentType: 'text', data: null,
       xhrFields: {withCredentials: false},
       success: successfn,
@@ -799,14 +820,14 @@ app.controller('ResultsCtrl', function ($scope, $cookies) {
           x: $scope.fullData[s][plot.x.axis],
           y: $scope.fullData[s][plot.y.axis],
           mode: 'lines',
-          name: $scope.stageMap[s]
+          name: $scope.stageMap[s].name
         });
         data.push({
           x: $scope.eventsData[s][plot.x.axis],
           y: $scope.eventsData[s][plot.y.axis],
           mode: 'markers',
           showlegend: false,
-          name: $scope.stageMap[s] + ' Event'
+          name: $scope.stageMap[s].name + ' Event'
         });
       }
     }
@@ -829,7 +850,8 @@ app.controller('WorldCtrl', function ($scope, $location) {
   $scope.$parent.toolbarTitle = "Live";
   var w;
 
-  var stageMap = {};
+  $scope.stageMap = [];
+  var stageColours = [];
   var fullData = []; // all data from output files - filled at start
   var eventsData = []; // all data from events files - filled at start
   var vel = []; // vel vs. time - grows in real time
@@ -982,7 +1004,7 @@ app.controller('WorldCtrl', function ($scope, $location) {
       if (data.Mission !== undefined) {
         $scope.numStages = 0;
         $.each(data.Mission.Stages, function (key, val) {
-          stageMap[val.id] = val.name;
+          $scope.stageMap.push({id: val.id, name: val.name});
           $scope.numStages++;
         });
         if ($scope.queryParams['id'] === undefined) {
@@ -1156,7 +1178,6 @@ app.controller('WorldCtrl', function ($scope, $location) {
           baseLayerPicker: false,
           creditContainer: document.getElementById("creditContainer"),
           /* remove to revert to old (include stars + atmosphere) */
-          skyAtmosphere: false,
           skyBox: new Cesium.SkyBox({
             show: false
           }),
@@ -1177,7 +1198,7 @@ app.controller('WorldCtrl', function ($scope, $location) {
         });
 
         /* add to revert to old (include sun) */
-        //w.viewer.scene.globe.enableLighting = false;
+        w.viewer.scene.globe.enableLighting = true;
         /**/
         
         w.viewer.timeline.updateFromClock();
@@ -1209,6 +1230,10 @@ app.controller('WorldCtrl', function ($scope, $location) {
 
       max[i] = {};
     }
+    
+    stageColours[0] = '#ff0000';
+    stageColours[1] = '#8B8BE5';
+    stageColours[2] = '#00ff00';
 
     $scope.getHazardMap();
   };
@@ -1262,7 +1287,7 @@ app.controller('WorldCtrl', function ($scope, $location) {
 
   $scope.getDataFile = function (stage) {
 
-    var url = $scope.$parent.client + '/output/' + w.getProp('id') + '_' + stageMap[stage] + '.dat';
+    var url = $scope.$parent.client + '/output/' + w.getProp('id') + '_' + $scope.stageMap[stage].name + '.dat';
     $.ajax({type: 'GET', url: url, contentType: 'text', data: null,
       xhrFields: {withCredentials: false},
       success: successfn,
@@ -1290,7 +1315,7 @@ app.controller('WorldCtrl', function ($scope, $location) {
           continue;
 
         var data = lines[i].split("\t");
-        fullData[stage][parseInt(data[0])] = parseFloat(data[6]) + ":" + parseFloat(data[4]) + ":" + parseFloat(data[5]);
+        fullData[stage][parseInt(data[0])] = parseFloat(data[6]) + ":" + parseFloat(data[4]) + ":" + parseFloat(data[5]) + ":" + parseFloat(data[21])* Math.PI / 180 + ":" + (parseFloat(data[16])-90)* Math.PI / 180;
 
         var focus = false;
         var ign = false;
@@ -1324,7 +1349,7 @@ app.controller('WorldCtrl', function ($scope, $location) {
         trajectory.addSample(time, position);
         p_stage.addSample(time, position);
 
-        if (focus) {
+        if (focus && w.getProp('watch')===undefined) {
           var e = w.viewer.entities.add({
             availability: new Cesium.TimeIntervalCollection([new Cesium.TimeInterval({start: start, stop: stop})]),
             position: trajectory,
@@ -1342,26 +1367,27 @@ app.controller('WorldCtrl', function ($scope, $location) {
 
       }
 
-      var ign = focusPoints[focusPoints.length-1][1] > 0.1;
-      var e = w.viewer.entities.add({
-        availability: new Cesium.TimeIntervalCollection([new Cesium.TimeInterval({start: start, stop: stop})]),
-        position: trajectory,
-        path: {resolution: 1, material: new Cesium.PolylineGlowMaterialProperty({glowPower: 0.1, color: ign ? Cesium.Color.RED : Cesium.Color.YELLOW}), width: 8}
-      });
-      e.position.setInterpolationOptions({
-        interpolationDegree: 5,
-        interpolationAlgorithm: Cesium.LagrangePolynomialApproximation
-      });
-
-      if (w.getProp('watch') !== undefined) {
-        var pinBuilder = new Cesium.PinBuilder();
+      if(w.getProp('watch') === undefined) {
+        var ign = focusPoints[focusPoints.length - 1][1] > 0.1;
+        var e = w.viewer.entities.add({
+          availability: new Cesium.TimeIntervalCollection([new Cesium.TimeInterval({start: start, stop: stop})]),
+          position: trajectory,
+          path: {resolution: 1, material: new Cesium.PolylineGlowMaterialProperty({glowPower: 0.1, color: ign ? Cesium.Color.RED : Cesium.Color.YELLOW}), width: 8}
+        });
+        e.position.setInterpolationOptions({
+          interpolationDegree: 5,
+          interpolationAlgorithm: Cesium.LagrangePolynomialApproximation
+        });
+      } else {
         w.entities[stage] = w.viewer.entities.add({
+          name: '../untitled.glb',
+          model: {
+            uri: '../untitled.glb',
+            minimumPixelSize: 4,
+            maximumScale: 512
+          },
           position: p_stage,
-          path: {resolution: 1, material: new Cesium.PolylineGlowMaterialProperty({glowPower: 0.1, color: Cesium.Color.TRANSPARENT}), width: 1},
-          billboard: {
-            image: pinBuilder.fromText(stage + 1, Cesium.Color.ROYALBLUE, 32).toDataURL(),
-            verticalOrigin: Cesium.VerticalOrigin.BOTTOM
-          }
+          path: {resolution: 1, material: new Cesium.PolylineGlowMaterialProperty({glowPower: 0.1, color: Cesium.Color.TRANSPARENT}), width: 1}
         });
         w.entities[stage].position.setInterpolationOptions({
           interpolationDegree: 5,
@@ -1378,11 +1404,11 @@ app.controller('WorldCtrl', function ($scope, $location) {
   };
 
   $scope.getEventsFile = function (stage) {
-    if (stageMap[stage] === undefined) {
+    if ($scope.stageMap[stage] === undefined) {
       $scope.start();
     }
     else {
-      var url = $scope.$parent.client + '/output/' + w.getProp('id') + '_' + stageMap[stage] + '_events.dat';
+      var url = $scope.$parent.client + '/output/' + w.getProp('id') + '_' + $scope.stageMap[stage].name + '_events.dat';
       $.ajax({type: 'GET', url: url, contentType: 'text', data: null,
         xhrFields: {withCredentials: false},
         success: successfn,
@@ -1412,10 +1438,12 @@ app.controller('WorldCtrl', function ($scope, $location) {
         var lat = 180 * Math.atan(z / Math.sqrt(x * x + y * y)) / Math.PI;
         var lon = 180 * Math.atan2(y, x) / Math.PI;
 
-        w.viewer.entities.add({
-          position: Cesium.Cartesian3.fromDegrees(lon, lat, h),
-          point: {pixelSize: 5, color: Cesium.Color.TRANSPARENT, outlineColor: Cesium.Color.RED, outlineWidth: 1}
-        });
+        if (w.getProp('watch') === undefined) {
+          w.viewer.entities.add({
+            position: Cesium.Cartesian3.fromDegrees(lon, lat, h),
+            point: {pixelSize: 5, color: Cesium.Color.TRANSPARENT, outlineColor: Cesium.Color.RED, outlineWidth: 1}
+          });
+        }
       }
 
       $scope.getDataFile(stage);
@@ -1487,62 +1515,56 @@ app.controller('WorldCtrl', function ($scope, $location) {
       
       if (time <= 600) {
         
+        var altData = [];
+        var velData = [];
         for (var s = 0; s < $scope.numStages; s++) {
           for (var i = w.plottedTime; i <= time; i++) {
 
             if (fullData[s][i] === undefined) {
-              if (fullData[s - 1] !== undefined)
+              if (fullData[s - 1] !== undefined && fullData[s - 1][i] !== undefined)
               {
+                var tel = fullData[s - 1][i].split(":");
+                w.entities[s].orientation = Cesium.Transforms.headingPitchRollQuaternion(w.entities[s].position.getValue(time), tel[3], tel[4], 0);
+                vel[s][0].push([i, tel[2]]);
+                alt[s][0].push([i, tel[1]]);
+                
                 if (eventsData[s - 1][i] !== undefined)
                 {
-                  var tel = fullData[s - 1][i].split(":");
-                  vel[s][0].push([i, tel[2]]);
                   vel[s][1].push([i, tel[2]]);
-                  alt[s][0].push([i, tel[1]]);
                   alt[s][1].push([i, tel[1]]);
                 }
-                else if (fullData[s - 1][i] !== undefined)
-                {
-                  var tel = fullData[s - 1][i].split(":");
-                  vel[s][0].push([i, tel[2]]);
-                  alt[s][0].push([i, tel[1]]);
-                }
               }
-            }
-            else if (eventsData[s][i] !== undefined)
-            {
-              var tel = fullData[s][i].split(":");
-              vel[s][0].push([i, tel[2]]);
-              vel[s][1].push([i, tel[2]]);
-              alt[s][0].push([i, tel[1]]);
-              alt[s][1].push([i, tel[1]]);
             }
             else
             {
               var tel = fullData[s][i].split(":");
+              w.entities[s].orientation = Cesium.Transforms.headingPitchRollQuaternion(w.entities[s].position.getValue(time), tel[3], tel[4], 0);
               vel[s][0].push([i, tel[2]]);
               alt[s][0].push([i, tel[1]]);
+              
+              if (eventsData[s][i] !== undefined)
+              {
+                vel[s][1].push([i, tel[2]]);
+                alt[s][1].push([i, tel[1]]);
+              }
             }
           }
+          
+          altData.push({data: future[s]["alt"], color: '#aaaaaa', lineWidth: 1, lines: {show: true, fill: false}});
+          altData.push({data: alt[s][0], color: stageColours[s], lineWidth: 1, lines: {show: true, fill: stage === s}});
+          altData.push({data: alt[s][1], lines: {show: false}, points: {show: true}});
+          
+          velData.push({data: future[s]["vel"], color: '#aaaaaa', lineWidth: 1, lines: {show: true, fill: false}});
+          velData.push({data: vel[s][0], color: stageColours[s], lineWidth: 1, lines: {show: true, fill: stage === s}});
+          velData.push({data: vel[s][1], lines: {show: false}, points: {show: true}});
+          
         }
         w.plottedTime = time + 1;
 
-        plot["altitude"].setData([
-          {data: future[0]["alt"], color: '#aaaaaa', lineWidth: 1, lines: {show: true, fill: false}},
-          {data: future[1]["alt"], color: '#aaaaaa', lineWidth: 1, lines: {show: true, fill: false}},
-          {data: alt[stage][1], lines: {show: false}, points: {show: true}},
-          {data: alt[0][0], color: '#ff0000', lineWidth: 1, lines: {show: true, fill: stage === 0}},
-          {data: alt[1][0], color: '#8B8BE5', lineWidth: 1, lines: {show: true, fill: stage === 1}}
-        ]);
+        plot["altitude"].setData(altData);
         plot["altitude"].draw();
 
-        plot["velocity"].setData([
-          {data: future[0]["vel"], color: '#aaaaaa', lineWidth: 1, lines: {show: true, fill: false}},
-          {data: future[1]["vel"], color: '#aaaaaa', lineWidth: 1, lines: {show: true, fill: false}},
-          {data: vel[stage][1], lines: {show: false}, points: {show: true}},
-          {data: vel[0][0], color: '#ff0000', lineWidth: 1, lines: {show: true, fill: stage === 0}},
-          {data: vel[1][0], color: '#8B8BE5', lineWidth: 1, lines: {show: true, fill: stage === 1}}
-        ]);
+        plot["velocity"].setData(velData);
         plot["velocity"].draw();
       }
     }
