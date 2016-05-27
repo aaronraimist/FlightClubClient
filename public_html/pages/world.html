@@ -1,8 +1,7 @@
 <md-content id="world" layout-fill flex layout="column" ng-cloak>
 
   <md-content ng-show="countdown || finished" flex layout="column" layout-align='space-around center'>
-    <md-content flex></md-content>
-    <md-content flex layout-fill class='md-primary centre'>
+    <md-content class='md-primary centre'>
       <div ng-show="countdown">
         <h3 class=".md-display-3">{{missionName}} will launch in</h3>
         <md-divider></md-divider>
@@ -17,7 +16,6 @@
         <a class=".md-display-3" href="" ng-click="redirect('world?watch=2&code=' + missionCode)">Rewatch the launch here</a>
       </div>
     </md-content>
-    <md-content flex></md-content>
   </md-content>
 
   <md-content layout="row">
@@ -62,8 +60,7 @@
       <md-toolbar class="md-theme-indigo">
         <div class="md-toolbar-tools" layout="row" layout-align="space-around center" flex>
           <h1><span>{{missionName}}</span></h1>
-          <md-button class="md-raised" ng-click="clickStage(0)">{{stage0}}</md-button>
-          <md-button class="md-raised" ng-click="clickStage(1)">{{stage1}}</md-button>
+          <md-button ng-repeat="stage in stageMap" class="md-raised" ng-click="clickStage(stage.id)">Stage {{stage.id+1}}</md-button>
         </div>
       </md-toolbar>
       <md-content>
