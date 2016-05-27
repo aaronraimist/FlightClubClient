@@ -22,6 +22,7 @@ app.controller('IndexCtrl', function ($scope, $mdSidenav, $cookies, $location, $
   
   //var base = 'http://localhost', port = ':8080';
   var base = '//'+$location.host(), port = ':8443';
+  $scope.pageTitle = "Flight Club";
   $scope.toolbarClass = "";
   $scope.client = base;
   $scope.server = base + port + '/FlightClub';
@@ -937,6 +938,7 @@ app.controller('WorldCtrl', function ($scope, $location) {
         }
 
         $scope.clock = 'T' + sign + hours + ':' + minutes + ':' + seconds;
+        $scope.$parent.pageTitle = 'T' + sign + hours + ':' + minutes + ':' + seconds;
       }
 
     } else if ($scope.countdown) {
@@ -953,6 +955,14 @@ app.controller('WorldCtrl', function ($scope, $location) {
       $scope.hours = hours + ' hour' + ((hours !== 1) ? 's' : '');
       $scope.minutes = minutes + ' minute' + ((minutes !== 1) ? 's' : '');
       $scope.seconds = seconds + ' second' + ((seconds !== 1) ? 's' : '');
+      
+      if (hours < 10)
+        hours = '0' + hours;
+      if (minutes < 10)
+        minutes = '0' + minutes;
+      if (seconds < 10)
+        seconds = '0' + seconds;
+      $scope.$parent.pageTitle = 'T' + sign + hours + ':' + minutes + ':' + seconds;
 
       if (Math.abs((59 * _minute - rand5) - distance) < 1000) // clock -> plots limit between T-59 -> T-54
         window.location.reload(true);
@@ -1349,7 +1359,7 @@ app.controller('WorldCtrl', function ($scope, $location) {
         trajectory.addSample(time, position);
         p_stage.addSample(time, position);
 
-        if (focus && w.getProp('watch')===undefined) {
+        if (focus) {
           var e = w.viewer.entities.add({
             availability: new Cesium.TimeIntervalCollection([new Cesium.TimeInterval({start: start, stop: stop})]),
             position: trajectory,
@@ -1367,8 +1377,7 @@ app.controller('WorldCtrl', function ($scope, $location) {
 
       }
 
-      if(w.getProp('watch') === undefined) {
-        var ign = focusPoints[focusPoints.length - 1][1] > 0.1;
+      var ign = focusPoints[focusPoints.length-1][1] > 0.1;
         var e = w.viewer.entities.add({
           availability: new Cesium.TimeIntervalCollection([new Cesium.TimeInterval({start: start, stop: stop})]),
           position: trajectory,
@@ -1378,16 +1387,16 @@ app.controller('WorldCtrl', function ($scope, $location) {
           interpolationDegree: 5,
           interpolationAlgorithm: Cesium.LagrangePolynomialApproximation
         });
-      } else {
+
+      if (w.getProp('watch') !== undefined) {
+        var pinBuilder = new Cesium.PinBuilder();
         w.entities[stage] = w.viewer.entities.add({
-          name: '../untitled.glb',
-          model: {
-            uri: '../untitled.glb',
-            minimumPixelSize: 4,
-            maximumScale: 512
-          },
           position: p_stage,
-          path: {resolution: 1, material: new Cesium.PolylineGlowMaterialProperty({glowPower: 0.1, color: Cesium.Color.TRANSPARENT}), width: 1}
+          path: {resolution: 1, material: new Cesium.PolylineGlowMaterialProperty({glowPower: 0.1, color: Cesium.Color.TRANSPARENT}), width: 1},
+          billboard: {
+            image: pinBuilder.fromText(stage + 1, Cesium.Color.ROYALBLUE, 32).toDataURL(),
+            verticalOrigin: Cesium.VerticalOrigin.BOTTOM
+          }
         });
         w.entities[stage].position.setInterpolationOptions({
           interpolationDegree: 5,
@@ -1438,13 +1447,11 @@ app.controller('WorldCtrl', function ($scope, $location) {
         var lat = 180 * Math.atan(z / Math.sqrt(x * x + y * y)) / Math.PI;
         var lon = 180 * Math.atan2(y, x) / Math.PI;
 
-        if (w.getProp('watch') === undefined) {
           w.viewer.entities.add({
             position: Cesium.Cartesian3.fromDegrees(lon, lat, h),
             point: {pixelSize: 5, color: Cesium.Color.TRANSPARENT, outlineColor: Cesium.Color.RED, outlineWidth: 1}
           });
         }
-      }
 
       $scope.getDataFile(stage);
     }
