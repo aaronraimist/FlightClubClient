@@ -1158,6 +1158,7 @@ app.controller('WorldCtrl', function ($scope, $location) {
     window.CESIUM_BASE_URL = '//cesiumjs.org/releases/1.20/Build/Cesium/';
     $.getScript("//cesiumjs.org/releases/1.20/Build/Cesium/Cesium.js", function ()
     {
+      Cesium.BingMapsApi.defaultKey = 'Atr1lJvbFdMUnJ6fw4qGKDcZuEjzVRh-6WLmrRZDcCggpZIPH9sdEyUWGWXO1kPc';
       $.getScript("js/worldObj.js", function ()
       {
 
