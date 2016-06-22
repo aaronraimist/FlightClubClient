@@ -117,7 +117,8 @@ app.controller('HomeCtrl', function ($scope, $mdDialog, $mdSidenav) {
     {code: 'CUTOFF', name: 'Cutoff'},
     {code: 'GUIDANCE', name: 'Guidance'},
     {code: 'SEPARATION', name: 'Launch/Separation'},
-    {code: 'FAIRING_SEP', name: 'Fairing Separation'}
+    {code: 'FAIRING_SEP', name: 'Fairing Separation'},
+    {code: 'PAYLOAD_SEP', name: 'Payload Separation'}
   ];
 
   var fillMissions = function (data) {
@@ -1470,18 +1471,19 @@ app.controller('WorldCtrl', function ($scope, $location) {
     }
     /*
     setInterval(function () {
-      var heading = 180.0 * viewer.camera.heading / Math.PI;
-      var pitch = 180.0 * viewer.camera.pitch / Math.PI;
-      var roll = 180.0 * viewer.camera.roll / Math.PI;
-      var matrix = viewer.camera.inverseViewMatrix;
+      var heading = 180.0 * w.viewer.camera.heading / Math.PI;
+      var pitch = 180.0 * w.viewer.camera.pitch / Math.PI;
+      var roll = 180.0 * w.viewer.camera.roll / Math.PI;
+      var matrix = w.viewer.camera.inverseViewMatrix;
       var pos1 = Math.sqrt(matrix[12] * matrix[12] + matrix[13] * matrix[13]);
       var pos2 = matrix[14];
       var lat = 180.0 * Math.atan(pos2 / pos1) / Math.PI;
-      var lon = 180.0 * Math.atan(matrix[12] / matrix[13]) / Math.PI;
+      var lon = -90.0-(180.0 * Math.atan(matrix[12] / matrix[13]) / Math.PI);
       var radius = Math.sqrt(matrix[12] * matrix[12] + matrix[13] * matrix[13] + matrix[14] * matrix[14]);
       var height = radius - 6378137;
-      var x = 1;
-    }, 10000);
+      console.log("long/lat/height =    " + lon + "/" + lat + "/" + height);
+      console.log("heading/pitch/roll = " + heading + "/" + pitch + "/" + roll);
+    }, 5000);
     */
   };
 
