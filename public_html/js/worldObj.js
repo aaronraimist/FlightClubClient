@@ -68,5 +68,13 @@ function world() {
       roll: Cesium.Math.toRadians(359.831)
     }
   };
+  launchPadViews['BOWT'] = {
+    destination: Cesium.Cartesian3.fromDegrees(-103.824, 21.348, 450395.0),
+    orientation: {
+      heading: Cesium.Math.toRadians(357.51),
+      pitch: Cesium.Math.toRadians(-21.66),
+      roll: Cesium.Math.toRadians(359.93)
+    }
+  };
 
 };
