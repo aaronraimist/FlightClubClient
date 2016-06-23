@@ -137,12 +137,16 @@ app.controller('HomeCtrl', function ($scope, $mdDialog, $mdSidenav) {
       } else {
         $scope.past.push(missionObj);
       }
-
-      if ($scope.selectedMission === undefined && (missionObj.display || $scope.authorised)) {
-        $scope.selectMission(missionObj.code);
-        $scope.selectedMission = missionObj;
-      }
     }
+    
+    var missionObj;
+    if($scope.upcoming.length>0) {
+      missionObj = $scope.upcoming[$scope.upcoming.length-1];
+    } else {
+      missionObj = $scope.past[0];
+    }
+    $scope.selectMission(missionObj.code);
+    $scope.selectedMission = missionObj;
 
   };
 
