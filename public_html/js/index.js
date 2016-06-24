@@ -2,7 +2,23 @@
 
 var app = angular.module('FlightClub', ['ngMaterial', 'ngCookies', 'ngMessages', 'ngRoute']);
 
-app.config(function ($routeProvider, $locationProvider) {
+app.config(function ($routeProvider, $locationProvider, $mdThemingProvider) {
+  
+  $mdThemingProvider.definePalette('primaryPalette', $mdThemingProvider.extendPalette('pink', {
+    '50': '424e57', // md-button, radio off
+    '500': '181c1f', // grey for navbar, selected grid tile (md-primary), radio off background
+    '900': 'fff', // add/remove text
+    'A100': 'fff', // white for tab background
+    'A200': 'ccac55', // gold for selected tab underline, radio on
+    'A700': 'ff0000' // warn messages
+  }));
+  
+  $mdThemingProvider.theme('default')
+          .primaryPalette('primaryPalette')
+          .backgroundPalette('primaryPalette')
+          .accentPalette('primaryPalette')
+          .warnPalette('primaryPalette');
+  
   $locationProvider.html5Mode(true);
   $routeProvider
           .when("/", {templateUrl: "/pages/home.html", controller: "HomeCtrl"})
@@ -841,6 +857,11 @@ app.controller('ResultsCtrl', function ($scope, $cookies) {
     var layout = {
       title: plot.title,
       showlegend: false,
+      font: {
+        family: 'Brandon Grotesque',
+        size: 15,
+        color: '#181c1f'
+      },
       xaxis: {type: plot.x.type, title: plot.x.label, range: plot.y.axis > 11 ? [0, 1000] : [null, null]},
       yaxis: {type: plot.y.type, title: plot.y.label}
     };
