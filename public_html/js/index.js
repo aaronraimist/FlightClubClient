@@ -6,7 +6,9 @@ app.config(function ($routeProvider, $locationProvider, $mdThemingProvider) {
   
   $mdThemingProvider.definePalette('primaryPalette', $mdThemingProvider.extendPalette('pink', {
     '50': '424e57', // md-button, radio off
+    '200': 'ccac55', // gold for selected options (hover)
     '500': '181c1f', // grey for navbar, selected grid tile (md-primary), radio off background
+    '600': 'ccac55', // gold for selected options
     '900': 'fff', // add/remove text
     'A100': 'fff', // white for tab background
     'A200': 'ccac55', // gold for selected tab underline, radio on
@@ -120,7 +122,11 @@ app.controller('HomeCtrl', function ($scope, $mdDialog, $mdSidenav) {
   $scope.httpRequest('/payloads', 'GET', null, function (data) {
     $scope.payloads = fill(data);
   }, null);
-
+  $scope.httpRequest('/companies', 'GET', null, function (data) {
+    $scope.companies = fill(data);
+    $scope.$apply();
+  }, null);
+  
   $scope.$parent.toolbarClass = "";
   $scope.gravTurnSelect = [
     {code: 'NONE', name: null},
