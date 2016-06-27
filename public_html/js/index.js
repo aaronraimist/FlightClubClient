@@ -38,8 +38,8 @@ app.config(function ($routeProvider, $locationProvider, $mdThemingProvider) {
 
 app.controller('IndexCtrl', function ($scope, $mdSidenav, $cookies, $location, $window) {
   
-  //var base = 'http://localhost', port = ':8080';
-  var base = '//'+$location.host(), port = ':8443';
+  var base = 'http://localhost', port = ':8080';
+  //var base = '//'+$location.host(), port = ':8443';
   $scope.pageTitle = "Flight Club";
   $scope.toolbarClass = "";
   $scope.client = base;
@@ -184,9 +184,9 @@ app.controller('HomeCtrl', function ($scope, $mdDialog, $mdSidenav) {
   $scope.selectMission = function (code) {
     $scope.httpRequest('/missions/' + code, 'GET', null, function (data) {
       $mdSidenav("sidenav").close();
-      $scope.form = JSON.parse(JSON.stringify(data));
+      $scope.form = JSON.parse(data);
       $scope.sortEvents();
-      $scope.missionName = data.Mission.description;
+      $scope.missionName = $scope.form.Mission.description;
       $scope.$parent.toolbarTitle = "Mission Builder | " + $scope.missionName;
       $scope.selectedEvent = null;
       $scope.$apply();
@@ -358,9 +358,8 @@ app.controller('LoginCtrl', function ($timeout, $document, $scope, $cookies, $lo
         var now = new Date();
         var expiryDate = new Date(now.getTime() + 1000 * parseInt(data.Success.maxAge));
 
-        var res = jQuery.parseJSON(JSON.stringify(data, null, 2));
-        $cookies.put('authToken', res.Success.authToken, {'expires': expiryDate});
-        $scope.$parent.token = res.Success.authToken;
+        $cookies.put('authToken', data.Success.authToken, {'expires': expiryDate});
+        $scope.$parent.token = data.Success.authToken;
         $scope.$parent.loginLabel = "Logout";
         $scope.$parent.authorised = true;
         $scope.$parent.$apply(function () {
@@ -476,19 +475,17 @@ app.controller('DonateCtrl', function ($scope) {
           $scope.processed = true;
           $scope.$parent.httpRequest('/donate', 'POST', JSON.stringify(data),
                   function (res) {
-                    var data = JSON.parse(JSON.stringify(res));
-                    if (data.error === undefined) {
+                    if (res.error === undefined) {
                       $scope.success = true;
                     } else {
                       $scope.error = "Oops! There was an error of some sort. Your card has not been charged.";
-                      $scope.errorDetail = data.error;
+                      $scope.errorDetail = res.error;
                     }
                     $scope.$apply();
                   },
                   function (res) {
-                    var data = JSON.parse(JSON.stringify(res));
                     $scope.error = "Oops! Looks like FlightClub isn't responding. You will not be charged.";
-                    $scope.errorDetail = data.error;
+                    $scope.errorDetail = res.error;
                     $scope.$apply();
                   }
           );
@@ -621,11 +618,15 @@ app.controller('ResultsCtrl', function ($scope, $cookies) {
               });
             }, null);
     $scope.$parent.httpRequest('/missions/' + $scope.queryParams['code'], 'GET', null,
-            function (data) {
+            function (res) {
+              var data = JSON.parse(res);
               if (data.Mission !== undefined) {
+                
+                // stageMap should get built from simulator/results api call. Stage filenames should be there
                 $.each(data.Mission.Stages, function (key, val) {
                   $scope.stageMap.push({id: val.id, name: val.name});
                 });
+                
                 if($scope.queryParams['id'] === undefined) {
                   $scope.queryParams['id'] = data.Mission.livelaunch;
                 }
@@ -649,9 +650,8 @@ app.controller('ResultsCtrl', function ($scope, $cookies) {
 
     $scope.$parent.httpRequest('/simulator/new', 'POST', formData,
             function (data) {
-              var obj = jQuery.parseJSON(JSON.stringify(data, null, 2));
-              if (obj.Mission.success === true) {
-                var queryString = obj.Mission.output.split('?')[1];
+              if (data.Mission.success === true) {
+                var queryString = data.Mission.output.split('?')[1];
 
                 $scope.loadMessage = "Building plots...";
                 $scope.$apply();
@@ -659,7 +659,7 @@ app.controller('ResultsCtrl', function ($scope, $cookies) {
                 window.history.pushState({}, "", '/results/?' + queryString);
                 $scope.load(queryString);
               } else {
-                var errors = obj.Mission.errors;
+                var errors = data.Mission.errors;
                 var errorsHash = window.btoa(errors);
 
                 window.location = $scope.$parent.client + '/error/#' + errorsHash;
