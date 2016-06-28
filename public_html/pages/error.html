@@ -1,9 +1,9 @@
 <md-content layout-fill layout-padding flex layout-align="start start" layout="column">
-  <div ng-repeat="error in data.errors">
-    {{error}}
-  </div>
+  <pre>
+    {{data.errors}}
+  </pre>
   <md-content layout="row" layout-align="center center">
-    <md-button ng-disabled="formDisabled" class="md-raised md-primary" ng-click="reportError()">Report This Error</md-button>
+    <md-button ng-disabled="formDisabled" class="md-raised" ng-click="reportError()">Report This Error</md-button>
     <md-icon ng-show="mailSuccess">done</md-icon>
     <md-icon ng-show="mailError">clear</md-icon>
   </md-content>

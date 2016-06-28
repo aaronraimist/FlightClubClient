@@ -39,7 +39,7 @@
         <md-content flex layout-fill>
           <textarea ng-change="validate()" style='min-height:100px' layout-fill ng-model="form.message"></textarea>
         </md-content>
-        <md-button ng-disabled="formDisabled" class="md-raised md-primary" type="submit" ng-click="sendMail()">Send Mail!</md-button>
+        <md-button ng-disabled="formDisabled" class="md-raised" type="submit" ng-click="sendMail()">Send Mail!</md-button>
         <md-icon ng-show="mailSuccess">done</md-icon>
         <md-content show-gt-sm flex></md-content>
       </form>

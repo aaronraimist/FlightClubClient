@@ -38,8 +38,8 @@ app.config(function ($routeProvider, $locationProvider, $mdThemingProvider) {
 
 app.controller('IndexCtrl', function ($scope, $mdSidenav, $cookies, $location, $window) {
   
-  var base = 'http://localhost', port = ':8080';
-  //var base = '//'+$location.host(), port = ':8443';
+  //var base = 'http://localhost', port = ':8080';
+  var base = '//'+$location.host(), port = ':8443';
   $scope.pageTitle = "Flight Club";
   $scope.toolbarClass = "";
   $scope.client = base;
@@ -427,6 +427,7 @@ app.controller('DonateCtrl', function ($scope) {
   $scope.$parent.toolbarTitle = 'Donate';
   $scope.processed = false;
   $scope.success = false;
+  $scope.isLoading = false;
 
   $scope.click = function () {
     // Open Checkout with further options
@@ -466,6 +467,8 @@ app.controller('DonateCtrl', function ($scope) {
         image: 'images/favicon/android-icon-192x192.png',
         locale: 'auto',
         token: function (token) {
+          $scope.isLoading = true;
+          $scope.$apply();
           var data = {
             amount: 100 * parseFloat($scope.amountEuro),
             stripeToken: token.id,
@@ -475,6 +478,7 @@ app.controller('DonateCtrl', function ($scope) {
           $scope.processed = true;
           $scope.$parent.httpRequest('/donate', 'POST', JSON.stringify(data),
                   function (res) {
+                    $scope.isLoading = false;
                     if (res.error === undefined) {
                       $scope.success = true;
                     } else {
@@ -484,6 +488,7 @@ app.controller('DonateCtrl', function ($scope) {
                     $scope.$apply();
                   },
                   function (res) {
+                    $scope.isLoading = false;
                     $scope.error = "Oops! Looks like FlightClub isn't responding. You will not be charged.";
                     $scope.errorDetail = res.error;
                     $scope.$apply();
@@ -503,7 +508,7 @@ app.controller('ErrorCtrl', function ($http, $scope) {
   $scope.mailSuccess = $scope.mailError = $scope.formDisabled = false;
   
   var hash = window.location.hash.substring(1);    
-  $scope.data = {errors: window.atob(hash).split(",")};
+  $scope.data = {errors: window.atob(hash)};
   
   $scope.reportError = function() {
     
@@ -632,10 +637,7 @@ app.controller('ResultsCtrl', function ($scope, $cookies) {
                 }
               }
               $scope.missionName = data.Mission.description;
-
-              $.getScript("js/plotly.min.js", function () {
-                $scope.getDataFile(0);
-              });
+              $scope.getDataFile(0);
 
             }, null);
   };
