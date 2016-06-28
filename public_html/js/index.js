@@ -1327,7 +1327,6 @@ app.controller('WorldCtrl', function ($scope, $location) {
     }
 
     function errorfn(data) {
-      console.log(data);
       $scope.getEventsFile(0);
     }
   };
