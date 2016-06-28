@@ -1044,7 +1044,8 @@ app.controller('WorldCtrl', function ($scope, $location) {
         break;
     }
 
-    $scope.$parent.httpRequest('/missions/' + $scope.queryParams['code'], 'GET', null, function (data) {
+    $scope.$parent.httpRequest('/missions/' + $scope.queryParams['code'], 'GET', null, function (res) {
+      var data = JSON.parse(res);
       if (data.Mission !== undefined) {
         $scope.numStages = 0;
         $.each(data.Mission.Stages, function (key, val) {
@@ -1057,7 +1058,8 @@ app.controller('WorldCtrl', function ($scope, $location) {
       }
       $scope.fillData(data);
     }, 
-    function(data) {
+    function(res) {
+      var data = JSON.parse(res);
       $scope.fillData(data);
     });
 
