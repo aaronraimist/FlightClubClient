@@ -683,7 +683,7 @@ app.controller('ResultsCtrl', function ($scope, $cookies) {
   }
 
   var PLOTS = ['altitude1', 'profile1', 'total-dv', 'velocity1', 'prop',
-    'phase1', 'q', 'throttle', 'accel1', 'aoa', 'aov', 'aop', 'drag'];
+    'phase1', 'q', 'throttle', 'accel1', 'aoa', 'aov', 'aop', 'drag', 'thrust-coeff'];
   $scope.plotTiles = (function () {
     var tiles = [];
     for (var i = 0; i < PLOTS.length; i++) {
@@ -696,7 +696,7 @@ app.controller('ResultsCtrl', function ($scope, $cookies) {
   $scope.fullData = [];
   $scope.eventsData = [];
   $scope.stageMap = [];
-  $scope.numCols = 17;
+  $scope.numCols = 22;
   $scope.overrideAttempted = false;
 
   //////////////////////////////////////
@@ -831,9 +831,16 @@ app.controller('ResultsCtrl', function ($scope, $cookies) {
     plotMap.push({id: 'drag', stages: lowerStages, title: "Drag Coefficient",
       x: {axis: 0, label: "Time (s)", type: "linear"},
       y: {axis: 17, label: "Cd", type: "linear"}});
+    plotMap.push({id: 'thrust-coeff', stages: lowerStages, title: "Thrust Coefficient",
+      x: {axis: 0, label: "Time (s)", type: "linear"},
+      y: {axis: 22, label: "Ct", type: "linear"}});
 
     $scope.isLoading = false;
     $scope.$apply();
+    
+    while(Plotly === undefined) {
+      sleep(100);
+    }
 
     for (var i = 0; i < plotMap.length; i++) {
       $scope.initialisePlot2(plotMap[i]);
