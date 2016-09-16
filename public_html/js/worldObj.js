@@ -61,11 +61,11 @@ function world() {
     }
   };
   launchPadViews['BOCA'] = {
-    destination: Cesium.Cartesian3.fromDegrees(-93.885, 15.088, 882000.0),
+    destination: Cesium.Cartesian3.fromDegrees(-94.706, 15.725, 1108500.0),
     orientation: {
-      heading: Cesium.Math.toRadians(326.332),
-      pitch: Cesium.Math.toRadians(-36.270),
-      roll: Cesium.Math.toRadians(359.831)
+      heading: Cesium.Math.toRadians(355.6),
+      pitch: Cesium.Math.toRadians(-43.032),
+      roll: Cesium.Math.toRadians(359.8)
     }
   };
   launchPadViews['BOWT'] = {
