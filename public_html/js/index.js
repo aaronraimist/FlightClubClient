@@ -38,8 +38,8 @@ app.config(function ($routeProvider, $locationProvider, $mdThemingProvider) {
 
 app.controller('IndexCtrl', function ($scope, $mdSidenav, $cookies, $location, $window) {
   
-  //var base = 'http://localhost', port = ':8080';
-  var base = '//'+$location.host(), port = ':8443';
+  var base = 'http://localhost', port = ':8080';
+  //var base = '//'+$location.host(), port = ':8443';
   $scope.pageTitle = "Flight Club";
   $scope.toolbarClass = "";
   $scope.client = base;
@@ -117,7 +117,10 @@ app.controller('HomeCtrl', function ($scope, $mdDialog, $mdSidenav) {
     $scope.launchSites = fill(data);
   }, null);
   $scope.httpRequest('/launchvehicles', 'GET', null, function (data) {
-    $scope.launchVehicles = fill(data);
+    $scope.launchVehicles = fillVehicles(data);
+  }, null);
+  $scope.httpRequest('/stages', 'GET', null, function (data) {
+    $scope.stageTypes = fillStages(data);
   }, null);
   $scope.httpRequest('/payloads', 'GET', null, function (data) {
     $scope.payloads = fill(data);
@@ -180,6 +183,24 @@ app.controller('HomeCtrl', function ($scope, $mdDialog, $mdSidenav) {
     }
     return array;
   };
+  
+  var fillVehicles = function(data) {
+    var list = data.data;
+    var array = {};
+    for (var i = list.length; i > 0; i--) {
+      array[list[i - 1].code] = list[i - 1];
+    }
+    return array;
+  };
+  
+  var fillStages = function(data) {
+    var list = data.data;
+    var array = {};
+    for (var i = list.length; i > 0; i--) {
+      array[list[i - 1].id] = list[i - 1];
+    }
+    return array;
+  };
 
   $scope.selectMission = function (code) {
     $scope.httpRequest('/missions/' + code, 'GET', null, function (data) {
@@ -189,6 +210,16 @@ app.controller('HomeCtrl', function ($scope, $mdDialog, $mdSidenav) {
       $scope.missionName = $scope.form.Mission.description;
       $scope.$parent.toolbarTitle = "Mission Builder | " + $scope.missionName;
       $scope.selectedEvent = null;
+      $scope.builderType = 'custom';
+      $scope.$apply();
+    }, null);
+  };
+
+  $scope.selectMissionVehicle = function (code) {
+    $scope.httpRequest('/missions/' + code, 'GET', null, function (data) {
+      var tempForm = JSON.parse(data);
+      $scope.form.Mission.Vehicle = tempForm.Mission.Vehicle;
+      $scope.selectedStage = tempForm.Mission.Vehicle.Stages[0];
       $scope.$apply();
     }, null);
   };
@@ -205,19 +236,32 @@ app.controller('HomeCtrl', function ($scope, $mdDialog, $mdSidenav) {
   $scope.selectVehicle = function (event, veh) {
     setUniqueClass(event.currentTarget, 'md-content', 'button', 'md-primary');
 
-    if ($scope.form.Mission.launchvehicle !== veh.code
-            && (veh.code === 'FNH' || $scope.form.Mission.launchvehicle === 'FNH')) {
+    if ($scope.form.Mission.Vehicle.code !== veh.code
+            && (veh.code === 'FNH' || $scope.form.Mission.Vehicle.code === 'FNH')) {
       $scope.form.Mission.Events = [];
     }
-    $scope.form.Mission.launchvehicle = veh.code;
+    $scope.form.Mission.Vehicle.code = veh.code;
+    $scope.form.Mission.Vehicle.description = veh.description;
   };
   $scope.selectPayload = function (event, payload) {
     setUniqueClass(event.currentTarget, 'md-content', 'button', 'md-primary');
-    $scope.form.Mission.Payload = payload;
+    $scope.form.Mission.Payload.code = payload.code;
   };
   $scope.selectEvent = function (trigger, event) {
     setUniqueClass(trigger.currentTarget, 'md-content', 'button', 'md-primary');
     $scope.selectedEvent = event;
+  };
+  $scope.selectStageType = function (trigger, stage) {
+    setUniqueClass(trigger.currentTarget, 'md-content', 'button', 'md-primary');
+    $scope.selectedStage = stage;
+  };
+  $scope.decrementStages = function() {
+      $scope.form.Mission.Vehicle.Stages.pop();
+      $scope.$apply();
+  };
+  $scope.incrementStages = function() {
+      $scope.form.Mission.Vehicle.Stages[$scope.form.Mission.Vehicle.Stages.length] = {};
+      $scope.$apply();      
   };
   $scope.addEvent = function () {
     var newEvent = {
