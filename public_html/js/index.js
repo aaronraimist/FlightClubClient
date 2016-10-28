@@ -289,17 +289,17 @@ app.controller('HomeCtrl', function ($scope, $mdDialog, $mdSidenav) {
                     $scope.selectedStage.Engines.push({});
                 };
 
-                $scope.openEngineEditDialog = function ($event, $engineIndex, engine) {
+                $scope.openEngineEditDialog = function ($event, $engineIndex, engineConfig) {
 
                     var obj = {
-                        controller: function ($scope, lEngineTypes, lEngine, lForm, $mdDialog, lStage) {
+                        controller: function ($scope, lEngineTypes, lEngineConfig, lForm, $mdDialog, lStage) {
 
-                            $scope.selectedEngine = jQuery.extend(true, {}, lEngine);
+                            $scope.selectedEngineConfig = jQuery.extend(true, {}, lEngineConfig);
                             $scope.engineTypes = lEngineTypes;
                             $scope.stage = lStage;
 
                             $scope.selectEngineType = function (newEngine) {
-                                $scope.selectedEngine = newEngine;
+                                $scope.selectedEngineConfig.Engine = newEngine;
                             };
                             $scope.cancel = function () {
                                 $mdDialog.cancel();
@@ -308,7 +308,7 @@ app.controller('HomeCtrl', function ($scope, $mdDialog, $mdSidenav) {
                                 $mdDialog.hide();
                             };
                             $scope.save = function () {
-                                $scope.stage.Engines[$engineIndex].Engine = $scope.selectedEngine;
+                                $scope.stage.Engines[$engineIndex] = $scope.selectedEngineConfig;
                                 $mdDialog.hide();
                             };
                         },
@@ -322,7 +322,7 @@ app.controller('HomeCtrl', function ($scope, $mdDialog, $mdSidenav) {
                         locals: {
                             lStage: $scope.selectedStage,
                             lEngineTypes: $scope.engineTypes,
-                            lEngine: engine,
+                            lEngineConfig: engineConfig,
                             lForm: $scope.parentScope.form
                         }
                     };

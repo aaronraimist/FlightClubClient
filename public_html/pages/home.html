@@ -31,7 +31,7 @@
                                         <label>Copy Vehicle from existing missions:</label>
                                     </md-radio-button>
                                     <md-input-container flex class="md-block">
-                                        <md-select ng-model="selectedVeh" name="selectedVeh" aria-label="SelectPastVehicle">
+                                        <md-select ng-model="selectedVeh" name="selectedVeh" aria-label="SelectPastVehicle" ng-disabled="builderType!='previous'">
                                             <md-option ng-repeat="mission in past" value="{{mission.code}}" ng-click="selectMissionVehicle(mission.code)">{{mission.name}}</md-option>
                                         </md-select>
                                     </md-input-container>
@@ -40,7 +40,7 @@
                                     <md-radio-button flex value="custom">
                                         <label>Customize</label>
                                     </md-radio-button>
-                                    <md-button class="md-secondary" aria-label="add" ng-click='incrementStages()'>Add Stage</md-button>
+                                    <md-button class="md-raised" style="color:white" aria-label="add" ng-click='incrementStages()' ng-disabled="builderType!='custom'">Add Stage</md-button>
                                 </md-content>
                             </md-radio-group>
                             <md-divider flex></md-divider>

@@ -120,7 +120,7 @@
                                     <p>Thrust: {{engineConfig.Engine.thrustSL/1000.0}}kN (SL) // {{engineConfig.Engine.thrustVac/1000.0}}kN (Vac)</p>
                                     <p>Isp: {{engineConfig.Engine.ispSL}}s (SL) // {{engineConfig.Engine.ispVac}}s (Vac)</p>
                                 </div>
-                                <md-button style="min-width:0" ng-click="openEngineEditDialog($event, $index, engineConfig.Engine)">
+                                <md-button style="min-width:0" ng-click="openEngineEditDialog($event, $index, engineConfig)">
                                     <md-icon class="material-icons">mode_edit</md-icon>                                    
                                 </md-button>
                                 <md-button style="min-width:0" ng-click="removeEngine($index)">
