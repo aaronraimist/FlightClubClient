@@ -1,0 +1,137 @@
+<md-dialog aria-label="Autocomplete Dialog Example" ng-cloak>
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <h2>Edit Stage Properties</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="save()">
+                <md-icon class="material-icons" aria-label="Save changes">save</md-icon>
+            </md-button>
+            <md-button class="md-icon-button" ng-click="cancel()">
+                <md-icon class="material-icons" aria-label="Close dialog">close</md-icon>
+            </md-button>
+        </div>
+    </md-toolbar>
+
+    <md-dialog-content>
+        <div class="md-dialog-content">
+            <md-content flex layout-align='space-around center'>
+                <label>Choose stage:</label>
+                <md-content flex layout-align='space-around center'>
+                    <md-input-container flex class="md-block" layout-fill>
+                        <md-select ng-model="selectedStage.name" required aria-label="ChooseStage">
+                            <md-option ng-repeat="obj in stageTypes" ng-click="selectStageType(obj)">{{obj.name}}</md-option>
+                        </md-select>
+                    </md-input-container>
+                </md-content>
+            </md-content>
+            <form role="form" ng-submit="answer()">
+                <md-content flex layout-align='space-around center'>
+                    <label>Customize:</label>
+                    <md-content layout="column" layout-gt-sm="row" layout-align="space-around center">
+                        <md-input-container flex class="md-block">
+                            <label>Name</label>
+                            <input ng-model="selectedStage.name" name="stageName" required aria-label="StageName">
+                            <div ng-messages="profileForm.stageName.$error" multiple md-auto-hide="true">
+                                <div ng-message="required">
+                                    This can be whatever you want, but make it descriptive!
+                                </div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex class="md-block">
+                            <label>Radius (m)</label>
+                            <input ng-model="selectedStage.radius" name="stageRadius" required aria-label="StageRadius" float>
+                            <div ng-messages="profileForm.stageRadius.$error" multiple md-auto-hide="true">
+                                <div ng-message="required">
+                                    This can be whatever you want, but make it descriptive!
+                                </div>
+                            </div>
+                        </md-input-container>
+                    </md-content>
+                    <md-content layout="column" layout-gt-sm="row" layout-align="space-around center">
+                        <md-input-container flex class="md-block">
+                            <label>Length (m)</label>
+                            <input ng-model="selectedStage.length" name="stageLength" required aria-label="StageLength" float>
+                            <div ng-messages="profileForm.stageLength.$error" multiple md-auto-hide="true">
+                                <div ng-message="required">
+                                    This can be whatever you want, but make it descriptive!
+                                </div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex class="md-block">
+                            <label>Dry Mass (kg)</label>
+                            <input ng-model="selectedStage.dryMass" name="stageDryMass" required aria-label="StageDryMass" float>
+                            <div ng-messages="profileForm.stageDryMass.$error" multiple md-auto-hide="true">
+                                <div ng-message="required">
+                                    This can be whatever you want, but make it descriptive!
+                                </div>
+                            </div>
+                        </md-input-container>
+                    </md-content>
+                    <md-content layout="column" layout-gt-sm="row" layout-align="space-around center">
+                        <md-input-container flex class="md-block">
+                            <label>Propellant Mass (kg)</label>
+                            <input ng-model="selectedStage.propMass" name="stagePropMass" required aria-label="StagePropellantMass" float>
+                            <div ng-messages="profileForm.stagePropMass.$error" multiple md-auto-hide="true">
+                                <div ng-message="required">
+                                    This can be whatever you want, but make it descriptive!
+                                </div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex class="md-block">
+                            <label>Fuel Capacity (kg)</label>
+                            <input ng-model="selectedStage.fuelCapacity" name="stageFuelCapacity" required aria-label="StageFuelCapacity" float>
+                            <div ng-messages="profileForm.stageFuelCapacity.$error" multiple md-auto-hide="true">
+                                <div ng-message="required">
+                                    This can be whatever you want, but make it descriptive!
+                                </div>
+                            </div>
+                        </md-input-container>
+                    </md-content>
+                    <md-content layout="column" layout-gt-sm="row" layout-align="space-around center">
+                        <md-input-container flex class="md-block">
+                            <label>Fairing Radius (m)</label>
+                            <input ng-model="selectedStage.fairingRadius" name="stageFairingRadius" required aria-label="StageFairingRadius" float>
+                            <div ng-messages="profileForm.stageFairingRadius.$error" multiple md-auto-hide="true">
+                                <div ng-message="required">
+                                    This can be whatever you want, but make it descriptive!
+                                </div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex class="md-block">
+                            <label>Fairing Mass (kg)</label>
+                            <input ng-model="selectedStage.fairingMass" name="stageFairingMass" required aria-label="StageFairingMass" float>
+                            <div ng-messages="profileForm.stageFairingMass.$error" multiple md-auto-hide="true">
+                                <div ng-message="required">
+                                    This can be whatever you want, but make it descriptive!
+                                </div>
+                            </div>
+                        </md-input-container>
+                    </md-content>
+                    <md-divider></md-divider>
+                    <md-content>
+                        <md-button style="float:right" class="md-secondary" aria-label="add" ng-click='incrementEngines()'>Add Engine</md-button>
+                    </md-content>
+                    <md-content layout-fill layout-align="space-between center" layout="row">
+                        <md-list layout-fill layout='column'>
+                            <md-list-item class="md-3-line" ng-repeat="engineConfig in selectedStage.Engines">
+                                <div class="md-list-item-text">
+                                    <h3>{{engineConfig.number}} x {{engineConfig.Engine.name}}</h3>
+                                    <h4>{{engineConfig.Engine.mass}}kg</h4>
+                                    <p>Thrust: {{engineConfig.Engine.thrustSL/1000.0}}kN (SL) // {{engineConfig.Engine.thrustVac/1000.0}}kN (Vac)</p>
+                                    <p>Isp: {{engineConfig.Engine.ispSL}}s (SL) // {{engineConfig.Engine.ispVac}}s (Vac)</p>
+                                </div>
+                                <md-button style="min-width:0" ng-click="openEngineEditDialog($event, $index, engineConfig.Engine)">
+                                    <md-icon class="material-icons">mode_edit</md-icon>                                    
+                                </md-button>
+                                <md-button style="min-width:0" ng-click="removeEngine($index)">
+                                    <md-icon class="material-icons">close</md-icon>
+                                </md-button>
+                                <md-divider ng-if="!$last"></md-divider>
+                            </md-list-item>
+                        </md-list>
+                    </md-content>
+                </md-content>
+            </form>
+        </div>
+    </md-dialog-content>
+</md-dialog>

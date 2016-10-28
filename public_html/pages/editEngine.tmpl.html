@@ -1,0 +1,102 @@
+<md-dialog aria-label="Autocomplete Dialog Example" ng-cloak>
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <h2>Edit Engine Properties</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="save()">
+                <md-icon class="material-icons" aria-label="Save changes">save</md-icon>
+            </md-button>
+            <md-button class="md-icon-button" ng-click="cancel()">
+                <md-icon class="material-icons" aria-label="Close dialog">close</md-icon>
+            </md-button>
+        </div>
+    </md-toolbar>
+
+    <md-dialog-content>
+        <div class="md-dialog-content">
+            <label>Choose engine:</label>
+            <md-input-container flex class="md-block" layout-fill>
+                <md-select ng-model="selectedEngine.name" required aria-label="Choose Engine">
+                    <md-option ng-repeat="obj in engineTypes" ng-click="selectEngineType(obj)">{{obj.name}}</md-option>
+                </md-select>
+            </md-input-container>
+            <form role="form" ng-submit="answer()">
+                <md-content flex layout-align='space-around center'>
+                    <label>Selected Engine</label>
+                    <md-content layout="row" layout-align="space-around center">
+                        <md-input-container flex class="md-block">
+                            <label>Name</label>
+                            <input ng-model="selectedEngine.name" name="engineName" required aria-label="Engine Name">
+                            <div ng-messages="profileForm.engineName.$error" multiple md-auto-hide="true">
+                                <div ng-message="required">
+                                    This can be whatever you want, but make it descriptive!
+                                </div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex class="md-block">
+                            <label>Mass (kg)</label>
+                            <input ng-model="selectedEngine.mass" name="engineMass" required float>
+                            <div ng-messages="profileForm.engineMass.$error" multiple md-auto-hide="true">
+                                <div ng-message="required">
+                                    This can be whatever you want, but make it descriptive!
+                                </div>
+                            </div>
+                        </md-input-container>
+                    </md-content>
+                    <md-content layout="row" layout-align="space-around center">
+                        <md-input-container flex class="md-block">
+                            <label>Sea Level Isp (s)</label>
+                            <input ng-model="selectedEngine.ispSL" name="engineispSL" required float>
+                            <div ng-messages="profileForm.engineispSL.$error" multiple md-auto-hide="true">
+                                <div ng-message="required">
+                                    This can be whatever you want, but make it descriptive!
+                                </div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex class="md-block">
+                            <label>Vacuum Isp (s)</label>
+                            <input ng-model="selectedEngine.ispVac" name="engineispVac" required float>
+                            <div ng-messages="profileForm.engineispVac.$error" multiple md-auto-hide="true">
+                                <div ng-message="required">
+                                    This can be whatever you want, but make it descriptive!
+                                </div>
+                            </div>
+                        </md-input-container>
+                    </md-content>
+                    <md-content layout="row" layout-align="space-around center">
+                        <md-input-container flex class="md-block">
+                            <label>Sea Level Thrust (N)</label>
+                            <input ng-model="selectedEngine.thrustSL" name="enginethrustSL" required float>
+                            <div ng-messages="profileForm.enginethrustSL.$error" multiple md-auto-hide="true">
+                                <div ng-message="required">
+                                    This can be whatever you want, but make it descriptive!
+                                </div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex class="md-block">
+                            <label>Vacuum Thrust (N)</label>
+                            <input ng-model="selectedEngine.thrustVac" name="enginethrustVac" required float>
+                            <div ng-messages="profileForm.enginethrustVac.$error" multiple md-auto-hide="true">
+                                <div ng-message="required">
+                                    This can be whatever you want, but make it descriptive!
+                                </div>
+                            </div>
+                        </md-input-container>
+                    </md-content>
+                    <md-content layout="row" layout-align="space-around center">
+                        <md-input-container flex class="md-block">
+                            <label>Throttle Capability</label>
+                            <input ng-model="selectedEngine.throttleCapability" name="throttleCapability" required float>
+                            <div ng-messages="profileForm.throttleCapability.$error" multiple md-auto-hide="true">
+                                <div ng-message="required">
+                                    This can be whatever you want, but make it descriptive!
+                                </div>
+                            </div>
+                        </md-input-container>
+                        <md-content flex></md-content>
+                    </md-content>
+                </md-content>
+            </form>
+        </div>
+    </md-dialog-content>
+</md-dialog>

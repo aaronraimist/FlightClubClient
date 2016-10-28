@@ -36,11 +36,21 @@ app.config(function ($routeProvider, $locationProvider, $mdThemingProvider) {
           .otherwise({redirectTo: '/'});
 });
 
+app.directive('float', function(){
+    return {
+        require: 'ngModel',
+        link: function(scope, ele, attr, ctrl){
+            ctrl.$parsers.unshift(function(viewValue){
+                return parseFloat(viewValue, 10);
+            });
+        }
+    };
+});
+
 app.controller('IndexCtrl', function ($scope, $mdSidenav, $cookies, $location, $window) {
   
   var base = 'http://localhost', port = ':8080';
   //var base = '//'+$location.host(), port = ':8443';
-  $scope.pageTitle = "Flight Club";
   $scope.toolbarClass = "";
   $scope.client = base;
   $scope.server = base + port + '/FlightClub';
@@ -110,6 +120,8 @@ app.controller('IndexCtrl', function ($scope, $mdSidenav, $cookies, $location, $
 
 app.controller('HomeCtrl', function ($scope, $mdDialog, $mdSidenav) {
 
+  var homeCtrl = this;
+
   $scope.httpRequest('/missions', 'GET', null, function (data) {
     fillMissions(data);
   }, null);
@@ -121,6 +133,9 @@ app.controller('HomeCtrl', function ($scope, $mdDialog, $mdSidenav) {
   }, null);
   $scope.httpRequest('/stages', 'GET', null, function (data) {
     $scope.stageTypes = fillStages(data);
+  }, null);
+  $scope.httpRequest('/engines', 'GET', null, function (data) {
+    $scope.engineTypes = fillStages(data);
   }, null);
   $scope.httpRequest('/payloads', 'GET', null, function (data) {
     $scope.payloads = fill(data);
@@ -251,13 +266,94 @@ app.controller('HomeCtrl', function ($scope, $mdDialog, $mdSidenav) {
     setUniqueClass(trigger.currentTarget, 'md-content', 'button', 'md-primary');
     $scope.selectedEvent = event;
   };
-  $scope.selectStageType = function (trigger, stage) {
-    setUniqueClass(trigger.currentTarget, 'md-content', 'button', 'md-primary');
-    $scope.selectedStage = stage;
-  };
-  $scope.decrementStages = function() {
-      $scope.form.Mission.Vehicle.Stages.pop();
-      $scope.$apply();
+  
+    $scope.openStageEditDialog = function ($event, $stageIndex, stage) {
+
+        $mdDialog.show({
+            controller: function ($scope, lParent, lForm, lStage, $mdDialog) {
+
+                $scope.parentScope = lParent;
+
+                $scope.selectedStage = jQuery.extend(true, {}, lStage);
+                $scope.stageTypes = $scope.parentScope.stageTypes;
+                $scope.engineTypes = $scope.parentScope.engineTypes;
+
+                $scope.selectStageType = function (newStage) {
+                    $scope.selectedStage = newStage;
+                };
+                $scope.removeEngine = function ($index) {
+                    $scope.selectedStage.Engines.splice($index, 1);
+                };
+                $scope.incrementEngines = function () {
+                    if (!$scope.selectedStage.Engines)
+                        $scope.selectedStage.Engines = [];
+                    $scope.selectedStage.Engines.push({});
+                };
+
+                $scope.openEngineEditDialog = function ($event, $engineIndex, engine) {
+
+                    var obj = {
+                        controller: function ($scope, lEngineTypes, lEngine, lForm, $mdDialog, lStage) {
+
+                            $scope.selectedEngine = jQuery.extend(true, {}, lEngine);
+                            $scope.engineTypes = lEngineTypes;
+                            $scope.stage = lStage;                
+
+                            $scope.selectEngineType = function (newEngine) {
+                                $scope.selectedEngine = newEngine;
+                            };
+                            $scope.cancel = function () {
+                                $mdDialog.cancel();
+                            };
+                            $scope.finish = function () {
+                                $mdDialog.hide();
+                            };
+                            $scope.save = function () {
+                                $scope.stage.Engines[$engineIndex].Engine = $scope.selectedEngine;
+                                $mdDialog.hide();
+                            };
+                        },
+                        templateUrl: '/pages/editEngine.tmpl.html',
+                        parent: angular.element(document.body),
+                        targetEvent: $event,
+                        clickOutsideToClose: true,
+                        //preserveScope: true,
+                        autoWrap: true,
+                        skipHide: true,
+                        locals: {
+                            lStage: $scope.selectedStage,
+                            lEngineTypes: $scope.engineTypes,
+                            lEngine: engine,
+                            lForm: $scope.parentScope.form
+                        }
+                    };
+                    $mdDialog.show(obj);
+                };
+                $scope.cancel = function () {
+                    $mdDialog.cancel();
+                };
+                $scope.finish = function () {
+                    $mdDialog.hide();
+                };
+                $scope.save = function () {
+                    lForm.Mission.Vehicle.Stages[$stageIndex] = $scope.selectedStage;
+                    $mdDialog.hide();
+                };
+            },
+            templateUrl: '/pages/editStage.tmpl.html',
+            parent: angular.element(document.body),
+            targetEvent: $event,
+            clickOutsideToClose: true,
+            locals: {
+                lParent: $scope,
+                lForm: $scope.form,
+                lStage: stage
+            }
+        });
+    };
+  
+  $scope.removeStage = function($index) {
+      $scope.form.Mission.Vehicle.Stages.splice($index, 1);
   };
   $scope.incrementStages = function() {
       $scope.form.Mission.Vehicle.Stages[$scope.form.Mission.Vehicle.Stages.length] = {};
@@ -1023,7 +1119,6 @@ app.controller('WorldCtrl', function ($scope, $location) {
         }
 
         $scope.clock = 'T' + sign + hours + ':' + minutes + ':' + seconds;
-        $scope.$parent.pageTitle = 'T' + sign + hours + ':' + minutes + ':' + seconds;
       }
 
     } else if ($scope.countdown) {
@@ -1040,14 +1135,6 @@ app.controller('WorldCtrl', function ($scope, $location) {
       $scope.hours = hours + ' hour' + ((hours !== 1) ? 's' : '');
       $scope.minutes = minutes + ' minute' + ((minutes !== 1) ? 's' : '');
       $scope.seconds = seconds + ' second' + ((seconds !== 1) ? 's' : '');
-      
-      if (hours < 10)
-        hours = '0' + hours;
-      if (minutes < 10)
-        minutes = '0' + minutes;
-      if (seconds < 10)
-        seconds = '0' + seconds;
-      $scope.$parent.pageTitle = 'T' + sign + hours + ':' + minutes + ':' + seconds;
 
       if (Math.abs((59 * _minute - rand5) - distance) < 1000) // clock -> plots limit between T-59 -> T-54
         window.location.reload(true);
