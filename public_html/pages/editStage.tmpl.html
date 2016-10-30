@@ -89,6 +89,18 @@
                     </md-content>
                     <md-content layout="column" layout-gt-sm="row" layout-align="space-around center">
                         <md-input-container flex class="md-block">
+                            <label>Minimum Fuel Limit (kg)</label>
+                            <input ng-model="selectedStage.minimumFuel" name="minimumFuel" required aria-label="StageMinimumFuel" float>
+                            <div ng-messages="profileForm.minimumFuel.$error" multiple md-auto-hide="true">
+                                <div ng-message="required">
+                                    This can be whatever you want, but make it descriptive!
+                                </div>
+                            </div>
+                        </md-input-container>
+                        <md-content flex></md-content>
+                    </md-content>
+                    <md-content layout="column" layout-gt-sm="row" layout-align="space-around center">
+                        <md-input-container flex class="md-block">
                             <label>Fairing Radius (m)</label>
                             <input ng-model="selectedStage.fairingRadius" name="stageFairingRadius" required aria-label="StageFairingRadius" float>
                             <div ng-messages="profileForm.stageFairingRadius.$error" multiple md-auto-hide="true">
