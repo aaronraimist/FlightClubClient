@@ -227,7 +227,8 @@ app.controller('HomeCtrl', function ($scope, $mdDialog, $mdSidenav) {
             $scope.missionName = $scope.form.Mission.description;
             $scope.$parent.toolbarTitle = "Mission Builder | " + $scope.missionName;
             $scope.selectedEvent = null;
-            $scope.builderType = 'custom';
+            $scope.builderType = 'previous';
+            $scope.selectedVeh = code;
             $scope.$apply();
         }, null);
     };
