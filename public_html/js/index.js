@@ -765,7 +765,7 @@ app.controller('ResultsCtrl', function ($scope, $cookies) {
                     if (data.Mission !== undefined) {
 
                         // stageMap should get built from simulator/results api call. Stage filenames should be there
-                        $.each(data.Mission.Stages, function (key, val) {
+                        $.each(data.Mission.Vehicle.Stages, function (key, val) {
                             $scope.stageMap.push({id: val.id, name: val.name});
                         });
 
