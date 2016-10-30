@@ -163,6 +163,7 @@ app.controller('HomeCtrl', function ($scope, $mdDialog, $mdSidenav) {
     var fillMissions = function (data) {
         var list = data.data;
 
+        $scope.allMissions = [];
         $scope.upcoming = [];
         $scope.past = [];
 
@@ -172,8 +173,10 @@ app.controller('HomeCtrl', function ($scope, $mdDialog, $mdSidenav) {
             var tempDate = Date.parse(mission.date.replace(/-/g, "/") + ' ' + mission.time + ' UTC');
 
             if (tempDate > new Date()) {
+                $scope.allMissions.push(missionObj);
                 $scope.upcoming.push(missionObj);
             } else {
+                $scope.allMissions.push(missionObj);
                 $scope.past.push(missionObj);
             }
         }

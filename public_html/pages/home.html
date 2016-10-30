@@ -32,7 +32,7 @@
                                     </md-radio-button>
                                     <md-input-container flex class="md-block">
                                         <md-select ng-model="selectedVeh" name="selectedVeh" aria-label="SelectPastVehicle" ng-disabled="builderType!='previous'">
-                                            <md-option ng-repeat="mission in past" value="{{mission.code}}" ng-click="selectMissionVehicle(mission.code)">{{mission.name}}</md-option>
+                                            <md-option ng-repeat="mission in allMissions" value="{{mission.code}}" ng-click="selectMissionVehicle(mission.code)">{{mission.name}}</md-option>
                                         </md-select>
                                     </md-input-container>
                                 </md-content>
