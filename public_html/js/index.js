@@ -229,6 +229,7 @@ app.controller('HomeCtrl', function ($scope, $mdDialog, $mdSidenav) {
             $scope.selectedEvent = null;
             $scope.builderType = 'previous';
             $scope.selectedVeh = code;
+            $scope.recalcDV();
             $scope.$apply();
         }, null);
     };
@@ -340,6 +341,7 @@ app.controller('HomeCtrl', function ($scope, $mdDialog, $mdSidenav) {
                 };
                 $scope.save = function () {
                     lForm.Mission.Vehicle.Stages[$stageIndex] = $scope.selectedStage;
+                    lParent.recalcDV();
                     $mdDialog.hide();
                 };
             },
@@ -355,13 +357,77 @@ app.controller('HomeCtrl', function ($scope, $mdDialog, $mdSidenav) {
         });
     };
 
+    $scope.openEventEditDialog = function ($trigger, $eventIndex, event) {
+
+        $mdDialog.show({
+            controller: function ($scope, lParent, lForm, lEvent, $mdDialog) {
+
+                $scope.parentScope = lParent;
+                $scope.selectedEvent = jQuery.extend(true, {}, lEvent);
+                $scope.type = $scope.parentScope.type;
+                $scope.stages = $scope.parentScope.form.Mission.Vehicle.Stages;
+                $scope.gravTurnSelect = $scope.parentScope.gravTurnSelect;
+                
+                $scope.cancel = function () {
+                    $mdDialog.cancel();
+                };
+                $scope.finish = function () {
+                    $mdDialog.hide();
+                };
+                $scope.save = function () {
+                    lForm.Mission.Events[$eventIndex] = $scope.selectedEvent;
+                    lParent.recalcDV();
+                    $mdDialog.hide();
+                };
+            },
+            templateUrl: '/pages/editEvent.tmpl.html',
+            parent: angular.element(document.body),
+            targetEvent: $trigger,
+            clickOutsideToClose: true,
+            locals: {
+                lParent: $scope,
+                lForm: $scope.form,
+                lEvent: event
+            }
+        });
+    };
+    
     $scope.removeStage = function ($index) {
         $scope.form.Mission.Vehicle.Stages.splice($index, 1);
+        $scope.recalcDV();
     };
     $scope.incrementStages = function () {
         $scope.form.Mission.Vehicle.Stages[$scope.form.Mission.Vehicle.Stages.length] = {};
         $scope.$apply();
     };
+    
+    $scope.recalcDV = function() {
+        
+        var totalDV = 0;
+        var stages = $scope.form.Mission.Vehicle.Stages;
+        
+        for(var i=0;i<stages.length;i++) {
+            
+            var isp = stages[i].Engines[0].Engine.ispVac;
+            if(i===0) {
+                isp = 0.5*(stages[i].Engines[0].Engine.ispSL+stages[i].Engines[0].Engine.ispVac);
+            }
+            
+            var aboveMass = 0;
+            for(var j=i+1;j<stages.length;j++) {
+                aboveMass += stages[j].dryMass + stages[j].propMass;
+            }
+            aboveMass += parseFloat($scope.form.Mission.Payload.mass);
+            
+            var m0 = aboveMass + stages[i].dryMass + stages[i].propMass;
+            var m1 = aboveMass + stages[i].dryMass;
+            var mf = m0/m1;
+            
+            totalDV += 9.81*isp*Math.log(mf);
+        }
+        $scope.payloadDV = (totalDV/1000.0).toPrecision(3);
+    };
+    
     $scope.addEvent = function () {
         var newEvent = {
             type: null,
@@ -380,12 +446,8 @@ app.controller('HomeCtrl', function ($scope, $mdDialog, $mdSidenav) {
         $scope.form.Mission.Events.push(newEvent);
         $scope.selectedEvent = newEvent;
     };
-    $scope.removeEvent = function () {
-        var index = $scope.form.Mission.Events.indexOf($scope.selectedEvent);
-        if (index > -1) {
-            $scope.form.Mission.Events.splice(index, 1);
-            $scope.selectedEvent = null;
-        }
+    $scope.removeEvent = function (index) {
+        $scope.form.Mission.Events.splice(index, 1);
     };
 
     $scope.sortEvents = function () {

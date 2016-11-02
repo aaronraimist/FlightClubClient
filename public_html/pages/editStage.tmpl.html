@@ -32,18 +32,14 @@
                             <label>Name</label>
                             <input ng-model="selectedStage.name" name="stageName" required aria-label="StageName">
                             <div ng-messages="profileForm.stageName.$error" multiple md-auto-hide="true">
-                                <div ng-message="required">
-                                    This can be whatever you want, but make it descriptive!
-                                </div>
+                                <div ng-message="required">This can be whatever you want, but make it descriptive!</div>
                             </div>
                         </md-input-container>
                         <md-input-container flex class="md-block">
                             <label>Radius (m)</label>
                             <input ng-model="selectedStage.radius" name="stageRadius" required aria-label="StageRadius" float>
                             <div ng-messages="profileForm.stageRadius.$error" multiple md-auto-hide="true">
-                                <div ng-message="required">
-                                    This can be whatever you want, but make it descriptive!
-                                </div>
+                                <div ng-message="required">This is required!</div>
                             </div>
                         </md-input-container>
                     </md-content>
@@ -52,18 +48,14 @@
                             <label>Length (m)</label>
                             <input ng-model="selectedStage.length" name="stageLength" required aria-label="StageLength" float>
                             <div ng-messages="profileForm.stageLength.$error" multiple md-auto-hide="true">
-                                <div ng-message="required">
-                                    This can be whatever you want, but make it descriptive!
-                                </div>
+                                <div ng-message="required">This is required!</div>
                             </div>
                         </md-input-container>
                         <md-input-container flex class="md-block">
                             <label>Dry Mass (kg)</label>
                             <input ng-model="selectedStage.dryMass" name="stageDryMass" required aria-label="StageDryMass" float>
                             <div ng-messages="profileForm.stageDryMass.$error" multiple md-auto-hide="true">
-                                <div ng-message="required">
-                                    This can be whatever you want, but make it descriptive!
-                                </div>
+                                <div ng-message="required">This is required!</div>
                             </div>
                         </md-input-container>
                     </md-content>
@@ -72,18 +64,14 @@
                             <label>Propellant Mass (kg)</label>
                             <input ng-model="selectedStage.propMass" name="stagePropMass" required aria-label="StagePropellantMass" float>
                             <div ng-messages="profileForm.stagePropMass.$error" multiple md-auto-hide="true">
-                                <div ng-message="required">
-                                    This can be whatever you want, but make it descriptive!
-                                </div>
+                                <div ng-message="required">This is required!</div>
                             </div>
                         </md-input-container>
                         <md-input-container flex class="md-block">
                             <label>Fuel Capacity (kg)</label>
                             <input ng-model="selectedStage.fuelCapacity" name="stageFuelCapacity" required aria-label="StageFuelCapacity" float>
                             <div ng-messages="profileForm.stageFuelCapacity.$error" multiple md-auto-hide="true">
-                                <div ng-message="required">
-                                    This can be whatever you want, but make it descriptive!
-                                </div>
+                                <div ng-message="required">This is required!</div>
                             </div>
                         </md-input-container>
                     </md-content>
@@ -92,9 +80,7 @@
                             <label>Minimum Fuel Limit (kg)</label>
                             <input ng-model="selectedStage.minimumFuel" name="minimumFuel" required aria-label="StageMinimumFuel" float>
                             <div ng-messages="profileForm.minimumFuel.$error" multiple md-auto-hide="true">
-                                <div ng-message="required">
-                                    This can be whatever you want, but make it descriptive!
-                                </div>
+                                <div ng-message="required">This is required!</div>
                             </div>
                         </md-input-container>
                         <md-content flex></md-content>
@@ -102,21 +88,11 @@
                     <md-content layout="column" layout-gt-sm="row" layout-align="space-around center">
                         <md-input-container flex class="md-block">
                             <label>Fairing Radius (m)</label>
-                            <input ng-model="selectedStage.fairingRadius" name="stageFairingRadius" required aria-label="StageFairingRadius" float>
-                            <div ng-messages="profileForm.stageFairingRadius.$error" multiple md-auto-hide="true">
-                                <div ng-message="required">
-                                    This can be whatever you want, but make it descriptive!
-                                </div>
-                            </div>
+                            <input ng-model="selectedStage.fairingRadius" name="stageFairingRadius" aria-label="StageFairingRadius" float>
                         </md-input-container>
                         <md-input-container flex class="md-block">
                             <label>Fairing Mass (kg)</label>
-                            <input ng-model="selectedStage.fairingMass" name="stageFairingMass" required aria-label="StageFairingMass" float>
-                            <div ng-messages="profileForm.stageFairingMass.$error" multiple md-auto-hide="true">
-                                <div ng-message="required">
-                                    This can be whatever you want, but make it descriptive!
-                                </div>
-                            </div>
+                            <input ng-model="selectedStage.fairingMass" name="stageFairingMass" aria-label="StageFairingMass" float>
                         </md-input-container>
                     </md-content>
                     <md-divider></md-divider>

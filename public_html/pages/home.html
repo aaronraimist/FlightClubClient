@@ -58,8 +58,15 @@
                                         <md-button style="min-width:0" ng-click="removeStage($index)">
                                             <md-icon class="material-icons">close</md-icon>
                                         </md-button>
-                                        <md-divider ng-if="!$last"></md-divider>
+                                        <md-divider></md-divider>
                                     </md-list-item>
+                                    <md-content layout="column">
+                                        <md-input-container class="md-block">
+                                            <label>Payload Mass (kg)</label>
+                                            <input ng-model="form.Mission.Payload.mass" ng-change="recalcDV()">
+                                        </md-input-container>
+                                        <p>Maximum payload dV: {{payloadDV}} km/s</p>
+                                    </md-content>
                                 </md-list>
                             </md-content>
                         </md-content>
@@ -71,21 +78,36 @@
                     <md-content layout-padding layout-fill flex layout='column' layout-gt-sm='row' layout-align='space-between start'>
 
                         <md-content class="perfectHeight" flex layout-fill>
-                            <md-list layout='column'>
+                            <md-content layout="row" layout-align="space-between center">
+                                <md-content flex></md-content>
+                                <md-button flex class="md-raised" show-sm hide-gt-sm show-sm type="submit" ng-click="submit()">Submit</md-button>
+                            </md-content>
+                            <md-list flex layout='column'>
                                 <md-content layout="row" layout-align="space-between center">
                                     <md-subheader class="md-no-sticky">Events</md-subheader>
                                     <md-button class="md-raised" ng-click="addEvent()">Add</md-button>
                                 </md-content>
                                 <md-divider></md-divider>
-                                <md-list-item layout='row' layout-align='space-between center' ng-repeat="event in form.Mission.Events" ng-click="selectEvent($event, event)">
-                                    <div flex class="md-secondary eventLabel">{{"T" + (event.time < 0 ? '' : '+') + event.time}}</div>
-                                    <div class="md-secondary eventLabel">{{event.name}}</div>
+                                <md-list-item class="md-2-line secondary-button-padding" ng-repeat="event in form.Mission.Events">
+                                    <div class="md-list-item-text">
+                                        <h3>{{"T" + (event.time < 0 ? '' : '+') + event.time}} // {{event.name}}</h3>
+                                        <p>{{form.Mission.Vehicle.Stages[event.stage].name}}</p>
+                                    </div>
+                                    <md-button hide show-sm style="min-width:0" ng-click="openEventEditDialog($event, $index, event)">
+                                        <md-icon class="material-icons">mode_edit</md-icon>
+                                    </md-button>
+                                    <md-button hide show-gt-sm style="min-width:0" ng-click="selectEvent($event, event)">
+                                        <md-icon class="material-icons">mode_edit</md-icon>
+                                    </md-button>
+                                    <md-button style="min-width:0" ng-click="removeEvent($index)">
+                                        <md-icon class="material-icons">close</md-icon>
+                                    </md-button>
                                     <md-divider></md-divider>
                                 </md-list-item>
                             </md-list>
                         </md-content>
-
-                        <md-content flex layout-fill>
+                        
+                        <md-content flex layout-fill hide-xs hide-sm show-gt-sm>
                             <md-content ng-show="selectedEvent !== undefined">
                                 <md-content layout="row" layout-align="space-around center">
                                     <md-input-container flex class="md-block">
@@ -181,20 +203,11 @@
                                         </md-select>
                                     </md-input-container>
                                 </md-content>
-                                <md-content layout="row" layout-align="space-between center">
-                                    <md-button class="md-raised" ng-disabled="selectedEvent === null" ng-click="removeEvent()">Remove</md-button>
-                                </md-content>
                             </md-content>
+                            <md-button flex class="md-raised" type="submit" ng-click="submit()">Submit</md-button>
                         </md-content>
 
-                        <md-content flex layout-fill>
-                            <md-content layout="row" layout-align="space-around center">
-                                <md-input-container flex class="md-block">
-                                    <label>Payload Mass (kg)</label>
-                                    <input ng-model="form.Mission.Payload.mass">
-                                </md-input-container>
-                                <md-button flex class="md-raised" type="submit" ng-click="submit()">Submit</md-button>
-                            </md-content>
+                        <md-content flex layout-fill ng-show="authorised">
                             <md-content>
                                 <md-divider></md-divider>
                                 <md-content layout="row" layout-align="space-around center">
@@ -204,8 +217,6 @@
                                     </md-input-container>
                                     <div flex></div>
                                 </md-content>
-                            </md-content>
-                            <md-content ng-show="authorised">
                                 <md-divider></md-divider>
                                 <md-content layout="row" layout-align="space-around center">
                                     <md-input-container flex class="md-block">

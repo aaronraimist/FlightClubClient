@@ -5,6 +5,7 @@
   src: url(/fonts/Brandon\ Grotesque\ Medium.otf) format('opentype');
 }
 
+// //fonts.googleapis.com/icon?family=Material+Icons
 /* fallback */
 @font-face {
   font-family: 'Material Icons';
@@ -74,10 +75,6 @@ md-input-container {
 
 .fullHeight {
   min-height: 100%;
-}
-
-.hide {
-  display: none;
 }
 
 .eventLabel {
