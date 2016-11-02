@@ -11,14 +11,17 @@ app.config(function ($routeProvider, $locationProvider, $mdThemingProvider) {
         '600': 'ccac55', // gold for selected options
         '900': 'fff', // add/remove text
         'A100': 'fff', // white for tab background
-        'A200': 'ccac55', // gold for selected tab underline, radio on
         'A700': 'ff0000' // warn messages
+    }));
+
+    $mdThemingProvider.definePalette('accentPalette', $mdThemingProvider.extendPalette('pink', {
+        'A200': 'ccac55' // gold for selected tab underline, radio on
     }));
 
     $mdThemingProvider.theme('default')
             .primaryPalette('primaryPalette')
             .backgroundPalette('primaryPalette')
-            .accentPalette('primaryPalette')
+            .accentPalette('accentPalette')
             .warnPalette('primaryPalette');
 
     $locationProvider.html5Mode(true);
@@ -118,8 +121,6 @@ app.controller('IndexCtrl', function ($scope, $mdSidenav, $cookies, $location, $
 });
 
 app.controller('HomeCtrl', function ($scope, $mdDialog, $mdSidenav) {
-
-    var homeCtrl = this;
 
     $scope.httpRequest('/missions', 'GET', null, function (data) {
         fillMissions(data);
