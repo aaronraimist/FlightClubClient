@@ -408,9 +408,20 @@ app.controller('HomeCtrl', function ($scope, $mdDialog, $mdSidenav) {
         
         for(var i=0;i<stages.length;i++) {
             
+            // Use Vac ISP of first engine by default
             var isp = stages[i].Engines[0].Engine.ispVac;
+            
             if(i===0) {
+                // for lower stages, take midpoint of SL and Vac ISP
                 isp = 0.5*(stages[i].Engines[0].Engine.ispSL+stages[i].Engines[0].Engine.ispVac);
+            } else if (stages[i].Engines.length>1) {
+                // for upper stages, specifically look for Vac engines and use them
+                for(var e=0;e<stages[i].Engines.length;e++) {
+                    if(stages[i].Engines[e].Engine.ispSL === null) {
+                        isp = stages[i].Engines[e].Engine.ispVac;
+                        break;
+                    }
+                }
             }
             
             var aboveMass = 0;
