@@ -278,11 +278,11 @@
         </md-toolbar>
         <md-divider></md-divider>
         <md-list>
-            <md-subheader class="md-no-sticky">Upcoming Missions</md-subheader>
+            <md-subheader style="text-align:right" layout-fill  class="md-no-sticky">Upcoming Missions</md-subheader>
             <md-list-item ng-repeat="mission in upcoming" ng-show="mission.display || authorised" ng-click="selectMission(mission.code)">
                 <span class="md-secondary">{{mission.name}}</span>
             </md-list-item>
-            <md-subheader class="md-no-sticky">Past Missions</md-subheader>
+            <md-subheader style="text-align:right" layout-fill class="md-no-sticky">Past Missions</md-subheader>
             <md-list-item ng-repeat="mission in past" ng-show="mission.display || authorised" ng-click="selectMission(mission.code)">
                 <span class="md-secondary">{{mission.name}}</span>
             </md-list-item>
