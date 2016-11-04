@@ -1,0 +1,65 @@
+<md-dialog aria-label="Autocomplete Dialog Example" ng-cloak>
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <h2>Admin</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="save()">
+                <md-icon class="material-icons" aria-label="Save changes">save</md-icon>
+            </md-button>
+            <md-button class="md-icon-button" ng-click="cancel()">
+                <md-icon class="material-icons" aria-label="Close dialog">close</md-icon>
+            </md-button>
+        </div>
+    </md-toolbar>
+
+    <md-dialog-content>
+        <div class="md-dialog-content">
+            <md-content flex layout-fill>
+                <md-content layout="row" layout-align="space-around center">
+                    <md-input-container flex class="md-block">
+                        <label>Orbits</label>
+                        <input ng-model="parentScope.form.Mission.orbits" ng-disabled="!authorised">
+                    </md-input-container>
+                    <div flex></div>
+                </md-content>
+                <md-divider></md-divider>
+                <md-content layout="row" layout-align="space-around center">
+                    <md-input-container flex class="md-block">
+                        <label>Code</label>
+                        <input ng-model="parentScope.form.Mission.code">
+                    </md-input-container>
+                    <md-input-container flex class="md-block">
+                        <label>Description</label>
+                        <input ng-model="parentScope.form.Mission.description">
+                    </md-input-container>
+                </md-content>
+                <md-content layout="row" layout-align="space-around center">
+                    <md-input-container flex class="md-block">
+                        <label>Date</label>
+                        <input ng-model="parentScope.form.Mission.date">
+                    </md-input-container>
+                    <md-input-container flex class="md-block">
+                        <label>Time</label>
+                        <input ng-model="parentScope.form.Mission.time">
+                    </md-input-container>
+                </md-content>
+                <md-content layout="row" layout-align="space-around center">
+                    <md-content flex>
+                        <md-input-container flex class="md-block">
+                            <label>Company</label>
+                            <md-select ng-model="parentScope.form.Mission.company">
+                                <md-option ng-repeat="obj in companies" value="{{obj.code}}">{{obj.name}}</md-option>
+                            </md-select>
+                        </md-input-container>
+                    </md-content>
+                    <md-content flex layout="row" layout-align="space-around center">
+                        <md-input-container class="md-block">
+                            <label>Display</label>
+                            <md-switch ng-model="parentScope.form.Mission.display" aria-label="Display"></md-switch>
+                        </md-input-container>
+                    </md-content>
+                </md-content>
+            </md-content>
+        </div>
+    </md-dialog-content>
+</md-dialog>

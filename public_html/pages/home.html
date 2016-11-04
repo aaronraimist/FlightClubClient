@@ -80,7 +80,9 @@
                         <md-content class="perfectHeight" flex layout-fill>
                             <md-content layout="row" layout-align="space-between center">
                                 <md-content></md-content>
-                                <md-button class="md-raised" show-sm hide-gt-sm show-sm type="submit" ng-click="submit()">Run simulation!</md-button>
+                                <md-button class="md-raised" show-sm hide-gt-sm ng-show="authorised" type="submit" ng-click="openAdminEditDialog($event)">Admin</md-button>
+                                <md-button class="md-raised" show-sm hide-gt-sm ng-show="authorised" type="submit" ng-click="save($event)">Save</md-button>
+                                <md-button class="md-raised" show-sm hide-gt-sm type="submit" ng-click="submit()">Run simulation!</md-button>
                             </md-content>
                             <md-list flex layout='column'>
                                 <md-content layout="row" layout-align="space-between center">
@@ -206,58 +208,9 @@
                             </md-content>
                             <md-content layout="row" layout-align="space-between center">
                                 <md-content></md-content>
+                                <md-button class="md-raised" ng-show="authorised" type="submit" ng-click="openAdminEditDialog($event)">Admin</md-button>
+                                <md-button class="md-raised" ng-show="authorised" type="submit" ng-click="save($event)">Save</md-button>
                                 <md-button class="md-raised" type="submit" ng-click="submit()">Run simulation!</md-button>
-                            </md-content>
-                        </md-content>
-
-                        <md-content flex layout-fill ng-show="authorised">
-                            <md-content>
-                                <md-divider></md-divider>
-                                <md-content layout="row" layout-align="space-around center">
-                                    <md-input-container flex class="md-block">
-                                        <label>Orbits</label>
-                                        <input ng-model="form.Mission.orbits" ng-disabled="!authorised">
-                                    </md-input-container>
-                                    <div flex></div>
-                                </md-content>
-                                <md-divider></md-divider>
-                                <md-content layout="row" layout-align="space-around center">
-                                    <md-input-container flex class="md-block">
-                                        <label>Code</label>
-                                        <input ng-model="form.Mission.code">
-                                    </md-input-container>
-                                    <md-input-container flex class="md-block">
-                                        <label>Description</label>
-                                        <input ng-model="form.Mission.description">
-                                    </md-input-container>
-                                </md-content>
-                                <md-content layout="row" layout-align="space-around center">
-                                    <md-input-container flex class="md-block">
-                                        <label>Date</label>
-                                        <input ng-model="form.Mission.date">
-                                    </md-input-container>
-                                    <md-input-container flex class="md-block">
-                                        <label>Time</label>
-                                        <input ng-model="form.Mission.time">
-                                    </md-input-container>
-                                </md-content>
-                                <md-content layout="row" layout-align="space-around center">
-                                    <md-content flex>
-                                        <md-input-container flex class="md-block">
-                                            <label>Company</label>
-                                            <md-select ng-model="form.Mission.company">
-                                                <md-option ng-repeat="obj in companies" value="{{obj.code}}">{{obj.name}}</md-option>
-                                            </md-select>
-                                        </md-input-container>
-                                    </md-content>
-                                    <md-content flex layout="row" layout-align="space-around center">
-                                        <md-input-container class="md-block">
-                                            <label>Display</label>
-                                            <md-switch ng-model="form.Mission.display" aria-label="Display"></md-switch>
-                                        </md-input-container>
-                                        <md-button class="md-raised" type="submit" ng-click="save($event)">Save</md-button>
-                                    </md-content>
-                                </md-content>
                             </md-content>
 
                         </md-content>

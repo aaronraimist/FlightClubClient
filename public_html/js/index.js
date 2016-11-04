@@ -128,17 +128,11 @@ app.controller('HomeCtrl', function ($scope, $mdDialog, $mdSidenav) {
     $scope.httpRequest('/launchsites', 'GET', null, function (data) {
         $scope.launchSites = fill(data);
     }, null);
-    $scope.httpRequest('/launchvehicles', 'GET', null, function (data) {
-        $scope.launchVehicles = fillVehicles(data);
-    }, null);
     $scope.httpRequest('/stages', 'GET', null, function (data) {
         $scope.stageTypes = fillStages(data);
     }, null);
     $scope.httpRequest('/engines', 'GET', null, function (data) {
         $scope.engineTypes = fillStages(data);
-    }, null);
-    $scope.httpRequest('/payloads', 'GET', null, function (data) {
-        $scope.payloads = fill(data);
     }, null);
     $scope.httpRequest('/companies', 'GET', null, function (data) {
         $scope.companies = fill(data);
@@ -389,6 +383,42 @@ app.controller('HomeCtrl', function ($scope, $mdDialog, $mdSidenav) {
                 lParent: $scope,
                 lForm: $scope.form,
                 lEvent: event
+            }
+        });
+    };
+
+    $scope.openAdminEditDialog = function ($trigger) {
+
+        $mdDialog.show({
+            controller: function ($scope, lParent, lForm, $mdDialog) {
+
+                $scope.parentScope = jQuery.extend(true, {}, lParent);
+                $scope.companies = lParent.companies;
+                
+                $scope.cancel = function () {
+                    $mdDialog.cancel();
+                };
+                $scope.finish = function () {
+                    $mdDialog.hide();
+                };
+                $scope.save = function () {
+                    lForm.Mission.code = $scope.parentScope.form.Mission.code;
+                    lForm.Mission.description = $scope.parentScope.form.Mission.description;
+                    lForm.Mission.date = $scope.parentScope.form.Mission.date;
+                    lForm.Mission.time = $scope.parentScope.form.Mission.time;
+                    lForm.Mission.company = $scope.parentScope.form.Mission.company;
+                    lForm.Mission.orbits = $scope.parentScope.form.Mission.orbits;
+                    lForm.Mission.display = $scope.parentScope.form.Mission.display;
+                    $mdDialog.hide();
+                };
+            },
+            templateUrl: '/pages/editAdmin.tmpl.html',
+            parent: angular.element(document.body),
+            targetEvent: $trigger,
+            clickOutsideToClose: true,
+            locals: {
+                lParent: $scope,
+                lForm: $scope.form
             }
         });
     };
