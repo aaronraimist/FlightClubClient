@@ -31,7 +31,7 @@
                                         <label>Use vehicle from existing mission:</label>
                                     </md-radio-button>
                                     <md-input-container flex class="md-block">
-                                        <md-select ng-model="selectedVeh" name="selectedVeh" aria-label="SelectPastVehicle" ng-disabled="builderType!='previous'">
+                                        <md-select ng-model="selectedVeh" name="selectedVeh" aria-label="SelectPastVehicle" ng-disabled="builderType != 'previous'">
                                             <md-option ng-repeat="mission in allMissions" value="{{mission.code}}" ng-click="selectMissionVehicle(mission.code)">{{mission.name}}</md-option>
                                         </md-select>
                                     </md-input-container>
@@ -40,7 +40,7 @@
                                     <md-radio-button flex value="custom">
                                         <label>Customize</label>
                                     </md-radio-button>
-                                    <md-button class="md-raised" style="color:white" aria-label="add" ng-click='incrementStages()' ng-disabled="builderType!='custom'">Add Stage</md-button>
+                                    <md-button class="md-raised" style="color:white" aria-label="add" ng-click='incrementStages()' ng-disabled="builderType != 'custom'">Add Stage</md-button>
                                 </md-content>
                             </md-radio-group>
                             <md-divider flex></md-divider>
@@ -50,7 +50,7 @@
                                         <div class="md-list-item-text">
                                             <h3>{{stage.name}}</h3>
                                             <h4 ng-repeat="engineConfig in stage.Engines">{{engineConfig.number}} x {{engineConfig.Engine.name}}</h4>
-                                            <p>Dry mass: {{stage.dryMass/1000.0}}t // Propellant mass: {{stage.propMass/1000.0}}t/{{stage.fuelCapacity/1000.0}}t // Total mass: {{(stage.dryMass+stage.propMass)/1000.0}}t</p>
+                                            <p>Dry mass: {{stage.dryMass / 1000.0}}t // Propellant mass: {{stage.propMass / 1000.0}}t/{{stage.fuelCapacity / 1000.0}}t // Total mass: {{(stage.dryMass + stage.propMass) / 1000.0}}t</p>
                                         </div>
                                         <md-button style="min-width:0" ng-click="openStageEditDialog($event, $index, stage)">
                                             <md-icon class="material-icons">mode_edit</md-icon>
@@ -108,103 +108,101 @@
                                 </md-list-item>
                             </md-list>
                         </md-content>
-                        
+
                         <md-content flex layout-fill hide-xs hide-sm show-gt-sm>
-                            <md-content ng-show="selectedEvent !== undefined">
-                                <md-content layout="row" layout-align="space-around center">
-                                    <md-input-container flex class="md-block">
-                                        <label>Event Type</label>
-                                        <md-select ng-model="selectedEvent.type" name="type" required>
-                                            <md-option ng-repeat="obj in type" value="{{obj.code}}" 
-                                                       ng-disabled="obj.code === 'FAIRING_SEP' && form.Mission.Payload.code !== 'SATL'">{{obj.name}}</md-option>
-                                        </md-select>
-                                        <div ng-messages="profileForm.type.$error" multiple md-auto-hide="true">
-                                            <div ng-message="required">
-                                                What type of event do you want to create?
-                                            </div>
+                            <md-content layout="row" layout-align="space-around center">
+                                <md-input-container flex class="md-block">
+                                    <label>Event Type</label>
+                                    <md-select ng-model="selectedEvent.type" name="type" ng-required="selectedEvent!==null">
+                                        <md-option ng-repeat="obj in type" value="{{obj.code}}" 
+                                                   ng-disabled="obj.code === 'FAIRING_SEP' && form.Mission.Payload.code !== 'SATL'">{{obj.name}}</md-option>
+                                    </md-select>
+                                    <div ng-messages="profileForm.type.$error" multiple md-auto-hide="true">
+                                        <div ng-message="required">
+                                            What type of event do you want to create?
                                         </div>
-                                    </md-input-container>
-                                    <md-input-container flex class="md-block">
-                                        <label>Name</label>
-                                        <input ng-model="selectedEvent.name" name="name" required>
-                                        <div ng-messages="profileForm.name.$error" multiple md-auto-hide="true">
-                                            <div ng-message="required">
-                                                This can be whatever you want, but make it descriptive!
-                                            </div>
-                                        </div>
-                                    </md-input-container>
-                                </md-content>
-                                <md-content layout="row" layout-align="space-around center">
-                                    <md-input-container flex class="md-block">
-                                        <label>Stage</label>
-                                        <md-select ng-model="selectedEvent.stage" name="stage" required>
-                                            <md-option ng-repeat="obj in form.Mission.Vehicle.Stages" value="{{obj.stageNum}}">{{obj.name}}</md-option>
-                                        </md-select>
-                                        <div ng-messages="profileForm.stage.$error" multiple md-auto-hide="true">
-                                            <div ng-message="required">
-                                                The event has to apply to one stage in particular
-                                            </div>
-                                        </div>
-                                    </md-input-container>
-                                    <div flex></div>
-                                </md-content>
-                                <md-content layout="row" layout-align="space-around center">
-                                    <md-input-container flex class="md-block">
-                                        <label>Time (seconds from T-0)</label>
-                                        <input ng-model="selectedEvent.time" ng-change="sortEvents()" name="time" required>
-                                        <div ng-messages="profileForm.time.$error" multiple md-auto-hide="true">
-                                            <div ng-message="required">
-                                                What time should this event take place?
-                                            </div>
-                                        </div>
-                                    </md-input-container>
-                                    <div flex>
-                                        <md-input-container flex class="md-block" ng-show="selectedEvent.type === 'GUIDANCE'">
-                                            <label>End (seconds from T-0)</label>
-                                            <input ng-model="selectedEvent.end" name="end">
-                                        </md-input-container>
                                     </div>
-                                </md-content>
-                                <md-content ng-show="selectedEvent.type === 'IGNITION'"
-                                            layout="row" layout-align="space-around center">
-                                    <md-input-container flex class="md-block">
-                                        <label>Engines</label>
-                                        <input ng-model="selectedEvent.engines" name="engines" required/>
-                                        <div ng-messages="profileForm.engines.$error" multiple md-auto-hide="true">
-                                            <div ng-message="required">
-                                                You can't do a burn with no engines...
-                                            </div>
+                                </md-input-container>
+                                <md-input-container flex class="md-block">
+                                    <label>Name</label>
+                                    <input ng-model="selectedEvent.name" name="name" ng-required="selectedEvent!==null">
+                                    <div ng-messages="profileForm.name.$error" multiple md-auto-hide="true">
+                                        <div ng-message="required">
+                                            This can be whatever you want, but make it descriptive!
                                         </div>
+                                    </div>
+                                </md-input-container>
+                            </md-content>
+                            <md-content layout="row" layout-align="space-around center">
+                                <md-input-container flex class="md-block">
+                                    <label>Stage</label>
+                                    <md-select ng-model="selectedEvent.stage" name="stage" ng-required="selectedEvent!==null">
+                                        <md-option ng-repeat="obj in form.Mission.Vehicle.Stages" value="{{obj.stageNum}}">{{obj.name}}</md-option>
+                                    </md-select>
+                                    <div ng-messages="profileForm.stage.$error" multiple md-auto-hide="true">
+                                        <div ng-message="required">
+                                            The event has to apply to one stage in particular
+                                        </div>
+                                    </div>
+                                </md-input-container>
+                                <div flex></div>
+                            </md-content>
+                            <md-content layout="row" layout-align="space-around center">
+                                <md-input-container flex class="md-block">
+                                    <label>Time (seconds from T-0)</label>
+                                    <input ng-model="selectedEvent.time" ng-change="sortEvents()" name="time" ng-required="selectedEvent!==null">
+                                    <div ng-messages="profileForm.time.$error" multiple md-auto-hide="true">
+                                        <div ng-message="required">
+                                            What time should this event take place?
+                                        </div>
+                                    </div>
+                                </md-input-container>
+                                <div flex>
+                                    <md-input-container flex class="md-block" ng-show="selectedEvent.type === 'GUIDANCE'">
+                                        <label>End (seconds from T-0)</label>
+                                        <input ng-model="selectedEvent.end" name="end">
                                     </md-input-container>
-                                    <md-input-container flex class="md-block">
-                                        <label>Dynamic Burn</label>
-                                        <md-switch ng-model="selectedEvent.dynamic" aria-label="Hoverslam"></md-switch>
-                                    </md-input-container>
-                                </md-content>
-                                <md-content ng-show="selectedEvent.type === 'IGNITION' || selectedEvent.type === 'GUIDANCE'"
-                                            layout="row" layout-align="space-around center">
-                                    <md-input-container flex class="md-block">
-                                        <label>Pitch</label>
-                                        <input ng-model="selectedEvent.Attitude.pitch">
-                                    </md-input-container>
-                                    <md-input-container flex class="md-block">
-                                        <label>Yaw</label>
-                                        <input ng-model="selectedEvent.Attitude.yaw">
-                                    </md-input-container>
-                                </md-content>
-                                <md-content ng-show="selectedEvent.type === 'IGNITION' || selectedEvent.type === 'GUIDANCE'"
-                                            layout="row" layout-align="space-around center">
-                                    <md-input-container flex class="md-block">
-                                        <label>Throttle</label>
-                                        <input ng-model="selectedEvent.Attitude.throttle">
-                                    </md-input-container>
-                                    <md-input-container flex class="md-block">
-                                        <label>Gravity Turn</label>
-                                        <md-select ng-model="selectedEvent.Attitude.gt">
-                                            <md-option ng-repeat="obj in gravTurnSelect" value="{{obj.code}}">{{obj.name}}</md-option>
-                                        </md-select>
-                                    </md-input-container>
-                                </md-content>
+                                </div>
+                            </md-content>
+                            <md-content ng-show="selectedEvent.type === 'IGNITION'"
+                                        layout="row" layout-align="space-around center">
+                                <md-input-container flex class="md-block">
+                                    <label>Engines</label>
+                                    <input ng-model="selectedEvent.engines" name="engines" ng-required="selectedEvent.type === 'IGNITION'"/>
+                                    <div ng-messages="profileForm.engines.$error" multiple md-auto-hide="true">
+                                        <div ng-message="required">
+                                            You can't do a burn with no engines...
+                                        </div>
+                                    </div>
+                                </md-input-container>
+                                <md-input-container flex class="md-block">
+                                    <label>Dynamic Burn</label>
+                                    <md-switch ng-model="selectedEvent.dynamic" aria-label="Hoverslam"></md-switch>
+                                </md-input-container>
+                            </md-content>
+                            <md-content ng-show="selectedEvent.type === 'IGNITION' || selectedEvent.type === 'GUIDANCE'"
+                                        layout="row" layout-align="space-around center">
+                                <md-input-container flex class="md-block">
+                                    <label>Pitch</label>
+                                    <input ng-model="selectedEvent.Attitude.pitch">
+                                </md-input-container>
+                                <md-input-container flex class="md-block">
+                                    <label>Yaw</label>
+                                    <input ng-model="selectedEvent.Attitude.yaw">
+                                </md-input-container>
+                            </md-content>
+                            <md-content ng-show="selectedEvent.type === 'IGNITION' || selectedEvent.type === 'GUIDANCE'"
+                                        layout="row" layout-align="space-around center">
+                                <md-input-container flex class="md-block">
+                                    <label>Throttle</label>
+                                    <input ng-model="selectedEvent.Attitude.throttle">
+                                </md-input-container>
+                                <md-input-container flex class="md-block">
+                                    <label>Gravity Turn</label>
+                                    <md-select ng-model="selectedEvent.Attitude.gt">
+                                        <md-option ng-repeat="obj in gravTurnSelect" value="{{obj.code}}">{{obj.name}}</md-option>
+                                    </md-select>
+                                </md-input-container>
                             </md-content>
                             <md-content layout="row" layout-align="space-between center">
                                 <md-content></md-content>
