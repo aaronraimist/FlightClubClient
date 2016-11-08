@@ -1249,6 +1249,9 @@ app.controller('WorldCtrl', function ($scope, $location) {
     $scope.pollLaunchTime = function () {
         $scope.$parent.httpRequest('/missions/' + w.getProp('code'), 'GET', null,
                 function (data) {
+                    
+                    data = JSON.parse(data);
+                    
                     var tempDate = data.Mission.date.replace(/-/g, "/") + ' ' + data.Mission.time + ' UTC';
                     var newTime = Date.parse(tempDate);
 
@@ -1290,8 +1293,8 @@ app.controller('WorldCtrl', function ($scope, $location) {
             var data = JSON.parse(res);
             if (data.Mission !== undefined) {
                 $scope.numStages = 0;
-                $.each(data.Mission.Stages, function (key, val) {
-                    $scope.stageMap.push({id: val.id, name: val.name});
+                $.each(data.Mission.Vehicle.Stages, function (key, val) {
+                    $scope.stageMap.push({id: val.stageNum, name: val.name});
                     $scope.numStages++;
                 });
                 if ($scope.queryParams['id'] === undefined) {
@@ -1429,7 +1432,7 @@ app.controller('WorldCtrl', function ($scope, $location) {
     $scope.loadCesium = function (otherFunction) {
 
         window.CESIUM_BASE_URL = '//cesiumjs.org/releases/1.20/Build/Cesium/';
-        $.getScript("//cesiumjs.org/releases/1.20/Build/Cesium/Cesium.js", function ()
+        $.getScript("/cesium/Cesium-1.20.js", function ()
         {
             Cesium.BingMapsApi.defaultKey = 'Atr1lJvbFdMUnJ6fw4qGKDcZuEjzVRh-6WLmrRZDcCggpZIPH9sdEyUWGWXO1kPc';
             $.getScript("js/worldObj.js", function ()
