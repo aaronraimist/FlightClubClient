@@ -458,6 +458,8 @@ app.controller('HomeCtrl', function ($scope, $mdDialog, $mdSidenav) {
             var aboveMass = 0;
             for(var j=i+1;j<stages.length;j++) {
                 aboveMass += stages[j].dryMass + stages[j].propMass;
+                if(stages[j].fairingMass)
+                    aboveMass += stages[j].fairingMass;
             }
             aboveMass += parseFloat($scope.form.Mission.Payload.mass);
             
