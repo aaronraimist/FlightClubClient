@@ -95,7 +95,7 @@
                                         <h3>{{"T" + (event.time < 0 ? '' : '+') + event.time}} // {{event.name}}</h3>
                                         <p>{{form.Mission.Vehicle.Stages[event.stage].name}}</p>
                                     </div>
-                                    <md-button hide show-sm style="min-width:0" ng-click="openEventEditDialog($event, $index, event)">
+                                    <md-button show-sm hide-gt-sm style="min-width:0" ng-click="openEventEditDialog($event, $index, event)">
                                         <md-icon class="material-icons">mode_edit</md-icon>
                                     </md-button>
                                     <md-button hide show-gt-sm style="min-width:0" ng-click="selectEvent($event, event)">
