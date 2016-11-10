@@ -137,7 +137,7 @@
                                 <md-input-container flex class="md-block">
                                     <label>Stage</label>
                                     <md-select ng-model="selectedEvent.stage" name="stage" ng-required="selectedEvent!==null">
-                                        <md-option ng-repeat="obj in form.Mission.Vehicle.Stages" value="{{obj.stageNum}}">{{obj.name}}</md-option>
+                                        <md-option ng-repeat="obj in form.Mission.Vehicle.Stages" ng-value="obj.stageNum">{{obj.name}}</md-option>
                                     </md-select>
                                     <div ng-messages="profileForm.stage.$error" multiple md-auto-hide="true">
                                         <div ng-message="required">

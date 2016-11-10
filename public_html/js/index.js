@@ -128,7 +128,7 @@ app.controller('HomeCtrl', function ($scope, $mdDialog, $mdSidenav) {
     $scope.httpRequest('/launchsites', 'GET', null, function (data) {
         $scope.launchSites = fill(data);
     }, null);
-    $scope.httpRequest('/stages', 'GET', null, function (data) {
+    $scope.httpRequest('/stages?engineDetail=true', 'GET', null, function (data) {
         $scope.stageTypes = fillStages(data);
     }, null);
     $scope.httpRequest('/engines', 'GET', null, function (data) {
@@ -196,15 +196,6 @@ app.controller('HomeCtrl', function ($scope, $mdDialog, $mdSidenav) {
         return array;
     };
 
-    var fillVehicles = function (data) {
-        var list = data.data;
-        var array = {};
-        for (var i = list.length; i > 0; i--) {
-            array[list[i - 1].code] = list[i - 1];
-        }
-        return array;
-    };
-
     var fillStages = function (data) {
         var list = data.data;
         var array = {};
@@ -233,7 +224,6 @@ app.controller('HomeCtrl', function ($scope, $mdDialog, $mdSidenav) {
         $scope.httpRequest('/missions/' + code, 'GET', null, function (data) {
             var tempForm = JSON.parse(data);
             $scope.form.Mission.Vehicle = tempForm.Mission.Vehicle;
-            $scope.selectedStage = tempForm.Mission.Vehicle.Stages[0];
             $scope.$apply();
         }, null);
     };
@@ -247,23 +237,10 @@ app.controller('HomeCtrl', function ($scope, $mdDialog, $mdSidenav) {
         setUniqueClass(event.currentTarget, 'md-content', 'button', 'md-primary');
         $scope.form.Mission.launchsite = site.code;
     };
-    $scope.selectVehicle = function (event, veh) {
-        setUniqueClass(event.currentTarget, 'md-content', 'button', 'md-primary');
-
-        if ($scope.form.Mission.Vehicle.code !== veh.code
-                && (veh.code === 'FNH' || $scope.form.Mission.Vehicle.code === 'FNH')) {
-            $scope.form.Mission.Events = [];
-        }
-        $scope.form.Mission.Vehicle.code = veh.code;
-        $scope.form.Mission.Vehicle.description = veh.description;
-    };
-    $scope.selectPayload = function (event, payload) {
-        setUniqueClass(event.currentTarget, 'md-content', 'button', 'md-primary');
-        $scope.form.Mission.Payload.code = payload.code;
-    };
     $scope.selectEvent = function (trigger, event) {
         setUniqueClass(trigger.currentTarget, 'md-content', 'button', 'md-primary');
         $scope.selectedEvent = event;
+        $scope.form.Mission.Vehicle.Stages[event.stage].stageNum = event.stage;
     };
 
     $scope.openStageEditDialog = function ($event, $stageIndex, stage) {
@@ -424,12 +401,28 @@ app.controller('HomeCtrl', function ($scope, $mdDialog, $mdSidenav) {
     };
     
     $scope.removeStage = function ($index) {
+        var stageNum = $scope.form.Mission.Vehicle.Stages[$index].stageNum;
+        var list = [];
         $scope.form.Mission.Vehicle.Stages.splice($index, 1);
+        $scope.form.Mission.Events.forEach(function(event, i) {
+            if(event.stage === stageNum) {
+                list.push(i);
+            } else if (event.stage > stageNum) {
+                event.stage--;
+            }
+        });
+        $scope.form.Mission.Vehicle.Stages.forEach(function(obj, i) {
+            // this isn't pushing through to the select options for some reason
+            // so the event's "Stage" field doesn't update properly, since it has value="obj.stage".
+            obj.stageNum = i;
+        });
+        for(var i=list.length-1;i>=0;i--) {
+            $scope.form.Mission.Events.splice(list[i], 1);
+        }
         $scope.recalcDV();
     };
     $scope.incrementStages = function () {
         $scope.form.Mission.Vehicle.Stages[$scope.form.Mission.Vehicle.Stages.length] = {};
-        $scope.$apply();
     };
     
     $scope.recalcDV = function() {
@@ -438,6 +431,9 @@ app.controller('HomeCtrl', function ($scope, $mdDialog, $mdSidenav) {
         var stages = $scope.form.Mission.Vehicle.Stages;
         
         for(var i=0;i<stages.length;i++) {
+            
+            if(stages[i] === undefined || stages[i].Engines === undefined)
+                continue;
             
             // Use Vac ISP of first engine by default
             var isp = stages[i].Engines[0].Engine.ispVac;
