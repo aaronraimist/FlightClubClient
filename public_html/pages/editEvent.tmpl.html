@@ -17,9 +17,35 @@
             <md-content flex layout-fill>
                 <md-content ng-show="selectedEvent !== undefined">
                     <md-content layout="row" layout-align="space-around center">
+                        <md-content flex layout="row">
+                            <md-input-container flex class="md-block">
+                                <label>Time (seconds from T-0)</label>
+                                <input ng-model="selectedEvent.time" ng-change="sortEvents()" name="time" ng-required="selectedEvent!==null">
+                                <div ng-messages="profileForm.time.$error" multiple md-auto-hide="true">
+                                    <div ng-message="required">
+                                        What time should this event take place?
+                                    </div>
+                                </div>
+                            </md-input-container>
+                            <md-input-container flex class="md-block" ng-show="selectedEvent.type === 'GUIDANCE'">
+                                <label>End (seconds from T-0)</label>
+                                <input ng-model="selectedEvent.end" name="end">
+                            </md-input-container>
+                        </md-content>
+                        <md-input-container flex class="md-block">
+                            <label>Name</label>
+                            <input ng-model="selectedEvent.name" name="name" ng-required="selectedEvent!==null">
+                            <div ng-messages="profileForm.name.$error" multiple md-auto-hide="true">
+                                <div ng-message="required">
+                                    This can be whatever you want, but make it descriptive!
+                                </div>
+                            </div>
+                        </md-input-container>
+                    </md-content>
+                    <md-content layout="row" layout-align="space-around center">
                         <md-input-container flex class="md-block">
                             <label>Event Type</label>
-                            <md-select ng-model="selectedEvent.type" name="type" required>
+                            <md-select ng-model="selectedEvent.type" name="type" ng-required="selectedEvent!==null">
                                 <md-option ng-repeat="obj in type" value="{{obj.code}}" 
                                            ng-disabled="obj.code === 'FAIRING_SEP' && form.Mission.Payload.code !== 'SATL'">{{obj.name}}</md-option>
                             </md-select>
@@ -30,20 +56,9 @@
                             </div>
                         </md-input-container>
                         <md-input-container flex class="md-block">
-                            <label>Name</label>
-                            <input ng-model="selectedEvent.name" name="name" required>
-                            <div ng-messages="profileForm.name.$error" multiple md-auto-hide="true">
-                                <div ng-message="required">
-                                    This can be whatever you want, but make it descriptive!
-                                </div>
-                            </div>
-                        </md-input-container>
-                    </md-content>
-                    <md-content layout="row" layout-align="space-around center">
-                        <md-input-container flex class="md-block">
                             <label>Stage</label>
-                            <md-select ng-model="selectedEvent.stage" name="stage" required>
-                                <md-option ng-repeat="obj in stages" value="{{obj.stageNum}}">{{obj.name}}</md-option>
+                            <md-select ng-model="selectedEvent.stage" name="stage" ng-required="selectedEvent!==null">
+                                <md-option ng-repeat="obj in stages" ng-value="obj.stageNum">{{obj.name}}</md-option>
                             </md-select>
                             <div ng-messages="profileForm.stage.$error" multiple md-auto-hide="true">
                                 <div ng-message="required">
@@ -51,63 +66,52 @@
                                 </div>
                             </div>
                         </md-input-container>
-                        <div flex></div>
                     </md-content>
                     <md-content layout="row" layout-align="space-around center">
-                        <md-input-container flex class="md-block">
-                            <label>Time (seconds from T-0)</label>
-                            <input ng-model="selectedEvent.time" ng-change="sortEvents()" name="time" required>
-                            <div ng-messages="profileForm.time.$error" multiple md-auto-hide="true">
-                                <div ng-message="required">
-                                    What time should this event take place?
-                                </div>
-                            </div>
-                        </md-input-container>
-                        <div flex>
-                            <md-input-container flex class="md-block" ng-show="selectedEvent.type === 'GUIDANCE'">
-                                <label>End (seconds from T-0)</label>
-                                <input ng-model="selectedEvent.end" name="end">
-                            </md-input-container>
-                        </div>
+                        <md-content flex layout="row" layout-align="space-around center">
+                            <md-content ng-show="selectedEvent.type === 'IGNITION' || selectedEvent.type === 'GUIDANCE'"
+                                        flex layout="row" class="md-block">
+                                <md-input-container flex class="md-block">
+                                    <label>Pitch</label>
+                                    <input ng-model="selectedEvent.Attitude.pitch">
+                                </md-input-container>
+                                <md-input-container flex class="md-block">
+                                    <label>Yaw</label>
+                                    <input ng-model="selectedEvent.Attitude.yaw">
+                                </md-input-container>
+                                <md-input-container flex class="md-block">
+                                    <label>Throttle</label>
+                                    <input ng-model="selectedEvent.Attitude.throttle">
+                                </md-input-container>
+                                <md-input-container flex class="md-block">
+                                    <label>Gravity Turn</label>
+                                    <md-select ng-model="selectedEvent.Attitude.gt">
+                                        <md-option ng-repeat="obj in gravTurnSelect" value="{{obj.code}}">{{obj.name}}</md-option>
+                                    </md-select>
+                                </md-input-container>
+                            </md-content>
+                        </md-content>
                     </md-content>
-                    <md-content ng-show="selectedEvent.type === 'IGNITION'"
+                    <md-content ng-show="selectedEvent.type === 'IGNITION' || selectedEvent.type === 'CUTOFF'"
                                 layout="row" layout-align="space-around center">
-                        <md-input-container flex class="md-block">
-                            <label>Engines</label>
-                            <input ng-model="selectedEvent.engines" name="engines" required/>
-                            <div ng-messages="profileForm.engines.$error" multiple md-auto-hide="true">
-                                <div ng-message="required">
-                                    You can't do a burn with no engines...
-                                </div>
-                            </div>
-                        </md-input-container>
+                        <md-content flex class="md-block">
+                            <md-content layout="row" ng-repeat="engineConfig in stageEngines">
+                                <md-switch flex ng-model="engineConfig.active" aria-label="Activate Engines" ng-change="changeEngineOnEvent(selectedEvent, engineConfig)"></md-switch>
+                                <md-input-container flex>
+                                    <label># of {{engineConfig.Engine.name}} engines</label>
+                                    <input ng-model="selectedEvent.Engines[$index].engineId" name="id" ng-value="engineConfig.engineId" type="hidden"/>
+                                    <input ng-model="selectedEvent.Engines[$index].number" name="engines" ng-required="engineConfig.active" ng-change="selectedEvent.Engines[$index].engineId = engineConfig.engineId"/>
+                                    <div ng-messages="profileForm.engines.$error" multiple md-auto-hide="true">
+                                        <div ng-message="required">
+                                            You can't do a burn with no engines...
+                                        </div>
+                                    </div>
+                                </md-input-container>
+                            </md-content>
+                        </md-content>
                         <md-input-container flex class="md-block">
                             <label>Dynamic Burn</label>
                             <md-switch ng-model="selectedEvent.dynamic" aria-label="Hoverslam"></md-switch>
-                        </md-input-container>
-                    </md-content>
-                    <md-content ng-show="selectedEvent.type === 'IGNITION' || selectedEvent.type === 'GUIDANCE'"
-                                layout="row" layout-align="space-around center">
-                        <md-input-container flex class="md-block">
-                            <label>Pitch</label>
-                            <input ng-model="selectedEvent.Attitude.pitch">
-                        </md-input-container>
-                        <md-input-container flex class="md-block">
-                            <label>Yaw</label>
-                            <input ng-model="selectedEvent.Attitude.yaw">
-                        </md-input-container>
-                    </md-content>
-                    <md-content ng-show="selectedEvent.type === 'IGNITION' || selectedEvent.type === 'GUIDANCE'"
-                                layout="row" layout-align="space-around center">
-                        <md-input-container flex class="md-block">
-                            <label>Throttle</label>
-                            <input ng-model="selectedEvent.Attitude.throttle">
-                        </md-input-container>
-                        <md-input-container flex class="md-block">
-                            <label>Gravity Turn</label>
-                            <md-select ng-model="selectedEvent.Attitude.gt">
-                                <md-option ng-repeat="obj in gravTurnSelect" value="{{obj.code}}">{{obj.name}}</md-option>
-                            </md-select>
                         </md-input-container>
                     </md-content>
                 </md-content>

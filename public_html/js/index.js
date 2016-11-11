@@ -39,6 +39,17 @@ app.config(function ($routeProvider, $locationProvider, $mdThemingProvider) {
             .otherwise({redirectTo: '/'});
 });
 
+app.directive('int', function () {
+    return {
+        require: 'ngModel',
+        link: function (scope, ele, attr, ctrl) {
+            ctrl.$parsers.unshift(function (viewValue) {
+                return parseInt(viewValue, 10);
+            });
+        }
+    };
+});
+
 app.directive('float', function () {
     return {
         require: 'ngModel',
@@ -234,13 +245,19 @@ app.controller('HomeCtrl', function ($scope, $mdDialog, $mdSidenav) {
     }
 
     $scope.selectSite = function (event, site) {
-        setUniqueClass(event.currentTarget, 'md-content', 'button', 'md-primary');
+        uniqueClass(event.currentTarget, 'md-content', 'button', 'md-primary', true);
         $scope.form.Mission.launchsite = site.code;
     };
     $scope.selectEvent = function (trigger, event) {
-        setUniqueClass(trigger.currentTarget, 'md-content', 'button', 'md-primary');
-        $scope.selectedEvent = event;
-        $scope.form.Mission.Vehicle.Stages[event.stage].stageNum = event.stage;
+        
+        if ($scope.selectedEvent === event) {
+            $scope.selectedEvent = null; 
+            uniqueClass(trigger.currentTarget, 'md-content', 'button', 'md-primary', false);
+        } else {
+            $scope.selectedEvent = event;
+            $scope.form.Mission.Vehicle.Stages[event.stage].stageNum = event.stage;
+            uniqueClass(trigger.currentTarget, 'md-content', 'button', 'md-primary', true);
+        }
     };
 
     $scope.openStageEditDialog = function ($event, $stageIndex, stage) {
@@ -258,12 +275,25 @@ app.controller('HomeCtrl', function ($scope, $mdDialog, $mdSidenav) {
                     $scope.selectedStage = newStage;
                 };
                 $scope.removeEngine = function ($index) {
+                    
+                    // if this happens on an Engine that isn't last in the list, 
+                    // it will fuck up all the EventEngines!
+                    // no way around it though, without removing all those events from the profile
+                    // and that's silly
+                    
                     $scope.selectedStage.Engines.splice($index, 1);
+                    $scope.selectedStage.Engines.forEach(function (obj, i) {
+                        obj.engineId = i;
+                    });
+                    $scope.parentScope.recalcDV();
+
                 };
                 $scope.incrementEngines = function () {
                     if (!$scope.selectedStage.Engines)
                         $scope.selectedStage.Engines = [];
-                    $scope.selectedStage.Engines.push({});
+                    $scope.selectedStage.Engines.push({
+                        engineId: $scope.selectedStage.Engines.length
+                    });
                 };
 
                 $scope.openEngineEditDialog = function ($event, $engineIndex, engineConfig) {
@@ -338,6 +368,7 @@ app.controller('HomeCtrl', function ($scope, $mdDialog, $mdSidenav) {
                 $scope.selectedEvent = jQuery.extend(true, {}, lEvent);
                 $scope.type = $scope.parentScope.type;
                 $scope.stages = $scope.parentScope.form.Mission.Vehicle.Stages;
+                $scope.stageEngines = $scope.parentScope.form.Mission.Vehicle.Stages[$scope.selectedEvent.stage].Engines;
                 $scope.gravTurnSelect = $scope.parentScope.gravTurnSelect;
                 
                 $scope.cancel = function () {
@@ -412,8 +443,6 @@ app.controller('HomeCtrl', function ($scope, $mdDialog, $mdSidenav) {
             }
         });
         $scope.form.Mission.Vehicle.Stages.forEach(function(obj, i) {
-            // this isn't pushing through to the select options for some reason
-            // so the event's "Stage" field doesn't update properly, since it has value="obj.stage".
             obj.stageNum = i;
         });
         for(var i=list.length-1;i>=0;i--) {
@@ -568,14 +597,15 @@ app.controller('HomeCtrl', function ($scope, $mdDialog, $mdSidenav) {
         };
     };
 
-    var setUniqueClass = function (target, parentType, targetType, className) {
+    var uniqueClass = function (target, parentType, targetType, className, add) {
 
         var parent = target.closest(parentType);
         var targets = parent.getElementsByTagName(targetType);
         for (var i = 0; i < targets.length; i++) {
             targets[i].classList.remove(className);
         }
-        target.classList.add(className);
+        if(add)
+            target.classList.add(className);
     };
 
 });
