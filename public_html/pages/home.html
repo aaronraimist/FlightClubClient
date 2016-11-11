@@ -183,7 +183,7 @@
                                         </md-input-container>
                                         <md-input-container flex class="md-block">
                                             <label>Throttle</label>
-                                            <input ng-model="selectedEvent.Attitude.throttle">
+                                            <input ng-disabled="selectedEvent.dynamic" ng-model="selectedEvent.Attitude.throttle">
                                         </md-input-container>
                                         <md-input-container flex class="md-block">
                                             <label>Gravity Turn</label>
@@ -196,27 +196,25 @@
                             </md-content>
                             <md-content ng-show="selectedEvent.type === 'IGNITION' || selectedEvent.type === 'CUTOFF'"
                                         layout="row" layout-align="space-around center">
-                                <md-content flex class="md-block">
-                                    <md-content layout="row" ng-repeat="engineConfig in form.Mission.Vehicle.Stages[selectedEvent.stage].Engines">
-                                        <md-switch flex ng-model="engineConfig.active" aria-label="Activate Engines" ng-change="changeEngineOnEvent(selectedEvent, engineConfig)"></md-switch>
-                                        <md-input-container flex>
-                                            <label># of {{engineConfig.Engine.name}} engines</label>
-                                            <input ng-model="selectedEvent.Engines[$index].engineId" name="id" ng-value="engineConfig.engineId" type="hidden"/>
-                                            <input ng-model="selectedEvent.Engines[$index].number" name="engines" ng-required="engineConfig.active" ng-change="selectedEvent.Engines[$index].engineId = engineConfig.engineId"/>
-                                            <div ng-messages="profileForm.engines.$error" multiple md-auto-hide="true">
-                                                <div ng-message="required">
-                                                    You can't do a burn with no engines...
-                                                </div>
+                                <md-content flex class="md-block" ng-repeat="engineConfig in form.Mission.Vehicle.Stages[selectedEvent.stage].Engines">
+                                    <md-input-container flex>
+                                        <label># of {{engineConfig.Engine.name}} engines</label>
+                                        <input ng-model="selectedEvent.Engines[$index].engineId" name="id" ng-value="engineConfig.engineId" type="hidden"/>
+                                        <input ng-model="selectedEvent.Engines[$index].number" name="engines" required ng-change="selectedEvent.Engines[$index].engineId = engineConfig.engineId"/>
+                                        <div ng-messages="profileForm.engines.$error" multiple md-auto-hide="true">
+                                            <div ng-message="required">
+                                                Insert 0 if you don't want to use these engines
                                             </div>
-                                        </md-input-container>
-                                    </md-content>
+                                        </div>
+                                    </md-input-container>
                                 </md-content>
-                                <md-input-container flex class="md-block">
-                                    <label>Dynamic Burn</label>
-                                    <md-switch ng-model="selectedEvent.dynamic" aria-label="Hoverslam"></md-switch>
-                                </md-input-container>
+                                <md-content flex class='md-block'>
+                                    <md-input-container flex class="md-block" ng-show="selectedEvent.type === 'IGNITION'">
+                                        <label>Is Landing Burn?</label>
+                                        <md-switch ng-model="selectedEvent.dynamic" aria-label="Hoverslam"></md-switch>
+                                    </md-input-container>
+                                </md-content>
                             </md-content>
-
                         </md-content>
                     </md-content>
                 </md-tab-content>

@@ -60,6 +60,7 @@ function world() {
       roll: Cesium.Math.toRadians(359.795)
     }
   };
+  launchPadViews['K39A'] = launchPadViews['LC40'];
   launchPadViews['BOCA'] = {
     destination: Cesium.Cartesian3.fromDegrees(-94.706, 15.725, 1108500.0),
     orientation: {
