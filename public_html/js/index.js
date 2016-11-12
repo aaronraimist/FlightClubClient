@@ -268,6 +268,7 @@ app.controller('HomeCtrl', function ($scope, $mdDialog, $mdSidenav) {
                 $scope.parentScope = lParent;
 
                 $scope.selectedStage = jQuery.extend(true, {}, lStage);
+                $scope.tempEvents = jQuery.extend(true, [], lForm.Mission.Events);
                 $scope.stageTypes = $scope.parentScope.stageTypes;
                 $scope.engineTypes = $scope.parentScope.engineTypes;
 
@@ -276,14 +277,21 @@ app.controller('HomeCtrl', function ($scope, $mdDialog, $mdSidenav) {
                 };
                 $scope.removeEngine = function ($index) {
                     
-                    // if this happens on an Engine that isn't last in the list, 
-                    // it will fuck up all the EventEngines!
-                    // no way around it though, without removing all those events from the profile
-                    // and that's silly
-                    
                     $scope.selectedStage.Engines.splice($index, 1);
                     $scope.selectedStage.Engines.forEach(function (obj, i) {
                         obj.engineId = i;
+                    });
+                    $scope.tempEvents.forEach(function(event) {
+                        
+                        if(event.stage === $scope.selectedStage.stageNum) {
+                            for (var i = event.Engines.length - 1; i >= 0; i--) {
+                                if(event.Engines[i].engineId === $index) {
+                                    event.Engines.splice(event.Engines[i], 1);
+                                } else if (event.Engines[i].engineId > $index) {
+                                    event.Engines[i].engineId--;
+                                }
+                            }
+                        }
                     });
                     $scope.parentScope.recalcDV();
 
@@ -299,7 +307,7 @@ app.controller('HomeCtrl', function ($scope, $mdDialog, $mdSidenav) {
                 $scope.openEngineEditDialog = function ($event, $engineIndex, engineConfig) {
 
                     var obj = {
-                        controller: function ($scope, lEngineTypes, lEngineConfig, lForm, $mdDialog, lStage) {
+                        controller: function ($scope, lEngineTypes, lEngineConfig, $mdDialog, lStage) {
 
                             $scope.selectedEngineConfig = jQuery.extend(true, {}, lEngineConfig);
                             $scope.engineTypes = lEngineTypes;
@@ -329,8 +337,7 @@ app.controller('HomeCtrl', function ($scope, $mdDialog, $mdSidenav) {
                         locals: {
                             lStage: $scope.selectedStage,
                             lEngineTypes: $scope.engineTypes,
-                            lEngineConfig: engineConfig,
-                            lForm: $scope.parentScope.form
+                            lEngineConfig: engineConfig
                         }
                     };
                     $mdDialog.show(obj);
@@ -343,6 +350,7 @@ app.controller('HomeCtrl', function ($scope, $mdDialog, $mdSidenav) {
                 };
                 $scope.save = function () {
                     lForm.Mission.Vehicle.Stages[$stageIndex] = $scope.selectedStage;
+                    lForm.Mission.Events = $scope.tempEvents;
                     lParent.recalcDV();
                     $mdDialog.hide();
                 };
