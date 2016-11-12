@@ -63,8 +63,8 @@ app.directive('float', function () {
 
 app.controller('IndexCtrl', function ($scope, $mdSidenav, $cookies, $location, $window) {
 
-    //var base = 'http://localhost', port = ':8080';
-    var base = '//'+$location.host(), port = ':8443';
+    var base = 'http://localhost', port = ':8080';
+    //var base = '//'+$location.host(), port = ':8443';
     $scope.toolbarClass = "";
     $scope.client = base;
     $scope.server = base + port + '/FlightClub';
@@ -234,7 +234,19 @@ app.controller('HomeCtrl', function ($scope, $mdDialog, $mdSidenav) {
     $scope.selectMissionVehicle = function (code) {
         $scope.httpRequest('/missions/' + code, 'GET', null, function (data) {
             var tempForm = JSON.parse(data);
+            
+            var currentStages = $scope.form.Mission.Vehicle.Stages.length;
+            var newStages = tempForm.Mission.Vehicle.Stages.length;
+            
             $scope.form.Mission.Vehicle = tempForm.Mission.Vehicle;
+            
+            if(currentStages > newStages) {
+                for (var i = $scope.form.Mission.Events.length - 1; i >= 0; i--) {
+                    if($scope.form.Mission.Events[i].stage > newStages-1)
+                        $scope.form.Mission.Events.splice(i, 1);
+                }
+            }
+            
             $scope.$apply();
         }, null);
     };
