@@ -113,8 +113,8 @@
                         <md-content class="perfectHeight" flex layout-fill hide-xs hide-sm show-gt-sm>
                             <md-content style="padding-top:8px" layout="row" layout-align="space-between center">
                                 <md-content></md-content>
-                                <md-button class="md-raised" ng-show="authorised" type="submit" ng-click="openAdminEditDialog($event)">Admin</md-button>
-                                <md-button class="md-raised" ng-show="authorised" type="submit" ng-click="save($event)">Save</md-button>
+                                <md-button class="md-raised" ng-show="authorised" ng-click="openAdminEditDialog($event)">Admin</md-button>
+                                <md-button class="md-raised" ng-show="authorised" ng-click="save($event)">Save</md-button>
                                 <md-button class="md-raised" type="submit" ng-click="submit()">Run simulation!</md-button>
                             </md-content>
                             <md-divider></md-divider>
@@ -122,11 +122,9 @@
                                 <md-content flex layout="row">
                                     <md-input-container flex class="md-block">
                                         <label>Time (seconds from T-0)</label>
-                                        <input ng-model="selectedEvent.time" ng-change="sortEvents()" name="time" ng-required="selectedEvent!==null">
+                                        <input type="number" step="any" ng-model="selectedEvent.time" ng-change="sortEvents()" name="time" ng-required="selectedEvent!==null">
                                         <div ng-messages="profileForm.time.$error" multiple md-auto-hide="true">
-                                            <div ng-message="required">
-                                                What time should this event take place?
-                                            </div>
+                                            <div ng-message="required">What time should this event begin?</div>
                                         </div>
                                     </md-input-container>
                                     <md-input-container flex class="md-block" ng-show="selectedEvent.type === 'GUIDANCE'">
@@ -138,9 +136,7 @@
                                     <label>Name</label>
                                     <input ng-model="selectedEvent.name" name="name" ng-required="selectedEvent!==null">
                                     <div ng-messages="profileForm.name.$error" multiple md-auto-hide="true">
-                                        <div ng-message="required">
-                                            This can be whatever you want, but make it descriptive!
-                                        </div>
+                                        <div ng-message="required">This field is required, but can be anything. Be descriptive!</div>
                                     </div>
                                 </md-input-container>
                             </md-content>
@@ -148,13 +144,10 @@
                                 <md-input-container flex class="md-block">
                                     <label>Event Type</label>
                                     <md-select ng-model="selectedEvent.type" name="type" ng-required="selectedEvent!==null">
-                                        <md-option ng-repeat="obj in type" value="{{obj.code}}" 
-                                                   ng-disabled="obj.code === 'FAIRING_SEP' && form.Mission.Payload.code !== 'SATL'">{{obj.name}}</md-option>
+                                        <md-option ng-repeat="obj in type" value="{{obj.code}}" ng-disabled="obj.code === 'FAIRING_SEP' && form.Mission.Payload.code !== 'SATL'">{{obj.name}}</md-option>
                                     </md-select>
                                     <div ng-messages="profileForm.type.$error" multiple md-auto-hide="true">
-                                        <div ng-message="required">
-                                            What type of event do you want to create?
-                                        </div>
+                                        <div ng-message="required">You must specify the type of event here</div>
                                     </div>
                                 </md-input-container>
                                 <md-input-container flex class="md-block">
@@ -163,9 +156,7 @@
                                         <md-option ng-repeat="obj in form.Mission.Vehicle.Stages" ng-value="obj.stageNum">{{obj.name}}</md-option>
                                     </md-select>
                                     <div ng-messages="profileForm.stage.$error" multiple md-auto-hide="true">
-                                        <div ng-message="required">
-                                            The event has to apply to one stage in particular
-                                        </div>
+                                        <div ng-message="required">An event has to apply to a particular stage</div>
                                     </div>
                                 </md-input-container>
                             </md-content>
@@ -183,7 +174,11 @@
                                         </md-input-container>
                                         <md-input-container flex class="md-block">
                                             <label>Throttle</label>
-                                            <input ng-disabled="selectedEvent.dynamic" ng-model="selectedEvent.Attitude.throttle">
+                                            <input type="number" name="throttle" min="0" max="1" step="any" ng-disabled="selectedEvent.dynamic" ng-model="selectedEvent.Attitude.throttle">
+                                            <div ng-messages="profileForm.throttle.$error" multiple md-auto-hide="true">
+                                                <div ng-message="min">Throttle must be between 0 and 1, inclusive</div>
+                                                <div ng-message="max">Throttle must be between 0 and 1, inclusive</div>
+                                            </div>
                                         </md-input-container>
                                         <md-input-container flex class="md-block">
                                             <label>Gravity Turn</label>
@@ -197,14 +192,14 @@
                             <md-content ng-show="selectedEvent.type === 'IGNITION' || selectedEvent.type === 'CUTOFF'"
                                         layout="row" layout-align="space-around center">
                                 <md-content flex class="md-block" ng-repeat="engineConfig in form.Mission.Vehicle.Stages[selectedEvent.stage].Engines">
-                                    <md-input-container flex>
+                                    <md-input-container style="width:90%" flex>
                                         <label># of {{engineConfig.Engine.name}} engines</label>
                                         <input ng-model="selectedEvent.Engines[$index].engineId" name="id" ng-value="engineConfig.engineId" type="hidden"/>
-                                        <input ng-model="selectedEvent.Engines[$index].number" name="engines" required ng-change="selectedEvent.Engines[$index].engineId = engineConfig.engineId"/>
+                                        <input type="number" ng-model="selectedEvent.Engines[$index].number" name="engines" required min="0" max="{{engineConfig.number}}" ng-change="selectedEvent.Engines[$index].engineId = engineConfig.engineId"/>
                                         <div ng-messages="profileForm.engines.$error" multiple md-auto-hide="true">
-                                            <div ng-message="required">
-                                                Insert 0 if you don't want to use these engines
-                                            </div>
+                                            <div ng-message="required">Insert 0 if you don't want to use these engines</div>
+                                            <div ng-message="min">This has to be a positive integer!</div>
+                                            <div ng-message="max">This stage only has {{engineConfig.number}} {{engineConfig.Engine.name}}'s!</div>
                                         </div>
                                     </md-input-container>
                                 </md-content>
