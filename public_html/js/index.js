@@ -267,7 +267,8 @@ app.controller('HomeCtrl', function ($scope, $mdDialog, $mdSidenav) {
             uniqueClass(trigger.currentTarget, 'md-content', 'button', 'md-primary', false);
         } else {
             $scope.selectedEvent = event;
-            $scope.form.Mission.Vehicle.Stages[event.stage].stageNum = event.stage;
+            if(event.stage !== undefined)
+                $scope.form.Mission.Vehicle.Stages[event.stage].stageNum = event.stage;
             uniqueClass(trigger.currentTarget, 'md-content', 'button', 'md-primary', true);
         }
     };
@@ -522,7 +523,6 @@ app.controller('HomeCtrl', function ($scope, $mdDialog, $mdSidenav) {
             type: null,
             stage: null,
             name: null,
-            engines: null,
             time: null,
             dynamic: null,
             Attitude: {
@@ -530,7 +530,8 @@ app.controller('HomeCtrl', function ($scope, $mdDialog, $mdSidenav) {
                 yaw: null,
                 gt: null,
                 throttle: null
-            }
+            },
+            Engines: []
         };
         $scope.form.Mission.Events.push(newEvent);
         $scope.selectedEvent = newEvent;
@@ -914,17 +915,12 @@ app.controller('ResultsCtrl', function ($scope, $cookies) {
                             }
                         }
                     });
-                }, null);
+                }
+        );
         $scope.$parent.httpRequest('/missions/' + $scope.queryParams['code'], 'GET', null,
                 function (res) {
                     var data = JSON.parse(res);
                     if (data.Mission !== undefined) {
-
-                        // stageMap should get built from simulator/results api call. Stage filenames should be there
-                        $.each(data.Mission.Vehicle.Stages, function (key, val) {
-                            $scope.stageMap.push({id: val.id, name: val.name});
-                        });
-
                         if ($scope.queryParams['id'] === undefined) {
                             $scope.queryParams['id'] = data.Mission.livelaunch;
                         }
@@ -932,7 +928,8 @@ app.controller('ResultsCtrl', function ($scope, $cookies) {
                     $scope.missionName = data.Mission.description;
                     $scope.getDataFile(0);
 
-                }, null);
+                }
+        );
     };
 
     $scope.animate_rocket();
@@ -1021,38 +1018,40 @@ app.controller('ResultsCtrl', function ($scope, $cookies) {
     };
 
     $scope.getDataFile = function (stage) {
-        if ($scope.stageMap[stage] === undefined) {
-            $scope.initialisePlots();
-        } else {
-            var url = $scope.$parent.client + '/output/' + $scope.queryParams['id'] + '_' + $scope.stageMap[stage].name + '.dat';
-            $.ajax({type: 'GET', url: url, contentType: 'text', data: null,
-                xhrFields: {withCredentials: false},
-                success: successfn,
-                error: errorfn
-            });
-        }
+        var url = $scope.$parent.client + '/output/' + $scope.queryParams['id'] + '_' + stage + '.dat';
+        $.ajax({type: 'GET', url: url, contentType: 'text', data: null,
+            xhrFields: {withCredentials: false},
+            success: successfn,
+            error: errorfn
+        });
 
         function successfn(data) {
-            var lines = data.split("\n");
+            
+            if(data.indexOf("html") !== -1) {
+                $scope.initialisePlots();
+            } else {
+                var lines = data.split("\n");
+                $scope.stageMap.push({id: stage, name: lines[0].split("#")[1]});
 
-            $scope.fullData[stage] = [];
-            for (var j = 0; j <= $scope.numCols; j++) {
-                $scope.fullData[stage][j] = [];
-                for (var i = 1; i < lines.length; i++) {
-                    var data = lines[i].split("\t");
-                    $scope.fullData[stage][j][i] = parseFloat(data[j]);
+                $scope.fullData[stage] = [];
+                for (var j = 0; j <= $scope.numCols; j++) {
+                    $scope.fullData[stage][j] = [];
+                    for (var i = 2; i < lines.length; i++) {
+                        var data = lines[i].split("\t");
+                        $scope.fullData[stage][j][i] = parseFloat(data[j]);
+                    }
                 }
+                $scope.getEventsFile(stage);
             }
-            $scope.getEventsFile(stage);
         }
 
         function errorfn(data) {
-            getEventsFile(stage);
+            console.log(data);
         }
     };
 
     $scope.getEventsFile = function (stage) {
-        var url = $scope.$parent.client + '/output/' + $scope.queryParams['id'] + '_' + $scope.stageMap[stage].name + '_events.dat';
+        var url = $scope.$parent.client + '/output/' + $scope.queryParams['id'] + '_' + stage + '_events.dat';
         $.ajax({type: 'GET', url: url, contentType: 'text', data: null,
             xhrFields: {withCredentials: false},
             success: successfn,
@@ -1074,7 +1073,7 @@ app.controller('ResultsCtrl', function ($scope, $cookies) {
         }
 
         function errorfn(data) {
-            $scope.getDataFile(stage + 1);
+            console.log(data);
         }
     };
 
@@ -1184,7 +1183,6 @@ app.controller('WorldCtrl', function ($scope, $location) {
     $scope.$parent.toolbarTitle = "Live";
     var w;
 
-    $scope.stageMap = [];
     var stageColours = [];
     var fullData = []; // all data from output files - filled at start
     var eventsData = []; // all data from events files - filled at start
@@ -1337,24 +1335,17 @@ app.controller('WorldCtrl', function ($scope, $location) {
                 break;
         }
 
-        $scope.$parent.httpRequest('/missions/' + $scope.queryParams['code'], 'GET', null, function (res) {
-            var data = JSON.parse(res);
-            if (data.Mission !== undefined) {
-                $scope.numStages = 0;
-                $.each(data.Mission.Vehicle.Stages, function (key, val) {
-                    $scope.stageMap.push({id: val.stageNum, name: val.name});
-                    $scope.numStages++;
-                });
-                if ($scope.queryParams['id'] === undefined) {
-                    $scope.queryParams['id'] = data.Mission.livelaunch;
-                }
-            }
-            $scope.fillData(data);
-        },
-                function (res) {
-                    var data = JSON.parse(res);
-                    $scope.fillData(data);
-                });
+        if ($scope.queryParams['id'] === undefined) {
+            $scope.$parent.httpRequest('/missions/' + $scope.queryParams['code'], 'GET', null,
+                    function (res) {
+                        var data = JSON.parse(res);
+                        if (data.Mission !== undefined) {
+                            $scope.queryParams['id'] = data.Mission.livelaunch;
+                        }
+                        $scope.fillData(data);
+                    }
+            );
+        }
 
         setInterval(function () {
             $scope.$apply(function () {
@@ -1365,6 +1356,7 @@ app.controller('WorldCtrl', function ($scope, $location) {
 
     $scope.fillData = function (data) {
 
+        $scope.numStages = 0;
         if (data.Mission !== undefined) {
             $scope.missionName = data.Mission.description;
             $scope.missionCode = $scope.queryParams['code'];
@@ -1615,13 +1607,13 @@ app.controller('WorldCtrl', function ($scope, $location) {
         }
 
         function errorfn(data) {
-            $scope.getEventsFile(0);
+            console.log(data);
         }
     };
 
     $scope.getDataFile = function (stage) {
 
-        var url = $scope.$parent.client + '/output/' + w.getProp('id') + '_' + $scope.stageMap[stage].name + '.dat';
+        var url = $scope.$parent.client + '/output/' + w.getProp('id') + '_' + stage + '.dat';
         $.ajax({type: 'GET', url: url, contentType: 'text', data: null,
             xhrFields: {withCredentials: false},
             success: successfn,
@@ -1630,6 +1622,7 @@ app.controller('WorldCtrl', function ($scope, $location) {
 
         function successfn(data) {
 
+            $scope.numStages++;
             var lines = data.split("\n");
 
             var p_stage = new Cesium.SampledPositionProperty();
@@ -1640,10 +1633,10 @@ app.controller('WorldCtrl', function ($scope, $location) {
             var start = Cesium.JulianDate.fromDate(launchDate);
             var stop = Cesium.JulianDate.addSeconds(start, 60000, new Cesium.JulianDate());
 
-            var t = 0, throttle = 0;
+            var t = 0;
             fullData[stage] = [];
             max[stage] = [];
-            for (var i = 1; i < lines.length; i++) {
+            for (var i = 2; i < lines.length; i++) {
 
                 if (lines[i] === "")
                     continue;
@@ -1737,46 +1730,48 @@ app.controller('WorldCtrl', function ($scope, $location) {
     };
 
     $scope.getEventsFile = function (stage) {
-        if ($scope.stageMap[stage] === undefined) {
-            $scope.start();
-        } else {
-            var url = $scope.$parent.client + '/output/' + w.getProp('id') + '_' + $scope.stageMap[stage].name + '_events.dat';
-            $.ajax({type: 'GET', url: url, contentType: 'text', data: null,
-                xhrFields: {withCredentials: false},
-                success: successfn,
-                error: errorfn
-            });
-        }
+        var url = $scope.$parent.client + '/output/' + w.getProp('id') + '_' + stage + '_events.dat';
+        $.ajax({type: 'GET', url: url, contentType: 'text', data: null,
+            xhrFields: {withCredentials: false},
+            success: successfn,
+            error: errorfn
+        });
 
         function successfn(data) {
-            var lines = data.split("\n");
-            eventsData[stage] = [];
+            
+            if(data.indexOf("html") !== -1) {
+                $scope.start();
+            } else {
+            
+                var lines = data.split("\n");
+                eventsData[stage] = [];
 
-            focusPoints = [];
-            for (var i = 1; i < lines.length; i++) {
-                var data = lines[i].split("\t");
+                focusPoints = [];
+                for (var i = 1; i < lines.length; i++) {
+                    var data = lines[i].split("\t");
 
-                if (data.length === 1)
-                    continue;
+                    if (data.length === 1)
+                        continue;
 
-                eventsData[stage][parseInt(data[0])] = parseFloat(data[12]); // eventsData[time] = throttle
-                focusPoints.push([parseFloat(data[0]), parseFloat(data[12])]);
+                    eventsData[stage][parseInt(data[0])] = parseFloat(data[12]); // eventsData[time] = throttle
+                    focusPoints.push([parseFloat(data[0]), parseFloat(data[12])]);
 
-                var x = parseFloat(data[1 + offset]); //offset=17
-                var y = parseFloat(data[2 + offset]);
-                var z = parseFloat(data[3 + offset]);
-                var h = parseFloat(data[4]) * 1e3;
+                    var x = parseFloat(data[1 + offset]); //offset=17
+                    var y = parseFloat(data[2 + offset]);
+                    var z = parseFloat(data[3 + offset]);
+                    var h = parseFloat(data[4]) * 1e3;
 
-                var lat = 180 * Math.atan(z / Math.sqrt(x * x + y * y)) / Math.PI;
-                var lon = 180 * Math.atan2(y, x) / Math.PI;
+                    var lat = 180 * Math.atan(z / Math.sqrt(x * x + y * y)) / Math.PI;
+                    var lon = 180 * Math.atan2(y, x) / Math.PI;
 
-                w.viewer.entities.add({
-                    position: Cesium.Cartesian3.fromDegrees(lon, lat, h),
-                    point: {pixelSize: 5, color: Cesium.Color.TRANSPARENT, outlineColor: Cesium.Color.RED, outlineWidth: 1}
-                });
+                    w.viewer.entities.add({
+                        position: Cesium.Cartesian3.fromDegrees(lon, lat, h),
+                        point: {pixelSize: 5, color: Cesium.Color.TRANSPARENT, outlineColor: Cesium.Color.RED, outlineWidth: 1}
+                    });
+                }
+
+                $scope.getDataFile(stage);
             }
-
-            $scope.getDataFile(stage);
         }
 
         function errorfn(data) {
