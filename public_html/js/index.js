@@ -63,8 +63,8 @@ app.directive('float', function () {
 
 app.controller('IndexCtrl', function ($scope, $mdSidenav, $cookies, $location, $window) {
 
-    var base = 'http://localhost', port = ':8080';
-    //var base = '//'+$location.host(), port = ':8443';
+    //var base = 'http://localhost', port = ':8080';
+    var base = '//'+$location.host(), port = ':8443';
     $scope.toolbarClass = "";
     $scope.client = base;
     $scope.server = base + port + '/FlightClub';
@@ -193,8 +193,9 @@ app.controller('HomeCtrl', function ($scope, $mdDialog, $mdSidenav) {
         } else {
             missionObj = $scope.past[0];
         }
-        $scope.selectMission(missionObj.code);
         $scope.selectedMission = missionObj;
+        $scope.form = data.next;
+        setNewMission(missionObj.code);
 
     };
 
@@ -220,15 +221,20 @@ app.controller('HomeCtrl', function ($scope, $mdDialog, $mdSidenav) {
         $scope.httpRequest('/missions/' + code, 'GET', null, function (data) {
             $mdSidenav("sidenav").close();
             $scope.form = JSON.parse(data);
-            $scope.sortEvents();
-            $scope.missionName = $scope.form.Mission.description;
-            $scope.$parent.toolbarTitle = "Mission Builder | " + $scope.missionName;
-            $scope.selectedEvent = null;
-            $scope.builderType = 'previous';
-            $scope.selectedVeh = code;
-            $scope.recalcDV();
+            setNewMission(code);
             $scope.$apply();
         }, null);
+    };
+    
+    var setNewMission = function (code) {
+        $scope.sortEvents();
+        $scope.missionName = $scope.form.Mission.description;
+        $scope.$parent.toolbarTitle = "Mission Builder | " + $scope.missionName;
+        $scope.selectedEvent = null;
+        $scope.builderType = 'previous';
+        $scope.selectedVeh = code;
+        $scope.recalcDV();
+        $scope.$apply();
     };
 
     $scope.selectMissionVehicle = function (code) {
@@ -1128,11 +1134,7 @@ app.controller('ResultsCtrl', function ($scope, $cookies) {
 
         $scope.isLoading = false;
         $scope.$apply();
-
-        while (Plotly === undefined) {
-            sleep(100);
-        }
-
+        
         for (var i = 0; i < plotMap.length; i++) {
             $scope.initialisePlot2(plotMap[i]);
         }
@@ -1171,7 +1173,7 @@ app.controller('ResultsCtrl', function ($scope, $cookies) {
             xaxis: {type: plot.x.type, title: plot.x.label, range: plot.y.axis > 11 ? [0, 1000] : [null, null]},
             yaxis: {type: plot.y.type, title: plot.y.label}
         };
-
+        
         Plotly.newPlot(plot.id, data, layout);
 
     };
@@ -1335,18 +1337,16 @@ app.controller('WorldCtrl', function ($scope, $location) {
                 break;
         }
 
-        if ($scope.queryParams['id'] === undefined) {
-            $scope.$parent.httpRequest('/missions/' + $scope.queryParams['code'], 'GET', null,
-                    function (res) {
-                        var data = JSON.parse(res);
-                        if (data.Mission !== undefined) {
-                            $scope.queryParams['id'] = data.Mission.livelaunch;
-                        }
-                        $scope.fillData(data);
+        $scope.$parent.httpRequest('/missions/' + $scope.queryParams['code'], 'GET', null,
+                function (res) {
+                    var data = JSON.parse(res);
+                    if (data.Mission !== undefined && $scope.queryParams['id'] === undefined) {
+                        $scope.queryParams['id'] = data.Mission.livelaunch;
                     }
-            );
-        }
-
+                    $scope.fillData(data);
+                }
+        );
+        
         setInterval(function () {
             $scope.$apply(function () {
                 $scope.setClock(w);
@@ -1607,7 +1607,7 @@ app.controller('WorldCtrl', function ($scope, $location) {
         }
 
         function errorfn(data) {
-            console.log(data);
+            $scope.getEventsFile(0);
         }
     };
 
