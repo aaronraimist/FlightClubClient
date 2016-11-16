@@ -1,24 +1,30 @@
 angular.module('FlightClub').config(function ($routeProvider, $locationProvider, $mdThemingProvider) {
 
     $mdThemingProvider.definePalette('primaryPalette', $mdThemingProvider.extendPalette('pink', {
-        '50': '424e57', // md-button, radio off
-        '200': 'ccac55', // gold for selected options (hover)
-        '500': '181c1f', // grey for navbar, selected grid tile (md-primary), radio off background
-        '600': 'ccac55', // gold for selected options
-        '900': 'fff', // add/remove text
-        'A100': 'fff', // white for tab background
-        'A700': 'ff0000' // warn messages
+        '500': '181c1f', // grey for navbar
+        '600': '424e57' // hover on sites
     }));
 
-    $mdThemingProvider.definePalette('accentPalette', $mdThemingProvider.extendPalette('pink', {
-        'A200': 'ccac55' // gold for selected tab underline, radio on
+    $mdThemingProvider.definePalette('backgroundPalette', $mdThemingProvider.extendPalette('blue', {
+        '50': 'fff',
+        '200': 'eee', // hover on select option
+        '500': '424e57', // hover on buttons
+        '900': '181c1f', // md-raised text color
+        'A100': 'fff', // dropdown menu background
+        'A200': '000' // dropdown menu text
+    }));
+
+    $mdThemingProvider.definePalette('accentPalette', $mdThemingProvider.extendPalette('green', {
+        '200': 'ccac55', // gold for selected options (hover)
+        '600': 'ccac55', // gold for selected options
+        'A200': 'ccac55', // gold for selected tab underline, radio on
+        'A700': 'ccac55' // hover on selected grid tile
     }));
 
     $mdThemingProvider.theme('default')
+            .backgroundPalette('backgroundPalette')
             .primaryPalette('primaryPalette')
-            .backgroundPalette('primaryPalette')
-            .accentPalette('accentPalette')
-            .warnPalette('primaryPalette');
+            .accentPalette('accentPalette');
 
     $locationProvider.html5Mode(true);
     $routeProvider

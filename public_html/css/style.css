@@ -19,7 +19,7 @@ html, input, textarea, select {
 #home md-grid-list {
   padding-bottom: 0 !important;
 }
-
+/*
 md-tabs .md-tab.md-active {
   color: #ccac55; //spacex gold
 }
@@ -28,7 +28,7 @@ md-tabs .md-tab.md-active {
   color: #000 !important;
   background-color: #ccac55 !important; // gold
 }
-
+*/
 md-menu-item {
   padding: 0 8px;
 }
