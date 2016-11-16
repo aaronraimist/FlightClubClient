@@ -1,11 +1,38 @@
 /* global Plotly */
 
-angular.module('FlightClub').controller('ResultsCtrl', function ($scope, $cookies) {
+angular.module('FlightClub').controller('ResultsCtrl', function ($scope, $cookies, $interval) {
 
     $scope.$parent.toolbarClass = "";
     $scope.$parent.toolbarTitle = 'Results';
     $scope.loadPos = 30;
-    $scope.loadMessage = "Building plots...";
+    $scope.loadMessage = "Building plots...";    
+
+    $scope.messages = [
+        'Engine Chill',
+        'Terminal Count',
+        'Main Engine Start',
+        'Liftoff!',
+        'Vehicle is supersonic',
+        'Vehicle is passing through Max Q',
+        'MECO!',
+        'Stage separation. Good luck Stage 1...',
+        'Upper stage ignition',
+        'Boostback looks good',
+        'Entry burn is complete',
+        'Landing burn has begun',
+        'LZ-1, The Falcon has landed',
+        'We have SECO!',
+        'Follow me on Twitter: @decmurphy_'
+    ];
+
+    var i = 0;
+    $scope.loadMessageSecondary = $scope.messages[i++];
+    $interval(function () {
+        if (Math.random() < 0.75) {
+            $scope.loadMessageSecondary = $scope.messages[i++];
+        }
+    }, 250, $scope.messages.length - 1);
+    
     $scope.animate_rocket = function () {
 
         var windowWidth = $(document).width();
@@ -118,7 +145,7 @@ angular.module('FlightClub').controller('ResultsCtrl', function ($scope, $cookie
     var queryString = window.location.search.substring(1);
 
     if (formHash) {
-        $scope.loadMessage = "Calculating trajectory...";
+        $scope.loadMessage = "Calculating trajectory...";    
         var formData = window.atob(formHash);
 
         $scope.$parent.httpRequest('/simulator/new', 'POST', formData,
@@ -147,7 +174,7 @@ angular.module('FlightClub').controller('ResultsCtrl', function ($scope, $cookie
                     }
 
                     window.location = $scope.$parent.client + '/error/#' + errorsHash;
-                });
+                });        
     } else if (queryString) {
         $scope.load(queryString);
     }
