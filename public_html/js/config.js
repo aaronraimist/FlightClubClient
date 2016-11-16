@@ -8,6 +8,7 @@ angular.module('FlightClub').config(function ($routeProvider, $locationProvider,
     $mdThemingProvider.definePalette('backgroundPalette', $mdThemingProvider.extendPalette('blue', {
         '50': 'fff',
         '200': 'eee', // hover on select option
+        '400': 'aaa', // disabled options
         '500': '424e57', // hover on buttons
         '900': '181c1f', // md-raised text color
         'A100': 'fff', // dropdown menu background

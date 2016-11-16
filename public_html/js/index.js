@@ -40,6 +40,14 @@ angular.module('FlightClub').controller('IndexCtrl', function ($scope, $mdSidena
         $mdSidenav(id).toggle();
     };
 
+    $scope.open = function (id) {
+        $mdSidenav(id).open();
+    };
+
+    $scope.close = function (id) {
+        $mdSidenav(id).close();
+    };
+
     $scope.toggleLogin = function () {
         if (!$scope.authorised) {
             $location.path('/login');

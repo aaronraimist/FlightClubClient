@@ -24,35 +24,35 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
         fillMissions(data);
     }, function(data, statusText) {
         $scope.missionLoading = false;
-        $scope.toolbarTitle = 'It usually works, I swear';
+        $scope.$parent.toolbarTitle = 'It usually works, I swear';
         $scope.serverErrorMessage += 'Missions: ' + statusText + '\n';
     });
     $scope.httpRequest('/launchsites', 'GET', null, function (data) {
         $scope.launchSites = fill(data);
     }, function(data, statusText) {
         $scope.missionLoading = false;
-        $scope.toolbarTitle = 'It usually works, I swear';
+        $scope.$parent.toolbarTitle = 'It usually works, I swear';
         $scope.serverErrorMessage += 'LaunchSites: ' + statusText + '\n';
     });
     $scope.httpRequest('/stages?engineDetail=true', 'GET', null, function (data) {
         $scope.stageTypes = fillStages(data);
     }, function(data, statusText) {
         $scope.missionLoading = false;
-        $scope.toolbarTitle = 'It usually works, I swear';
+        $scope.$parent.toolbarTitle = 'It usually works, I swear';
         $scope.serverErrorMessage += 'Stages: ' + statusText + '\n';
     });
     $scope.httpRequest('/engines', 'GET', null, function (data) {
         $scope.engineTypes = fillStages(data);
     }, function(data, statusText) {
         $scope.missionLoading = false;
-        $scope.toolbarTitle = 'It usually works, I swear';
+        $scope.$parent.toolbarTitle = 'It usually works, I swear';
         $scope.serverErrorMessage += 'Engines: ' + statusText + '\n';
     });
     $scope.httpRequest('/companies', 'GET', null, function (data) {
         $scope.companies = fill(data);
     }, function(data, statusText) {
         $scope.missionLoading = false;
-        $scope.toolbarTitle = 'It usually works, I swear';
+        $scope.$parent.toolbarTitle = 'It usually works, I swear';
         $scope.serverErrorMessage += 'Companies: ' + statusText + '\n';
     });
 

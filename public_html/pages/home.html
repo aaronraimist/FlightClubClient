@@ -5,9 +5,9 @@
         <p ng-show="!missionLoading" style="white-space:pre-wrap;">{{serverErrorMessage}}</p>
     </md-content>
     <form ng-show="loadSuccess" layout-fill layout="row" flex name="profileForm" ng-cloak>
-        <md-tabs flex md-selected="3" md-border-bottom md-autoselect>
+        <md-tabs flex md-selected="3" md-border-bottom md-autoselect md-swipe-content="true">
             <md-tab label='Launch Site'>
-                <md-tab-content>
+                <md-tab-content md-swipe-left="onSwipeLeft()">
                     <md-content layout-fill flex layout-padding layout="row" layout-align="space-around center" style="margin-bottom:8px">
                         <md-grid-list layout-padding layout-margin layout-fill
                                       md-cols-xs="1" md-cols-sm="2" md-cols-md="4" md-cols-gt-md="6"
@@ -80,7 +80,7 @@
                 </md-tab-content>
             </md-tab>
             <md-tab label='Flight Profile'>
-                <md-tab-content>
+                <md-tab-content md-swipe-left="open('sidenav')">
                     <md-content layout-padding layout-fill flex layout='column' layout-gt-sm='row' layout-align='space-between start'>
                         <md-content class="perfectHeight" flex layout-fill>
                             <md-content layout="row" layout-align="space-between center">
@@ -221,7 +221,7 @@
         </md-tabs>
     </form>
 
-    <md-sidenav flex layout="column" class="md-sidenav-right md-whiteframe-z2" md-component-id="sidenav" md-is-locked-open="false">
+    <md-sidenav flex layout="column" class="md-sidenav-right md-whiteframe-z2" md-component-id="sidenav" md-is-locked-open="false" md-swipe-right="close('sidenav')">
         <md-toolbar class="md-theme-indigo" layout="row" layout-align="space-between center" >
             <div class="md-toolbar-tools" layout="row" layout-align="space-around center" flex>
                 <h1><span>Stock Profiles</span></h1>

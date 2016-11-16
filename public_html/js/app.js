@@ -1,1 +1,1 @@
-angular.module('FlightClub', ['ngMaterial', 'ngCookies', 'ngMessages', 'ngRoute']);
+angular.module('FlightClub', ['ngMaterial', 'ngCookies', 'ngMessages', 'ngRoute', 'ngAnimate', 'ngAria']);

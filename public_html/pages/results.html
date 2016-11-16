@@ -1,4 +1,4 @@
-<md-content id="results" layout-fill flex layout="column">
+<md-content id="results" layout-fill flex layout="column" md-swipe-left="open('sidenav')">
 
   <div ng-show="isLoading" flex layout="column" layout-align="center center" layout-padding>
     <h2>{{loadMessage}}</h2>
@@ -20,7 +20,7 @@
     </md-grid-tile>
   </md-grid-list>
 
-  <md-sidenav layout="column" class="md-sidenav-right md-whiteframe-z2" md-component-id="sidenav">
+  <md-sidenav layout="column" class="md-sidenav-right md-whiteframe-z2" md-component-id="sidenav" md-swipe-right="close('sidenav')">
     <md-toolbar class="md-theme-indigo" layout="row" layout-align="space-between center" >
       <div class="md-toolbar-tools" layout="row" layout-align="space-around center" flex>
         <h1><span>{{missionName}}</span></h1>
