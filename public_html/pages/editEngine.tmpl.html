@@ -1,4 +1,4 @@
-<md-dialog aria-label="Autocomplete Dialog Example" ng-cloak>
+<md-dialog aria-label="Edit Engine Detail Dialog">
     <md-toolbar>
         <div class="md-toolbar-tools">
             <h2>Edit Engine Properties</h2>
@@ -22,7 +22,7 @@
                 <md-input-container flex class="md-block">
                     <label>Choose engine:</label>
                     <md-select ng-model="selectedEngineConfig.Engine.name" required aria-label="Choose Engine">
-                        <md-option ng-repeat="obj in engineTypes" ng-click="selectEngineType(obj)">{{obj.name}}</md-option>
+                        <md-option ng-repeat="obj in engineTypes" value="{{obj.name}}" ng-click="selectEngineType(obj)">{{obj.name}}</md-option>
                     </md-select>
                 </md-input-container>
             </md-content>

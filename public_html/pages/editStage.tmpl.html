@@ -1,4 +1,4 @@
-<md-dialog aria-label="Autocomplete Dialog Example" ng-cloak>
+<md-dialog aria-label="Edit Stage Detail Dialog">
     <md-toolbar>
         <div class="md-toolbar-tools">
             <h2>Edit Stage Properties</h2>
@@ -19,7 +19,7 @@
                 <md-content flex layout-align='space-around center'>
                     <md-input-container flex class="md-block" layout-fill>
                         <md-select ng-model="selectedStage.name" required aria-label="ChooseStage">
-                            <md-option ng-repeat="obj in stageTypes" ng-click="selectStageType(obj)">{{obj.name}}</md-option>
+                            <md-option ng-repeat="obj in stageTypes" value="{{obj.name}}" ng-click="selectStageType(obj)">{{obj.name}}</md-option>
                         </md-select>
                     </md-input-container>
                 </md-content>
