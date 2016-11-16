@@ -1,6 +1,26 @@
 /* global Cesium */
 
-angular.module('FlightClub').controller('WorldCtrl', function ($scope, $location) {
+angular.module('FlightClub').controller('WorldCtrl', function ($scope, $location, $interval) {
+    
+    $scope.worldLoading = true;
+    $scope.messages = [
+        'Getting data from /r/SpaceX...',
+        'Killing Church...',
+        'YVAN EHT NIOJ',
+        'Donating to flightclub.io...',
+        'Literally downloading the entire planet.',
+        'Have some patience, dammit',
+        'Dowloading trajectory data files...',
+        'Damn your internet is slow, man',
+        'I hope your browser can handle this',
+        'Follow on Twitter: @decmurphy_'
+    ];
+    
+    var i = Math.floor(Math.random()*($scope.messages.length+1));
+    $scope.missionLoadingMessage = $scope.messages[i++];
+    $interval(function() {
+        $scope.missionLoadingMessage = $scope.messages[i++%$scope.messages.length];
+    }, 400);
 
     $scope.$parent.toolbarClass = "";
     $scope.$parent.toolbarTitle = "Live";
@@ -295,6 +315,7 @@ angular.module('FlightClub').controller('WorldCtrl', function ($scope, $location
         window.CESIUM_BASE_URL = '//cesiumjs.org/releases/1.20/Build/Cesium/';
         $.getScript("//cesiumjs.org/releases/1.20/Build/Cesium/Cesium.js", function ()
         {
+            $scope.worldLoading = false;
             Cesium.BingMapsApi.defaultKey = 'Atr1lJvbFdMUnJ6fw4qGKDcZuEjzVRh-6WLmrRZDcCggpZIPH9sdEyUWGWXO1kPc';
 
             w = new world();
