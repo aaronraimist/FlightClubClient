@@ -7,13 +7,13 @@ angular.module('FlightClub').controller('WorldCtrl', function ($scope, $location
         'Getting data from /r/SpaceX...',
         'Killing Church...',
         'YVAN EHT NIOJ',
-        'Donating to flightclub.io...',
+        'Donate to flightclub.io',
         'Literally downloading the entire planet.',
         'Have some patience, dammit',
-        'Dowloading trajectory data files...',
+        'Downloading trajectory data files...',
         'Damn your internet is slow, man',
         'I hope your browser can handle this',
-        'Follow on Twitter: @decmurphy_'
+        'Follow me on Twitter: @decmurphy_'
     ];
     
     var i = Math.floor(Math.random()*($scope.messages.length+1));

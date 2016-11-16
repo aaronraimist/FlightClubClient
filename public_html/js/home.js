@@ -11,7 +11,7 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
         'Turtling FoxhoundBat...',
         'YVAN EHT NIOJ',
         'Impersonating Benjamin Klein...',
-        'Donating to flightclub.io...'
+        'Donate to flightclub.io!'
     ];
     
     var i = Math.floor(Math.random()*($scope.messages.length+1));
