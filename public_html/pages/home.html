@@ -122,7 +122,7 @@
                                 <md-button class="md-raised" type="submit" ng-click="submit()">Run simulation!</md-button>
                             </md-content>
                             <md-divider></md-divider>
-                            <md-content layout="row" layout-align="space-around center">
+                            <md-content ng-show="selectedEvent !== null" layout="row" layout-align="space-around center">
                                 <md-content flex layout="row">
                                     <md-input-container flex class="md-block">
                                         <label>Time (seconds from T-0)</label>
@@ -144,7 +144,7 @@
                                     </div>
                                 </md-input-container>
                             </md-content>
-                            <md-content layout="row" layout-align="space-around center">
+                            <md-content ng-show="selectedEvent !== null" layout="row" layout-align="space-around center">
                                 <md-input-container flex class="md-block">
                                     <label>Event Type</label>
                                     <md-select ng-model="selectedEvent.type" name="type" ng-required="selectedEvent!==null">
@@ -230,13 +230,13 @@
                 <i class="material-icons">keyboard_arrow_right</i>
             </md-button>
         </md-toolbar>
-        <md-divider></md-divider>
         <md-list>
-            <md-subheader style="text-align:right" layout-fill  class="md-no-sticky">Upcoming Missions</md-subheader>
+            <md-subheader layout-fill  class="md-no-sticky">Upcoming Missions</md-subheader>
             <md-list-item ng-repeat="mission in upcoming" ng-show="mission.display || authorised" ng-click="selectMission(mission.code)">
                 <span class="md-secondary">{{mission.name}}</span>
             </md-list-item>
-            <md-subheader style="text-align:right" layout-fill class="md-no-sticky">Past Missions</md-subheader>
+            <md-divider></md-divider>
+            <md-subheader layout-fill class="md-no-sticky">Past Missions</md-subheader>
             <md-list-item ng-repeat="mission in past" ng-show="mission.display || authorised" ng-click="selectMission(mission.code)">
                 <span class="md-secondary">{{mission.name}}</span>
             </md-list-item>

@@ -23,7 +23,7 @@ angular.module('FlightClub').controller('WorldCtrl', function ($scope, $location
     }, 400);
 
     $scope.$parent.toolbarClass = "";
-    $scope.$parent.toolbarTitle = "Live";
+    $scope.$parent.toolbarTitle = "Flight Club | Live";
     var w;
 
     var stageColours = [];

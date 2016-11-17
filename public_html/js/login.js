@@ -1,7 +1,7 @@
 angular.module('FlightClub').controller('LoginCtrl', function ($timeout, $document, $scope, $cookies, $location) {
 
     $scope.$parent.toolbarClass = "fullPage fixie";
-    $scope.$parent.toolbarTitle = 'Login';
+    $scope.$parent.toolbarTitle = 'Flight Club | Login';
 
     // hack to fix password label not detecting input on Chrome 
     // https://github.com/angular/material/issues/1376

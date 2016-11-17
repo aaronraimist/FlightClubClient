@@ -447,14 +447,21 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
             Engines: []
         };
         $scope.form.Mission.Events.push(newEvent);
+        $scope.sortEvents();
         $scope.selectedEvent = newEvent;
     };
     $scope.removeEvent = function (index) {
+        if($scope.selectedEvent === $scope.form.Mission.Events[index])
+            $scope.selectedEvent = null;
         $scope.form.Mission.Events.splice(index, 1);
     };
 
     $scope.sortEvents = function () {
         $scope.form.Mission.Events.sort(function (a, b) {
+            if(a.time === null || a.time === undefined)
+                return 1;
+            if(b.time === null || b.time === undefined)
+                return -1;
             return parseFloat(a.time) - parseFloat(b.time);
         });
     };

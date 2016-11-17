@@ -3,7 +3,7 @@
 angular.module('FlightClub').controller('ResultsCtrl', function ($scope, $cookies, $interval) {
 
     $scope.$parent.toolbarClass = "";
-    $scope.$parent.toolbarTitle = 'Results';
+    $scope.$parent.toolbarTitle = 'Flight Club | Results';
     $scope.loadPos = 30;
     $scope.loadMessage = "Building plots...";    
 
