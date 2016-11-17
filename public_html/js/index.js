@@ -1,7 +1,13 @@
 angular.module('FlightClub').controller('IndexCtrl', function ($scope, $mdSidenav, $cookies, $location, $window) {
 
-    var base = 'http://localhost', port = ':8080';
-    //var base = '//'+$location.host(), port = ':8443';
+    var base, port;
+    if($location.host() === 'localhost') {
+        base= 'http://localhost';
+        port = ':8080';
+    } else {
+        base = '//'+$location.host();
+        port = ':8443';
+    }
     $scope.toolbarClass = "";
     $scope.client = base;
     $scope.server = base + port + '/FlightClub';
