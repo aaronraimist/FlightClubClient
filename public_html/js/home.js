@@ -4,20 +4,26 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
     $scope.loadSuccess = false;
     $scope.serverErrorMessage = 'The flightclub.io server has undergone a rapid unscheduled disassembly :/\n'
             + 'You\'ll need to wake until I wake up and see this...\n\n';
-    $scope.messages = [
-        'Getting data from /r/SpaceX...',
-        'Killing Church...',
-        'Rebuilding Amos-6...',
-        'Turtling FoxhoundBat...',
-        'YVAN EHT NIOJ',
-        'Impersonating Benjamin Klein...',
-        'Donate to flightclub.io!'
+    $scope.messageArray = [
+        // p is probability of update being skipped until next interval
+        { p: 0.5, message: 'Getting data from /r/SpaceX...' },
+        { p: 0.5, message: 'Killing Church...' },
+        { p: 0.5, message: 'Rebuilding Amos-6...' },
+        { p: 0.5, message: 'Turtling FoxhoundBat...' },
+        { p: 0.5, message: 'YVAN EHT NIOJ' },
+        { p: 0.5, message: 'Impersonating Benjamin Klein...' },
+        { p: 0.5, message: 'Donate to flightclub.io!' },
+        { p: 0.5, message: 'Wake up, John...' },
+        { p: 0.8, message: 'In the beginning the Universe was created. This has made a lot of people very angry and been widely regarded as a bad move.' }
     ];
     
-    var i = Math.floor(Math.random()*($scope.messages.length+1));
-    $scope.missionLoadingMessage = $scope.messages[i++];
+    var i = Math.floor(Math.random()*($scope.messageArray.length+1));
+    $scope.missionLoadingMessage = $scope.messageArray[i++].message;
     $interval(function() {
-        $scope.missionLoadingMessage = $scope.messages[i++%$scope.messages.length];
+        $scope.missionLoadingMessage = $scope.messageArray[i].message;
+        if (Math.random() > $scope.messageArray[i].p) {
+            i = (i+1)%$scope.messageArray.length;
+        }
     }, 350);
     
     $scope.httpRequest('/missions', 'GET', null, function (data) {
