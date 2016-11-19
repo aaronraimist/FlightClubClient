@@ -38,7 +38,7 @@
       <md-list-item ng-click="goToLive()">
         <span class="md-secondary">Watch Live!</span>
       </md-list-item>
-      <md-list-item ng-click="overrideLive()" ng-show="authorised">
+      <md-list-item ng-click="overrideLive()" ng-show="authorised && hasPermission('overrideLive')">
         <i class="material-icons" ng-show="overrideAttempted">{{overrideStatus}}</i><span class="md-secondary">Override Live Plot</span>
       </md-list-item>
       <md-divider></md-divider>

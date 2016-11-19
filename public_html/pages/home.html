@@ -97,11 +97,11 @@
                         <md-content class="perfectHeight" flex layout-fill>
                             <md-content layout="row" layout-align="space-between center">
                                 <md-content></md-content>
-                                <md-button class="md-raised" show-sm hide-gt-sm ng-show="authorised" type="submit" ng-click="openAdminEditDialog($event)">
+                                <md-button class="md-raised" show-sm hide-gt-sm ng-show="authorised && hasPermission('editCore')" type="submit" ng-click="openAdminEditDialog($event)">
                                         <md-tooltip md-direction="left">Core Settings</md-tooltip>
                                         <md-icon class="material-icons">visibility</md-icon>
                                 </md-button>
-                                <md-button class="md-raised" show-sm hide-gt-sm ng-show="authorised" type="submit" ng-click="save($event)">
+                                <md-button class="md-raised" show-sm hide-gt-sm ng-show="authorised && hasPermission('save')" type="submit" ng-click="save($event)">
                                         <md-tooltip md-direction="left">Save Changes</md-tooltip>
                                         <md-icon class="material-icons">save</md-icon>
                                 </md-button>
@@ -154,11 +154,11 @@
                         <md-content class="perfectHeight" flex layout-fill hide-xs hide-sm show-gt-sm>
                             <md-content style="padding-top:8px" layout="row" layout-align="space-between center">
                                 <md-content></md-content>
-                                <md-button class="md-raised" ng-show="authorised" type="submit" ng-click="openAdminEditDialog($event)">
+                                <md-button class="md-raised" ng-show="authorised && hasPermission('editCore')" type="submit" ng-click="openAdminEditDialog($event)">
                                         <md-tooltip md-direction="left">Core Settings</md-tooltip>
                                         <md-icon class="material-icons">visibility</md-icon>
                                 </md-button>
-                                <md-button class="md-raised" ng-show="authorised" type="submit" ng-click="save($event)">
+                                <md-button class="md-raised" ng-show="authorised && hasPermission('save')" type="submit" ng-click="save($event)">
                                         <md-tooltip md-direction="left">Save Changes</md-tooltip>
                                         <md-icon class="material-icons">save</md-icon>
                                 </md-button>

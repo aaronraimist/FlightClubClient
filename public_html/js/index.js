@@ -13,12 +13,34 @@ angular.module('FlightClub').controller('IndexCtrl', function ($scope, $mdSidena
     $scope.server = base + port + '/FlightClub';
     var api_url = $scope.server + '/api/v1';
 
+    $scope.token = $cookies.get('authToken');
+    $scope.authorised = false;
+    $scope.permissions = [];
+    $scope.canCreateUser = false;
+
     $scope.httpRequest = function (dest, method, data, successfn, errorfn) {
         $.ajax({type: method, url: api_url + dest, contentType: 'application/json', data: data,
             dataType: "json", xhrFields: {withCredentials: false}, headers: {},
             success: successfn, error: errorfn
         });
     };
+
+    if ($scope.token !== undefined) {
+        var data = JSON.stringify({auth: {token: $scope.token}});
+        $scope.httpRequest('/auth/', 'POST', data, function (data) {
+            $scope.authorised = data.auth;
+            
+            data.permissions.split(",").forEach(function(el) {
+                $scope.permissions.push(el.toLowerCase());
+            });
+            $scope.canCreateUser = $scope.hasPermission('createUser');
+            
+            if (!$scope.authorised) {
+                $cookies.remove('authToken');
+            }
+            $scope.$apply();
+        });
+    }
 
     $scope.parseQueryString = function (queryString)
     {
@@ -30,9 +52,6 @@ angular.module('FlightClub').controller('IndexCtrl', function ($scope, $mdSidena
         }
         return paramMap;
     };
-
-    $scope.token = $cookies.get('authToken');
-    $scope.authorised = false;
 
     $scope.redirect = function (path) {
         $location.url(path);
@@ -53,31 +72,14 @@ angular.module('FlightClub').controller('IndexCtrl', function ($scope, $mdSidena
     $scope.close = function (id) {
         $mdSidenav(id).close();
     };
-
-    $scope.toggleLogin = function () {
-        if (!$scope.authorised) {
-            $location.path('/login');
-        } else {
-            $cookies.remove('authToken');
-            $scope.loginLabel = "Login";
-            $scope.authorised = false;
-            $scope.token = undefined;
-        }
-    };
-
-    if ($scope.token !== undefined) {
-        var data = JSON.stringify({auth: {token: $scope.token}});
-        $scope.httpRequest('/auth/', 'POST', data, function (data) {
-            $scope.authorised = data.auth;
-            if (!$scope.authorised) {
-                $cookies.remove('authToken');
-                $scope.loginLabel = "Login";
-            } else {
-                $scope.loginLabel = "Logout";
-            }
-            $scope.$apply();
+    
+    $scope.hasPermission = function(toCheck) {
+        var ret = false;
+        toCheck = toCheck.toLowerCase();
+        $scope.permissions.forEach(function(p) {
+            if(p === "all" || p === toCheck)
+                ret = true;
         });
-    } else {
-        $scope.loginLabel = "Login";
-    }
+        return ret;
+    };
 });

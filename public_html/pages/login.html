@@ -1,16 +1,39 @@
 <md-content layout-fill flex layout="column">
-  <form flex layout="column" layout-align="center center" class="md-inline-form centre">
-    <div>
-      <md-input-container>
-        <label>Username</label>
-        <input ng-model="form.Login.username">
-      </md-input-container>
-      <md-input-container>
-        <label>Password</label>
-        <input type="password" ng-model="form.Login.password">
-      </md-input-container>
-    </div>
-    <md-button class="md-raised" type="submit" ng-click="login()">Log in</md-button>
-  </form>
-  <div>{{loginError}}</div>
+    <form flex layout="row" layout-align="space-between center" class="md-inline-form centre">
+        <md-content flex layout="column">
+            <div>
+                <md-input-container>
+                    <label>Username</label>
+                    <input ng-model="form.Login.username" ng-change="alert = ''">
+                </md-input-container>
+                <md-input-container>
+                    <label>Password</label>
+                    <input type="password" ng-model="form.Login.password" ng-change="alert = ''">
+                </md-input-container>
+            </div>
+            <div>
+                <md-button class="md-raised" type="submit" ng-click="loginToggle()">{{authorised ? "Logout" : "Login"}}</md-button>
+                <span>{{alert}}</span>
+            </div>
+        </md-content>
+        <md-content flex layout="column" ng-show="authorised && hasPermission('createUser')">
+            <div>
+                <md-input-container>
+                    <label>New Username</label>
+                    <input ng-model="form.Login.new.username">
+                </md-input-container>
+                <md-input-container>
+                    <label>New Password</label>
+                    <input type="password" ng-model="form.Login.new.password">
+                </md-input-container>
+                <md-input-container>
+                    <label>Permissions</label>
+                    <input ng-model="form.Login.new.permissions">
+                </md-input-container>
+            </div>
+            <div>
+                <md-button class="md-raised" type="submit" ng-click="create()">Create User</md-button>
+            </div>
+        </md-content>
+    </form>
 </md-content>
