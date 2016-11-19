@@ -45,8 +45,12 @@
                                 <md-content layout="row" layout-align="space-between center" layout-fill>
                                     <md-radio-button flex value="custom">
                                         <label>Customize</label>
+                                        <md-tooltip md-direction="bottom">Allow Editing Of This Vehicle</md-tooltip>
                                     </md-radio-button>
-                                    <md-button class="md-raised" style="color:#181c1f" aria-label="add" ng-click='incrementStages()' ng-disabled="builderType !== 'custom'">Add Stage</md-button>
+                                    <md-button class="md-raised" style="color:#181c1f" aria-label="add" ng-click='incrementStages()' ng-disabled="builderType !== 'custom'">
+                                        <md-tooltip md-direction="bottom">Add Stage</md-tooltip>
+                                        <md-icon class="material-icons">add</md-icon>
+                                    </md-button>
                                 </md-content>
                             </md-radio-group>
                             <md-divider flex></md-divider>
@@ -58,20 +62,28 @@
                                             <h4 ng-repeat="engineConfig in stage.Engines">{{engineConfig.number}} x {{engineConfig.Engine.name}}</h4>
                                             <p>Dry mass: {{stage.dryMass / 1000.0}}t // Propellant mass: {{stage.propMass / 1000.0}}t/{{stage.fuelCapacity / 1000.0}}t // Total mass: {{(stage.dryMass + stage.propMass) / 1000.0}}t</p>
                                         </div>
-                                        <md-button style="min-width:0" ng-click="openStageEditDialog($event, $index, stage)">
+                                        <md-button style="min-width:0" ng-click="openStageEditDialog($event, $index, stage)" ng-disabled="builderType !== 'custom'">
+                                            <md-tooltip md-direction="bottom">Edit This Stage</md-tooltip>
                                             <md-icon class="material-icons">mode_edit</md-icon>
                                         </md-button>
-                                        <md-button style="min-width:0" ng-click="removeStage($index)">
+                                        <md-button style="min-width:0" ng-click="removeStage($index)" ng-disabled="builderType !== 'custom'">
+                                            <md-tooltip md-direction="bottom">Remove Stage From Vehicle</md-tooltip>
                                             <md-icon class="material-icons">close</md-icon>
                                         </md-button>
                                         <md-divider></md-divider>
                                     </md-list-item>
                                     <md-content layout="column">
-                                        <md-input-container class="md-block">
-                                            <label>Payload Mass (kg)</label>
-                                            <input ng-model="form.Mission.Payload.mass" ng-change="recalcDV()">
-                                        </md-input-container>
-                                        <p>Maximum payload ΔV: {{payloadDV}} km/s</p>
+                                        <md-content layout='row' layout-align='space-between center'>
+                                            <md-input-container flex class="md-block">
+                                                <md-tooltip md-direction="bottom">The entire mass of the stuff on top of the top stage</md-tooltip>
+                                                <label>Payload Mass (kg)</label>
+                                                <input ng-model="form.Mission.Payload.mass" ng-change="recalcDV()">
+                                            </md-input-container>
+                                            <p flex>
+                                            <md-tooltip md-direction="bottom">This doesn't take gravity losses or atmospheric losses into account</md-tooltip>
+                                            Maximum payload ΔV: {{payloadDV}} km/s
+                                            </p>
+                                        </md-content>
                                     </md-content>
                                 </md-list>
                             </md-content>
@@ -85,14 +97,23 @@
                         <md-content class="perfectHeight" flex layout-fill>
                             <md-content layout="row" layout-align="space-between center">
                                 <md-content></md-content>
-                                <md-button class="md-raised" show-sm hide-gt-sm ng-show="authorised" type="submit" ng-click="openAdminEditDialog($event)">Admin</md-button>
-                                <md-button class="md-raised" show-sm hide-gt-sm ng-show="authorised" type="submit" ng-click="save($event)">Save</md-button>
+                                <md-button class="md-raised" show-sm hide-gt-sm ng-show="authorised" type="submit" ng-click="openAdminEditDialog($event)">
+                                        <md-tooltip md-direction="left">Core Settings</md-tooltip>
+                                        <md-icon class="material-icons">visibility</md-icon>
+                                </md-button>
+                                <md-button class="md-raised" show-sm hide-gt-sm ng-show="authorised" type="submit" ng-click="save($event)">
+                                        <md-tooltip md-direction="left">Save Changes</md-tooltip>
+                                        <md-icon class="material-icons">save</md-icon>
+                                </md-button>
                                 <md-content>
                                     <md-button class="md-raised" show-sm hide-gt-sm type="submit" ng-click="export()">
                                         <md-tooltip md-direction="left">Export Profile to URL</md-tooltip>
                                         <md-icon class="material-icons">content_copy</md-icon>
                                     </md-button>
-                                    <md-button class="md-raised" show-sm hide-gt-sm type="submit" ng-click="submit()">Run simulation!</md-button>
+                                    <md-button class="md-raised md-primary" show-sm hide-gt-sm type="submit" ng-click="submit()">
+                                        <md-tooltip md-direction="left">Run Simulation!</md-tooltip>
+                                        <md-icon class="material-icons">send</md-icon>
+                                    </md-button>
                                 </md-content>
                             </md-content>
                             <md-list flex layout='column'>
@@ -129,56 +150,70 @@
                         <md-content class="perfectHeight" flex layout-fill hide-xs hide-sm show-gt-sm>
                             <md-content style="padding-top:8px" layout="row" layout-align="space-between center">
                                 <md-content></md-content>
-                                <md-button class="md-raised" ng-show="authorised" ng-click="openAdminEditDialog($event)">Admin</md-button>
-                                <md-button class="md-raised" ng-show="authorised" ng-click="save($event)">Save</md-button>
+                                <md-button class="md-raised" ng-show="authorised" type="submit" ng-click="openAdminEditDialog($event)">
+                                        <md-tooltip md-direction="left">Core Settings</md-tooltip>
+                                        <md-icon class="material-icons">visibility</md-icon>
+                                </md-button>
+                                <md-button class="md-raised" ng-show="authorised" type="submit" ng-click="save($event)">
+                                        <md-tooltip md-direction="left">Save Changes</md-tooltip>
+                                        <md-icon class="material-icons">save</md-icon>
+                                </md-button>
                                 <md-content>
                                     <md-button class="md-raised" type="submit" ng-click="export()">
                                         <md-tooltip md-direction="left">Export Profile to URL</md-tooltip>
                                         <md-icon class="material-icons">content_copy</md-icon>
                                     </md-button>
-                                    <md-button class="md-raised" type="submit" ng-click="submit()">Run simulation!</md-button>
+                                    <md-button class="md-raised md-primary" type="submit" ng-click="submit()">
+                                        <md-tooltip md-direction="bottom">Run Simulation!</md-tooltip>
+                                        <md-icon class="material-icons">send</md-icon>
+                                    </md-button>
                                 </md-content>
                             </md-content>
                             <md-divider></md-divider>
                             <md-content ng-show="selectedEvent !== null" layout="row" layout-align="space-around center">
                                 <md-content flex layout="row">
                                     <md-input-container flex class="md-block">
+                                        <md-tooltip md-direction="bottom">This is the time that the event should happen/begin at</md-tooltip>
                                         <label>Time (seconds from T-0)</label>
                                         <input type="number" step="any" ng-model="selectedEvent.time" ng-change="sortEvents()" name="time" ng-required="selectedEvent!==null">
                                         <div ng-messages="profileForm.time.$error" multiple md-auto-hide="true">
-                                            <div ng-message="required">What time should this event begin?</div>
+                                            <div ng-message="required">This is required!</div>
                                         </div>
                                     </md-input-container>
                                     <md-input-container flex class="md-block" ng-show="selectedEvent.type === 'GUIDANCE'">
+                                        <md-tooltip md-direction="bottom">This is the time at which the event should be complete</md-tooltip>
                                         <label>End (seconds from T-0)</label>
                                         <input ng-model="selectedEvent.end" name="end">
                                     </md-input-container>
                                 </md-content>
                                 <md-input-container flex class="md-block">
+                                    <md-tooltip md-direction="bottom">You can name your events anything. Be descriptive!</md-tooltip>
                                     <label>Name</label>
                                     <input ng-model="selectedEvent.name" name="name" ng-required="selectedEvent!==null">
                                     <div ng-messages="profileForm.name.$error" multiple md-auto-hide="true">
-                                        <div ng-message="required">This field is required, but can be anything. Be descriptive!</div>
+                                        <div ng-message="required">This is required!</div>
                                     </div>
                                 </md-input-container>
                             </md-content>
                             <md-content ng-show="selectedEvent !== null" layout="row" layout-align="space-around center">
                                 <md-input-container flex class="md-block">
+                                    <md-tooltip md-direction="bottom">Choose from Ignition, Cutoff, Guidance, Separation...</md-tooltip>
                                     <label>Event Type</label>
                                     <md-select ng-model="selectedEvent.type" name="type" ng-required="selectedEvent!==null">
                                         <md-option ng-repeat="obj in type" value="{{obj.code}}" ng-disabled="obj.code === 'FAIRING_SEP' && form.Mission.Vehicle.Stages[selectedEvent.stage].fairingMass === undefined">{{obj.name}}</md-option>
                                     </md-select>
                                     <div ng-messages="profileForm.type.$error" multiple md-auto-hide="true">
-                                        <div ng-message="required">You must specify the type of event here</div>
+                                        <div ng-message="required">This is required!</div>
                                     </div>
                                 </md-input-container>
                                 <md-input-container flex class="md-block">
+                                    <md-tooltip md-direction="bottom">The event applies to this rocket stage in particular</md-tooltip>
                                     <label>Stage</label>
                                     <md-select ng-model="selectedEvent.stage" name="stage" ng-required="selectedEvent!==null">
                                         <md-option ng-repeat="obj in form.Mission.Vehicle.Stages" ng-value="obj.stageNum">{{obj.name}}</md-option>
                                     </md-select>
                                     <div ng-messages="profileForm.stage.$error" multiple md-auto-hide="true">
-                                        <div ng-message="required">An event has to apply to a particular stage</div>
+                                        <div ng-message="required">This is required!</div>
                                     </div>
                                 </md-input-container>
                             </md-content>
@@ -187,14 +222,17 @@
                                     <md-content ng-show="selectedEvent.type === 'IGNITION' || selectedEvent.type === 'GUIDANCE'"
                                                 flex layout="row" class="md-block">
                                         <md-input-container flex class="md-block">
+                                            <md-tooltip md-direction="bottom">Manually control your heading: 0° pitch is level to the ground, 90° is flying vertically, etc</md-tooltip>
                                             <label>Pitch</label>
                                             <input ng-model="selectedEvent.Attitude.pitch">
                                         </md-input-container>
                                         <md-input-container flex class="md-block">
+                                            <md-tooltip md-direction="bottom">Manually control your heading: 0° yaw is flying East, 90° is flying North, etc.</md-tooltip>
                                             <label>Yaw</label>
                                             <input ng-model="selectedEvent.Attitude.yaw">
                                         </md-input-container>
                                         <md-input-container flex class="md-block">
+                                            <md-tooltip md-direction="bottom">Set the target throttle for this Guidance event. Must be between 0 and 1.</md-tooltip>
                                             <label>Throttle</label>
                                             <input type="number" name="throttle" min="0" max="1" step="any" ng-disabled="selectedEvent.dynamic" ng-model="selectedEvent.Attitude.throttle">
                                             <div ng-messages="profileForm.throttle.$error" multiple md-auto-hide="true">
@@ -203,6 +241,7 @@
                                             </div>
                                         </md-input-container>
                                         <md-input-container flex class="md-block">
+                                            <md-tooltip md-direction="bottom">Set this to do a forward or reverse gravity turn for the duration of the event.</md-tooltip>
                                             <label>Gravity Turn</label>
                                             <md-select ng-model="selectedEvent.Attitude.gt">
                                                 <md-option ng-repeat="obj in gravTurnSelect" value="{{obj.code}}">{{obj.name}}</md-option>
@@ -215,6 +254,7 @@
                                         layout="row" layout-align="space-around center">
                                 <md-content flex class="md-block" ng-repeat="engineConfig in form.Mission.Vehicle.Stages[selectedEvent.stage].Engines">
                                     <md-input-container style="width:90%" flex>
+                                        <md-tooltip md-direction="bottom">How many engines do you want to {{selectedEvent.type === 'IGNITION' ? 'ignite' : 'cut off'}}?</md-tooltip>
                                         <label># of {{engineConfig.Engine.name}} engines</label>
                                         <input ng-model="selectedEvent.Engines[$index].engineId" name="id" ng-value="engineConfig.engineId" type="hidden"/>
                                         <input type="number" ng-model="selectedEvent.Engines[$index].number" name="engines" required min="0" max="{{engineConfig.number}}" ng-change="selectedEvent.Engines[$index].engineId = engineConfig.engineId"/>
@@ -227,6 +267,7 @@
                                 </md-content>
                                 <md-content flex class='md-block'>
                                     <md-input-container flex class="md-block" ng-show="selectedEvent.type === 'IGNITION'">
+                                        <md-tooltip md-direction="bottom">This will activate the hoverslam algorithm for this burn. Big time-eater, so use this carefully!</md-tooltip>
                                         <label>Is Landing Burn?</label>
                                         <md-switch ng-model="selectedEvent.dynamic" aria-label="Hoverslam"></md-switch>
                                     </md-input-container>
