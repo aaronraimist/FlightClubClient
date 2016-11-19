@@ -7,34 +7,35 @@ angular.module('FlightClub').controller('ResultsCtrl', function ($scope, $cookie
     $scope.loadPos = 30;
     $scope.loadMessage = "Building plots...";    
 
-    $scope.messages = [
-        'Engine Chill',
-        'Terminal Count',
-        'Main Engine Start',
-        'Liftoff!',
-        'Vehicle is supersonic',
-        'Vehicle is passing through Max Q',
-        'MECO!',
-        'Stage separation. Good luck Stage 1...',
-        'Upper stage ignition',
-        'Boostback looks good',
-        'Entry burn is complete',
-        'Landing burn has begun',
-        'LZ-1, The Falcon has landed',
-        'We have SECO!',
-        'Follow me on Twitter: @decmurphy_'
+    $scope.messageArray = [
+        // p is probability of update being skipped until next interval
+        { p: 0.2, message: 'Engine Chill'},
+        { p: 0.2, message: 'Terminal Count'},
+        { p: 0.2, message: 'Main Engine Start'},
+        { p: 0.7, message: 'Liftoff!'},
+        { p: 0.3, message: 'Vehicle is supersonic'},
+        { p: 0.3, message: 'Vehicle is passing through Max Q'},
+        { p: 0.7, message: 'MECO!'},
+        { p: 0.3, message: 'Stage separation. Good luck Stage 1...'},
+        { p: 0.6, message: 'Upper stage ignition'},
+        { p: 0.6, message: 'Boostback looks good'},
+        { p: 0.4, message: 'Entry burn is complete'},
+        { p: 0.3, message: 'Landing burn has begun'},
+        { p: 0.7, message: 'LZ-1, The Falcon has landed'},
+        { p: 0.6, message: 'We have SECO!'},
+        { p: 0.5, message: 'Follow me on Twitter: @decmurphy_'}
     ];
-
+    
     var i = 0;
-    $scope.loadMessageSecondary = $scope.messages[i++];
-    $interval(function () {
-        if (Math.random() < 0.7) {
-            if(i === $scope.messages.length)
+    $scope.missionLoadingMessage = $scope.messageArray[i++].message;
+    $interval(function() {
+        if (Math.random() > $scope.messageArray[i].p) {
+            if(i === $scope.messageArray.length)
                 $interval.cancel(this);
             else
-                $scope.loadMessageSecondary = $scope.messages[i++];
+                $scope.loadMessageSecondary = $scope.messageArray[i++].message;
         }
-    }, 250);
+    }, 350);
     
     $scope.animate_rocket = function () {
 

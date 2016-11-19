@@ -10,6 +10,7 @@ angular.module('FlightClub').config(function ($routeProvider, $locationProvider,
         '200': 'eee', // hover on select option
         '400': 'aaa', // disabled options
         '500': '424e57', // hover on buttons
+        '700': 'ccac55', // gold for tooltip backgrounds
         '900': '181c1f', // md-raised text color
         'A100': 'fff', // dropdown menu background
         'A200': '000' // dropdown menu text

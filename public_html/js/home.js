@@ -1,4 +1,4 @@
-angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog, $mdSidenav, $interval) {
+angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog, $mdSidenav, $interval, $location) {
 
     $scope.missionLoading = true;
     $scope.loadSuccess = false;
@@ -6,19 +6,19 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
             + 'You\'ll need to wake until I wake up and see this...\n\n';
     $scope.messageArray = [
         // p is probability of update being skipped until next interval
-        { p: 0.5, message: 'Getting data from /r/SpaceX...' },
+        { p: 0.7, message: 'Getting data from /r/SpaceX...' },
         { p: 0.5, message: 'Killing Church...' },
-        { p: 0.5, message: 'Rebuilding Amos-6...' },
-        { p: 0.5, message: 'Turtling FoxhoundBat...' },
-        { p: 0.5, message: 'YVAN EHT NIOJ' },
-        { p: 0.5, message: 'Impersonating Benjamin Klein...' },
-        { p: 0.5, message: 'Donate to flightclub.io!' },
-        { p: 0.5, message: 'Wake up, John...' },
+        { p: 0.7, message: 'Rebuilding Amos-6...' },
+        { p: 0.2, message: 'Turtling FoxhoundBat...' },
+        { p: 0.2, message: 'YVAN EHT NIOJ' },
+        { p: 0.2, message: 'Impersonating Benjamin Klein...' },
+        { p: 0.6, message: 'Donate to flightclub.io!' },
+        { p: 0.6, message: 'Wake up, John...' },
+        { p: 0.1, message: 'SUBLIMINAL MESSAGES' },
         { p: 0.8, message: 'In the beginning the Universe was created. This has made a lot of people very angry and been widely regarded as a bad move.' }
     ];
     
-    var i = Math.floor(Math.random()*($scope.messageArray.length+1));
-    $scope.missionLoadingMessage = $scope.messageArray[i++].message;
+    var i = Math.floor(Math.random()*$scope.messageArray.length);
     $interval(function() {
         $scope.missionLoadingMessage = $scope.messageArray[i].message;
         if (Math.random() > $scope.messageArray[i].p) {
@@ -108,8 +108,16 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
         $scope.selectedMission = missionObj;
         $scope.loadSuccess = true;
         $scope.missionLoading = false;
-        $scope.form = data.next;
-        setNewMission(missionObj.code);
+        
+        var formHash = window.location.hash.substring(1);
+        if (formHash) {
+            var formData = window.atob(formHash);
+            $scope.form = JSON.parse(formData);
+            setNewMission($scope.form.Mission.code);
+        } else {
+            $scope.form = data.next;
+            setNewMission(missionObj.code);
+        }
 
     };
 
@@ -470,6 +478,14 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
                 return -1;
             return parseFloat(a.time) - parseFloat(b.time);
         });
+    };
+    
+    $scope.export = function () {
+        $scope.form.auth = {token: $scope.$parent.token};
+        var formAsJSON_string = JSON.stringify($scope.form);
+
+        var formHash = window.btoa(formAsJSON_string);
+        $location.hash(formHash);
     };
 
     $scope.submit = function () {

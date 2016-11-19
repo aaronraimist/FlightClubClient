@@ -87,12 +87,21 @@
                                 <md-content></md-content>
                                 <md-button class="md-raised" show-sm hide-gt-sm ng-show="authorised" type="submit" ng-click="openAdminEditDialog($event)">Admin</md-button>
                                 <md-button class="md-raised" show-sm hide-gt-sm ng-show="authorised" type="submit" ng-click="save($event)">Save</md-button>
-                                <md-button class="md-raised" show-sm hide-gt-sm type="submit" ng-click="submit()">Run simulation!</md-button>
+                                <md-content>
+                                    <md-button class="md-raised" show-sm hide-gt-sm type="submit" ng-click="export()">
+                                        <md-tooltip md-direction="left">Export Profile to URL</md-tooltip>
+                                        <md-icon class="material-icons">content_copy</md-icon>
+                                    </md-button>
+                                    <md-button class="md-raised" show-sm hide-gt-sm type="submit" ng-click="submit()">Run simulation!</md-button>
+                                </md-content>
                             </md-content>
                             <md-list flex layout='column'>
                                 <md-content layout="row" layout-align="space-between center">
                                     <md-subheader class="md-no-sticky">Events</md-subheader>
-                                    <md-button class="md-raised" ng-click="addEvent()">Add Event</md-button>
+                                    <md-button class="md-raised" ng-click="addEvent()">
+                                        <md-tooltip md-direction="left">Add Event</md-tooltip>
+                                        <md-icon class="material-icons">add</md-icon>
+                                    </md-button>
                                 </md-content>
                                 <md-divider></md-divider>
                                 <md-list-item class="md-2-line secondary-button-padding" ng-repeat="event in form.Mission.Events">
@@ -101,12 +110,15 @@
                                         <p>{{form.Mission.Vehicle.Stages[event.stage].name}}</p>
                                     </div>
                                     <md-button show-sm hide-gt-sm style="min-width:0" ng-click="openEventEditDialog($event, $index, event)">
+                                        <md-tooltip md-direction="left">Edit Event</md-tooltip>
                                         <md-icon class="material-icons">mode_edit</md-icon>
                                     </md-button>
                                     <md-button hide show-gt-sm style="min-width:0" ng-click="selectEvent($event, event)">
+                                        <md-tooltip md-direction="left">Edit Event</md-tooltip>
                                         <md-icon class="material-icons">mode_edit</md-icon>
                                     </md-button>
                                     <md-button style="min-width:0" ng-click="removeEvent($index)">
+                                        <md-tooltip md-direction="left">Remove Event</md-tooltip>
                                         <md-icon class="material-icons">close</md-icon>
                                     </md-button>
                                     <md-divider></md-divider>
@@ -119,7 +131,13 @@
                                 <md-content></md-content>
                                 <md-button class="md-raised" ng-show="authorised" ng-click="openAdminEditDialog($event)">Admin</md-button>
                                 <md-button class="md-raised" ng-show="authorised" ng-click="save($event)">Save</md-button>
-                                <md-button class="md-raised" type="submit" ng-click="submit()">Run simulation!</md-button>
+                                <md-content>
+                                    <md-button class="md-raised" type="submit" ng-click="export()">
+                                        <md-tooltip md-direction="left">Export Profile to URL</md-tooltip>
+                                        <md-icon class="material-icons">content_copy</md-icon>
+                                    </md-button>
+                                    <md-button class="md-raised" type="submit" ng-click="submit()">Run simulation!</md-button>
+                                </md-content>
                             </md-content>
                             <md-divider></md-divider>
                             <md-content ng-show="selectedEvent !== null" layout="row" layout-align="space-around center">

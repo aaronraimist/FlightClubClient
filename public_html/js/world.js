@@ -3,24 +3,28 @@
 angular.module('FlightClub').controller('WorldCtrl', function ($scope, $location, $interval) {
     
     $scope.worldLoading = true;
-    $scope.messages = [
-        'Getting data from /r/SpaceX...',
-        'Killing Church...',
-        'YVAN EHT NIOJ',
-        'Donate to flightclub.io',
-        'Literally downloading the entire planet.',
-        'Have some patience, dammit',
-        'Downloading trajectory data files...',
-        'Damn your internet is slow, man',
-        'I hope your browser can handle this',
-        'Follow me on Twitter: @decmurphy_'
+    $scope.messageArray = [
+        // p is probability of update being skipped until next interval
+        { p: 0.8, message: 'Getting data from /r/SpaceX...'},
+        { p: 0.4, message: 'Killing Church...'},
+        { p: 0.3, message: 'YVAN EHT NIOJ'},
+        { p: 0.6, message: 'Donate to flightclub.io'},
+        { p: 0.8, message: 'Literally downloading the entire planet.'},
+        { p: 0.2, message: 'Have some patience, dammit'},
+        { p: 0.8, message: 'Downloading trajectory data files...'},
+        { p: 0.2, message: 'Damn your internet is slow, man'},
+        { p: 0.2, message: 'I hope your browser can handle this'},
+        { p: 0.5, message: 'Follow me on Twitter: @decmurphy_'}
     ];
     
-    var i = Math.floor(Math.random()*($scope.messages.length+1));
-    $scope.missionLoadingMessage = $scope.messages[i++];
+    var i = Math.floor(Math.random()*($scope.messageArray.length+1));
+    $scope.missionLoadingMessage = $scope.messageArray[i++].message;
     $interval(function() {
-        $scope.missionLoadingMessage = $scope.messages[i++%$scope.messages.length];
-    }, 400);
+        $scope.missionLoadingMessage = $scope.messageArray[i].message;
+        if (Math.random() > $scope.messageArray[i].p) {
+            i = (i+1)%$scope.messageArray.length;
+        }
+    }, 350);
 
     $scope.$parent.toolbarClass = "";
     $scope.$parent.toolbarTitle = "Flight Club | Live";
@@ -231,9 +235,11 @@ angular.module('FlightClub').controller('WorldCtrl', function ($scope, $location
             if (timeUntilLaunch > 1 * 60 * 60 * 1000)
             {
                 $scope.countdown = true;
+                $scope.worldLoading = false;
             } else if (timeUntilLaunch < -14 * 60 * 1000)
             {
                 $scope.finished = true;
+                $scope.worldLoading = false;
             } else
             {
                 $scope.loadCesium(function () {
