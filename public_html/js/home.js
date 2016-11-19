@@ -25,7 +25,7 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
             i = (i+1)%$scope.messageArray.length;
         }
     }, 350);
-    
+        
     $scope.httpRequest('/missions', 'GET', null, function (data) {
         fillMissions(data);
     }, function(data, statusText) {
@@ -156,7 +156,6 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
         $scope.builderType = 'previous';
         $scope.selectedVeh = code;
         $scope.recalcDV();
-        $scope.$apply();
     };
 
     $scope.selectMissionVehicle = function (code) {
@@ -480,12 +479,51 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
         });
     };
     
-    $scope.export = function () {
+    $scope.export = function (ev) {
         $scope.form.auth = {token: $scope.$parent.token};
         var formAsJSON_string = JSON.stringify($scope.form);
-
         var formHash = window.btoa(formAsJSON_string);
-        $location.hash(formHash);
+        
+        $mdDialog.show(
+            $mdDialog.prompt()
+                .title('Export Profile to Clipboard')
+                .textContent('Ctrl-A, Ctrl-C, Enter')
+                .ariaLabel('flight profile params')
+                .initialValue(formHash)
+                .targetEvent(ev)
+                .ok('Done!')
+        );
+
+    };
+    
+    $scope.import = function (ev) {
+        
+        var confirm = $mdDialog.prompt()
+                .title('Import Profile from Clipboard')
+                .textContent('Ctrl-V, Enter')
+                .ariaLabel('flight profile params')
+                .targetEvent(ev)
+                .ok('Done!')
+                .cancel('Cancel');
+
+        $mdDialog.show(confirm).then(function (formHash) {
+            try {
+                var formData = window.atob(formHash);
+                $scope.form = JSON.parse(formData);
+                setNewMission($scope.form.Mission.code);
+            } catch (err) {
+                $mdDialog.show(
+                        $mdDialog.alert()
+                        .clickOutsideToClose(true)
+                        .title('Invalid params!')
+                        .textContent('That didn\'t work, sorry')
+                        .ariaLabel('import failure')
+                        .ok('Ok!')
+                        .targetEvent(ev)
+                        );
+            }
+        });
+        
     };
 
     $scope.submit = function () {
