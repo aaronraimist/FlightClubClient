@@ -29,12 +29,10 @@ angular.module('FlightClub').controller('ResultsCtrl', function ($scope, $cookie
     var i = 0;
     $scope.missionLoadingMessage = $scope.messageArray[i++].message;
     $interval(function() {
-        if (Math.random() > $scope.messageArray[i].p) {
-            if(i === $scope.messageArray.length)
-                $interval.cancel(this);
-            else
-                $scope.loadMessageSecondary = $scope.messageArray[i++].message;
-        }
+        if (i === $scope.messageArray.length)
+            $interval.cancel(this);
+        else if (Math.random() > $scope.messageArray[i].p)
+            $scope.loadMessageSecondary = $scope.messageArray[i++].message;
     }, 350);
     
     $scope.animate_rocket = function () {
