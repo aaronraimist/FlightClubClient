@@ -1,4 +1,4 @@
-angular.module('FlightClub').controller('IndexCtrl', function ($scope, $mdSidenav, $cookies, $location, $window) {
+angular.module('FlightClub').controller('IndexCtrl', function ($scope, $mdSidenav, $cookies, $location, $window, $interval) {
 
     var base, port;
     if($location.host() === 'localhost') {
@@ -41,6 +41,16 @@ angular.module('FlightClub').controller('IndexCtrl', function ($scope, $mdSidena
             $scope.$apply();
         });
     }
+    
+    $interval(function() {
+        if ($scope.theme)
+            $interval.cancel(this);
+        else {
+            $scope.theme = $cookies.get('fc_theme');
+            if($scope.theme === undefined)
+                $scope.theme = 'fc_default';
+        }
+    }, 100);        
 
     $scope.parseQueryString = function (queryString)
     {
@@ -81,5 +91,10 @@ angular.module('FlightClub').controller('IndexCtrl', function ($scope, $mdSidena
                 ret = true;
         });
         return ret;
+    };
+    
+    $scope.toggleTheme = function() {
+        $scope.theme = $scope.theme === 'fc_dark' ? 'fc_default' : 'fc_dark';
+        $cookies.put('fc_theme', $scope.theme);
     };
 });

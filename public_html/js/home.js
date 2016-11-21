@@ -1,4 +1,4 @@
-angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog, $mdSidenav, $interval, $location) {
+angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog, $mdSidenav, $interval) {
 
     $scope.missionLoading = true;
     $scope.loadSuccess = false;
@@ -26,7 +26,7 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
             i = (i+1)%$scope.messageArray.length;
         }
     }, 350);
-        
+    
     $scope.httpRequest('/missions', 'GET', null, function (data) {
         fillMissions(data);
     }, function(data, statusText) {

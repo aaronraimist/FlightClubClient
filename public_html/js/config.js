@@ -5,28 +5,27 @@ angular.module('FlightClub').config(function ($routeProvider, $locationProvider,
         '600': '424e57' // hover on sites
     }));
 
-    $mdThemingProvider.definePalette('backgroundPalette', $mdThemingProvider.extendPalette('blue', {
-        '50': 'fff',
-        '200': 'eee', // hover on select option
-        '400': 'aaa', // disabled options
-        '500': '424e57', // hover on buttons
-        '700': 'ccac55', // gold for tooltip backgrounds
-        '900': '181c1f', // md-raised text color
-        'A100': 'fff', // dropdown menu background
-        'A200': '000' // dropdown menu text
-    }));
-
     $mdThemingProvider.definePalette('accentPalette', $mdThemingProvider.extendPalette('green', {
+        '500': 'ccac55', // accents in dark()
         '200': 'ccac55', // gold for selected options (hover)
         '600': 'ccac55', // gold for selected options
         'A200': 'ccac55', // gold for selected tab underline, radio on
         'A700': 'ccac55' // hover on selected grid tile
     }));
-
-    $mdThemingProvider.theme('default')
-            .backgroundPalette('backgroundPalette')
+    
+    $mdThemingProvider.theme('fc_default')
+            .backgroundPalette('grey')
             .primaryPalette('primaryPalette')
-            .accentPalette('accentPalette');
+            .accentPalette('accentPalette')
+    ;
+    
+    $mdThemingProvider.theme('fc_dark')
+            .primaryPalette('primaryPalette')
+            .accentPalette('accentPalette')
+            .dark()
+    ;
+    
+    $mdThemingProvider.alwaysWatchTheme(true);
 
     $locationProvider.html5Mode(true);
     $routeProvider

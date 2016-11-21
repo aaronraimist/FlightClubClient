@@ -61,8 +61,8 @@
     <meta name="msapplication-TileImage" content="images/favicon/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
   </head>
-  <body data-ng-element-ready="">
-    <div layout="column" flex style="min-height:100%" ng-cloak>
+  <body data-ng-element-ready="" md-theme="{{theme}}" md-theme-watch="true" ng-cloak>
+    <div layout="column" flex style="min-height:100%">
       <section layout-fill layout="column" flex>
         <md-toolbar class="{{toolbarClass}}">
           <div class="md-toolbar-tools">
@@ -99,6 +99,12 @@
                   <md-button ng-click="redirect('/contact')">
                     <md-icon class="material-icons">mail_outline</md-icon>
                     <span>Contact</span>
+                  </md-button>
+                </md-menu-item>
+                <md-menu-item>
+                  <md-button ng-click="toggleTheme()">
+                    <md-icon class="material-icons">cached</md-icon>
+                    <span>Change Theme</span>
                   </md-button>
                 </md-menu-item>
               </md-menu-content>
