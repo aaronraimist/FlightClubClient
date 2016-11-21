@@ -1,4 +1,4 @@
-angular.module('FlightClub').controller('LoginCtrl', function ($timeout, $document, $scope, $cookies, $location, $mdDialog) {
+angular.module('FlightClub').controller('LoginCtrl', function ($timeout, $document, $scope, $cookies, $mdDialog) {
 
     $scope.$parent.toolbarClass = "fullPage fixie";
     $scope.$parent.toolbarTitle = 'Flight Club | Login';
@@ -47,6 +47,7 @@ angular.module('FlightClub').controller('LoginCtrl', function ($timeout, $docume
             $scope.$parent.authorised = false;
             $scope.$parent.permissions.length = 0;
             $scope.$parent.token = undefined;
+            $scope.alert = "Successfully logged out!";
         }
     };
     

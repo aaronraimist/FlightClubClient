@@ -50,6 +50,15 @@ html, input, textarea, select {
 #home md-grid-list {
   padding-bottom: 0 !important;
 }
+
+md-progress-circular.md-fc_dark-theme path {
+    stroke: #ccac55;
+}
+/*
+.plotly svg {
+    background: transparent !important;
+}
+*/
 /*
 md-tabs .md-tab.md-active {
   color: #ccac55; //spacex gold
