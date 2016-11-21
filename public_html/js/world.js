@@ -274,7 +274,7 @@ angular.module('FlightClub').controller('WorldCtrl', function ($scope, $location
     };
 
     $scope.loadFlot = function () {
-        $.getScript("js/flot.min.js", function () {
+        $.getScript("flot/flot.min.js", function () {
             setTimeout(function () {
                 var fullWidth = $(document.body)[0].clientWidth;
                 var width = $("md-sidenav")[0].clientWidth;

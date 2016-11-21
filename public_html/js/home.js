@@ -15,7 +15,8 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
         { p: 0.6, message: 'Donate to flightclub.io!' },
         { p: 0.6, message: 'Wake up, John...' },
         { p: 0.1, message: 'SUBLIMINAL MESSAGES' },
-        { p: 0.8, message: 'In the beginning the Universe was created. This has made a lot of people very angry and been widely regarded as a bad move.' }
+        { p: 0.8, message: 'In the beginning the Universe was created. This has made a lot of people very angry and been widely regarded as a bad move.' },
+        { p: 0.8, message: '☠☠☠ Give it up jiggy make it feel like foreplay / Yo my cardio is infinite / Ha ha / Big willie style\'s all in it / Gettin jiggy wit it / Na na na na na na na nana ☠☠☠'}
     ];
     
     var i = Math.floor(Math.random()*$scope.messageArray.length);

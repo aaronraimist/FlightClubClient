@@ -3,3 +3,10 @@ public_html/fonts/Brandon\ Grotesque\ Medium.otf
 deploy*
 nbproject/
 scripts/
+public_html/angular-1.5.8/
+public_html/angular-material-1.1.1/
+public_html/cesium/
+public_html/flot/
+public_html/font-awesome-4.5.0/
+public_html/fonts/
+public_html/jquery-3.1.1/
