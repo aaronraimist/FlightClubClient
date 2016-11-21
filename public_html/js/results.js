@@ -287,60 +287,60 @@ angular.module('FlightClub').controller('ResultsCtrl', function ($scope, $cookie
         }
     };
 
+    $scope.plotMap = [];
     $scope.initialisePlots = function () {
 
         var lowerStages = $scope.stageMap.length === 2 ? [0] : [0, 1];
         var allStages = $scope.stageMap.length === 2 ? [0, 1] : [0, 1, 2];
 
-        var plotMap = [];
-        plotMap.push({id: 'altitude1', stages: allStages, title: "Altitude",
+        $scope.plotMap.push({id: 'altitude1', stages: allStages, title: "Altitude",
             x: {axis: 0, label: "Time (s)", type: "linear"},
             y: {axis: 4, label: "Altitude (km)", type: "linear"}});
-        plotMap.push({id: 'profile1', stages: allStages, title: "Profile",
+        $scope.plotMap.push({id: 'profile1', stages: allStages, title: "Profile",
             x: {axis: 6, label: "Downrange (km)", type: "linear"},
             y: {axis: 4, label: "Altitude (km)", type: "linear"}});
-        plotMap.push({id: 'total-dv', stages: allStages, title: "Total dV Expended",
+        $scope.plotMap.push({id: 'total-dv', stages: allStages, title: "Total dV Expended",
             x: {axis: 0, label: "Time (s)", type: "log"},
             y: {axis: 9, label: "dV (m/s)", type: "log"}});
-        plotMap.push({id: 'velocity1', stages: allStages, title: "Velocity",
+        $scope.plotMap.push({id: 'velocity1', stages: allStages, title: "Velocity",
             x: {axis: 0, label: "Time (s)", type: "linear"},
             y: {axis: 5, label: "Velocity (m/s)", type: "linear"}});
-        plotMap.push({id: 'prop', stages: allStages, title: "Propellant Mass",
+        $scope.plotMap.push({id: 'prop', stages: allStages, title: "Propellant Mass",
             x: {axis: 0, label: "Time (s)", type: "log"},
             y: {axis: 8, label: "Mass (t)", type: "log"}});
-        plotMap.push({id: 'phase1', stages: lowerStages, title: "Booster Phasespace",
+        $scope.plotMap.push({id: 'phase1', stages: lowerStages, title: "Booster Phasespace",
             x: {axis: 4, label: "Altitude (km)", type: "linear"},
             y: {axis: 5, label: "Velocity (m/s)", type: "linear"}});
-        plotMap.push({id: 'q', stages: lowerStages, title: "Aerodynamic Pressure",
+        $scope.plotMap.push({id: 'q', stages: lowerStages, title: "Aerodynamic Pressure",
             x: {axis: 0, label: "Time (s)", type: "linear"},
             y: {axis: 7, label: "Pressure (kN/m^2)", type: "linear"}});
-        plotMap.push({id: 'throttle', stages: allStages, title: "Throttle",
+        $scope.plotMap.push({id: 'throttle', stages: allStages, title: "Throttle",
             x: {axis: 0, label: "Time (s)", type: "linear"},
             y: {axis: 12, label: "Throttle", type: "linear"}});
-        plotMap.push({id: 'accel1', stages: allStages, title: "Acceleration",
+        $scope.plotMap.push({id: 'accel1', stages: allStages, title: "Acceleration",
             x: {axis: 0, label: "Time (s)", type: "linear"},
             y: {axis: 13, label: "Acceleration (g)", type: "linear"}});
-        plotMap.push({id: 'aoa', stages: allStages, title: "Angle of Attack",
+        $scope.plotMap.push({id: 'aoa', stages: allStages, title: "Angle of Attack",
             x: {axis: 0, label: "Time (s)", type: "linear"},
             y: {axis: 14, label: "Angle (degrees)", type: "linear"}});
-        plotMap.push({id: 'aov', stages: allStages, title: "Velocity Angle",
+        $scope.plotMap.push({id: 'aov', stages: allStages, title: "Velocity Angle",
             x: {axis: 0, label: "Time (s)", type: "linear"},
             y: {axis: 15, label: "Angle (degrees)", type: "linear"}});
-        plotMap.push({id: 'aop', stages: allStages, title: "Pitch Angle",
+        $scope.plotMap.push({id: 'aop', stages: allStages, title: "Pitch Angle",
             x: {axis: 0, label: "Time (s)", type: "linear"},
             y: {axis: 16, label: "Angle (degrees)", type: "linear"}});
-        plotMap.push({id: 'drag', stages: lowerStages, title: "Drag Coefficient",
+        $scope.plotMap.push({id: 'drag', stages: lowerStages, title: "Drag Coefficient",
             x: {axis: 0, label: "Time (s)", type: "linear"},
             y: {axis: 17, label: "Cd", type: "linear"}});
-        plotMap.push({id: 'thrust-coeff', stages: lowerStages, title: "Thrust Coefficient",
+        $scope.plotMap.push({id: 'thrust-coeff', stages: lowerStages, title: "Thrust Coefficient",
             x: {axis: 0, label: "Time (s)", type: "linear"},
             y: {axis: 22, label: "Ct", type: "linear"}});
 
         $scope.isLoading = false;
         $scope.$apply();
         
-        for (var i = 0; i < plotMap.length; i++) {
-            $scope.initialisePlot2(plotMap[i]);
+        for (var i = 0; i < $scope.plotMap.length; i++) {
+            $scope.initialisePlot2($scope.plotMap[i]);
         }
     };
 
@@ -366,19 +366,43 @@ angular.module('FlightClub').controller('ResultsCtrl', function ($scope, $cookie
             }
         }
 
+        var fontColor = $scope.$parent.theme==='fc_dark' ? '#fafafa' : '#181c1f';
+        var bgColor = $scope.$parent.theme==='fc_dark' ? '#303030' : '#fafafa';
         var layout = {
             title: plot.title,
             showlegend: false,
             font: {
                 family: 'Brandon Grotesque',
                 size: 15,
-                color: '#181c1f'
+                color: fontColor
             },
-            xaxis: {type: plot.x.type, title: plot.x.label, range: plot.y.axis > 11 ? [0, 1000] : [null, null]},
-            yaxis: {type: plot.y.type, title: plot.y.label}
+            xaxis: {
+                color: fontColor,
+                type: plot.x.type, 
+                title: plot.x.label, 
+                range: plot.y.axis > 11 ? [0, 1000] : [null, null]
+            },
+            yaxis: {
+                color: fontColor,
+                type: plot.y.type, 
+                title: plot.y.label
+            },
+            paper_bgcolor: bgColor,
+            plot_bgcolor: bgColor
         };
         
         Plotly.newPlot(plot.id, data, layout);
 
     };
+    
+    $scope.$parent.$watch('theme', function() {
+        
+        if($scope.plotMap) {
+            for (var i = 0; i < $scope.plotMap.length; i++) {
+                $scope.initialisePlot2($scope.plotMap[i]);
+            }
+        }
+        
+    });
+    
 });
