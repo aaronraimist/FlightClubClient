@@ -9,7 +9,7 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
     $scope.importStyle = false;
     
     $scope.serverErrorMessage = 'The flightclub.io server has undergone a rapid unscheduled disassembly :/\n'
-            + 'You\'ll need to wake until I wake up and see this...\n\n';
+            + 'You\'ll need to wait until I wake up and see this...\n\n';
     $scope.messageArray = [
         // p is probability of update being skipped until next interval
         { p: 0.7, message: 'Getting data from /r/SpaceX...' },
