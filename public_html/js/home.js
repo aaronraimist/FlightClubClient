@@ -2,6 +2,12 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
 
     $scope.missionLoading = true;
     $scope.loadSuccess = false;
+    
+    $scope.export_icon = 'content_copy';
+    $scope.exportStyle = false;
+    $scope.import_icon = 'content_paste';
+    $scope.importStyle = false;
+    
     $scope.serverErrorMessage = 'The flightclub.io server has undergone a rapid unscheduled disassembly :/\n'
             + 'You\'ll need to wake until I wake up and see this...\n\n';
     $scope.messageArray = [
@@ -480,51 +486,91 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
         });
     };
     
-    $scope.export = function (ev) {
+    $scope.export = function (ev) {       
+        
         $scope.form.auth = {token: $scope.$parent.token};
         var formAsJSON_string = JSON.stringify($scope.form);
         var formHash = window.btoa(formAsJSON_string);
+       
         
-        $mdDialog.show(
-            $mdDialog.prompt()
-                .title('Export Profile to Clipboard')
-                .textContent('Ctrl-A, Ctrl-C, Enter')
-                .ariaLabel('flight profile params')
-                .initialValue(formHash)
-                .targetEvent(ev)
-                .ok('Done!')
-        );
-
+        $scope.exportStyle = true;
+        if($scope.supports_html5_storage()) {
+            window['localStorage']['fc_profile'] = formHash;
+            $scope.exportStatusColor = '#82CA9D';
+            $scope.export_icon = 'check';
+            setTimeout(function() {
+                $scope.export_icon = 'content_copy';
+                $scope.exportStyle = false;
+            }, 4000);
+        } else {
+            $scope.exportStatusColor = '#F7977A';
+            $scope.export_icon = 'close';
+            setTimeout(function() {
+                $scope.export_icon = 'content_copy';
+                $scope.exportStyle = false;
+            }, 4000);
+            $mdDialog.show(
+                    $mdDialog.alert()
+                    .clickOutsideToClose(true)
+                    .title('Not supported!')
+                    .textContent('Your browser doesn\'t support local storage! Upgrade, fool!')
+                    .ariaLabel('export failure')
+                    .ok(':(')
+                    .targetEvent(ev)
+                    );            
+        }
     };
     
     $scope.import = function (ev) {
         
-        var confirm = $mdDialog.prompt()
-                .title('Import Profile from Clipboard')
-                .textContent('Ctrl-V, Enter')
-                .ariaLabel('flight profile params')
-                .targetEvent(ev)
-                .ok('Done!')
-                .cancel('Cancel');
-
-        $mdDialog.show(confirm).then(function (formHash) {
+        $scope.importStyle = true;
+        if($scope.supports_html5_storage()) {
+            var formHash = window['localStorage']['fc_profile'];
             try {
                 var formData = window.atob(formHash);
                 $scope.form = JSON.parse(formData);
                 setNewMission($scope.form.Mission.code);
+                $scope.importStatusColor = '#82CA9D';
+                $scope.import_icon = 'check';
+                setTimeout(function () {
+                    $scope.import_icon = 'content_paste';
+                    $scope.importStyle = false;
+                }, 4000);
             } catch (err) {
+                $scope.importStatusColor = '#F7977A';
+                $scope.import_icon = 'close';
+                setTimeout(function () {
+                    $scope.import_icon = 'content_paste';
+                    $scope.importStyle = false;
+                }, 4000);
                 $mdDialog.show(
                         $mdDialog.alert()
                         .clickOutsideToClose(true)
-                        .title('Invalid params!')
-                        .textContent('That didn\'t work, sorry')
+                        .title('Import error!')
+                        .textContent(err)
                         .ariaLabel('import failure')
                         .ok('Ok!')
                         .targetEvent(ev)
                         );
             }
-        });
-        
+        } else {
+            $scope.importStatusColor = '#F7977A';
+            $scope.import_icon = 'close';
+            setTimeout(function () {
+                $scope.import_icon = 'content_paste';
+                $scope.importStyle = false;
+            }, 4000);
+            $mdDialog.show(
+                    $mdDialog.alert()
+                    .clickOutsideToClose(true)
+                    .title('Not supported!')
+                    .textContent('Your browser doesn\'t support local storage! Upgrade, fool!')
+                    .ariaLabel('import failure')
+                    .ok('Ok!')
+                    .targetEvent(ev)
+                    );
+        }
+
     };
 
     $scope.submit = function () {

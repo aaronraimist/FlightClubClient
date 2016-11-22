@@ -97,4 +97,12 @@ angular.module('FlightClub').controller('IndexCtrl', function ($scope, $mdSidena
         $scope.theme = $scope.theme === 'fc_dark' ? 'fc_default' : 'fc_dark';
         $cookies.put('fc_theme', $scope.theme);
     };
+    
+    $scope.supports_html5_storage = function() {
+        try {
+            return 'localStorage' in window && window['localStorage'] !== null;
+        } catch (e) {
+            return false;
+        }
+    };
 });
