@@ -48,7 +48,7 @@ angular.module('FlightClub').controller('IndexCtrl', function ($scope, $mdSidena
         else {
             $scope.theme = $cookies.get('fc_theme');
             if($scope.theme === undefined)
-                $scope.theme = 'fc_default';
+                $scope.theme = 'fc_dark';
         }
     }, 100);        
 

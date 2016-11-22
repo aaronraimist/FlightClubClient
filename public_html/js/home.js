@@ -148,7 +148,6 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
     
     $scope.updateUrl = function() {
         if($scope.form) {
-            $scope.form.auth = {token: $scope.$parent.token};
             var formAsJSON_string = JSON.stringify($scope.form);
 
             var formHash = window.btoa(formAsJSON_string);
@@ -504,6 +503,7 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
         
         $scope.form.auth = {token: $scope.$parent.token};
         var formAsJSON_string = JSON.stringify($scope.form);
+        $scope.form.auth = {token: null};
         var formHash = window.btoa(formAsJSON_string);
        
         
@@ -588,7 +588,9 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
     };
 
     $scope.submit = function () {
+        $scope.form.auth = {token: $scope.$parent.token};
         var formHash = $scope.updateUrl();
+        $scope.form.auth = {token: null};
         window.open($scope.$parent.client + '/results/#' + formHash, '_blank');
     };
 
