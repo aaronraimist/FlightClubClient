@@ -1,4 +1,4 @@
-angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog, $mdSidenav, $interval) {
+angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog, $mdSidenav, $interval, $location) {
 
     $scope.missionLoading = true;
     $scope.loadSuccess = false;
@@ -116,7 +116,7 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
         $scope.loadSuccess = true;
         $scope.missionLoading = false;
         
-        var formHash = window.location.hash.substring(1);
+        var formHash = $location.hash();
         if (formHash) {
             var formData = window.atob(formHash);
             $scope.form = JSON.parse(formData);
@@ -145,6 +145,21 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
         }
         return array;
     };
+    
+    $scope.updateUrl = function() {
+        if($scope.form) {
+            $scope.form.auth = {token: $scope.$parent.token};
+            var formAsJSON_string = JSON.stringify($scope.form);
+
+            var formHash = window.btoa(formAsJSON_string);
+            $location.hash(formHash);
+            return formHash;
+        }
+    };
+    
+    $scope.$watch('form', function() {
+        $scope.updateUrl();
+    }, true);
 
     $scope.selectMission = function (code) {
         $scope.httpRequest('/missions/' + code, 'GET', null, function (data) {
@@ -157,8 +172,7 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
     
     var setNewMission = function (code) {
         $scope.sortEvents();
-        $scope.missionName = $scope.form.Mission.description;
-        $scope.$parent.toolbarTitle = "Mission Builder | " + $scope.missionName;
+        $scope.$parent.toolbarTitle = "Mission Builder | " + $scope.form.Mission.description;
         $scope.selectedEvent = null;
         $scope.builderType = 'previous';
         $scope.selectedVeh = code;
@@ -574,10 +588,7 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
     };
 
     $scope.submit = function () {
-        $scope.form.auth = {token: $scope.$parent.token};
-        var formAsJSON_string = JSON.stringify($scope.form);
-
-        var formHash = window.btoa(formAsJSON_string);
+        var formHash = $scope.updateUrl();
         window.open($scope.$parent.client + '/results/#' + formHash, '_blank');
     };
 

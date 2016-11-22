@@ -1,0 +1,24 @@
+
+<!--
+    64px top margin is to offset for toolbar
+    inner div was 8px larger and created scrollbar. add 8px bottom padding to fix.
+-->
+
+<md-content style="margin-top:64px;" layout-fill flex layout="column">
+    <md-content style="padding-bottom:8px" layout-fill flex layout="row" layout-align="space-around center">
+        <md-grid-list layout-fill
+                      md-cols-xs="1" md-cols-sm="2" md-cols-md="4" md-cols-gt-md="6"
+                      md-row-height-gt-md="1:1" md-row-height="2:2"
+                      md-gutter="12px" md-gutter-gt-sm="8px">
+            <md-grid-tile layout-padding ng-repeat="tile in mediaTiles"
+                          md-rowspan="1"
+                          md-colspan="1"
+                          md-colspan-gt-sm="2">
+                <md-button class="md-primary bolder md-raised" layout-padding layout-fill ng-click='redirectExternal(tile.url)'>
+                    <img src="{{tile.thumbnail}}" alt="{{tile.name}}"/>
+                    <md-grid-tile-footer><h3>{{tile.name}}</h3></md-grid-tile-footer>
+                </md-button>
+            </md-grid-tile>
+        </md-grid-list>
+    </md-content>
+</md-content>

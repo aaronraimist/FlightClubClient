@@ -22,6 +22,7 @@
     <script src="js/donate.js"></script>
     <script src="js/results.js"></script>
     <script src="js/world.js"></script>
+    <script src="js/media.js"></script>
     
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-route.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-animate.min.js"></script>
@@ -97,8 +98,14 @@
                 </md-menu-item>
                 <md-menu-item>
                   <md-button ng-click="redirect('/contact')">
-                    <md-icon class="material-icons">mail_outline</md-icon>
+                    <md-icon class="material-icons">contact_mail</md-icon>
                     <span>Contact</span>
+                  </md-button>
+                </md-menu-item>
+                <md-menu-item>
+                  <md-button ng-click="redirect('/media')">
+                    <md-icon class="material-icons">sms</md-icon>
+                    <span>Media</span>
                   </md-button>
                 </md-menu-item>
                 <md-menu-item>

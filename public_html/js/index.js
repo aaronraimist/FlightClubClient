@@ -1,5 +1,5 @@
 angular.module('FlightClub').controller('IndexCtrl', function ($scope, $mdSidenav, $cookies, $location, $window, $interval) {
-
+    
     var base, port;
     if($location.host() === 'localhost') {
         base= 'http://localhost';

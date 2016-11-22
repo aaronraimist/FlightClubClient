@@ -2,7 +2,7 @@
 
 angular.module('FlightClub').controller('ResultsCtrl', function ($scope, $cookies, $interval) {
 
-    $scope.$parent.toolbarClass = "";
+    $scope.$parent.toolbarClass = "fullPage fixie";
     $scope.$parent.toolbarTitle = 'Flight Club | Results';
     $scope.loadPos = 30;
     $scope.loadMessage = "Building plots...";    
