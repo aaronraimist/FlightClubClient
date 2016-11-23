@@ -326,6 +326,114 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
         });
     };
 
+    $scope.openBoosterEditDialog = function ($event, stage, $boosterIndex, booster) {
+
+        $mdDialog.show({
+            controller: function ($scope, lParent, lForm, lStage, lBooster, $mdDialog) {
+
+                $scope.parentScope = lParent;
+
+                $scope.selectedStage = jQuery.extend(true, {}, lBooster);
+                $scope.tempEvents = jQuery.extend(true, [], lForm.Mission.Events);
+                $scope.stageTypes = $scope.parentScope.stageTypes;
+                $scope.engineTypes = $scope.parentScope.engineTypes;
+
+                $scope.selectStageType = function (newStage) {
+                    $scope.selectedStage = newStage;
+                };
+                $scope.removeEngine = function ($index) {
+                    
+                    $scope.selectedStage.Engines.splice($index, 1);
+                    $scope.selectedStage.Engines.forEach(function (obj, i) {
+                        obj.engineId = i;
+                    });
+                    $scope.tempEvents.forEach(function(event) {
+                        
+                        if(event.stage === $scope.selectedStage.stageNum) {
+                            for (var i = event.Engines.length - 1; i >= 0; i--) {
+                                if(event.Engines[i].engineId === $index) {
+                                    event.Engines.splice(event.Engines[i], 1);
+                                } else if (event.Engines[i].engineId > $index) {
+                                    event.Engines[i].engineId--;
+                                }
+                            }
+                        }
+                    });
+                    $scope.parentScope.recalcDV();
+
+                };
+                $scope.incrementEngines = function () {
+                    if (!$scope.selectedStage.Engines)
+                        $scope.selectedStage.Engines = [];
+                    $scope.selectedStage.Engines.push({
+                        engineId: $scope.selectedStage.Engines.length
+                    });
+                };
+
+                $scope.openEngineEditDialog = function ($event, $engineIndex, engineConfig) {
+
+                    var obj = {
+                        controller: function ($scope, lEngineTypes, lEngineConfig, $mdDialog, lStage) {
+
+                            $scope.selectedEngineConfig = jQuery.extend(true, {}, lEngineConfig);
+                            $scope.engineTypes = lEngineTypes;
+                            $scope.stage = lStage;
+
+                            $scope.selectEngineType = function (newEngine) {
+                                $scope.selectedEngineConfig.Engine = newEngine;
+                            };
+                            $scope.cancel = function () {
+                                $mdDialog.cancel();
+                            };
+                            $scope.finish = function () {
+                                $mdDialog.hide();
+                            };
+                            $scope.save = function () {
+                                $scope.stage.Engines[$engineIndex] = $scope.selectedEngineConfig;
+                                $mdDialog.hide();
+                            };
+                        },
+                        templateUrl: '/pages/editEngine.tmpl.html',
+                        parent: angular.element(document.body),
+                        targetEvent: $event,
+                        clickOutsideToClose: true,
+                        //preserveScope: true,
+                        autoWrap: true,
+                        skipHide: true,
+                        locals: {
+                            lStage: $scope.selectedStage,
+                            lEngineTypes: $scope.engineTypes,
+                            lEngineConfig: engineConfig
+                        }
+                    };
+                    $mdDialog.show(obj);
+                };
+                $scope.cancel = function () {
+                    $mdDialog.cancel();
+                };
+                $scope.finish = function () {
+                    $mdDialog.hide();
+                };
+                $scope.save = function () {
+                    lStage.Boosters[$boosterIndex] = $scope.selectedStage;
+                    lForm.Mission.Events = $scope.tempEvents;
+                    lParent.recalcDV();
+                    $mdDialog.hide();
+                };
+            },
+            templateUrl: '/pages/editStage.tmpl.html',
+            parent: angular.element(document.body),
+            targetEvent: $event,
+            clickOutsideToClose: true,
+            locals: {
+                lParent: $scope,
+                lForm: $scope.form,
+                lBooster: booster,
+                lStage: stage
+            }
+        });
+    };
+
     $scope.openEventEditDialog = function ($trigger, $eventIndex, event) {
 
         $mdDialog.show({
@@ -416,6 +524,9 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
             $scope.form.Mission.Events.splice(list[i], 1);
         }
         $scope.recalcDV();
+    };
+    $scope.removeBooster = function(stage, $index) {
+        
     };
     $scope.incrementStages = function () {
         $scope.form.Mission.Vehicle.Stages[$scope.form.Mission.Vehicle.Stages.length] = {};

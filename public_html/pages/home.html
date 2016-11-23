@@ -56,7 +56,7 @@
                             <md-divider flex></md-divider>
                             <md-content flex layout-fill layout-align="space-between center" layout="row">
                                 <md-list layout-fill layout='column'>
-                                    <md-list-item class="md-3-line" ng-repeat="stage in form.Mission.Vehicle.Stages">
+                                    <md-list-item class="md-3-line" ng-repeat-start="stage in form.Mission.Vehicle.Stages">
                                         <div class="md-list-item-text">
                                             <h3>{{stage.name}}</h3>
                                             <h4 ng-repeat="engineConfig in stage.Engines">{{engineConfig.number}} x {{engineConfig.Engine.name}}</h4>
@@ -68,6 +68,22 @@
                                         </md-button>
                                         <md-button style="min-width:0" ng-click="removeStage($index)" ng-disabled="builderType !== 'custom'">
                                             <md-tooltip md-direction="bottom">Remove Stage From Vehicle</md-tooltip>
+                                            <md-icon class="material-icons">close</md-icon>
+                                        </md-button>
+                                        <md-divider></md-divider>
+                                    </md-list-item>
+                                    <md-list-item style="margin-left: 40px;" class="md-3-line" ng-repeat-end ng-repeat="booster in stage.Boosters">
+                                        <div class="md-list-item-text">
+                                            <h3>{{booster.name}}</h3>
+                                            <h4 ng-repeat="engineConfig in booster.Engines">{{engineConfig.number}} x {{engineConfig.Engine.name}}</h4>
+                                            <p>Dry mass: {{booster.dryMass / 1000.0}}t // Propellant mass: {{booster.propMass / 1000.0}}t/{{booster.fuelCapacity / 1000.0}}t // Total mass: {{(booster.dryMass + booster.propMass) / 1000.0}}t</p>
+                                        </div>
+                                        <md-button style="min-width:0" ng-click="openBoosterEditDialog($event, stage, $index, booster)" ng-disabled="builderType !== 'custom'">
+                                            <md-tooltip md-direction="bottom">Edit This Booster</md-tooltip>
+                                            <md-icon class="material-icons">mode_edit</md-icon>
+                                        </md-button>
+                                        <md-button style="min-width:0" ng-click="removeBooster(stage, $index)" ng-disabled="builderType !== 'custom'">
+                                            <md-tooltip md-direction="bottom">Remove Booster From Stage</md-tooltip>
                                             <md-icon class="material-icons">close</md-icon>
                                         </md-button>
                                         <md-divider></md-divider>
