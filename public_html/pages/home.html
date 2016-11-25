@@ -175,9 +175,10 @@
                                         <md-tooltip md-direction="left">Core Settings</md-tooltip>
                                         <md-icon class="material-icons">visibility</md-icon>
                                     </md-button>
-                                    <md-button class="md-raised md-accent" ng-show="authorised && hasPermission('save')" type="submit" ng-click="save($event)">
+                                    <md-button ng-style="{'background-color': saveStyle ? saveStatusColor : ''}" class="md-raised md-accent" ng-show="authorised && hasPermission('save')" type="submit" ng-click="save($event)">
                                         <md-tooltip md-direction="left">Save Changes</md-tooltip>
-                                        <md-icon class="material-icons">save</md-icon>
+                                        <md-icon ng-show="!saving" class="material-icons">{{save_icon}}</md-icon>
+                                        <md-progress-circular class="loadCircle" ng-show="saving" md-mode="indeterminate"></md-progress-circular>
                                     </md-button>
                                 </md-content>
                                 <md-content>
@@ -316,14 +317,16 @@
             </md-button>
         </md-toolbar>
         <md-list>
-            <md-subheader layout-fill  class="md-no-sticky">Upcoming Missions</md-subheader>
-            <md-list-item ng-repeat="mission in upcoming" ng-show="mission.display || authorised" ng-click="selectMission(mission.code)">
-                <span class="md-secondary">{{mission.name}}</span>
+            <md-subheader layout-fill class="md-no-sticky">Upcoming Missions</md-subheader>
+            <md-list-item layout-align="space-between center" ng-repeat="mission in upcoming" ng-show="mission.display || authorised" ng-click="selectMission(mission)">
+                <md-progress-circular flex class="loadCircle" ng-show="loadingMission && mission===selectedMission" md-mode="indeterminate"></md-progress-circular>
+                <span flex class="md-secondary">{{mission.name}}</span>
             </md-list-item>
             <md-divider></md-divider>
             <md-subheader layout-fill class="md-no-sticky">Past Missions</md-subheader>
-            <md-list-item ng-repeat="mission in past" ng-show="mission.display || authorised" ng-click="selectMission(mission.code)">
-                <span class="md-secondary">{{mission.name}}</span>
+            <md-list-item layout-align="space-between center" ng-repeat="mission in past" ng-show="mission.display || authorised" ng-click="selectMission(mission)">
+                <md-progress-circular flex class="loadCircle" ng-show="loadingMission && mission===selectedMission" md-mode="indeterminate"></md-progress-circular>
+                <span flex class="md-secondary">{{mission.name}}</span>
             </md-list-item>
         </md-list>
     </md-sidenav>

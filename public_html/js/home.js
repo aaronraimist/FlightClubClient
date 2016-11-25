@@ -7,6 +7,10 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
     $scope.exportStyle = false;
     $scope.import_icon = 'content_paste';
     $scope.importStyle = false;
+    $scope.save_icon = 'save';
+    $scope.saveStyle = false;
+    $scope.saving = false;
+    $scope.loadingMission = false;
     
     $scope.serverErrorMessage = 'The flightclub.io server has undergone a rapid unscheduled disassembly :/\n'
             + 'You\'ll need to wait until I wake up and see this...\n\n';
@@ -80,7 +84,8 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
         {code: 'IGNITION', name: 'Ignition'},
         {code: 'CUTOFF', name: 'Cutoff'},
         {code: 'GUIDANCE', name: 'Guidance'},
-        {code: 'SEPARATION', name: 'Launch/Separation'},
+        {code: 'LAUNCH', name: 'Launch'},
+        {code: 'SEPARATION', name: 'Stage Separation'},
         {code: 'FAIRING_SEP', name: 'Fairing Separation'},
         {code: 'PAYLOAD_SEP', name: 'Payload Separation'}
     ];
@@ -160,11 +165,14 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
         $scope.updateUrl();
     }, true);
 
-    $scope.selectMission = function (code) {
-        $scope.httpRequest('/missions/' + code, 'GET', null, function (data) {
+    $scope.selectMission = function (mission) {
+        $scope.selectedMission = mission;
+        $scope.loadingMission = true;
+        $scope.httpRequest('/missions/' + mission.code, 'GET', null, function (data) {
             $mdSidenav("sidenav").close();
+            $scope.loadingMission = false;
             $scope.form = JSON.parse(data);
-            setNewMission(code);
+            setNewMission(mission.code);
             $scope.$apply();
         }, null);
     };
@@ -200,7 +208,7 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
 
     // this handles moving back to homepage
     if ($scope.$parent.selectedMission !== undefined) {
-        $scope.selectMission($scope.$parent.selectedMission.code);
+        $scope.selectMission($scope.$parent.selectedMission);
     }
 
     $scope.selectSite = function (site) {
@@ -724,6 +732,7 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
                                 .ok('Ok')
                                 .cancel('Cancel');
                         $mdDialog.show(confirm).then(function () {
+                            $scope.saving = true;
                             $scope.httpRequest('/missions/' + $scope.form.Mission.code, 'PUT', formAsJSON_string, saveSuccess($mdDialog), saveError($mdDialog));
                         }, null);
                     } else
@@ -736,6 +745,7 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
                                 .ok('Ok')
                                 .cancel('Cancel');
                         $mdDialog.show(confirm).then(function () {
+                            $scope.saving = true;
                             $scope.httpRequest('/missions/', 'POST', formAsJSON_string, saveSuccess($mdDialog), saveError($mdDialog));
                         }, null);
                     }
@@ -745,6 +755,14 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
 
     var saveSuccess = function (mdDialog) {
         return function (data) {
+            $scope.saving = false;
+            $scope.saveStatusColor = '#82CA9D';
+            $scope.save_icon = 'check';
+            $scope.saveStyle = true;
+            setTimeout(function () {
+                $scope.save_icon = 'save';
+                $scope.saveStyle = false;
+            }, 4000);
             mdDialog.show(
                     mdDialog.alert()
                     .clickOutsideToClose(true)
@@ -758,6 +776,14 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
 
     var saveError = function (mdDialog) {
         return function (data) {
+            $scope.saving = false;
+            $scope.saveStatusColor = '#F7977A';
+            $scope.save_icon = 'close';
+            $scope.saveStyle = true;
+            setTimeout(function () {
+                $scope.save_icon = 'save';
+                $scope.saveStyle = false;
+            }, 4000);
             mdDialog.show(
                     mdDialog.alert()
                     .clickOutsideToClose(true)

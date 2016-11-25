@@ -43,12 +43,28 @@ html, input, textarea, select {
 /*    Some dark theme fixes    */
 /*******************************/
 
-md-progress-circular.md-fc_dark-theme path {
-    stroke: #ccac55;
+md-progress-circular.md-fc_dark-theme:not(.loadCircle) path {
+  stroke: #ccac55;
 }
 
 md-tabs.md-fc_dark-theme .md-tab.md-active {
   color: #eee;
+}
+
+/*******************************/
+/*   I hate myself for this    */
+/*******************************/
+
+.loadCircle {
+    width: 24px !important;
+    height: 24px !important;
+    margin: auto;
+}
+
+.loadCircle svg {
+    width: 24px !important;
+    height: 24px !important;
+    transform-origin: 12px !important;
 }
 
 /*******************************/
