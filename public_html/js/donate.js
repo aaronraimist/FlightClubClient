@@ -2,7 +2,6 @@
 
 angular.module('FlightClub').controller('DonateCtrl', function ($scope) {
 
-    $scope.$parent.toolbarClass = "fullPage fixie";
     $scope.$parent.toolbarTitle = 'Flight Club | Donate';
     $scope.processed = false;
     $scope.success = false;

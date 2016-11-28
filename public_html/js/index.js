@@ -8,7 +8,6 @@ angular.module('FlightClub').controller('IndexCtrl', function ($scope, $mdSidena
         base = '//'+$location.host();
         port = ':8443';
     }
-    $scope.toolbarClass = "";
     $scope.client = base;
     $scope.server = base + port + '/FlightClub';
     var api_url = $scope.server + '/api/v1';

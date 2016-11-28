@@ -2,7 +2,6 @@
 
 angular.module('FlightClub').controller('ResultsCtrl', function ($scope, $cookies, $interval) {
 
-    $scope.$parent.toolbarClass = "fullPage fixie";
     $scope.$parent.toolbarTitle = 'Flight Club | Results';
     $scope.loadPos = 30;
     $scope.loadMessage = "Building plots...";    
@@ -289,9 +288,13 @@ angular.module('FlightClub').controller('ResultsCtrl', function ($scope, $cookie
 
     $scope.plotMap = [];
     $scope.initialisePlots = function () {
+        
+        var allStages = [];
+        $scope.stageMap.forEach(function(el, i) {
+            allStages.push(i);
+        });
 
-        var lowerStages = $scope.stageMap.length === 2 ? [0] : [0, 1];
-        var allStages = $scope.stageMap.length === 2 ? [0, 1] : [0, 1, 2];
+        var lowerStages = $scope.stageMap.length === 2 ? [0] : [0, 2, 3];
 
         $scope.plotMap.push({id: 'altitude1', stages: allStages, title: "Altitude",
             x: {axis: 0, label: "Time (s)", type: "linear"},

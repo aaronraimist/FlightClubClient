@@ -1,6 +1,5 @@
 angular.module('FlightClub').controller('ErrorCtrl', function ($http, $scope) {
 
-    $scope.$parent.toolbarClass = "";
     $scope.$parent.toolbarTitle = 'Flight Club | Error';
     $scope.mailSuccess = $scope.mailError = $scope.formDisabled = false;
 

@@ -25,7 +25,6 @@ angular.module('FlightClub').controller('WorldCtrl', function ($scope, $location
         }
     }, 350);
 
-    $scope.$parent.toolbarClass = "";
     $scope.$parent.toolbarTitle = "Flight Club | Live";
     var w;
 
@@ -208,7 +207,6 @@ angular.module('FlightClub').controller('WorldCtrl', function ($scope, $location
         var now = new Date();
         var timeUntilLaunch = $scope.launchTime - now;
 
-        $scope.$parent.toolbarClass = "";
         $scope.cesiumShow = $scope.countdown = $scope.finished = $scope.sidebarShow = false;
         if ($scope.queryParams['watch'] === '2') {
 

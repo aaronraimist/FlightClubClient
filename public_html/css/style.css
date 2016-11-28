@@ -4,7 +4,6 @@
   src: url(/fonts/Brandon\ Grotesque\ Medium.otf) format('opentype');
 }
 
-
 /* 
 the next two chunks, or add
     <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons" media="bogus">
@@ -74,42 +73,10 @@ md-tabs.md-fc_dark-theme .md-tab.md-active {
 }
 
 /*
-  tabs content was starting way above the tab content
+  tabs content was starting way above the tab content. only important for launchpads
 */
 #home md-grid-list {
   padding-bottom: 0 !important;
-}
-
-md-menu-item {
-  padding: 0 8px;
-}
-
-md-input-container {
-  margin-bottom: 0;
-}
-
-.fixie {
-  position:fixed;
-}
-
-.fullPage {
-  top:0;
-  left:0;
-  z-index:1;
-  min-width:100%;
-}
-
-.fullHeight {
-  min-height: 100%;
-}
-
-.eventLabel {
-  position: relative !important;
-  top: 18px !important;
-}
-
-.perfectHeight {
-  height: 100% !important;
 }
 
 /* input has error div below. This makes select line up */
@@ -117,12 +84,8 @@ md-select, md-switch {
   margin-bottom: 24px !important;
 }
 
-::-webkit-scrollbar { 
+::-webkit-scrollbar {
   display: none; 
-}
-
-.hidden {
-  display: none !important;
 }
 
 #results md-grid-tile {
@@ -131,10 +94,6 @@ md-select, md-switch {
 
 #results figure {
   display: none !important;
-}
-
-md-sidenav, md-backdrop {
-  position: fixed;
 }
 
 #world md-backdrop {
@@ -147,11 +106,6 @@ md-sidenav, md-backdrop {
   left: 0;
   height: 100%;
   width: 100%;
-}
-
-#world md-menu-content {
-  background: black;
-  padding: 0;
 }
 
 @media 

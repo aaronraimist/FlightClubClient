@@ -1,5 +1,5 @@
 <md-content id="world" layout-fill flex layout="column" ng-cloak>
-    <md-content ng-show="worldLoading" class="perfectHeight" flex layout-fill layout-padding layout="column" layout-align="center center">
+    <md-content ng-show="worldLoading" flex layout-fill layout-padding layout="column" layout-align="center center">
         <md-progress-circular md-mode="indeterminate"></md-progress-circular>
         <p>{{missionLoadingMessage}}</p>
     </md-content>
@@ -36,8 +36,8 @@
                                 <span>Change View</span>
                             </md-button>
                         </md-menu-item>
-                        <md-menu-item ng-show="cesiumShow && sidebarShow">
-                            <md-button hide-gt-sm ng-click="toggleNav('sidenav')">
+                        <md-menu-item hide-gt-sm ng-show="cesiumShow && sidebarShow">
+                            <md-button ng-click="toggleNav('sidenav')">
                                 <md-icon class="material-icons">timeline</md-icon>
                                 <span>Telemetry</span>
                             </md-button>
@@ -59,7 +59,7 @@
             </div>
         </md-content>
 
-        <md-sidenav ng-class="{'fixie': $mdMedia('gt-sm')}" ng-show="cesiumShow && sidebarShow" flex layout="column" class="md-sidenav-right md-whiteframe-z2" md-component-id="sidenav" md-is-locked-open="$mdMedia('gt-sm')">
+        <md-sidenav ng-style="{'position:fixed': $mdMedia('gt-sm')}" ng-show="cesiumShow && sidebarShow" flex layout="column" class="md-sidenav-right md-whiteframe-z2" md-component-id="sidenav" md-is-locked-open="$mdMedia('gt-sm')">
             <md-toolbar class="md-theme-indigo">
                 <div class="md-toolbar-tools" layout="row" layout-align="space-around center" flex>
                     <h1><span>{{missionName}}</span></h1>

@@ -1,136 +1,134 @@
 <!doctype html>
 <html ng-app="FlightClub" ng-controller="IndexCtrl">
-  <head>
-    <title>Flight Club</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="keywords" content="flightclub, flight, club, spacex"/>
-    <meta name="author" content="Declan Murphy">
-    <meta name="description" content="Flight Club is a simulator and trajectory visualiser for orbital rocket launches and landings."/>
-    <base href="/"/>
-    
-    <script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/angular_material/1.1.1/angular-material.min.js"></script>
-    <script src="js/app.js"></script>
-    <script src="js/config.js"></script>
-    <script src="js/index.js"></script>
-    <script src="js/home.js"></script>
-    <script src="js/login.js"></script>
-    <script src="js/error.js"></script>
-    <script src="js/contact.js"></script>
-    <script src="js/donate.js"></script>
-    <script src="js/results.js"></script>
-    <script src="js/world.js"></script>
-    <script src="js/media.js"></script>
-    
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-route.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-animate.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-aria.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-messages.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-cookies.min.js"></script>
-    
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" media="bogus"> <!-- for contact page -->
-    <link rel="stylesheet" href="//cesiumjs.org/releases/1.20/Build/Cesium/Widgets/widgets.css" media="bogus">
-    <link rel="stylesheet" href="css/style.css" media="bogus">
-    <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/angular_material/1.1.1/angular-material.min.css" media="bogus">
+    <head>
+        <title>Flight Club</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="keywords" content="flightclub, flight, club, spacex"/>
+        <meta name="author" content="Declan Murphy">
+        <meta name="description" content="Flight Club is a simulator and trajectory visualiser for orbital rocket launches and landings."/>
+        <base href="/"/>
 
-    <meta property="og:title" content="Flight Club" />
-    <meta property="og:site_name" content="Flight Club"/>
-    <meta property="og:url" content="//www.flightclub.io" />
-    <meta property="og:description" content="Flight Club is a simulator and trajectory visualiser for orbital rocket launches and landings." />
-    <meta property="og:content" content="Flight Club is a simulator and trajectory visualiser for orbital rocket launches and landings." />
-    <meta property="og:type" content="website" />
-    <meta property="og:locale" content="en_US" />
-    <meta property="og:image" content="//www.flightclub.io/images/og_image.png" />   
+        <script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/angular_material/1.1.1/angular-material.min.js"></script>
+        <script src="js/app.js"></script>
+        <script src="js/config.js"></script>
+        <script src="js/index.js"></script>
+        <script src="js/home.js"></script>
+        <script src="js/login.js"></script>
+        <script src="js/error.js"></script>
+        <script src="js/contact.js"></script>
+        <script src="js/donate.js"></script>
+        <script src="js/results.js"></script>
+        <script src="js/world.js"></script>
+        <script src="js/media.js"></script>
 
-    <link rel="apple-touch-icon" sizes="57x57" href="images/favicon/apple-icon-57x57.png">
-    <link rel="apple-touch-icon" sizes="60x60" href="images/favicon/apple-icon-60x60.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="images/favicon/apple-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="76x76" href="images/favicon/apple-icon-76x76.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="images/favicon/apple-icon-114x114.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="images/favicon/apple-icon-120x120.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="images/favicon/apple-icon-144x144.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="images/favicon/apple-icon-152x152.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="images/favicon/apple-icon-180x180.png">
-    <link rel="icon" type="image/png" sizes="192x192"  href="images/favicon/android-icon-192x192.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="96x96" href="images/favicon/favicon-96x96.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16x16.png">
-    <link rel="manifest" href="images/favicon/manifest.json">
-    <meta name="msapplication-TileColor" content="#ffffff">
-    <meta name="msapplication-TileImage" content="images/favicon/ms-icon-144x144.png">
-    <meta name="theme-color" content="#ffffff">
-  </head>
-  <body data-ng-element-ready="" md-theme="{{theme}}" md-theme-watch="true" ng-cloak>
-    <div layout="column" flex style="min-height:100%">
-      <section layout-fill layout="column" flex>
-        <md-toolbar class="{{toolbarClass}}">
-          <div class="md-toolbar-tools">
-            <md-menu md-offset="0 50">
-              <md-button class="md-icon-button" aria-label="Menu" ng-click='$mdOpenMenu($event)'>
-                <md-icon class="material-icons">menu</md-icon>
-              </md-button>
-              <md-menu-content width="4">
-                <md-menu-item>
-                  <md-button ng-click="redirect('/')">
-                    <md-icon class="material-icons">home</md-icon>
-                    <span>Home</span>
-                  </md-button>
-                </md-menu-item>
-                <md-menu-item ng-click="redirect('/login')">
-                  <md-button>
-                    <md-icon class="material-icons">person</md-icon>
-                    <span>Login</span>
-                  </md-button>
-                </md-menu-item>
-                <md-menu-item>
-                  <md-button ng-click="redirectExternal('/docs')">
-                    <md-icon class="material-icons">description</md-icon>
-                    <span>Flight Club API Docs</span>
-                  </md-button>
-                </md-menu-item>
-                <md-menu-item>
-                  <md-button ng-click="redirect('/donate')">
-                    <md-icon class="material-icons">euro_symbol</md-icon>
-                    <span>Donate</span>
-                  </md-button>
-                </md-menu-item>
-                <md-menu-item>
-                  <md-button ng-click="redirect('/contact')">
-                    <md-icon class="material-icons">contact_mail</md-icon>
-                    <span>Contact</span>
-                  </md-button>
-                </md-menu-item>
-                <md-menu-item>
-                  <md-button ng-click="redirect('/media')">
-                    <md-icon class="material-icons">sms</md-icon>
-                    <span>Media</span>
-                  </md-button>
-                </md-menu-item>
-                <md-menu-item>
-                  <md-button ng-click="toggleTheme()">
-                    <md-icon class="material-icons">cached</md-icon>
-                    <span>Change Theme</span>
-                  </md-button>
-                </md-menu-item>
-              </md-menu-content>
-            </md-menu>
-            <h2>
-              <span>{{toolbarTitle}}</span>
-            </h2>
-            <span flex></span>
-            <md-button class="md-icon-button" aria-label="sidenav" ng-click="toggleNav('sidenav')">
-              <md-icon class="material-icons">more_vert</md-icon>
-            </md-button>
-          </div>
-        </md-toolbar>
-        <md-content ng-view layout-fill layout="column" flex md-swipe-left="open('sidenav')"></md-content>
-      </section>
-    </div>
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"> <!-- for contact page -->
-    <link rel="stylesheet" href="//cesiumjs.org/releases/1.20/Build/Cesium/Widgets/widgets.css">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/angular_material/1.1.1/angular-material.min.css">
-  </body>
+        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-route.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-animate.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-aria.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-messages.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-cookies.min.js"></script>
+
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" media="bogus"> <!-- for contact page -->
+        <link rel="stylesheet" href="//cesiumjs.org/releases/1.20/Build/Cesium/Widgets/widgets.css" media="bogus">
+        <link rel="stylesheet" href="css/style.css" media="bogus">
+        <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/angular_material/1.1.1/angular-material.min.css" media="bogus">
+
+        <meta property="og:title" content="Flight Club" />
+        <meta property="og:site_name" content="Flight Club"/>
+        <meta property="og:url" content="//www.flightclub.io" />
+        <meta property="og:description" content="Flight Club is a simulator and trajectory visualiser for orbital rocket launches and landings." />
+        <meta property="og:content" content="Flight Club is a simulator and trajectory visualiser for orbital rocket launches and landings." />
+        <meta property="og:type" content="website" />
+        <meta property="og:locale" content="en_US" />
+        <meta property="og:image" content="//www.flightclub.io/images/og_image.png" />   
+
+        <link rel="apple-touch-icon" sizes="57x57" href="images/favicon/apple-icon-57x57.png">
+        <link rel="apple-touch-icon" sizes="60x60" href="images/favicon/apple-icon-60x60.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="images/favicon/apple-icon-72x72.png">
+        <link rel="apple-touch-icon" sizes="76x76" href="images/favicon/apple-icon-76x76.png">
+        <link rel="apple-touch-icon" sizes="114x114" href="images/favicon/apple-icon-114x114.png">
+        <link rel="apple-touch-icon" sizes="120x120" href="images/favicon/apple-icon-120x120.png">
+        <link rel="apple-touch-icon" sizes="144x144" href="images/favicon/apple-icon-144x144.png">
+        <link rel="apple-touch-icon" sizes="152x152" href="images/favicon/apple-icon-152x152.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="images/favicon/apple-icon-180x180.png">
+        <link rel="icon" type="image/png" sizes="192x192"  href="images/favicon/android-icon-192x192.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="96x96" href="images/favicon/favicon-96x96.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16x16.png">
+        <link rel="manifest" href="images/favicon/manifest.json">
+        <meta name="msapplication-TileColor" content="#ffffff">
+        <meta name="msapplication-TileImage" content="images/favicon/ms-icon-144x144.png">
+        <meta name="theme-color" content="#ffffff">
+    </head>
+    <body data-ng-element-ready="" md-theme="{{theme}}" md-theme-watch="true" ng-cloak>
+        <section style="min-height:100%" layout="column" flex>
+            <md-toolbar class="{{toolbarClass}}">
+                <div class="md-toolbar-tools">
+                    <md-menu md-offset="0 50">
+                        <md-button class="md-icon-button" aria-label="Menu" ng-click='$mdOpenMenu($event)'>
+                            <md-icon class="material-icons">menu</md-icon>
+                        </md-button>
+                        <md-menu-content width="4">
+                            <md-menu-item>
+                                <md-button ng-click="redirect('/')">
+                                    <md-icon class="material-icons">home</md-icon>
+                                    <span>Home</span>
+                                </md-button>
+                            </md-menu-item>
+                            <md-menu-item ng-click="redirect('/login')">
+                                <md-button>
+                                    <md-icon class="material-icons">person</md-icon>
+                                    <span>Login</span>
+                                </md-button>
+                            </md-menu-item>
+                            <md-menu-item>
+                                <md-button ng-click="redirectExternal('/docs')">
+                                    <md-icon class="material-icons">description</md-icon>
+                                    <span>Flight Club API Docs</span>
+                                </md-button>
+                            </md-menu-item>
+                            <md-menu-item>
+                                <md-button ng-click="redirect('/donate')">
+                                    <md-icon class="material-icons">euro_symbol</md-icon>
+                                    <span>Donate</span>
+                                </md-button>
+                            </md-menu-item>
+                            <md-menu-item>
+                                <md-button ng-click="redirect('/contact')">
+                                    <md-icon class="material-icons">contact_mail</md-icon>
+                                    <span>Contact</span>
+                                </md-button>
+                            </md-menu-item>
+                            <md-menu-item>
+                                <md-button ng-click="redirect('/media')">
+                                    <md-icon class="material-icons">sms</md-icon>
+                                    <span>Media</span>
+                                </md-button>
+                            </md-menu-item>
+                            <md-menu-item>
+                                <md-button ng-click="toggleTheme()">
+                                    <md-icon class="material-icons">cached</md-icon>
+                                    <span>Change Theme</span>
+                                </md-button>
+                            </md-menu-item>
+                        </md-menu-content>
+                    </md-menu>
+                    <h2>
+                        <span>{{toolbarTitle}}</span>
+                    </h2>
+                    <span flex></span>
+                    <md-button class="md-icon-button" aria-label="sidenav" ng-click="toggleNav('sidenav')">
+                        <md-icon class="material-icons">more_vert</md-icon>
+                    </md-button>
+                </div>
+            </md-toolbar>
+            <md-content ng-view layout="column" flex md-swipe-left="open('sidenav')"></md-content>
+        </section>
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"> <!-- for contact page -->
+        <link rel="stylesheet" href="//cesiumjs.org/releases/1.20/Build/Cesium/Widgets/widgets.css">
+        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/angular_material/1.1.1/angular-material.min.css">
+    </body>
 </html>

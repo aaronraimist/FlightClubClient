@@ -1,6 +1,5 @@
 angular.module('FlightClub').controller('MediaCtrl', function ($scope) {
 
-    $scope.$parent.toolbarClass = "fullPage fixie";
     $scope.$parent.toolbarTitle = 'Flight Club | Media';
     
     $scope.mediaTiles = (function() {

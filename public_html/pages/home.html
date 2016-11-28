@@ -1,5 +1,5 @@
 <md-content id="home" layout-fill flex layout="column">
-    <md-content ng-show="!loadSuccess" class="perfectHeight" flex layout-fill layout-padding layout="column" layout-align="center center">
+    <md-content ng-show="!loadSuccess" flex layout-fill layout-padding layout="column" layout-align="center center">
         <md-progress-circular ng-show="missionLoading" md-mode="indeterminate"></md-progress-circular>
         <p ng-show="missionLoading">{{missionLoadingMessage}}</p>
         <p ng-show="!missionLoading" style="white-space:pre-wrap;">{{serverErrorMessage}}</p>
@@ -8,19 +8,18 @@
         <md-tabs flex md-selected="3" md-border-bottom md-autoselect md-swipe-content="true">
             <md-tab label='Launch Site'>
                 <md-tab-content md-swipe-left="onSwipeLeft()">
-                    <md-content layout-fill flex layout-padding layout="row" layout-align="space-around center" style="margin-bottom:8px">
-                        <md-grid-list layout-padding layout-margin layout-fill
+                    <md-content layout-fill flex layout-padding layout="row" layout-align="space-around center">
+                        <md-grid-list layout-fill
                                       md-cols-xs="1" md-cols-sm="2" md-cols-md="4" md-cols-gt-md="6"
                                       md-row-height-gt-md="1:1" md-row-height="2:2"
                                       md-gutter="12px" md-gutter-gt-sm="8px">
-                            <md-grid-tile ng-repeat="site in launchSites"
+                            <md-grid-tile layout-padding ng-repeat="site in launchSites"
                                           md-rowspan="1"
                                           md-colspan="1"
-                                          md-colspan-gt-sm="2"
-                                          style="margin:0px;padding:0px">
+                                          md-colspan-gt-sm="2">
                                 <md-button ng-class="{'md-accent':launchSites[form.Mission.launchsite] === site,'md-primary':launchSites[form.Mission.launchsite] !== site}" layout-padding layout-fill class="bolder md-raised" ng-click='selectSite(site)'>
-                                    <md-icon flex style="height:96px;width:96px" md-svg-src="{{'images/' + site.code + '.svg'}}"></md-icon>
-                                    <div flex>{{site.name}}</div>
+                                    <md-icon flex style="height:144px;width:144px" md-svg-src="{{'images/' + site.code + '.svg'}}"></md-icon>
+                                    <md-grid-tile-footer><h3>{{site.name}}</h3></md-grid-tile-footer>
                                 </md-button>
                             </md-grid-tile>
                         </md-grid-list>
@@ -110,15 +109,15 @@
             <md-tab label='Flight Profile'>
                 <md-tab-content md-swipe-left="open('sidenav')">
                     <md-content layout-padding layout-fill flex layout='column' layout-gt-sm='row' layout-align='space-between start'>
-                        <md-content class="perfectHeight" flex layout-fill>
+                        <md-content flex layout-fill>
                             <md-content layout="row" layout-align="space-between center">
                                 <md-content>
                                     <md-button class="md-raised md-accent" show-sm hide-gt-sm ng-show="authorised && hasPermission('editCore')" type="submit" ng-click="openAdminEditDialog($event)">
-                                        <md-tooltip md-direction="left">Core Settings</md-tooltip>
+                                        <md-tooltip md-direction="bottom">Core Settings</md-tooltip>
                                         <md-icon class="material-icons">visibility</md-icon>
                                     </md-button>
                                     <md-button class="md-raised md-accent" show-sm hide-gt-sm ng-show="authorised && hasPermission('save')" type="submit" ng-click="save($event)">
-                                        <md-tooltip md-direction="left">Save Changes</md-tooltip>
+                                        <md-tooltip md-direction="bottom">Save Changes</md-tooltip>
                                         <md-icon class="material-icons">save</md-icon>
                                     </md-button>
                                 </md-content>
@@ -149,13 +148,13 @@
                                 <md-list-item class="md-2-line secondary-button-padding" ng-repeat="event in form.Mission.Events">
                                     <div class="md-list-item-text">
                                         <h3>{{"T" + (event.time &lt; 0 ? '' : '+') + event.time}} // {{event.name}}</h3>
-                                        <p>{{form.Mission.Vehicle.Stages[event.stage].name}}</p>
+                                        <p>{{getStageByStageNum(event.stage).name}}</p>
                                     </div>
                                     <md-button show-sm hide-gt-sm style="min-width:0" ng-click="openEventEditDialog($event, $index, event)">
                                         <md-tooltip md-direction="left">Edit Event</md-tooltip>
                                         <md-icon class="material-icons">mode_edit</md-icon>
                                     </md-button>
-                                    <md-button hide show-gt-sm style="min-width:0" ng-click="selectEvent($event, event)">
+                                    <md-button hide show-gt-sm style="min-width:0" ng-click="selectEvent(event)">
                                         <md-tooltip md-direction="left">Edit Event</md-tooltip>
                                         <md-icon class="material-icons">mode_edit</md-icon>
                                     </md-button>
@@ -168,15 +167,15 @@
                             </md-list>
                         </md-content>
 
-                        <md-content class="perfectHeight" flex layout-fill hide-xs hide-sm show-gt-sm>
+                        <md-content flex layout-fill hide-xs hide-sm show-gt-sm>
                             <md-content style="padding-top:8px" layout="row" layout-align="space-between center">
                                 <md-content>
                                     <md-button class="md-raised md-accent" ng-show="authorised && hasPermission('editCore')" type="submit" ng-click="openAdminEditDialog($event)">
-                                        <md-tooltip md-direction="left">Core Settings</md-tooltip>
+                                        <md-tooltip md-direction="bottom">Core Settings</md-tooltip>
                                         <md-icon class="material-icons">visibility</md-icon>
                                     </md-button>
                                     <md-button ng-style="{'background-color': saveStyle ? saveStatusColor : ''}" class="md-raised md-accent" ng-show="authorised && hasPermission('save')" type="submit" ng-click="save($event)">
-                                        <md-tooltip md-direction="left">Save Changes</md-tooltip>
+                                        <md-tooltip md-direction="bottom">Save Changes</md-tooltip>
                                         <md-icon ng-show="!saving" class="material-icons">{{save_icon}}</md-icon>
                                         <md-progress-circular class="loadCircle" ng-show="saving" md-mode="indeterminate"></md-progress-circular>
                                     </md-button>
@@ -227,7 +226,7 @@
                                     <md-tooltip md-direction="bottom">Choose from Ignition, Cutoff, Guidance, Separation...</md-tooltip>
                                     <label>Event Type</label>
                                     <md-select ng-model="selectedEvent.type" name="type" ng-required="selectedEvent!==null">
-                                        <md-option ng-repeat="obj in type" value="{{obj.code}}" ng-disabled="obj.code === 'FAIRING_SEP' && form.Mission.Vehicle.Stages[selectedEvent.stage].fairingMass === undefined">{{obj.name}}</md-option>
+                                        <md-option ng-repeat="obj in type" value="{{obj.code}}" ng-disabled="obj.code === 'FAIRING_SEP' && getStageByStageNum(selectedEvent.stage).fairingMass === undefined">{{obj.name}}</md-option>
                                     </md-select>
                                     <div ng-messages="profileForm.type.$error" multiple md-auto-hide="true">
                                         <div ng-message="required">This is required!</div>
@@ -237,7 +236,8 @@
                                     <md-tooltip md-direction="bottom">The event applies to this rocket stage in particular</md-tooltip>
                                     <label>Stage</label>
                                     <md-select ng-model="selectedEvent.stage" name="stage" ng-required="selectedEvent!==null">
-                                        <md-option ng-repeat="obj in form.Mission.Vehicle.Stages" ng-value="obj.stageNum">{{obj.name}}</md-option>
+                                        <md-option ng-repeat-start="obj in form.Mission.Vehicle.Stages" ng-value="obj.stageNum">{{obj.name}}</md-option>
+                                        <md-option ng-repeat-end ng-repeat="obj2 in obj.Boosters" ng-value="obj2.stageNum">{{obj2.name}}</md-option>
                                     </md-select>
                                     <div ng-messages="profileForm.stage.$error" multiple md-auto-hide="true">
                                         <div ng-message="required">This is required!</div>
@@ -279,7 +279,7 @@
                             </md-content>
                             <md-content ng-show="selectedEvent.type === 'IGNITION' || selectedEvent.type === 'CUTOFF'"
                                         layout="row" layout-align="space-around center">
-                                <md-content flex class="md-block" ng-repeat="engineConfig in form.Mission.Vehicle.Stages[selectedEvent.stage].Engines">
+                                <md-content flex class="md-block" ng-repeat="engineConfig in getStageByStageNum(selectedEvent.stage).Engines">
                                     <md-input-container style="width:90%" flex>
                                         <md-tooltip md-direction="bottom">How many engines do you want to {{selectedEvent.type === 'IGNITION' ? 'ignite' : 'cut off'}}?</md-tooltip>
                                         <label># of {{engineConfig.Engine.name}} engines</label>

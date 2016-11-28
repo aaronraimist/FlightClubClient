@@ -73,7 +73,6 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
         $scope.serverErrorMessage += 'Companies: ' + statusText + '\n';
     });
 
-    $scope.$parent.toolbarClass = "";
     $scope.gravTurnSelect = [
         {code: 'NONE', name: null},
         {code: 'FORWARD', name: 'Forward'},
@@ -214,17 +213,21 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
     $scope.selectSite = function (site) {
         $scope.form.Mission.launchsite = site.code;
     };
-    $scope.selectEvent = function (trigger, event) {
-        
-        if ($scope.selectedEvent === event) {
-            $scope.selectedEvent = null; 
-            uniqueClass(trigger.currentTarget, 'md-content', 'button', 'md-primary', false);
-        } else {
-            $scope.selectedEvent = event;
-            if(event.stage !== undefined)
-                $scope.form.Mission.Vehicle.Stages[event.stage].stageNum = event.stage;
-            uniqueClass(trigger.currentTarget, 'md-content', 'button', 'md-primary', true);
+    $scope.selectEvent = function (event) {
+        $scope.selectedEvent = $scope.selectedEvent === event ? null : event;
+    };
+    $scope.getStageByStageNum = function(num) {
+        if(!$scope.form)
+            return null;
+        for(var i=0;i<$scope.form.Mission.Vehicle.Stages.length;i++) {
+            if($scope.form.Mission.Vehicle.Stages[i].stageNum === num)
+                return $scope.form.Mission.Vehicle.Stages[i];
+            for(var j=0;j<$scope.form.Mission.Vehicle.Stages[i].Boosters.length;j++) {
+                if($scope.form.Mission.Vehicle.Stages[i].Boosters[j].stageNum === num)
+                    return $scope.form.Mission.Vehicle.Stages[i].Boosters[j];
+            }
         }
+        return null;
     };
 
     $scope.openStageEditDialog = function ($event, $stageIndex, stage) {
@@ -733,7 +736,7 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
                                 .cancel('Cancel');
                         $mdDialog.show(confirm).then(function () {
                             $scope.saving = true;
-                            $scope.httpRequest('/missions/' + $scope.form.Mission.code, 'PUT', formAsJSON_string, saveSuccess($mdDialog), saveError($mdDialog));
+                            $scope.httpRequest('/missions/' + $scope.form.Mission.code, 'PUT', formAsJSON_string, saveSuccess, saveError);
                         }, null);
                     } else
                     {
@@ -746,64 +749,33 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
                                 .cancel('Cancel');
                         $mdDialog.show(confirm).then(function () {
                             $scope.saving = true;
-                            $scope.httpRequest('/missions/', 'POST', formAsJSON_string, saveSuccess($mdDialog), saveError($mdDialog));
+                            $scope.httpRequest('/missions/', 'POST', formAsJSON_string, saveSuccess, saveError);
                         }, null);
                     }
                 }, null);
 
     };
 
-    var saveSuccess = function (mdDialog) {
-        return function (data) {
-            $scope.saving = false;
-            $scope.saveStatusColor = '#82CA9D';
-            $scope.save_icon = 'check';
-            $scope.saveStyle = true;
-            setTimeout(function () {
-                $scope.save_icon = 'save';
-                $scope.saveStyle = false;
-            }, 4000);
-            mdDialog.show(
-                    mdDialog.alert()
-                    .clickOutsideToClose(true)
-                    .title("That's a bingo!")
-                    .textContent('Mission was updated successfully')
-                    .ariaLabel('Update Success')
-                    .ok('Ok')
-                    );
-        };
+    var saveSuccess = function () {
+        $scope.saving = false;
+        $scope.saveStatusColor = '#82CA9D';
+        $scope.save_icon = 'check';
+        $scope.saveStyle = true;
+        setTimeout(function () {
+            $scope.save_icon = 'save';
+            $scope.saveStyle = false;
+        }, 4000);
     };
 
-    var saveError = function (mdDialog) {
-        return function (data) {
-            $scope.saving = false;
-            $scope.saveStatusColor = '#F7977A';
-            $scope.save_icon = 'close';
-            $scope.saveStyle = true;
-            setTimeout(function () {
-                $scope.save_icon = 'save';
-                $scope.saveStyle = false;
-            }, 4000);
-            mdDialog.show(
-                    mdDialog.alert()
-                    .clickOutsideToClose(true)
-                    .title("I always hated you the most")
-                    .textContent('There was an error updating.')
-                    .ariaLabel('Update Failure')
-                    .ok('Ok')
-                    );
-        };
-    };
-
-    var uniqueClass = function (target, parentType, targetType, className, add) {
-
-        var parent = target.closest(parentType);
-        var targets = parent.getElementsByTagName(targetType);
-        for (var i = 0; i < targets.length; i++) {
-            targets[i].classList.remove(className);
-        }
-        if(add)
-            target.classList.add(className);
+    var saveError = function () {
+        $scope.saving = false;
+        $scope.saveStatusColor = '#F7977A';
+        $scope.save_icon = 'close';
+        $scope.saveStyle = true;
+        setTimeout(function () {
+            $scope.save_icon = 'save';
+            $scope.saveStyle = false;
+        }, 4000);
     };
 
 });
