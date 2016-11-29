@@ -45,10 +45,10 @@ angular.module('FlightClub').controller('IndexCtrl', function ($scope, $mdSidena
             $scope.$apply();
         });
     }
-    
-    $interval(function() {
+
+    var themer = $interval(function() {
         if ($scope.theme)
-            $interval.cancel(this);
+            $interval.cancel(themer);
         else {
             $scope.theme = $cookies.get('fc_theme');
             if($scope.theme === undefined)

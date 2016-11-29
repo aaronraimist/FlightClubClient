@@ -24,15 +24,15 @@ angular.module('FlightClub').controller('ResultsCtrl', function ($scope, $mdDial
         { p: 0.3, message: 'Landing burn has begun'},
         { p: 0.6, message: 'LZ-1, The Falcon has landed'},
         { p: 0.5, message: 'We have SECO!'},
-        { p: 0.9, message: '<a href="https://www.patreon.com/flightclub">Support me on Patreon!</a>'},
-        { p: 1.0, message: 'Follow me on Twitter: <a href="https://www.twitter.com/decmurphy_">@decmurphy_</a>'}        
+        { p: 0.9, message: '<a href="https://www.patreon.com/flightclub">Click here to support me on Patreon!</a>'},
+        { p: 0.0, message: 'Follow me on Twitter: <a href="https://www.twitter.com/decmurphy_">@decmurphy_</a>'}        
     ];
     
     var i = 0;
     $scope.missionLoadingMessage = $scope.messageArray[i++].message;
-    $interval(function() {
-        if (i === $scope.messageArray.length)
-            $interval.cancel(this);
+    var roller = $interval(function() {
+        if (i === $scope.messageArray.length || !$scope.isLoading)
+            $interval.cancel(roller);
         else if (Math.random() > $scope.messageArray[i-1].p)
             $scope.loadMessageSecondary = $scope.messageArray[i++].message;
     }, 350);

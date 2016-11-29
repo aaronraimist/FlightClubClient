@@ -24,7 +24,7 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
         { p: 0.2, message: 'Turtling FoxhoundBat...' },
         { p: 0.2, message: 'YVAN EHT NIOJ' },
         { p: 0.2, message: 'Impersonating Benjamin Klein...' },
-        { p: 0.9, message: '<a href="https://www.patreon.com/flightclub">Support me on Patreon!</a>'},
+        { p: 0.9, message: '<a href="https://www.patreon.com/flightclub">Click here to support me on Patreon!</a>'},
         { p: 0.6, message: 'Wake up, John...' },
         { p: 0.1, message: 'SUBLIMINAL MESSAGES' },
         { p: 0.8, message: 'In the beginning the Universe was created. This has made a lot of people very angry and been widely regarded as a bad move.' },
@@ -32,10 +32,13 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
     ];
     
     var i = Math.floor(Math.random()*$scope.messageArray.length);
-    $interval(function() {
+    var roller = $interval(function() {
         $scope.missionLoadingMessage = $scope.messageArray[i].message;
         if (Math.random() > $scope.messageArray[i].p) {
             i = (i+1)%$scope.messageArray.length;
+        }
+        if(!$scope.missionLoading) {
+            $interval.cancel(roller);
         }
     }, 350);
     

@@ -10,21 +10,22 @@ angular.module('FlightClub').controller('WorldCtrl', function ($scope, $location
         { p: 0.8, message: 'Getting data from /r/SpaceX...'},
         { p: 0.4, message: 'Killing Church...'},
         { p: 0.3, message: 'YVAN EHT NIOJ'},
-        { p: 0.9, message: '<a href="https://www.patreon.com/flightclub">Support me on Patreon!</a>'},
         { p: 0.8, message: 'Literally downloading the entire planet.'},
         { p: 0.2, message: 'Have some patience, dammit'},
         { p: 0.8, message: 'Downloading trajectory data files...'},
         { p: 0.2, message: 'Damn your internet is slow, man'},
         { p: 0.2, message: 'I hope your browser can handle this'},
-        { p: 0.5, message: 'Follow me on Twitter: @decmurphy_'}
+        { p: 0.9, message: '<a href="https://www.patreon.com/flightclub">Click here to support me on Patreon!</a>'},
+        { p: 0.0, message: 'Follow me on Twitter: <a href="https://www.twitter.com/decmurphy_">@decmurphy_</a>'}
     ];
     
-    var i = Math.floor(Math.random()*$scope.messageArray.length);
-    $interval(function() {
-        $scope.missionLoadingMessage = $scope.messageArray[i].message;
-        if (Math.random() > $scope.messageArray[i].p) {
-            i = (i+1)%$scope.messageArray.length;
-        }
+    var i = 0;
+    $scope.missionLoadingMessage = $scope.messageArray[i++].message;
+    var roller = $interval(function() {
+        if (i === $scope.messageArray.length || !$scope.worldLoading)
+            $interval.cancel(roller);
+        else if (Math.random() > $scope.messageArray[i-1].p)
+            $scope.loadMessageSecondary = $scope.messageArray[i++].message;
     }, 350);
 
     $scope.$parent.toolbarTitle = "Flight Club | Live";
