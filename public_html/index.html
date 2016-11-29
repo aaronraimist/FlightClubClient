@@ -85,12 +85,6 @@
                                 </md-button>
                             </md-menu-item>
                             <md-menu-item>
-                                <md-button ng-click="redirectExternal('/docs')">
-                                    <md-icon class="material-icons">description</md-icon>
-                                    <span>Flight Club API Docs</span>
-                                </md-button>
-                            </md-menu-item>
-                            <md-menu-item>
                                 <md-button ng-click="redirectExternal('https://www.patreon.com/flightclub')">
                                     <md-icon class="material-icons">
                                         <svg xmlns="http://www.w3.org/2000/svg"
@@ -101,12 +95,6 @@
                                         </svg>
                                     </md-icon>
                                     <span>Support me on Patreon!</span>
-                                </md-button>
-                            </md-menu-item>
-                            <md-menu-item>
-                                <md-button ng-click="redirect('/donate')">
-                                    <md-icon class="material-icons">euro_symbol</md-icon>
-                                    <span>Donate</span>
                                 </md-button>
                             </md-menu-item>
                             <md-menu-item>
@@ -125,6 +113,12 @@
                                 <md-button ng-click="toggleTheme()">
                                     <md-icon class="material-icons">cached</md-icon>
                                     <span>Change Theme</span>
+                                </md-button>
+                            </md-menu-item>
+                            <md-menu-item>
+                                <md-button ng-click="redirectExternal('/docs')">
+                                    <md-icon class="material-icons">description</md-icon>
+                                    <span>Flight Club API Docs</span>
                                 </md-button>
                             </md-menu-item>
                         </md-menu-content>
