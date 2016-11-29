@@ -1,7 +1,7 @@
 <md-content id="world" layout-fill flex layout="column" ng-cloak>
     <md-content ng-show="worldLoading" flex layout-fill layout-padding layout="column" layout-align="center center">
         <md-progress-circular md-mode="indeterminate"></md-progress-circular>
-        <p>{{missionLoadingMessage}}</p>
+        <p ng-bind-html="missionLoadingMessage"></p>
     </md-content>
     <md-content ng-show="!worldLoading && (countdown || finished)" flex layout="column" layout-align='space-around center'>
         <md-content class='md-primary centre'>

@@ -50,6 +50,14 @@ md-tabs.md-fc_dark-theme .md-tab.md-active {
   color: #eee;
 }
 
+a {
+    text-decoration: none;
+}
+
+.md-fc_dark-theme a {
+    color: #ccac55;
+}
+
 /*******************************/
 /*   I hate myself for this    */
 /*******************************/

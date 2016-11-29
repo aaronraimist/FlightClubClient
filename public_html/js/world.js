@@ -8,7 +8,7 @@ angular.module('FlightClub').controller('WorldCtrl', function ($scope, $location
         { p: 0.8, message: 'Getting data from /r/SpaceX...'},
         { p: 0.4, message: 'Killing Church...'},
         { p: 0.3, message: 'YVAN EHT NIOJ'},
-        { p: 0.6, message: 'Donate to flightclub.io'},
+        { p: 0.9, message: '<a href="https://www.patreon.com/flightclub">Support me on Patreon!</a>'},
         { p: 0.8, message: 'Literally downloading the entire planet.'},
         { p: 0.2, message: 'Have some patience, dammit'},
         { p: 0.8, message: 'Downloading trajectory data files...'},

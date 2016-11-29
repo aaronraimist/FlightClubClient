@@ -11,18 +11,19 @@ angular.module('FlightClub').controller('ResultsCtrl', function ($scope, $mdDial
         { p: 0.2, message: 'Engine Chill'},
         { p: 0.2, message: 'Terminal Count'},
         { p: 0.2, message: 'Main Engine Start'},
-        { p: 0.7, message: 'Liftoff!'},
+        { p: 0.5, message: 'Liftoff!'},
         { p: 0.3, message: 'Vehicle is supersonic'},
         { p: 0.3, message: 'Vehicle is passing through Max Q'},
-        { p: 0.7, message: 'MECO!'},
+        { p: 0.6, message: 'MECO!'},
         { p: 0.3, message: 'Stage separation. Good luck Stage 1...'},
-        { p: 0.6, message: 'Upper stage ignition'},
-        { p: 0.6, message: 'Boostback looks good'},
+        { p: 0.5, message: 'Upper stage ignition'},
+        { p: 0.5, message: 'Boostback looks good'},
         { p: 0.4, message: 'Entry burn is complete'},
         { p: 0.3, message: 'Landing burn has begun'},
-        { p: 0.7, message: 'LZ-1, The Falcon has landed'},
-        { p: 0.6, message: 'We have SECO!'},
-        { p: 0.5, message: 'Follow me on Twitter: @decmurphy_'}
+        { p: 0.6, message: 'LZ-1, The Falcon has landed'},
+        { p: 0.5, message: 'We have SECO!'},
+        { p: 0.9, message: '<a href="https://www.patreon.com/flightclub">Support me on Patreon!</a>'},
+        { p: 1.0, message: 'Follow me on Twitter: <a href="https://www.twitter.com/decmurphy_">@decmurphy_</a>'}        
     ];
     
     var i = 0;
@@ -30,7 +31,7 @@ angular.module('FlightClub').controller('ResultsCtrl', function ($scope, $mdDial
     $interval(function() {
         if (i === $scope.messageArray.length)
             $interval.cancel(this);
-        else if (Math.random() > $scope.messageArray[i].p)
+        else if (Math.random() > $scope.messageArray[i-1].p)
             $scope.loadMessageSecondary = $scope.messageArray[i++].message;
     }, 350);
     

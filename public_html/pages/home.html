@@ -1,7 +1,7 @@
 <md-content id="home" layout-fill flex layout="column">
     <md-content ng-show="!loadSuccess" flex layout-fill layout-padding layout="column" layout-align="center center">
         <md-progress-circular ng-show="missionLoading" md-mode="indeterminate"></md-progress-circular>
-        <p ng-show="missionLoading">{{missionLoadingMessage}}</p>
+        <p ng-show="missionLoading" ng-bind-html="missionLoadingMessage"></p>
         <p ng-show="!missionLoading" style="white-space:pre-wrap;">{{serverErrorMessage}}</p>
     </md-content>
     <form ng-show="loadSuccess" layout-fill layout="row" flex name="profileForm" ng-cloak>
