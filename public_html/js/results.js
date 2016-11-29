@@ -160,9 +160,7 @@ angular.module('FlightClub').controller('ResultsCtrl', function ($scope, $mdDial
                         window.history.pushState({}, "", '/results/?' + queryString);
                         $scope.load(queryString);
                     } else {
-                        var errors = data.Mission.errors;
-                        var errorsHash = window.btoa(errors);
-
+                        var errorsHash = window.btoa(JSON.stringify(data));
                         window.location = $scope.$parent.client + '/error/#' + errorsHash;
                     }
 
