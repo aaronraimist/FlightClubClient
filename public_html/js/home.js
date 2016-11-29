@@ -1,5 +1,7 @@
 angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog, $mdSidenav, $cookies, $interval, $location) {
 
+    $scope.$emit('viewBroadcast', 'home');
+
     $scope.missionLoading = true;
     $scope.loadSuccess = false;
     

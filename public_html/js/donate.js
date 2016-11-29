@@ -2,6 +2,8 @@
 
 angular.module('FlightClub').controller('DonateCtrl', function ($scope) {
 
+    $scope.$emit('viewBroadcast', 'donate');
+
     $scope.$parent.toolbarTitle = 'Flight Club | Donate';
     $scope.processed = false;
     $scope.success = false;

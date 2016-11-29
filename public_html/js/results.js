@@ -2,6 +2,8 @@
 
 angular.module('FlightClub').controller('ResultsCtrl', function ($scope, $mdDialog, $cookies, $interval) {
 
+    $scope.$emit('viewBroadcast', 'results');
+
     $scope.$parent.toolbarTitle = 'Flight Club | Results';
     $scope.loadPos = 30;
     $scope.loadMessage = "Building plots...";    

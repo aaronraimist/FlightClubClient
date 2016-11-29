@@ -1,5 +1,7 @@
 angular.module('FlightClub').controller('MediaCtrl', function ($scope) {
 
+    $scope.$emit('viewBroadcast', 'media');
+
     $scope.$parent.toolbarTitle = 'Flight Club | Media';
     
     $scope.mediaTiles = (function() {

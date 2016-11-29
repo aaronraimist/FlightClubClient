@@ -2,6 +2,8 @@
 
 angular.module('FlightClub').controller('WorldCtrl', function ($scope, $location, $interval) {
     
+    $scope.$emit('viewBroadcast', 'world');
+
     $scope.worldLoading = true;
     $scope.messageArray = [
         // p is probability of update being skipped until next interval

@@ -16,6 +16,11 @@ angular.module('FlightClub').controller('IndexCtrl', function ($scope, $mdSidena
     $scope.authorised = false;
     $scope.permissions = [];
     $scope.canCreateUser = false;
+    
+    $scope.showSidenav = true;
+    $scope.$on('viewBroadcast', function(event, args) {
+        $scope.showSidenav = (args === 'home' || args === 'results' || args === 'world');
+    });
 
     $scope.httpRequest = function (dest, method, data, successfn, errorfn) {
         $.ajax({type: method, url: api_url + dest, contentType: 'application/json', data: data,

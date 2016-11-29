@@ -1,5 +1,7 @@
 angular.module('FlightClub').controller('ContactCtrl', function ($scope, $http, $mdDialog) {
-
+    
+    $scope.$emit('viewBroadcast', 'contact');
+    
     $scope.$parent.toolbarTitle = 'Flight Club | Contact';
     $scope.mailSuccess = false;
     $scope.form = {
