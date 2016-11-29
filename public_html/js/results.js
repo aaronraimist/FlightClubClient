@@ -1,6 +1,6 @@
 /* global Plotly */
 
-angular.module('FlightClub').controller('ResultsCtrl', function ($scope, $cookies, $interval) {
+angular.module('FlightClub').controller('ResultsCtrl', function ($scope, $mdDialog, $cookies, $interval) {
 
     $scope.$parent.toolbarTitle = 'Flight Club | Results';
     $scope.loadPos = 30;
@@ -175,7 +175,7 @@ angular.module('FlightClub').controller('ResultsCtrl', function ($scope, $cookie
                     }
 
                     window.location = $scope.$parent.client + '/error/#' + errorsHash;
-                });        
+                });    
     } else if (queryString) {
         $scope.load(queryString);
     }
@@ -345,6 +345,9 @@ angular.module('FlightClub').controller('ResultsCtrl', function ($scope, $cookie
         for (var i = 0; i < $scope.plotMap.length; i++) {
             $scope.initialisePlot2($scope.plotMap[i]);
         }
+        
+        setTimeout(askForSupport, 1000);
+        
     };
 
     $scope.initialisePlot2 = function (plot) {
@@ -407,5 +410,31 @@ angular.module('FlightClub').controller('ResultsCtrl', function ($scope, $cookie
         }
         
     });
+    
+    var askForSupport = function() {
+         
+        if ($scope.supports_html5_storage()) {
+            var donateRequest = window['localStorage']['fc_donateRequest'];
+            if (donateRequest === undefined && $cookies.get('simCount') >= 3) {
+                
+                var confirm = $mdDialog.confirm()
+                        .title('Support me on Patreon!')
+                        .textContent('Hi, I\'m really sorry and I hate myself for annoying you with popups, but if you like Flight Club, I\'d really appreciate it if you considered supporting me on Patreon! I promise you\'ll never see this message again either way :)')
+                        .ariaLabel('support request')
+                        .ok('I love this site!')
+                        .cancel('This site sucks');
+
+                $mdDialog.show(confirm).then(
+                        function () {
+                            window['localStorage']['fc_donateRequest'] = 1;
+                            window.open('https://www.patreon.com/flightclub', '_blank');
+                        },
+                        function () {
+                            window['localStorage']['fc_donateRequest'] = 1;
+                        }
+                );
+            }
+        }
+    };
     
 });

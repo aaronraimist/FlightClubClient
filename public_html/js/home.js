@@ -1,4 +1,4 @@
-angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog, $mdSidenav, $interval, $location) {
+angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog, $mdSidenav, $cookies, $interval, $location) {
 
     $scope.missionLoading = true;
     $scope.loadSuccess = false;
@@ -713,6 +713,10 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
         $scope.form.auth = {token: $scope.$parent.token};
         var formHash = $scope.updateUrl();
         $scope.form.auth = {token: null};
+        
+        var simCount = $cookies.get('simCount');
+        $cookies.put('simCount', simCount ? simCount+1 : 1);
+        
         window.open($scope.$parent.client + '/results/#' + formHash, '_blank');
     };
 
