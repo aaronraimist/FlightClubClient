@@ -42,7 +42,6 @@ angular.module('FlightClub').controller('IndexCtrl', function ($scope, $mdSidena
             if (!$scope.authorised) {
                 $cookies.remove('authToken');
             }
-            $scope.$apply();
         });
     }
 

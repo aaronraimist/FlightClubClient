@@ -1,6 +1,6 @@
 /* global Cesium */
 
-angular.module('FlightClub').controller('WorldCtrl', function ($scope, $location, $interval) {
+angular.module('FlightClub').controller('WorldCtrl', function ($scope, $mdDialog, $location, $interval) {
     
     $scope.$emit('viewBroadcast', 'world');
 
@@ -18,15 +18,18 @@ angular.module('FlightClub').controller('WorldCtrl', function ($scope, $location
         { p: 0.9, message: '<a href="https://www.patreon.com/flightclub">Click here to support me on Patreon!</a>'},
         { p: 0.0, message: 'Follow me on Twitter: <a href="https://www.twitter.com/decmurphy_">@decmurphy_</a>'}
     ];
-    
-    var i = 0;
-    $scope.missionLoadingMessage = $scope.messageArray[i++].message;
-    var roller = $interval(function() {
-        if (i === $scope.messageArray.length || !$scope.worldLoading)
-            $interval.cancel(roller);
-        else if (Math.random() > $scope.messageArray[i-1].p)
-            $scope.loadMessageSecondary = $scope.messageArray[i++].message;
-    }, 350);
+        
+    var startRoller = function () {
+        var i = 0;
+        $scope.missionLoadingMessage = $scope.messageArray[i++].message;
+        var roller = $interval(function () {
+            if (i === $scope.messageArray.length || !$scope.worldLoading)
+                $interval.cancel(roller);
+            else if (Math.random() > $scope.messageArray[i - 1].p)
+                $scope.missionLoadingMessage = $scope.messageArray[i++].message;
+        }, 350);
+    };
+    startRoller();
 
     $scope.$parent.toolbarTitle = "Flight Club | Live";
     var w;
@@ -110,8 +113,8 @@ angular.module('FlightClub').controller('WorldCtrl', function ($scope, $location
                         $scope.pollLaunchTime();
                     if (Math.abs(rand5 + distance) < 1000) // poll for aborts between T-0 -> T+5
                         $scope.pollLaunchTime();
-                    if (Math.abs((15 * _minute + 10 * rand5) + distance) < 1000) // plots -> over limit between T+15 -> T+25
-                        window.location.reload(true);
+                    if (Math.abs((90 * _minute) + distance) < 1000) // plots -> over at T+1:30
+                        loadVars(true);
                 }
 
                 $scope.clock = 'T' + sign + hours + ':' + minutes + ':' + seconds;
@@ -132,8 +135,9 @@ angular.module('FlightClub').controller('WorldCtrl', function ($scope, $location
             $scope.minutes = minutes + ' minute' + ((minutes !== 1) ? 's' : '');
             $scope.seconds = seconds + ' second' + ((seconds !== 1) ? 's' : '');
 
-            if (Math.abs((59 * _minute - rand5) - distance) < 1000) // clock -> plots limit between T-59 -> T-54
-                window.location.reload(true);
+            //if (Math.abs((59 * _minute - rand5) - distance) < 1000) // clock -> plots limit between T-59 -> T-54
+            if (Math.abs((60 * _minute) - distance) < 1000) // clock -> plots limit at T-60
+                loadVars(true);
 
         }
     };
@@ -167,6 +171,7 @@ angular.module('FlightClub').controller('WorldCtrl', function ($scope, $location
             window.location = window.location.href.split('&amp;').join('&');
         }
         $scope.queryParams = $scope.$parent.parseQueryString(queryString);
+        loadVars();
 
         // world object doesn't need to be created unless using Cesium. can put launchtime as its own variable
         // then can move these getScript+new world() calls later in the code to only execute if showing Cesium.
@@ -181,22 +186,30 @@ angular.module('FlightClub').controller('WorldCtrl', function ($scope, $location
                 break;
         }
 
+        $interval(function () {
+            $scope.setClock(w);
+        }, 500);
+        
+    });
+    
+    var loadVars = function(reload) {
+
         $scope.$parent.httpRequest('/missions/' + $scope.queryParams['code'], 'GET', null,
                 function (res) {
                     var data = JSON.parse(res);
                     if (data.Mission !== undefined && $scope.queryParams['id'] === undefined) {
                         $scope.queryParams['id'] = data.Mission.livelaunch;
                     }
+                    if (reload) {
+                        $scope.worldLoading = true;
+                        startRoller();
+                    }
+                    
                     $scope.fillData(data);
                 }
         );
-
-        setInterval(function () {
-            $scope.$apply(function () {
-                $scope.setClock(w);
-            });
-        }, 1000);
-    });
+        
+    };
 
     $scope.fillData = function (data) {
 
@@ -259,28 +272,27 @@ angular.module('FlightClub').controller('WorldCtrl', function ($scope, $location
     $scope.loadFlot = function (otherFunction) {
         $.getScript("flot/flot.min.js", function () {
             
-            setTimeout(function () {
-                var fullWidth = $(document.body)[0].clientWidth;
-                var width = $("md-sidenav")[0].clientWidth;
-                $("#cesiumContainer").width((fullWidth - width) + 'px');
+            var fullWidth = $(document.body)[0].clientWidth;
+            var width = fullWidth <= 456 ? fullWidth - 56 : fullWidth >= 960 ? 400 : 320;
 
-                for (var stage = 0; stage < 2; stage++) {
-                    $scope.initialisePlot("altitude", stage);
-                    $scope.initialisePlot("velocity", stage);
-                }
+            $("#cesiumContainer").width((fullWidth - width) + 'px');
 
-                if (otherFunction)
-                    otherFunction();
-            }, 500);
+            for (var stage = 0; stage < 2; stage++) {
+                $scope.initialisePlot("altitude", stage);
+                $scope.initialisePlot("velocity", stage);
+            }
+
+            if (otherFunction)
+                otherFunction();
         });
         $scope.sidebarShow = true;
     };
 
     $scope.initialisePlot = function (element, stage) {
 
-        var width = $("md-sidenav")[0].clientWidth;
-        if (width === 0) // sidenav is collapsed on mobile, but width is 320 when expanded
-            width = 320;
+        var fullWidth = $(document.body)[0].clientWidth;
+        var width = fullWidth <= 456 ? fullWidth - 56 : fullWidth >= 960 ? 400 : 320;
+        width -= 32; // to account for layout-padding
 
         var placeholder = $("#" + element + "Plot");
         placeholder.width(width);
@@ -464,7 +476,7 @@ angular.module('FlightClub').controller('WorldCtrl', function ($scope, $location
             var launchDate = new Date($scope.launchTime);
 
             var start = Cesium.JulianDate.fromDate(launchDate);
-            var stop = Cesium.JulianDate.addSeconds(start, 60000, new Cesium.JulianDate());
+            var stop = Cesium.JulianDate.addSeconds(start, 600000, new Cesium.JulianDate());
 
             var t = 0;
             fullData[stage] = [];
@@ -474,7 +486,9 @@ angular.module('FlightClub').controller('WorldCtrl', function ($scope, $location
                 if (lines[i] === "")
                     continue;
 
-                var data = lines[i].split("\t");
+                var data = lines[i].split(";");
+                if(data.length === 1)
+                    data = lines[i].split("\t");
                 fullData[stage][parseInt(data[0])] = parseFloat(data[6]) + ":" + parseFloat(data[4]) + ":" + parseFloat(data[5]) + ":" + parseFloat(data[21]) * Math.PI / 180 + ":" + (parseFloat(data[16]) - 90) * Math.PI / 180;
 
                 var focus = false;
@@ -581,7 +595,9 @@ angular.module('FlightClub').controller('WorldCtrl', function ($scope, $location
 
                 focusPoints = [];
                 for (var i = 1; i < lines.length; i++) {
-                    var data = lines[i].split("\t");
+                    var data = lines[i].split(";");
+                    if(data.length === 1)
+                        data = lines[i].split("\t");
 
                     if (data.length === 1)
                         continue;
@@ -634,7 +650,9 @@ angular.module('FlightClub').controller('WorldCtrl', function ($scope, $location
 
             // track entity here so plot resize doesn't throw any errors before T-10s
             w.trackEntity(0);
-            $scope.update();
+            $interval(function() {
+                $scope.update();
+            }, 1000);
         }
         /*
          setInterval(function () {
@@ -739,7 +757,6 @@ angular.module('FlightClub').controller('WorldCtrl', function ($scope, $location
             }
         }
 
-        setTimeout($scope.update, 1000);
     };
 
 
@@ -769,24 +786,25 @@ angular.module('FlightClub').controller('WorldCtrl', function ($scope, $location
 
     $scope.plotResize = function (considerSidebar) {
 
-        setTimeout(function () {
-            for (var stage = 0; stage < 2; stage++) {
-                var width = $("md-sidenav")[0].clientWidth;
-                $("#altitudePlot").width(width);
-                $("#velocityPlot").width(width);
-                $("#altitudePlot").height(width / 1.6);
-                $("#velocityPlot").height(width / 1.6);
-            }
-            var w2;
-            if (considerSidebar) {
-                $scope.initialisePlot("altitude", w.getTrackedStage());
-                $scope.initialisePlot("velocity", w.getTrackedStage());
-                w2 = $(document.body)[0].clientWidth - $("md-sidenav")[0].clientWidth;
-            } else {
-                w2 = $(document.body)[0].clientWidth;
-            }
-            $("#cesiumContainer").width(w2);
-        }, 100);
+        for (var stage = 0; stage < 2; stage++) {
+            var width = fullWidth <= 456 ? fullWidth - 56 : fullWidth >= 960 ? 400 : 320;
+            $("#altitudePlot").width(width);
+            $("#velocityPlot").width(width);
+            $("#altitudePlot").height(width / 1.6);
+            $("#velocityPlot").height(width / 1.6);
+        }
+        var w2;
+        var fullWidth = $(document.body)[0].clientWidth;
+        if (considerSidebar) {
+            $scope.initialisePlot("altitude", w.getTrackedStage());
+            $scope.initialisePlot("velocity", w.getTrackedStage());
+            var width = fullWidth < 456 ? fullWidth - 56 : fullWidth > 960 ? 400 : 320;
+            w2 = fullWidth - width;
+        } else {
+            w2 = fullWidth;
+        }
+        $("#cesiumContainer").width(w2);
+        
     };
 
     $(window).resize(function () {
@@ -873,4 +891,26 @@ angular.module('FlightClub').controller('WorldCtrl', function ($scope, $location
         };
 
     }
+    
+    $scope.openCesiumCreditsDialog = function ($event) {
+        $mdDialog.show({
+            controller: function () {
+                $scope.hide = function () {
+                    $mdDialog.hide();
+                };
+
+                $scope.cancel = function () {
+                    $mdDialog.cancel();
+                };
+
+                $scope.answer = function (answer) {
+                    $mdDialog.hide(answer);
+                };
+            },
+            contentElement: '#myDialog',
+            parent: angular.element(document.body),
+            targetEvent: $event,
+            clickOutsideToClose: true
+        });
+    };
 });

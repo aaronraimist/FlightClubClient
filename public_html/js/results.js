@@ -156,10 +156,7 @@ angular.module('FlightClub').controller('ResultsCtrl', function ($scope, $mdDial
                 function (data) {
                     if (data.Mission.success === true) {
                         var queryString = data.Mission.output.split('?')[1];
-
                         $scope.loadMessage = "Building plots...";
-                        $scope.$apply();
-
                         window.history.pushState({}, "", '/results/?' + queryString);
                         $scope.load(queryString);
                     } else {
@@ -181,8 +178,11 @@ angular.module('FlightClub').controller('ResultsCtrl', function ($scope, $mdDial
         $scope.load(queryString);
     }
 
-    var PLOTS = ['altitude1', 'profile1', 'total-dv', 'velocity1', 'prop',
-        'phase1', 'q', 'throttle', 'accel1', 'aoa', 'aov', 'aop', 'drag', 'thrust-coeff'];
+    var PLOTS = ['altitude1', 'profile1', 'inclination', 
+        'velocity1', 'prop', 'phase1',
+         'throttle', 'accel1', 'q',
+        'aoa', 'aov', 'aop', 
+        'total-dv', 'drag', 'thrust-coeff'];
     $scope.plotTiles = (function () {
         var tiles = [];
         for (var i = 0; i < PLOTS.length; i++) {
@@ -195,7 +195,7 @@ angular.module('FlightClub').controller('ResultsCtrl', function ($scope, $mdDial
     $scope.fullData = [];
     $scope.eventsData = [];
     $scope.stageMap = [];
-    $scope.numCols = 22;
+    $scope.numCols = 23;
     $scope.overrideAttempted = false;
 
     //////////////////////////////////////
@@ -247,7 +247,9 @@ angular.module('FlightClub').controller('ResultsCtrl', function ($scope, $mdDial
                 for (var j = 0; j <= $scope.numCols; j++) {
                     $scope.fullData[stage][j] = [];
                     for (var i = 2; i < lines.length; i++) {
-                        var data = lines[i].split("\t");
+                        var data = lines[i].split(";");
+                        if(data.length === 1)
+                            data = lines[i].split("\t");
                         $scope.fullData[stage][j][i] = parseFloat(data[j]);
                     }
                 }
@@ -275,7 +277,9 @@ angular.module('FlightClub').controller('ResultsCtrl', function ($scope, $mdDial
             for (var j = 0; j <= $scope.numCols; j++) {
                 $scope.eventsData[stage][j] = [];
                 for (var i = 1; i < lines.length; i++) {
-                    var data = lines[i].split("\t");
+                    var data = lines[i].split(";");
+                    if(data.length === 1)
+                        data = lines[i].split("\t");
                     $scope.eventsData[stage][j][i] = parseFloat(data[j]);
                 }
             }
@@ -297,51 +301,54 @@ angular.module('FlightClub').controller('ResultsCtrl', function ($scope, $mdDial
 
         var lowerStages = $scope.stageMap.length === 2 ? [0] : [0, 2, 3];
 
-        $scope.plotMap.push({id: 'altitude1', stages: allStages, title: "Altitude",
+        $scope.plotMap.push({id: 'altitude1', stages: allStages, title: "Altitude", events: true,
             x: {axis: 0, label: "Time (s)", type: "linear"},
             y: {axis: 4, label: "Altitude (km)", type: "linear"}});
-        $scope.plotMap.push({id: 'profile1', stages: allStages, title: "Profile",
+        $scope.plotMap.push({id: 'profile1', stages: allStages, title: "Profile", events: true,
             x: {axis: 6, label: "Downrange (km)", type: "linear"},
             y: {axis: 4, label: "Altitude (km)", type: "linear"}});
-        $scope.plotMap.push({id: 'total-dv', stages: allStages, title: "Total dV Expended",
-            x: {axis: 0, label: "Time (s)", type: "log"},
-            y: {axis: 9, label: "dV (m/s)", type: "log"}});
-        $scope.plotMap.push({id: 'velocity1', stages: allStages, title: "Velocity",
+        $scope.plotMap.push({id: 'velocity1', stages: allStages, title: "Velocity", events: true,
             x: {axis: 0, label: "Time (s)", type: "linear"},
             y: {axis: 5, label: "Velocity (m/s)", type: "linear"}});
-        $scope.plotMap.push({id: 'prop', stages: allStages, title: "Propellant Mass",
+        $scope.plotMap.push({id: 'prop', stages: allStages, title: "Propellant Mass", events: false,
             x: {axis: 0, label: "Time (s)", type: "log"},
             y: {axis: 8, label: "Mass (t)", type: "log"}});
-        $scope.plotMap.push({id: 'phase1', stages: lowerStages, title: "Booster Phasespace",
+        $scope.plotMap.push({id: 'phase1', stages: lowerStages, title: "Booster Phasespace", events: true,
             x: {axis: 4, label: "Altitude (km)", type: "linear"},
             y: {axis: 5, label: "Velocity (m/s)", type: "linear"}});
-        $scope.plotMap.push({id: 'q', stages: lowerStages, title: "Aerodynamic Pressure",
+        $scope.plotMap.push({id: 'total-dv', stages: allStages, title: "Total dV Expended", events: false,
+            x: {axis: 0, label: "Time (s)", type: "log"},
+            y: {axis: 9, label: "dV (m/s)", type: "log"}});
+        $scope.plotMap.push({id: 'q', stages: lowerStages, title: "Aerodynamic Pressure", events: true,
             x: {axis: 0, label: "Time (s)", type: "linear"},
             y: {axis: 7, label: "Pressure (kN/m^2)", type: "linear"}});
-        $scope.plotMap.push({id: 'throttle', stages: allStages, title: "Throttle",
-            x: {axis: 0, label: "Time (s)", type: "linear"},
+        $scope.plotMap.push({id: 'throttle', stages: allStages, title: "Throttle", events: false,
+            x: {axis: 0, label: "Time (s)", type: "linear", range: [0, 1000]},
             y: {axis: 12, label: "Throttle", type: "linear"}});
-        $scope.plotMap.push({id: 'accel1', stages: allStages, title: "Acceleration",
-            x: {axis: 0, label: "Time (s)", type: "linear"},
+        $scope.plotMap.push({id: 'accel1', stages: allStages, title: "Acceleration", events: true,
+            x: {axis: 0, label: "Time (s)", type: "linear", range: [0, 1000]},
             y: {axis: 13, label: "Acceleration (g)", type: "linear"}});
-        $scope.plotMap.push({id: 'aoa', stages: allStages, title: "Angle of Attack",
-            x: {axis: 0, label: "Time (s)", type: "linear"},
-            y: {axis: 14, label: "Angle (degrees)", type: "linear"}});
-        $scope.plotMap.push({id: 'aov', stages: allStages, title: "Velocity Angle",
-            x: {axis: 0, label: "Time (s)", type: "linear"},
-            y: {axis: 15, label: "Angle (degrees)", type: "linear"}});
-        $scope.plotMap.push({id: 'aop', stages: allStages, title: "Pitch Angle",
-            x: {axis: 0, label: "Time (s)", type: "linear"},
-            y: {axis: 16, label: "Angle (degrees)", type: "linear"}});
-        $scope.plotMap.push({id: 'drag', stages: lowerStages, title: "Drag Coefficient",
-            x: {axis: 0, label: "Time (s)", type: "linear"},
+        $scope.plotMap.push({id: 'aoa', stages: allStages, title: "Angle of Attack", events: true,
+            x: {axis: 0, label: "Time (s)", type: "linear", range: [0, 1000]},
+            y: {axis: 14, label: "Angle (degrees)", type: "linear", range: [-180, 180]}});
+        $scope.plotMap.push({id: 'aov', stages: allStages, title: "Velocity Angle", events: true,
+            x: {axis: 0, label: "Time (s)", type: "linear", range: [0, 1000]},
+            y: {axis: 15, label: "Angle (degrees)", type: "linear", range: [-180, 180]}});
+        $scope.plotMap.push({id: 'aop', stages: allStages, title: "Pitch Angle", events: true,
+            x: {axis: 0, label: "Time (s)", type: "linear", range: [0, 1000]},
+            y: {axis: 16, label: "Angle (degrees)", type: "linear", range: [-180, 180]}});
+        $scope.plotMap.push({id: 'drag', stages: lowerStages, title: "Drag Coefficient", events: true,
+            x: {axis: 0, label: "Time (s)", type: "linear", range: [0, 1000]},
             y: {axis: 17, label: "Cd", type: "linear"}});
-        $scope.plotMap.push({id: 'thrust-coeff', stages: lowerStages, title: "Thrust Coefficient",
-            x: {axis: 0, label: "Time (s)", type: "linear"},
+        $scope.plotMap.push({id: 'thrust-coeff', stages: lowerStages, title: "Thrust Coefficient", events: true,
+            x: {axis: 0, label: "Time (s)", type: "linear", range: [0, 1000]},
             y: {axis: 22, label: "Ct", type: "linear"}});
+        $scope.plotMap.push({id: 'inclination', stages: allStages, title: "Inclination", events: false,
+            x: {axis: 0, label: "Time (s)", type: "linear"},
+            y: {axis: 23, label: "Incl (degrees)", type: "linear", range: [-180, 180]}});
 
-        $scope.isLoading = false;
-        $scope.$apply();
+        $scope.isLoading = false;        
+        $scope.$apply(); // removing this fucks up the plot sizes in initialiePlot2()
         
         for (var i = 0; i < $scope.plotMap.length; i++) {
             $scope.initialisePlot2($scope.plotMap[i]);
@@ -363,13 +370,20 @@ angular.module('FlightClub').controller('ResultsCtrl', function ($scope, $mdDial
                     mode: 'lines',
                     name: $scope.stageMap[s].name
                 });
-                data.push({
-                    x: $scope.eventsData[s][plot.x.axis],
-                    y: $scope.eventsData[s][plot.y.axis],
-                    mode: 'markers',
-                    showlegend: false,
-                    name: $scope.stageMap[s].name + ' Event'
-                });
+            }
+        }
+        if(plot.events) {
+            for (var i = 0; i < plot.stages.length; i++) {
+                var s = plot.stages[i];
+                if ($scope.fullData[s] !== undefined) {
+                    data.push({
+                        x: $scope.eventsData[s][plot.x.axis],
+                        y: $scope.eventsData[s][plot.y.axis],
+                        mode: 'markers',
+                        showlegend: false,
+                        name: $scope.stageMap[s].name + ' Event'
+                    });
+                }
             }
         }
 
@@ -387,12 +401,13 @@ angular.module('FlightClub').controller('ResultsCtrl', function ($scope, $mdDial
                 color: fontColor,
                 type: plot.x.type, 
                 title: plot.x.label, 
-                range: plot.y.axis > 11 ? [0, 1000] : [null, null]
+                range: plot.x.range
             },
             yaxis: {
                 color: fontColor,
                 type: plot.y.type, 
-                title: plot.y.label
+                title: plot.y.label,
+                range: plot.y.range
             },
             paper_bgcolor: bgColor,
             plot_bgcolor: bgColor

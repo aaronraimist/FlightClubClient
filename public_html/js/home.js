@@ -1,4 +1,4 @@
-angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog, $mdSidenav, $cookies, $interval, $location) {
+angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog, $mdSidenav, $cookies, $interval, $timeout, $location) {
 
     $scope.$emit('viewBroadcast', 'home');
 
@@ -177,7 +177,6 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
             $scope.loadingMission = false;
             $scope.form = JSON.parse(data);
             setNewMission(mission.code);
-            $scope.$apply();
         }, null);
     };
     
@@ -205,8 +204,6 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
                         $scope.form.Mission.Events.splice(i, 1);
                 }
             }
-            
-            $scope.$apply();
         }, null);
     };
 
@@ -494,6 +491,22 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
                 $scope.parentScope = jQuery.extend(true, {}, lParent);
                 $scope.companies = lParent.companies;
                 
+                // offset stuff necessary if client is not UTC. Date() returns time in local TZ >:|
+                var today = new Date();
+                var offset = -(today.getTimezoneOffset()/60);
+                var tempDate = new Date($scope.parentScope.form.Mission.date);
+                $scope.parentScope.form.Mission.date = new Date(tempDate.getTime() - offset*60*60*1000);
+                
+                Date.prototype.yyyymmdd = function () {
+                    var mm = this.getMonth() + 1; // getMonth() is zero-based
+                    var dd = this.getDate();
+
+                    return [this.getFullYear(),
+                        (mm > 9 ? '' : '0') + mm,
+                        (dd > 9 ? '' : '0') + dd
+                    ].join('-');
+                };
+                
                 $scope.cancel = function () {
                     $mdDialog.cancel();
                 };
@@ -503,7 +516,7 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
                 $scope.save = function () {
                     lForm.Mission.code = $scope.parentScope.form.Mission.code;
                     lForm.Mission.description = $scope.parentScope.form.Mission.description;
-                    lForm.Mission.date = $scope.parentScope.form.Mission.date;
+                    lForm.Mission.date = $scope.parentScope.form.Mission.date.yyyymmdd();
                     lForm.Mission.time = $scope.parentScope.form.Mission.time;
                     lForm.Mission.company = $scope.parentScope.form.Mission.company;
                     lForm.Mission.orbits = $scope.parentScope.form.Mission.orbits;
@@ -639,14 +652,14 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
             window['localStorage']['fc_profile'] = formHash;
             $scope.exportStatusColor = '#82CA9D';
             $scope.export_icon = 'check';
-            setTimeout(function() {
+            $timeout(function() {
                 $scope.export_icon = 'content_copy';
                 $scope.exportStyle = false;
             }, 4000);
         } else {
             $scope.exportStatusColor = '#F7977A';
             $scope.export_icon = 'close';
-            setTimeout(function() {
+            $timeout(function() {
                 $scope.export_icon = 'content_copy';
                 $scope.exportStyle = false;
             }, 4000);
@@ -673,14 +686,14 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
                 setNewMission($scope.form.Mission.code);
                 $scope.importStatusColor = '#82CA9D';
                 $scope.import_icon = 'check';
-                setTimeout(function () {
+                $timeout(function () {
                     $scope.import_icon = 'content_paste';
                     $scope.importStyle = false;
                 }, 4000);
             } catch (err) {
                 $scope.importStatusColor = '#F7977A';
                 $scope.import_icon = 'close';
-                setTimeout(function () {
+                $timeout(function () {
                     $scope.import_icon = 'content_paste';
                     $scope.importStyle = false;
                 }, 4000);
@@ -697,7 +710,7 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
         } else {
             $scope.importStatusColor = '#F7977A';
             $scope.import_icon = 'close';
-            setTimeout(function () {
+            $timeout(function () {
                 $scope.import_icon = 'content_paste';
                 $scope.importStyle = false;
             }, 4000);
@@ -770,7 +783,8 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
         $scope.saveStatusColor = '#82CA9D';
         $scope.save_icon = 'check';
         $scope.saveStyle = true;
-        setTimeout(function () {
+        $scope.$apply();
+        $timeout(function () {
             $scope.save_icon = 'save';
             $scope.saveStyle = false;
         }, 4000);
@@ -781,7 +795,8 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
         $scope.saveStatusColor = '#F7977A';
         $scope.save_icon = 'close';
         $scope.saveStyle = true;
-        setTimeout(function () {
+        $scope.$apply();
+        $timeout(function () {
             $scope.save_icon = 'save';
             $scope.saveStyle = false;
         }, 4000);

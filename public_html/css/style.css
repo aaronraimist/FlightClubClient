@@ -116,6 +116,14 @@ md-select, md-switch {
   width: 100%;
 }
 
+.cesium-widget-credits {
+    padding: 0;
+}
+
+.md-datepicker-button {
+    margin: 0 !important;
+}
+
 @media 
 only screen and (min-width: 768px)  {
 
