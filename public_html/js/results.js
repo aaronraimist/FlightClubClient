@@ -159,11 +159,11 @@ angular.module('FlightClub').controller('ResultsCtrl', function ($scope, $mdDial
                         $scope.loadMessage = "Building plots...";
                         window.history.pushState({}, "", '/results/?' + queryString);
                         $scope.load(queryString);
+                        $scope.$apply();
                     } else {
                         var errorsHash = window.btoa(JSON.stringify(data));
                         window.location = $scope.$parent.client + '/error/#' + errorsHash;
                     }
-
                 },
                 function (data) {
                     var errors, errorsHash = '';
