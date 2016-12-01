@@ -8,7 +8,7 @@ var minifyHTML = require('gulp-minify-html');
 // minify js
 var concat = require('gulp-concat');
 var stripDebug = require('gulp-strip-debug');
-var uglify = require('gulp-uglify');
+var minify = require('gulp-minify');
 // minify css
 var autoprefix = require('gulp-autoprefixer');
 var minifyCSS = require('gulp-minify-css');
@@ -43,8 +43,15 @@ gulp.task('htmlpage', function () {
 
 gulp.task('scripts', function () {
     gulp.src(['./public_html/js/app.js', './public_html/js/config.js', './public_html/js/index.js', './public_html/js/*.js'])
-            .pipe(concat('flightclub.min.js'))
+            .pipe(concat('flightclub.js'))
             .pipe(stripDebug())
+            .pipe(minify({
+                ext:{
+                    src:'.js',
+                    min:'.min.js'
+                },
+		mangle: false
+            }))
             //.pipe(uglify())
             .pipe(gulp.dest('/var/www/html/js/'));
     gulp.src('./public_html/flot/*.js')
