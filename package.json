@@ -1,0 +1,32 @@
+{
+  "name": "flightclubclient",
+  "version": "1.0.0",
+  "description": "client side html, scripts, styles for flightclub.io",
+  "main": "app.js",
+  "dependencies": {},
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^3.1.1",
+    "gulp-changed": "^1.3.2",
+    "gulp-concat": "^2.6.1",
+    "gulp-imagemin": "^3.1.1",
+    "gulp-jshint": "^2.0.4",
+    "gulp-minify": "0.0.14",
+    "gulp-minify-css": "^1.2.4",
+    "gulp-minify-html": "^1.0.6",
+    "gulp-strip-debug": "^1.1.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/murphd37/FlightClubClient.git"
+  },
+  "author": "Declan Murphy",
+  "license": "SEE LICENSE IN README.md",
+  "bugs": {
+    "url": "https://github.com/murphd37/FlightClubClient/issues"
+  },
+  "homepage": "https://github.com/murphd37/FlightClubClient#readme"
+}
