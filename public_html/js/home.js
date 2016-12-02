@@ -732,7 +732,7 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
         var formHash = $scope.updateUrl();
         $scope.form.auth = {token: null};
         
-        var simCount = $cookies.get('simCount');
+        var simCount = parseInt($cookies.get('simCount'));
         $cookies.put('simCount', simCount ? simCount+1 : 1);
         
         window.open($scope.$parent.client + '/results/#' + formHash, '_blank');
