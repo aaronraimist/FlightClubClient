@@ -242,9 +242,9 @@ angular.module('FlightClub').controller('WorldCtrl', function ($scope, $mdDialog
                 $scope.loadCesium(function () {
                     
                     var animation = document.getElementsByClassName("cesium-viewer-animationContainer")[0];
-                    animation.className += " hidden";
+                    animation.className += " hide";
                     var timeline = document.getElementsByClassName("cesium-viewer-timelineContainer")[0];
-                    timeline.className += " hidden";
+                    timeline.className += " hide";
 
                     w.setCameraLookingAt(data.Mission.launchsite);
                     $scope.loadDataAndPlot();
@@ -255,9 +255,9 @@ angular.module('FlightClub').controller('WorldCtrl', function ($scope, $mdDialog
             $scope.loadCesium(function () {
 
                 var animation = document.getElementsByClassName("cesium-viewer-animationContainer")[0];
-                animation.className += " hidden";
+                animation.className += " hide";
                 var timeline = document.getElementsByClassName("cesium-viewer-timelineContainer")[0];
-                timeline.className += " hidden";
+                timeline.className += " hide";
                 
                 $scope.loadDataAndPlot();
                 if ($scope.queryParams['view'] !== 'space')
@@ -343,17 +343,11 @@ angular.module('FlightClub').controller('WorldCtrl', function ($scope, $mdDialog
             w.viewer = new Cesium.Viewer('cesiumContainer', {
                 timeline: true,
                 animation: true,
-                scene3DOnly: true,
                 fullscreenButton: false,
                 homeButton: false,
                 geocoder: false,
                 baseLayerPicker: false,
                 creditContainer: document.getElementById("creditContainer"),
-                /* remove to revert to old (include stars + atmosphere) */
-                skyBox: new Cesium.SkyBox({
-                    show: false
-                }),
-                /**/
                 clock: new Cesium.Clock({
                     startTime: Cesium.JulianDate.fromDate(launchDate),
                     currentTime: Cesium.JulianDate.fromDate(now),
@@ -363,8 +357,8 @@ angular.module('FlightClub').controller('WorldCtrl', function ($scope, $mdDialog
                 }),
                 terrainProvider: new Cesium.CesiumTerrainProvider({
                     url: '//assets.agi.com/stk-terrain/world',
-                    requestWaterMask: true,
-                    requestVertexNormals: true
+                    requestWaterMask: false,
+                    requestVertexNormals: false
                 })
 
             });
