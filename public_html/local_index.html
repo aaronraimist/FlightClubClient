@@ -107,7 +107,7 @@
                         </md-menu-content>
                     </md-menu>
                     <h2>
-                        <span>{{toolbarTitle}}</span>
+                        <span hide show-gt-xs ng-hide="!isHome">Mission Builder | </span><span>{{toolbarTitle}}</span>
                     </h2>
                     <span flex></span>
                     <md-button ng-show="showSidenav" class="md-icon-button" aria-label="sidenav" ng-click="toggleNav('sidenav')">

@@ -19,6 +19,7 @@ angular.module('FlightClub').controller('IndexCtrl', function ($scope, $mdSidena
     
     $scope.showSidenav = true;
     $scope.$on('viewBroadcast', function(event, args) {
+        $scope.isHome = args === 'home';
         $scope.showSidenav = (args === 'home' || args === 'results' || args === 'world');
     });
 

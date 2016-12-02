@@ -182,7 +182,7 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
     
     var setNewMission = function (code) {
         $scope.sortEvents();
-        $scope.$parent.toolbarTitle = "Mission Builder | " + $scope.form.Mission.description;
+        $scope.$parent.toolbarTitle = $scope.form.Mission.description;
         $scope.selectedEvent = null;
         $scope.builderType = 'previous';
         $scope.selectedVeh = code;
