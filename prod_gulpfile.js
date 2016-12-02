@@ -27,25 +27,12 @@ gulp.task('htmlpage', function () {
 
     gulp.src('./src/index.html')
             .pipe(changed('.'))
-            .pipe(htmlmin({
-                removeComments: true,
-                collapseBooleanAttributes: true,
-                removeAttributeQuotes: true,
-                removeRedundantAttributes: true,
-                removeEmptyAttributes: true
-            }))
+            .pipe(htmlmin({removeComments: true,collapseBooleanAttributes: true,removeAttributeQuotes: true,removeRedundantAttributes: true,removeEmptyAttributes: true}))
             .pipe(gulp.dest('.'));
     
     gulp.src('./src/pages/*.html')
             .pipe(changed('./pages/'))
-            .pipe(htmlmin({
-                removeComments: true,
-                collapseWhitespace: true,
-                collapseBooleanAttributes: true,
-                removeAttributeQuotes: true,
-                removeRedundantAttributes: true,
-                removeEmptyAttributes: true
-            }))
+            .pipe(htmlmin({removeComments: true,collapseWhitespace: true,collapseBooleanAttributes: true,removeAttributeQuotes: true,removeRedundantAttributes: true,removeEmptyAttributes: true}))
             .pipe(gulp.dest('./pages/'));
     
 });
