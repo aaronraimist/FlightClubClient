@@ -270,7 +270,7 @@ angular.module('FlightClub').controller('WorldCtrl', function ($scope, $mdDialog
     };
 
     $scope.loadFlot = function (otherFunction) {
-        $.getScript("flot/flot.min.js", function () {
+        $.getScript("js/flot.min.js", function () {
             
             var fullWidth = $(document.body)[0].clientWidth;
             var width = fullWidth <= 456 ? fullWidth - 56 : fullWidth >= 960 ? 400 : 320;
@@ -317,8 +317,8 @@ angular.module('FlightClub').controller('WorldCtrl', function ($scope, $mdDialog
 
     $scope.loadCesium = function (otherFunction) {
 
-        window.CESIUM_BASE_URL = '//cesiumjs.org/releases/1.20/Build/Cesium/';
-        $.getScript("//cesiumjs.org/releases/1.20/Build/Cesium/Cesium.js", function ()
+        window.CESIUM_BASE_URL = '//cesiumjs.org/releases/1.28/Build/Cesium/';
+        $.getScript("//cesiumjs.org/releases/1.28/Build/Cesium/Cesium.js", function ()
         {
             $scope.worldLoading = false;
             Cesium.BingMapsApi.defaultKey = 'Atr1lJvbFdMUnJ6fw4qGKDcZuEjzVRh-6WLmrRZDcCggpZIPH9sdEyUWGWXO1kPc';
