@@ -1,9 +1,9 @@
-angular.module('FlightClub').controller('LoginCtrl', function ($timeout, $document, $scope, $cookies, $mdDialog) {
+angular.module('FlightClub').controller('LoginCtrl', function ($timeout, $document, $scope, $cookies) {
 
     $scope.$emit('viewBroadcast', 'login');
-
     $scope.$parent.toolbarTitle = 'Flight Club | Login';
 
+    $scope.forms = [];
     // hack to fix password label not detecting input on Chrome 
     // https://github.com/angular/material/issues/1376
     $timeout(function () {
@@ -14,28 +14,27 @@ angular.module('FlightClub').controller('LoginCtrl', function ($timeout, $docume
     }, 150);
     
     $scope.httpRequest('/user/permissions', 'GET', null, function (data) {
-        $scope.permissions = fill(data);
+        var list = data.data;
+        $scope.permissions = {};
+        for (var i = list.length; i > 0; i--) {
+            $scope.permissions[list[i - 1].code] = {code: list[i - 1].code, name: list[i - 1].name};
+        }
     }, function(data, statusText) {
         $scope.$parent.toolbarTitle = 'It usually works, I swear';
         $scope.alerts[2] += 'Permissions: ' + statusText + '\n';
     });
-
-    var fill = function (data) {
-        var list = data.data;
-        var array = {};
-        for (var i = list.length; i > 0; i--) {
-            array[list[i - 1].code] = {code: list[i - 1].code, name: list[i - 1].name};
-        }
-        return array;
+    
+    $scope.capitalise = function(string) {
+        return string === undefined ? undefined : string.charAt(0).toUpperCase() + string.slice(1);
     };
 
     $scope.alerts = [];
     $scope.loginToggle = function () {
         if (!$scope.$parent.authorised) {
             
-            var data = JSON.stringify($scope.form);
+            var data = JSON.stringify($scope.forms[0]);
             $scope.$parent.httpRequest('/user/login', 'POST', data, function (data) {
-                if (data.Success !== undefined) {
+                if (data.Success) {
                     var now = new Date();
                     var expiryDate = new Date(now.getTime() + 1000 * parseInt(data.Success.maxAge));
 
@@ -53,6 +52,7 @@ angular.module('FlightClub').controller('LoginCtrl', function ($timeout, $docume
                 } else {
                     $scope.alerts[0] = data.error;
                 }
+                $scope.forms[0] = {};
                 $scope.$apply();
             }, function (data) {
                 $scope.alerts[0] = data.error;
@@ -68,33 +68,39 @@ angular.module('FlightClub').controller('LoginCtrl', function ($timeout, $docume
         }
     };
     
-    $scope.create = function () {
-        $scope.form.auth = {token: $scope.$parent.token};
-        var data = JSON.stringify($scope.form);
-        $scope.form.auth = {token: ''};
-        $scope.$parent.httpRequest('/user/new', 'POSTT', data, function (data) {
-            if (data.Success !== undefined) {
-                $scope.alerts[1] = 'User \"' + $scope.form.Login.new.username + '\" created successfully!';
+    $scope.updatePassword = function () {
+        $scope.forms[1].auth = {token: $scope.$parent.token};
+        var data = JSON.stringify($scope.forms[1]);
+        $scope.forms[1].auth = {token: ''};
+        $scope.$parent.httpRequest('/user/updatePass', 'POST', data, function (data) {
+            if (data.Success) {
+                $scope.alerts[1] = 'Password updated successfully!';
             } else {
-                $scope.alerts[1] = 'Internal error creating User\n'+data;
+                $scope.alerts[1] = data.error;
             }
+            $scope.forms[1] = {};
+            $scope.$apply();
         }, function (data) {
-            $scope.alerts[1] = 'Error sending request\n'+data;
+            $scope.alerts[1] = 'Error sending request\n'+data.error;
+            $scope.$apply();
         });
     };
     
-    $scope.updatePassword = function () {
-        $scope.form.auth = {token: $scope.$parent.token};
-        var data = JSON.stringify($scope.form);
-        $scope.form.auth = {token: ''};
-        $scope.$parent.httpRequest('/user/updatePass', 'POST', data, function (data) {
-            if (data.Success !== undefined) {
-                $scope.alerts[1] = 'User \"' + $scope.form.Login.new.username + '\" created successfully!';
+    $scope.create = function () {
+        $scope.forms[2].auth = {token: $scope.$parent.token};
+        var data = JSON.stringify($scope.forms[2]);
+        $scope.forms[2].auth = {token: ''};
+        $scope.$parent.httpRequest('/user/new', 'POST', data, function (data) {
+            if (data.Success) {
+                $scope.alerts[2] = 'User \"' + $scope.forms[2].Create.new.username + '\" created successfully!';
             } else {
-                $scope.alerts[1] = 'Internal error creating User\n'+data;
+                $scope.alerts[2] = data.error;
             }
+            $scope.forms[2] = {};
+            $scope.$apply();
         }, function (data) {
-            $scope.alerts[1] = 'Error sending request\n'+data;
+            $scope.alerts[2] = 'Error sending request\n'+data.error;
+            $scope.$apply();
         });
     };
 });
