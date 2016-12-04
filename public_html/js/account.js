@@ -1,7 +1,7 @@
-angular.module('FlightClub').controller('LoginCtrl', function ($timeout, $document, $scope, $cookies) {
+angular.module('FlightClub').controller('AccountCtrl', function ($timeout, $document, $scope, $cookies) {
 
     $scope.$emit('viewBroadcast', 'login');
-    $scope.$parent.toolbarTitle = 'Flight Club | Login';
+    $scope.$parent.toolbarTitle = 'Flight Club | Account';
 
     $scope.forms = [];
     // hack to fix password label not detecting input on Chrome 

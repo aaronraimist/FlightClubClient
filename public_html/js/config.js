@@ -30,7 +30,7 @@ angular.module('FlightClub').config(function ($routeProvider, $locationProvider,
     $locationProvider.html5Mode(true);
     $routeProvider
             .when("/share/", {templateUrl: "/pages/home.html", controller: "HomeCtrl", reloadOnSearch: false})
-            .when("/login/", {templateUrl: "/pages/login.html", controller: "LoginCtrl"})
+            .when("/account/", {templateUrl: "/pages/account.html", controller: "AccountCtrl"})
             .when("/docs/", {controller: function () {
                     window.location.replace('/docs/');
                 }, template: "<div></div>"})
