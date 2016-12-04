@@ -1,39 +1,92 @@
 <md-content layout-fill flex layout="column">
-    <form flex layout="row" layout-align="space-between center" class="md-inline-form centre">
-        <md-content flex layout="column">
-            <div>
-                <md-input-container>
-                    <label>Username</label>
-                    <input ng-model="form.Login.username" ng-change="alert = ''">
-                </md-input-container>
-                <md-input-container>
-                    <label>Password</label>
-                    <input type="password" ng-model="form.Login.password" ng-change="alert = ''">
-                </md-input-container>
-            </div>
-            <div>
-                <md-button class="md-raised" type="submit" ng-click="loginToggle()">{{authorised ? "Logout" : "Login"}}</md-button>
-                <span>{{alert}}</span>
-            </div>
-        </md-content>
-        <md-content flex layout="column" ng-show="authorised && hasPermission('createUser')">
-            <div>
-                <md-input-container>
-                    <label>New Username</label>
-                    <input ng-model="form.Login.new.username">
-                </md-input-container>
-                <md-input-container>
-                    <label>New Password</label>
-                    <input type="password" ng-model="form.Login.new.password">
-                </md-input-container>
-                <md-input-container>
-                    <label>Permissions</label>
-                    <input ng-model="form.Login.new.permissions">
-                </md-input-container>
-            </div>
-            <div>
-                <md-button class="md-raised" type="submit" ng-click="create()">Create User</md-button>
-            </div>
-        </md-content>
-    </form>
+    <md-tabs layout-fill flex md-selected="0" md-border-bottom md-autoselect md-swipe-content="true">
+        <md-tab label='Login'>
+            <md-tab-content>
+                <form name="loginForm" layout-fill flex layout="column" layout-align="space-around center" class="md-inline-form centre">
+                    <md-content flex></md-content>
+                    <md-content flex layout="column">
+                        <div>
+                            <md-input-container>
+                                <label>Username</label>
+                                <input ng-model="form.Login.username" ng-change="alert = ''" required>
+                            </md-input-container>
+                            <md-input-container>
+                                <label>Password</label>
+                                <input type="password" ng-model="form.Login.password" ng-change="alert = ''" required>
+                            </md-input-container>
+                        </div>
+                        <div>
+                            <md-button class="md-raised" type="submit" ng-click="loginToggle()">{{authorised ? "Logout" : "Login"}}</md-button>
+                        </div>
+                        <pre>{{alerts[0]}}</pre>
+                    </md-content>
+                    <md-content flex></md-content>
+                </form>
+            </md-tab-content>
+        </md-tab>
+        <md-tab label='Change Password' ng-if="authorised">
+            <md-tab-content>
+                <form name="changeForm" layout-fill flex layout="column" layout-align="space-around center" class="md-inline-form centre">
+                    <md-content flex></md-content>
+                    <md-content flex layout="column">
+                        <div>
+                            <md-input-container>
+                                <label>Current Password</label>
+                                <input type="password" ng-model="form.Update.currentPass" required>
+                            </md-input-container>
+                            <md-input-container>
+                                <label>New Password</label>
+                                <input type="password" ng-model="form.Update.newPass1" required>
+                            </md-input-container>
+                            <md-input-container>
+                                <label>Confirm Password</label>
+                                <input type="password" ng-model="form.Update.newPass2" required>
+                            </md-input-container>
+                        </div>
+                        <div>
+                            <md-button class="md-raised" type="submit" ng-click="updatePassword()">Update Password</md-button>
+                        </div>
+                        <pre>{{alerts[1]}}</pre>
+                    </md-content>
+                    <md-content flex></md-content>
+                </form>
+            </md-tab-content>
+        </md-tab>
+        <md-tab label='Create User' ng-if="authorised && hasPermission('createUser')">
+            <md-tab-content>
+                <form name="createForm" layout-fill flex layout="column" layout-align="space-around center" class="md-inline-form centre">
+                    <md-content flex></md-content>
+                    <md-content flex layout="column">
+                        <div>
+                            <md-input-container>
+                                <label>Your Password</label>
+                                <input type="password" ng-model="form.Create.auth.password" ng-change="alert = ''" required>
+                            </md-input-container>
+                        </div>
+                        <div>
+                            <md-input-container>
+                                <label>New Username</label>
+                                <input ng-model="form.Create.new.username" required>
+                            </md-input-container>
+                            <md-input-container>
+                                <label>New Password</label>
+                                <input type="password" ng-model="form.Create.new.password" required>
+                            </md-input-container>
+                            <md-input-container>
+                                <label>Permissions</label>
+                                <md-select ng-model="form.Create.new.permissions" multiple>
+                                    <md-option ng-repeat="obj in permissions" value="{{obj.code}}">{{obj.name}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                        </div>
+                        <div>
+                            <md-button class="md-raised" type="submit" ng-click="create()">Create User</md-button>
+                        </div>
+                        <pre>{{alerts[2]}}</pre>
+                    </md-content>
+                    <md-content flex></md-content>
+                </form>
+            </md-tab-content>
+        </md-tab>
+    </md-tabs>
 </md-content>

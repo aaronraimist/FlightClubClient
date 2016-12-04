@@ -12,13 +12,29 @@ angular.module('FlightClub').controller('LoginCtrl', function ($timeout, $docume
             elem.parent().addClass('md-input-has-value');
         }
     }, 150);
+    
+    $scope.httpRequest('/user/permissions', 'GET', null, function (data) {
+        $scope.permissions = fill(data);
+    }, function(data, statusText) {
+        $scope.$parent.toolbarTitle = 'It usually works, I swear';
+        $scope.alerts[2] += 'Permissions: ' + statusText + '\n';
+    });
 
-    $scope.alert = "";
+    var fill = function (data) {
+        var list = data.data;
+        var array = {};
+        for (var i = list.length; i > 0; i--) {
+            array[list[i - 1].code] = {code: list[i - 1].code, name: list[i - 1].name};
+        }
+        return array;
+    };
+
+    $scope.alerts = [];
     $scope.loginToggle = function () {
         if (!$scope.$parent.authorised) {
             
             var data = JSON.stringify($scope.form);
-            $scope.$parent.httpRequest('/login', 'POST', data, function (data) {
+            $scope.$parent.httpRequest('/user/login', 'POST', data, function (data) {
                 if (data.Success !== undefined) {
                     var now = new Date();
                     var expiryDate = new Date(now.getTime() + 1000 * parseInt(data.Success.maxAge));
@@ -32,14 +48,14 @@ angular.module('FlightClub').controller('LoginCtrl', function ($timeout, $docume
                         $scope.$parent.permissions.push(el.toLowerCase());
                     });
                     
-                    $scope.alert = "Successfully logged in!";
+                    $scope.alerts[0] = "Successfully logged in!";
             
                 } else {
-                    $scope.alert = data.error;
+                    $scope.alerts[0] = data.error;
                 }
                 $scope.$apply();
             }, function (data) {
-                $scope.alert = data.error;
+                $scope.alerts[0] = data.error;
                 $scope.$apply();
             });
     
@@ -48,41 +64,37 @@ angular.module('FlightClub').controller('LoginCtrl', function ($timeout, $docume
             $scope.$parent.authorised = false;
             $scope.$parent.permissions.length = 0;
             $scope.$parent.token = undefined;
-            $scope.alert = "Successfully logged out!";
+            $scope.alerts[0] = "Successfully logged out!";
         }
     };
     
     $scope.create = function () {
+        $scope.form.auth = {token: $scope.$parent.token};
         var data = JSON.stringify($scope.form);
-        $scope.$parent.httpRequest('/login', 'PUT', data, function (data) {
+        $scope.form.auth = {token: ''};
+        $scope.$parent.httpRequest('/user/new', 'POSTT', data, function (data) {
             if (data.Success !== undefined) {
-                $mdDialog.show(
-                        $mdDialog.alert()
-                        .clickOutsideToClose(true)
-                        .title('User created successfully!')
-                        .textContent('User \"' + $scope.form.Login.new.username + '\" now exists.')
-                        .ariaLabel('create success')
-                        .ok('Ok!')
-                        );
+                $scope.alerts[1] = 'User \"' + $scope.form.Login.new.username + '\" created successfully!';
             } else {
-                $mdDialog.show(
-                        $mdDialog.alert()
-                        .clickOutsideToClose(true)
-                        .title('Error creating User')
-                        .textContent(data)
-                        .ariaLabel('create failure')
-                        .ok('Ok!')
-                        );
+                $scope.alerts[1] = 'Internal error creating User\n'+data;
             }
         }, function (data) {
-            $mdDialog.show(
-                    $mdDialog.alert()
-                    .clickOutsideToClose(true)
-                    .title('Error creating User')
-                    .textContent(data)
-                    .ariaLabel('create failure')
-                    .ok('Ok!')
-                    );
+            $scope.alerts[1] = 'Error sending request\n'+data;
+        });
+    };
+    
+    $scope.updatePassword = function () {
+        $scope.form.auth = {token: $scope.$parent.token};
+        var data = JSON.stringify($scope.form);
+        $scope.form.auth = {token: ''};
+        $scope.$parent.httpRequest('/user/updatePass', 'POST', data, function (data) {
+            if (data.Success !== undefined) {
+                $scope.alerts[1] = 'User \"' + $scope.form.Login.new.username + '\" created successfully!';
+            } else {
+                $scope.alerts[1] = 'Internal error creating User\n'+data;
+            }
+        }, function (data) {
+            $scope.alerts[1] = 'Error sending request\n'+data;
         });
     };
 });
