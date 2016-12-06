@@ -26,12 +26,12 @@
                     </md-content>
                 </md-tab-content>
             </md-tab>
-            <md-tab label='Launch Vehicle'>
+           l <md-tab label='Launch Vehicle'>
                 <md-tab-content>
-                    <md-content layout='row' flex layout-fill layout-padding layout-align='space-around start'>
-                        <md-content flex layout='column' layout-align='space-around center'>
-                            <md-radio-group layout="column" layout-align="start center" ng-model="builderType">
-                                <md-content layout="row" layout-align="space-between center" layout-fill>
+                    <md-content flex layout-fill layout='column' layout-gt-sm="row" layout-align='space-around start'>
+                        <md-radio-group layout-padding layout="column" layout-align="start center" ng-model="builderType">
+                            <md-content layout="row" layout-gt-sm="column" layout-align="center center" layout-fill>
+                                <md-content layout="row" layout-align="center center" layout-fill>
                                     <md-radio-button flex value="previous">
                                         <label>Use vehicle from existing mission:</label>
                                     </md-radio-button>
@@ -41,7 +41,7 @@
                                         </md-select>
                                     </md-input-container>
                                 </md-content>
-                                <md-content layout="row" layout-align="space-between center" layout-fill>
+                                <md-content layout="row" layout-align="center center" layout-fill>
                                     <md-radio-button flex value="custom">
                                         <label>Customize</label>
                                         <md-tooltip md-direction="bottom">Allow Editing Of This Vehicle</md-tooltip>
@@ -51,62 +51,62 @@
                                         <md-icon class="material-icons">add</md-icon>
                                     </md-button>
                                 </md-content>
-                            </md-radio-group>
-                            <md-divider flex></md-divider>
-                            <md-content flex layout-fill layout-align="space-between center" layout="row">
-                                <md-list layout-fill layout='column'>
-                                    <md-list-item class="md-3-line" ng-repeat-start="stage in form.Mission.Vehicle.Stages">
-                                        <div class="md-list-item-text">
-                                            <h3>{{stage.name}}</h3>
-                                            <h4 ng-repeat="engineConfig in stage.Engines">{{engineConfig.number}} x {{engineConfig.Engine.name}}</h4>
-                                            <p>Dry mass: {{stage.dryMass / 1000.0}}t // Propellant mass: {{stage.propMass / 1000.0}}t/{{stage.fuelCapacity / 1000.0}}t // Total mass: {{(stage.dryMass + stage.propMass) / 1000.0}}t</p>
-                                        </div>
-                                        <md-button style="min-width:0" ng-click="incrementEntity(stage)" ng-disabled="builderType !== 'custom'">
-                                            <md-tooltip md-direction="bottom">Add Booster</md-tooltip>
-                                            <md-icon class="material-icons">add</md-icon>
-                                        </md-button>
-                                        <md-button style="min-width:0" ng-click="openStageEditDialog($event, $index, stage)" ng-disabled="builderType !== 'custom'">
-                                            <md-tooltip md-direction="bottom">Edit This Stage</md-tooltip>
-                                            <md-icon class="material-icons">mode_edit</md-icon>
-                                        </md-button>
-                                        <md-button style="min-width:0" ng-click="removeEntity(null, $index)" ng-disabled="builderType !== 'custom'">
-                                            <md-tooltip md-direction="bottom">Remove Stage From Vehicle</md-tooltip>
-                                            <md-icon class="material-icons">close</md-icon>
-                                        </md-button>
-                                        <md-divider></md-divider>
-                                    </md-list-item>
-                                    <md-list-item class="md-3-line" ng-repeat-end ng-repeat="booster in stage.Boosters">
-                                        <md-icon class="material-icons md-48">subdirectory_arrow_right</md-icon>
-                                        <div class="md-list-item-text">
-                                            <h3>{{booster.name}}</h3>
-                                            <h4 ng-repeat="engineConfig in booster.Engines">{{engineConfig.number}} x {{engineConfig.Engine.name}}</h4>
-                                            <p>Dry mass: {{booster.dryMass / 1000.0}}t // Propellant mass: {{booster.propMass / 1000.0}}t/{{booster.fuelCapacity / 1000.0}}t // Total mass: {{(booster.dryMass + booster.propMass) / 1000.0}}t</p>
-                                        </div>
-                                        <md-button style="min-width:0" ng-click="openBoosterEditDialog($event, stage, $index, booster)" ng-disabled="builderType !== 'custom'">
-                                            <md-tooltip md-direction="bottom">Edit This Booster</md-tooltip>
-                                            <md-icon class="material-icons">mode_edit</md-icon>
-                                        </md-button>
-                                        <md-button style="min-width:0" ng-click="removeEntity(stage, $index)" ng-disabled="builderType !== 'custom'">
-                                            <md-tooltip md-direction="bottom">Remove Booster From Stage</md-tooltip>
-                                            <md-icon class="material-icons">close</md-icon>
-                                        </md-button>
-                                        <md-divider></md-divider>
-                                    </md-list-item>
-                                    <md-content layout="column">
-                                        <md-content layout='row' layout-align='space-between center'>
-                                            <md-input-container flex class="md-block">
-                                                <md-tooltip md-direction="bottom">The entire mass of the stuff on top of the top stage</md-tooltip>
-                                                <label>Payload Mass (kg)</label>
-                                                <input ng-model="form.Mission.Payload.mass" ng-change="recalcDV()">
-                                            </md-input-container>
-                                            <p flex>
-                                            <md-tooltip md-direction="bottom">This doesn't take gravity losses or atmospheric losses into account. Adding boosters to stages makes this less accurate.</md-tooltip>
-                                            Payload ΔV (estimate): {{payloadDV}} km/s
-                                            </p>
-                                        </md-content>
-                                    </md-content>
-                                </md-list>
                             </md-content>
+                            <md-divider layout-fill></md-divider>
+                            <md-content layout='row' layout-gt-sm="column" layout-align='space-around center'>
+                                <md-input-container class="md-block">
+                                    <md-tooltip md-direction="bottom">The entire mass of the stuff on top of the top stage</md-tooltip>
+                                    <label>Payload Mass (kg)</label>
+                                    <input ng-model="form.Mission.Payload.mass" ng-change="recalcDV()">
+                                </md-input-container>
+                                <div>
+                                    <span>Payload ΔV (estimate): {{payloadDV}} km/s</span>
+                                    <md-tooltip md-direction="bottom">This doesn't take gravity losses or atmospheric losses into account. Adding boosters to stages makes this less accurate.</md-tooltip>
+                                </div>
+                            </md-content>
+                        </md-radio-group>
+                        <md-content layout-padding flex layout-fill>
+                            <md-list flex layout='column'>
+                                <md-list-item class="md-3-line" ng-repeat-start="stage in form.Mission.Vehicle.Stages">
+                                    <div class="md-list-item-text">
+                                        <h3>{{stage.name}}</h3>
+                                        <h4 ng-show="stage.Engines[0] === undefined" style="color:red">This stage has no engines!!!</h4>
+                                        <h4 ng-repeat="engineConfig in stage.Engines">{{engineConfig.number}} x {{engineConfig.Engine.name}}</h4>
+                                        <p>Dry mass: {{stage.dryMass / 1000.0}}t // Propellant mass: {{stage.propMass / 1000.0}}t/{{stage.fuelCapacity / 1000.0}}t // Total mass: {{(stage.dryMass + stage.propMass) / 1000.0}}t</p>
+                                    </div>
+                                    <md-button style="min-width:0" ng-click="incrementEntity(stage)" ng-disabled="builderType !== 'custom'">
+                                        <md-tooltip md-direction="bottom">Add Booster</md-tooltip>
+                                        <md-icon class="material-icons">add</md-icon>
+                                    </md-button>
+                                    <md-button style="min-width:0" ng-click="openStageEditDialog($event, $index, stage)" ng-disabled="builderType !== 'custom'">
+                                        <md-tooltip md-direction="bottom">Edit This Stage</md-tooltip>
+                                        <md-icon class="material-icons">mode_edit</md-icon>
+                                    </md-button>
+                                    <md-button style="min-width:0" ng-click="removeEntity(null, $index)" ng-disabled="builderType !== 'custom'">
+                                        <md-tooltip md-direction="bottom">Remove Stage From Vehicle</md-tooltip>
+                                        <md-icon class="material-icons">close</md-icon>
+                                    </md-button>
+                                    <md-divider></md-divider>
+                                </md-list-item>
+                                <md-list-item class="md-3-line" ng-repeat-end ng-repeat="booster in stage.Boosters">
+                                    <md-icon class="material-icons md-48">subdirectory_arrow_right</md-icon>
+                                    <div class="md-list-item-text">
+                                        <h3>{{booster.name}}</h3>
+                                        <h4 ng-show="booster.Engines[0] === undefined" style="color:red">This booster has no engines!!!</h4>
+                                        <h4 ng-repeat="engineConfig in booster.Engines">{{engineConfig.number}} x {{engineConfig.Engine.name}}</h4>
+                                        <p>Dry mass: {{booster.dryMass / 1000.0}}t // Propellant mass: {{booster.propMass / 1000.0}}t/{{booster.fuelCapacity / 1000.0}}t // Total mass: {{(booster.dryMass + booster.propMass) / 1000.0}}t</p>
+                                    </div>
+                                    <md-button style="min-width:0" ng-click="openBoosterEditDialog($event, stage, $index, booster)" ng-disabled="builderType !== 'custom'">
+                                        <md-tooltip md-direction="bottom">Edit This Booster</md-tooltip>
+                                        <md-icon class="material-icons">mode_edit</md-icon>
+                                    </md-button>
+                                    <md-button style="min-width:0" ng-click="removeEntity(stage, $index)" ng-disabled="builderType !== 'custom'">
+                                        <md-tooltip md-direction="bottom">Remove Booster From Stage</md-tooltip>
+                                        <md-icon class="material-icons">close</md-icon>
+                                    </md-button>
+                                    <md-divider></md-divider>
+                                </md-list-item>
+                            </md-list>
                         </md-content>
                     </md-content>
                 </md-tab-content>
@@ -242,7 +242,7 @@
                                     <label>Stage</label>
                                     <md-select ng-model="selectedEvent.stage" name="stage" ng-required="selectedEvent!==null">
                                         <md-option ng-repeat-start="obj in form.Mission.Vehicle.Stages" ng-value="obj.stageNum">{{obj.name}}</md-option>
-                                        <md-option ng-repeat-end ng-repeat="obj2 in obj.Boosters" ng-value="obj2.stageNum">{{obj2.name}}</md-option>
+                                        <md-option ng-repeat-end ng-repeat="obj2 in obj.Boosters track by $index" ng-value="obj2.stageNum">{{obj2.name}}</md-option>
                                     </md-select>
                                     <div ng-messages="profileForm.stage.$error" multiple md-auto-hide="true">
                                         <div ng-message="required">This is required!</div>
@@ -324,13 +324,13 @@
         <md-list>
             <md-subheader layout-fill class="md-no-sticky">Upcoming Missions</md-subheader>
             <md-list-item layout-align="space-between center" ng-repeat="mission in upcoming" ng-show="mission.display || authorised" ng-click="selectMission(mission)">
-                <md-progress-circular flex class="loadCircle" ng-show="loadingMission && mission===selectedMission" md-mode="indeterminate"></md-progress-circular>
+                <md-progress-circular flex class="loadCircle" ng-show="loadingMission && mission === selectedMission" md-mode="indeterminate"></md-progress-circular>
                 <span flex class="md-secondary">{{mission.name}}</span>
             </md-list-item>
             <md-divider></md-divider>
             <md-subheader layout-fill class="md-no-sticky">Past Missions</md-subheader>
             <md-list-item layout-align="space-between center" ng-repeat="mission in past" ng-show="mission.display || authorised" ng-click="selectMission(mission)">
-                <md-progress-circular flex class="loadCircle" ng-show="loadingMission && mission===selectedMission" md-mode="indeterminate"></md-progress-circular>
+                <md-progress-circular flex class="loadCircle" ng-show="loadingMission && mission === selectedMission" md-mode="indeterminate"></md-progress-circular>
                 <span flex class="md-secondary">{{mission.name}}</span>
             </md-list-item>
         </md-list>
