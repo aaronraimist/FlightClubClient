@@ -26,12 +26,12 @@
                     </md-content>
                 </md-tab-content>
             </md-tab>
-           l <md-tab label='Launch Vehicle'>
+            <md-tab label='Launch Vehicle'>
                 <md-tab-content>
-                    <md-content flex layout-fill layout='column' layout-gt-sm="row" layout-align='space-around start'>
-                        <md-radio-group layout-padding layout="column" layout-align="start center" ng-model="builderType">
-                            <md-content layout="row" layout-gt-sm="column" layout-align="center center" layout-fill>
-                                <md-content layout="row" layout-align="center center" layout-fill>
+                    <md-content flex layout-fill layout='column' layout-gt-sm="row" layout-align='space-around center' layout-align-gt-sm='space-around start'>
+                        <md-radio-group flex-gt-sm="33" style="width:100%" layout-padding layout="column" layout-align="start center" ng-model="builderType">
+                            <md-content layout="column" layout-sm="row" layout-align="space-around center" layout-fill>
+                                <md-content layout-padding layout="row" layout-align="center center" layout-fill>
                                     <md-radio-button flex value="previous">
                                         <label>Use vehicle from existing mission:</label>
                                     </md-radio-button>
@@ -41,19 +41,19 @@
                                         </md-select>
                                     </md-input-container>
                                 </md-content>
-                                <md-content layout="row" layout-align="center center" layout-fill>
+                                <md-content layout-padding layout="row" layout-align="center center" layout-fill>
                                     <md-radio-button flex value="custom">
                                         <label>Customize</label>
                                         <md-tooltip md-direction="bottom">Allow Editing Of This Vehicle</md-tooltip>
                                     </md-radio-button>
-                                    <md-button class="md-raised" style="color:#181c1f" aria-label="add" ng-click='incrementEntity()' ng-disabled="builderType !== 'custom'">
+                                    <md-button class="md-raised" aria-label="add" ng-click='incrementEntity()' ng-disabled="builderType !== 'custom'">
                                         <md-tooltip md-direction="bottom">Add Stage</md-tooltip>
                                         <md-icon class="material-icons">add</md-icon>
                                     </md-button>
                                 </md-content>
                             </md-content>
                             <md-divider layout-fill></md-divider>
-                            <md-content layout='row' layout-gt-sm="column" layout-align='space-around center'>
+                            <md-content flex layout="column" layout-sm="row" layout-align='space-around center' layout-fill>
                                 <md-input-container class="md-block">
                                     <md-tooltip md-direction="bottom">The entire mass of the stuff on top of the top stage</md-tooltip>
                                     <label>Payload Mass (kg)</label>
@@ -72,7 +72,10 @@
                                         <h3>{{stage.name}}</h3>
                                         <h4 ng-show="stage.Engines[0] === undefined" style="color:red">This stage has no engines!!!</h4>
                                         <h4 ng-repeat="engineConfig in stage.Engines">{{engineConfig.number}} x {{engineConfig.Engine.name}}</h4>
-                                        <p>Dry mass: {{stage.dryMass / 1000.0}}t // Propellant mass: {{stage.propMass / 1000.0}}t/{{stage.fuelCapacity / 1000.0}}t // Total mass: {{(stage.dryMass + stage.propMass) / 1000.0}}t</p>
+                                        <p hide show-gt-xs>Dry mass: {{stage.dryMass / 1000.0}}t // Propellant mass: {{stage.propMass / 1000.0}}t/{{stage.fuelCapacity / 1000.0}}t // Total mass: {{(stage.dryMass + stage.propMass) / 1000.0}}t</p>
+                                        <p hide-gt-xs>Dry mass: {{stage.dryMass / 1000.0}}t</p>
+                                        <p hide-gt-xs>Propellant mass: {{stage.propMass / 1000.0}}t/{{stage.fuelCapacity / 1000.0}}t</p>
+                                        <p hide-gt-xs>Total mass: {{(stage.dryMass + stage.propMass) / 1000.0}}t</p>
                                     </div>
                                     <md-button style="min-width:0" ng-click="incrementEntity(stage)" ng-disabled="builderType !== 'custom'">
                                         <md-tooltip md-direction="bottom">Add Booster</md-tooltip>
