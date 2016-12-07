@@ -64,7 +64,7 @@ angular.module('FlightClub').controller('ResultsCtrl', function ($scope, $mdDial
         $scope.queryParams = $scope.$parent.parseQueryString(queryString);
         $scope.$parent.httpRequest('/simulator/results?' + queryString, 'GET', null,
                 function (data) {
-
+                    
                     var fileMap = new Object();
                     var files = data.Mission.Output.Files;
                     $.each(files, function (key, val)
@@ -156,6 +156,7 @@ angular.module('FlightClub').controller('ResultsCtrl', function ($scope, $mdDial
                 function (data) {
                     if (data.Mission.success === true) {
                         var queryString = data.Mission.output.split('?')[1];
+                        $scope.failureMode = data.Mission.failureMode;
                         $scope.loadMessage = "Building plots...";
                         window.history.pushState({}, "", '/results/?' + queryString);
                         $scope.load(queryString);
@@ -294,12 +295,12 @@ angular.module('FlightClub').controller('ResultsCtrl', function ($scope, $mdDial
     $scope.plotMap = [];
     $scope.initialisePlots = function () {
         
-        var allStages = [];
+        var allStages = [], lowerStages = [];
         $scope.stageMap.forEach(function(el, i) {
             allStages.push(i);
+            if(i !== $scope.stageMap.length-1)
+                lowerStages.push(i);
         });
-
-        var lowerStages = $scope.stageMap.length === 2 ? [0] : [0, 2, 3];
 
         $scope.plotMap.push({id: 'altitude1', stages: allStages, title: "Altitude", events: true,
             x: {axis: 0, label: "Time (s)", type: "linear"},
@@ -354,7 +355,18 @@ angular.module('FlightClub').controller('ResultsCtrl', function ($scope, $mdDial
             $scope.initialisePlot2($scope.plotMap[i]);
         }
         
-        setTimeout(askForSupport, 1000);
+        if(!$scope.failureMode)
+            setTimeout(askForSupport, 1000);
+        else {
+            $mdDialog.show(
+                    $mdDialog.alert()
+                    .clickOutsideToClose(true)
+                    .title('Mission Failure!')
+                    .textContent($scope.failureMode)
+                    .ariaLabel('mission failure reason')
+                    .ok('Ok')
+                );
+        }
         
     };
 

@@ -247,12 +247,10 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
                 $scope.engineTypes = $scope.parentScope.engineTypes;
 
                 $scope.selectStageType = function (newStage) {
-                    $scope.selectedStage = jQuery.extend(true, {}, newStage);
                     
-                    if(!$scope.selectedStage.Engines)
-                        $scope.selectedStage.Engines = [];
-                    if(!$scope.selectedStage.Boosters)
-                        $scope.selectedStage.Boosters = [];
+                    newStage.Engines = $scope.selectedStage.Engines;
+                    newStage.Boosters = $scope.selectedStage.Boosters;
+                    $scope.selectedStage = jQuery.extend(true, {}, newStage);
                     
                 };
                 $scope.removeEngine = function ($index) {
@@ -361,12 +359,11 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
                 $scope.engineTypes = $scope.parentScope.engineTypes;
 
                 $scope.selectStageType = function (newStage) {
+                    
+                    newStage.Engines = $scope.selectedStage.Engines;
+                    newStage.Boosters = $scope.selectedStage.Boosters;
                     $scope.selectedStage = jQuery.extend(true, {}, newStage);
                     
-                    if(!$scope.selectedStage.Engines)
-                        $scope.selectedStage.Engines = [];
-                    if(!$scope.selectedStage.Boosters)
-                        $scope.selectedStage.Boosters = [];
                 };
                 $scope.removeEngine = function ($index) {
                     
@@ -552,20 +549,24 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
     
     var resetstageNumbersAndEvents = function() {
         
-        var stageNumberMap = []; // maps old stageNumber to new stageNumber for updting Events
+        //var stageNumberMap = []; // maps old stageNumber to new stageNumber for updating Events
         
         var i = 0;
         for(var index=0;index<$scope.form.Mission.Vehicle.Stages.length;index++) {
             
             var obj = $scope.form.Mission.Vehicle.Stages[index];
-            stageNumberMap[obj.stageNumber] = i;
+            //stageNumberMap[obj.stageNumber] = i;
             obj.stageNumber = i++;
             
             $scope.form.Mission.Vehicle.Stages[index].Boosters.forEach(function (obj) {
-                stageNumberMap[obj.stageNumber] = i;
+                //stageNumberMap[obj.stageNumber] = i;
                 obj.stageNumber = i++;
             });
         }
+        /*
+         
+         I've decided not to do this. The user should get a warning if there are
+         unmatched events when they hit submit instead!
 
         // make list of events belonging to that entity to remove
         // decrement 'stage' property of all events for higher entities
@@ -579,7 +580,7 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
         for(var i=list.length-1;i>=0;i--) {
             $scope.form.Mission.Events.splice(list[i], 1);
         }
-        
+        */
     };
     
     $scope.removeEntity = function (parentStage, $index) {
@@ -782,8 +783,83 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
         }
 
     };
+    
+    var validateEventswithStages = function() {
+        
+        var returnObj = {
+            isValid: true,
+            invalidEvents: [],
+            unusedStages: []
+        };
+        
+        var stagesReferencedInEvents = [];
+        var maxStageNumber = -1;
+        $scope.form.Mission.Vehicle.Stages.forEach(function(stage) {
+            maxStageNumber++;
+            stage.Boosters.forEach(function() {maxStageNumber++;});
+        });
+        
+        // check for events that reference non-existent stages
+        $scope.form.Mission.Events.forEach(function(event) {
+            stagesReferencedInEvents.push(event.stage);    
+            if(event.stage > maxStageNumber)
+                returnObj.invalidEvents.push(event);
+        });
+        
+        // check for stages that have no attached events
+        $scope.form.Mission.Vehicle.Stages.forEach(function(stage) {
+           if(stagesReferencedInEvents.indexOf(stage.stageNumber)===-1)
+               returnObj.unusedStages.push(stage);
+            stage.Boosters.forEach(function(booster) {
+                if (stagesReferencedInEvents.indexOf(booster.stageNumber)===-1)
+                    returnObj.unusedStages.push(booster);
+            });
+        });
+        
+        returnObj.isValid = returnObj.invalidEvents.length===0 && returnObj.unusedStages.length===0;
+        return returnObj;
+    };
 
     $scope.submit = function () {
+        
+        var validation = validateEventswithStages();
+        if(!validation.isValid) {
+            
+            var stageString = '';
+            validation.unusedStages.forEach(function(stage) {
+                stageString += stage.stageName + ', ';
+            });
+            stageString.substring(0, stageString.length - 1);
+            
+            var eventString = '';
+            validation.invalidEvents.forEach(function(event) {
+                eventString += event.name + ', ';
+            });
+            eventString.substring(0, eventString.length - 1);
+            var x = 5;
+            
+            var confirm = $mdDialog.confirm()
+                    .title("Warning! Possible invalid profile")
+                    .htmlContent((stageString===''?'':('There were no events assigned to the following stages:<br>'
+                        +stageString+'<br>'))
+                        +(eventString===''?'':('The following events don\'t reference a valid stage:<br>'
+                        +eventString+'<br>'))
+                        +'Do you want to continue? Simulation may fail.'
+                    )
+                    .ariaLabel('Update Confirmation')
+                    .targetEvent(event)
+                    .ok('Ok')
+                    .cancel('Go back');
+            $mdDialog.show(confirm).then(function () {
+                processSubmit();
+            }, null);
+        } else {
+            processSubmit();
+        }
+    };
+    
+    var processSubmit = function() {
+        
         $scope.form.auth = {token: $scope.$parent.token};
         var formHash = $scope.updateUrl();
         $scope.form.auth = {token: null};

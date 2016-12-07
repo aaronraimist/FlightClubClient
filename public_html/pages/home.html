@@ -244,8 +244,8 @@
                                     <md-tooltip md-direction="bottom">The event applies to this rocket stage in particular</md-tooltip>
                                     <label>Stage</label>
                                     <md-select ng-model="selectedEvent.stage" name="stage" ng-required="selectedEvent!==null">
-                                        <md-option ng-repeat-start="obj in form.Mission.Vehicle.Stages" ng-value="obj.stageNumber">{{obj.name}}</md-option>
-                                        <md-option ng-repeat-end ng-repeat="obj2 in obj.Boosters track by $index" ng-value="obj2.stageNumber">{{obj2.name}}</md-option>
+                                        <md-option ng-repeat-start="obj in form.Mission.Vehicle.Stages" ng-value="obj.stageNumber">{{obj.stageName}}</md-option>
+                                        <md-option ng-repeat-end ng-repeat="obj2 in obj.Boosters track by $index" ng-value="obj2.stageNumber">{{obj2.stageName}}</md-option>
                                     </md-select>
                                     <div ng-messages="profileForm.stage.$error" multiple md-auto-hide="true">
                                         <div ng-message="required">This is required!</div>
