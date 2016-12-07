@@ -17,20 +17,29 @@
     <md-dialog-content>
         <div class="md-dialog-content">
             <md-content flex layout-align='space-around center'>
-                <label>Choose stage:</label>
-                <md-content flex layout-align='space-around center'>
-                    <md-input-container flex class="md-block" layout-fill>
-                        <md-select ng-model="selectedStage.name" required aria-label="ChooseStage">
-                            <md-option ng-repeat="obj in stageTypes" value="{{obj.name}}" ng-click="selectStageType(obj)">{{obj.name}}</md-option>
-                        </md-select>
-                    </md-input-container>
+                <md-content layout-padding flex layout="row">
+                    <div layout-padding flex="15" style="margin:auto">1)</div>
+                    <md-content flex>
+                        <label>Choose stage template:</label>
+                        <md-content flex layout-align='space-around center'>
+                            <md-input-container flex class="md-block" layout-fill>
+                                <md-select ng-model="selectedStage.name" required aria-label="ChooseStage">
+                                    <md-option ng-repeat="obj in stageTypes" value="{{obj.name}}" ng-click="selectStageType(obj)">{{obj.name}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                        </md-content>
+                    </md-content>
                 </md-content>
-            </md-content>
             <form role="form">
                 <md-content flex layout-align='space-around center'>
-                    <md-content>
-                        <md-button style="float:right" class="md-secondary" aria-label="add" ng-click='incrementEngines($event)'>Add Engine</md-button>
-                    </md-content>
+                    <md-content layout-padding flex layout="row">
+                        <div flex="15" style="margin:auto">2)</div>
+                        <md-content flex>
+                            <md-content>
+                                <md-button class="md-secondary" aria-label="add" ng-click='incrementEngines($event)'>Add Engines</md-button>
+                            </md-content>
+                        </md-content>
+                    </md-content>                            
                     <md-content layout-fill layout-align="space-between center" layout="row">
                         <md-list layout-fill layout='column'>
                             <md-list-item class="md-3-line" ng-repeat="engineConfig in selectedStage.Engines">
@@ -51,11 +60,16 @@
                         </md-list>
                     </md-content>
                     <md-divider></md-divider>
-                    <label>Customize:</label>
+                    <md-content layout-padding flex layout="row">
+                        <div flex="15" style="margin:auto">3)</div>
+                        <md-content layout-padding flex>
+                            <label>Customize:</label>
+                        </md-content>
+                    </md-content>
                     <md-content layout="column" layout-gt-sm="row" layout-align="space-around center">
                         <md-input-container flex class="md-block">
                             <label>Name</label>
-                            <input ng-model="selectedStage.name" name="stageName" required aria-label="StageName">
+                            <input ng-model="selectedStage.stageName" name="stageName" required aria-label="StageName">
                             <div ng-messages="profileForm.stageName.$error" multiple md-auto-hide="true">
                                 <div ng-message="required">This can be whatever you want, but make it descriptive!</div>
                             </div>
@@ -108,7 +122,13 @@
                                 <div ng-message="required">This is required!</div>
                             </div>
                         </md-input-container>
-                        <md-content flex></md-content>
+                        <md-input-container flex class="md-block">
+                            <label>Max Acceleration (g's)</label>
+                            <input ng-model="selectedStage.maxAccel" name="maxAccel" required aria-label="Maximum Accleration" float>
+                            <div ng-messages="profileForm.maxAccel.$error" multiple md-auto-hide="true">
+                                <div ng-message="required">This is required!</div>
+                            </div>
+                        </md-input-container>
                     </md-content>
                     <md-content layout="column" layout-gt-sm="row" layout-align="space-around center">
                         <md-input-container flex class="md-block">

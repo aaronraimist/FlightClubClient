@@ -5,7 +5,7 @@
         <p ng-show="!missionLoading" style="white-space:pre-wrap;">{{serverErrorMessage}}</p>
     </md-content>
     <form ng-show="loadSuccess" layout-fill layout="row" flex name="profileForm" ng-cloak>
-        <md-tabs flex md-selected="3" md-border-bottom md-autoselect md-swipe-content="true">
+        <md-tabs flex md-selected="2" md-border-bottom md-autoselect md-swipe-content="true">
             <md-tab label='Launch Site'>
                 <md-tab-content md-swipe-left="onSwipeLeft()">
                     <md-content layout-fill flex layout-padding layout="row" layout-align="space-around center">
@@ -69,7 +69,7 @@
                             <md-list flex layout='column'>
                                 <md-list-item class="md-3-line" ng-repeat-start="stage in form.Mission.Vehicle.Stages">
                                     <div class="md-list-item-text">
-                                        <h3>{{stage.name}}</h3>
+                                        <h3>{{stage.stageName}}</h3>
                                         <h4 ng-show="stage.Engines[0] === undefined" style="color:red">This stage has no engines!!!</h4>
                                         <h4 ng-repeat="engineConfig in stage.Engines">{{engineConfig.number}} x {{engineConfig.Engine.name}}</h4>
                                         <p hide show-gt-xs>Dry mass: {{stage.dryMass / 1000.0}}t // Propellant mass: {{stage.propMass / 1000.0}}t/{{stage.fuelCapacity / 1000.0}}t // Total mass: {{(stage.dryMass + stage.propMass) / 1000.0}}t</p>
@@ -94,7 +94,7 @@
                                 <md-list-item class="md-3-line" ng-repeat-end ng-repeat="booster in stage.Boosters">
                                     <md-icon class="material-icons md-48">subdirectory_arrow_right</md-icon>
                                     <div class="md-list-item-text">
-                                        <h3>{{booster.name}}</h3>
+                                        <h3>{{booster.stageName}}</h3>
                                         <h4 ng-show="booster.Engines[0] === undefined" style="color:red">This booster has no engines!!!</h4>
                                         <h4 ng-repeat="engineConfig in booster.Engines">{{engineConfig.number}} x {{engineConfig.Engine.name}}</h4>
                                         <p>Dry mass: {{booster.dryMass / 1000.0}}t // Propellant mass: {{booster.propMass / 1000.0}}t/{{booster.fuelCapacity / 1000.0}}t // Total mass: {{(booster.dryMass + booster.propMass) / 1000.0}}t</p>
@@ -156,7 +156,7 @@
                                 <md-list-item class="md-2-line secondary-button-padding" ng-repeat="event in form.Mission.Events">
                                     <div class="md-list-item-text">
                                         <h3>{{"T" + (event.time &lt; 0 ? '' : '+') + event.time}} // {{event.name}}</h3>
-                                        <p>{{getStageByStageNum(event.stage).name}}</p>
+                                        <p>{{getStageByNumber(event.stage).stageName}}</p>
                                     </div>
                                     <md-button show-sm hide-gt-sm style="min-width:0" ng-click="openEventEditDialog($event, $index, event)">
                                         <md-tooltip md-direction="left">Edit Event</md-tooltip>
@@ -234,7 +234,7 @@
                                     <md-tooltip md-direction="bottom">Choose from Ignition, Cutoff, Guidance, Separation...</md-tooltip>
                                     <label>Event Type</label>
                                     <md-select ng-model="selectedEvent.type" name="type" ng-required="selectedEvent!==null">
-                                        <md-option ng-repeat="obj in type" value="{{obj.code}}" ng-disabled="obj.code === 'FAIRING_SEP' && getStageByStageNum(selectedEvent.stage).fairingMass === undefined">{{obj.name}}</md-option>
+                                        <md-option ng-repeat="obj in type" value="{{obj.code}}" ng-disabled="obj.code === 'FAIRING_SEP' && getStageByNumber(selectedEvent.stage).fairingMass === undefined">{{obj.name}}</md-option>
                                     </md-select>
                                     <div ng-messages="profileForm.type.$error" multiple md-auto-hide="true">
                                         <div ng-message="required">This is required!</div>
@@ -244,8 +244,8 @@
                                     <md-tooltip md-direction="bottom">The event applies to this rocket stage in particular</md-tooltip>
                                     <label>Stage</label>
                                     <md-select ng-model="selectedEvent.stage" name="stage" ng-required="selectedEvent!==null">
-                                        <md-option ng-repeat-start="obj in form.Mission.Vehicle.Stages" ng-value="obj.stageNum">{{obj.name}}</md-option>
-                                        <md-option ng-repeat-end ng-repeat="obj2 in obj.Boosters track by $index" ng-value="obj2.stageNum">{{obj2.name}}</md-option>
+                                        <md-option ng-repeat-start="obj in form.Mission.Vehicle.Stages" ng-value="obj.stageNumber">{{obj.name}}</md-option>
+                                        <md-option ng-repeat-end ng-repeat="obj2 in obj.Boosters track by $index" ng-value="obj2.stageNumber">{{obj2.name}}</md-option>
                                     </md-select>
                                     <div ng-messages="profileForm.stage.$error" multiple md-auto-hide="true">
                                         <div ng-message="required">This is required!</div>
@@ -287,7 +287,7 @@
                             </md-content>
                             <md-content ng-show="selectedEvent.type === 'IGNITION' || selectedEvent.type === 'CUTOFF'"
                                         layout="row" layout-align="space-around center">
-                                <md-content flex class="md-block" ng-repeat="engineConfig in getStageByStageNum(selectedEvent.stage).Engines">
+                                <md-content flex class="md-block" ng-repeat="engineConfig in getStageByNumber(selectedEvent.stage).Engines">
                                     <md-input-container style="width:90%" flex>
                                         <md-tooltip md-direction="bottom">How many engines do you want to {{selectedEvent.type === 'IGNITION' ? 'ignite' : 'cut off'}}?</md-tooltip>
                                         <label># of {{engineConfig.Engine.name}} engines</label>

@@ -17,20 +17,30 @@
     <md-dialog-content>
         <div class="md-dialog-content">
             <md-content flex layout="row" layout-align='space-around center'>
-                <md-input-container flex class="md-block">
-                    <label># of engines:</label>
-                    <input ng-model="selectedEngineConfig.number" name="numEngines" required aria-label="Number of Engines" int>
-                </md-input-container>
-                <md-input-container flex class="md-block">
-                    <label>Choose engine:</label>
-                    <md-select ng-model="selectedEngineConfig.Engine.name" required aria-label="Choose Engine">
-                        <md-option ng-repeat="obj in engineTypes" value="{{obj.name}}" ng-click="selectEngineType(obj)">{{obj.name}}</md-option>
-                    </md-select>
-                </md-input-container>
+                <md-content layout-padding flex layout="row">
+                    <div layout-padding flex="15" style="margin:auto">1)</div>
+                    <md-content flex>
+                        <md-input-container flex class="md-block">
+                            <label>Choose engine:</label>
+                            <md-select ng-model="selectedEngineConfig.Engine.name" required aria-label="Choose Engine">
+                                <md-option ng-repeat="obj in engineTypes" value="{{obj.name}}" ng-click="selectEngineType(obj)">{{obj.name}}</md-option>
+                            </md-select>
+                        </md-input-container>
+                        <md-input-container flex class="md-block">
+                            <label># of engines:</label>
+                            <input ng-model="selectedEngineConfig.number" name="numEngines" required aria-label="Number of Engines" int>
+                        </md-input-container>
+                    </md-content>
+                </md-content>
             </md-content>
             <form role="form" ng-submit="answer()">
                 <md-content flex layout-align='space-around center'>
-                    <label>Selected Engine</label>
+                    <md-content layout-padding flex layout="row">
+                        <div layout-padding flex="15" style="margin:auto">2)</div>
+                        <md-content flex>
+                            <label>Customise:</label>
+                        </md-content>
+                    </md-content>
                     <md-content layout="row" layout-align="space-around center">
                         <md-input-container flex class="md-block">
                             <label>Name</label>

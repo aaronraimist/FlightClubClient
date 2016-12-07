@@ -151,7 +151,6 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
         var array = {};
         for (var i = list.length; i > 0; i--) {
             array[list[i - 1].id] = list[i - 1];
-            array[list[i - 1].id].stageNum = undefined;
         }
         return array;
     };
@@ -220,15 +219,15 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
     $scope.selectEvent = function (event) {
         $scope.selectedEvent = $scope.selectedEvent === event ? null : event;
     };
-    $scope.getStageByStageNum = function(num) {
+    $scope.getStageByNumber = function(num) {
         if(!$scope.form)
             return null;
         for(var i=0;i<$scope.form.Mission.Vehicle.Stages.length;i++) {
-            if($scope.form.Mission.Vehicle.Stages[i].stageNum === num)
+            if($scope.form.Mission.Vehicle.Stages[i].stageNumber === num)
                 return $scope.form.Mission.Vehicle.Stages[i];
             
             for(var j=0;j<$scope.form.Mission.Vehicle.Stages[i].Boosters.length;j++) {
-                if($scope.form.Mission.Vehicle.Stages[i].Boosters[j].stageNum === num)
+                if($scope.form.Mission.Vehicle.Stages[i].Boosters[j].stageNumber === num)
                     return $scope.form.Mission.Vehicle.Stages[i].Boosters[j];
             }
         }
@@ -264,7 +263,7 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
                     });
                     $scope.tempEvents.forEach(function(event) {
                         
-                        if(event.stage === $scope.selectedStage.stageNum) {
+                        if(event.stage === $scope.selectedStage.stageNumber) {
                             for (var i = event.Engines.length - 1; i >= 0; i--) {
                                 if(event.Engines[i].engineId === $index) {
                                     event.Engines.splice(event.Engines[i], 1);
@@ -332,7 +331,7 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
                 $scope.save = function () {                    
                     lForm.Mission.Vehicle.Stages[$stageIndex] = $scope.selectedStage;
                     lForm.Mission.Events = $scope.tempEvents;
-                    resetStageNumsAndEvents();
+                    resetstageNumbersAndEvents();
                     lParent.recalcDV();
                     $mdDialog.hide();
                 };
@@ -377,7 +376,7 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
                     });
                     $scope.tempEvents.forEach(function(event) {
                         
-                        if(event.stage === $scope.selectedStage.stageNum) {
+                        if(event.stage === $scope.selectedStage.stageNumber) {
                             for (var i = event.Engines.length - 1; i >= 0; i--) {
                                 if(event.Engines[i].engineId === $index) {
                                     event.Engines.splice(event.Engines[i], 1);
@@ -445,7 +444,7 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
                 $scope.save = function () {
                     lStage.Boosters[$boosterIndex] = $scope.selectedStage;
                     lForm.Mission.Events = $scope.tempEvents;
-                    resetStageNumsAndEvents();
+                    resetstageNumbersAndEvents();
                     lParent.recalcDV();
                     $mdDialog.hide();
                 };
@@ -551,20 +550,20 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
         });
     };
     
-    var resetStageNumsAndEvents = function() {
+    var resetstageNumbersAndEvents = function() {
         
-        var stageNumMap = []; // maps old stageNum to new stageNum for updting Events
+        var stageNumberMap = []; // maps old stageNumber to new stageNumber for updting Events
         
         var i = 0;
         for(var index=0;index<$scope.form.Mission.Vehicle.Stages.length;index++) {
             
             var obj = $scope.form.Mission.Vehicle.Stages[index];
-            stageNumMap[obj.stageNum] = i;
-            obj.stageNum = i++;
+            stageNumberMap[obj.stageNumber] = i;
+            obj.stageNumber = i++;
             
             $scope.form.Mission.Vehicle.Stages[index].Boosters.forEach(function (obj) {
-                stageNumMap[obj.stageNum] = i;
-                obj.stageNum = i++;
+                stageNumberMap[obj.stageNumber] = i;
+                obj.stageNumber = i++;
             });
         }
 
@@ -572,9 +571,9 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
         // decrement 'stage' property of all events for higher entities
         var list = [];
         $scope.form.Mission.Events.forEach(function(event, i) {
-            if(stageNumMap[event.stage] === undefined) 
+            if(stageNumberMap[event.stage] === undefined) 
                 list.push(i);
-            event.stage = stageNumMap[event.stage];
+            event.stage = stageNumberMap[event.stage];
         });
                 
         for(var i=list.length-1;i>=0;i--) {
@@ -585,14 +584,14 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
     
     $scope.removeEntity = function (parentStage, $index) {
 
-        // remove entity by stageNum
+        // remove entity by stageNumber
         if(parentStage) {
             parentStage.Boosters.splice($index, 1);
         } else {
             $scope.form.Mission.Vehicle.Stages.splice($index, 1);
         }
 
-        resetStageNumsAndEvents();
+        resetstageNumbersAndEvents();
         $scope.recalcDV();
     };
     
@@ -608,7 +607,7 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
                 Boosters: []
             };
         }        
-        resetStageNumsAndEvents();
+        resetstageNumbersAndEvents();
     };
     
     $scope.recalcDV = function() {
