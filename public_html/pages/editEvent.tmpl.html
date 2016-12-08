@@ -59,7 +59,7 @@
                                 </md-input-container>
                                 <md-input-container flex class="md-block">
                                     <label>Stage</label>
-                                    <md-select ng-model="selectedEvent.stage" name="stage" ng-required="selectedEvent!==null">
+                                    <md-select ng-model="selectedEvent.stageNumbers" name="stage" ng-required="selectedEvent!==null" multiple>
                                         <md-option ng-repeat="obj in stages" ng-value="obj.stageNumber">{{obj.stageName}}</md-option>
                                         <md-option ng-repeat-end ng-repeat="obj2 in obj.Boosters track by $index" ng-value="obj2.stageNumber">{{obj2.stageName}}</md-option>
                                     </md-select>

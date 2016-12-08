@@ -219,19 +219,27 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
     $scope.selectEvent = function (event) {
         $scope.selectedEvent = $scope.selectedEvent === event ? null : event;
     };
-    $scope.getStageByNumber = function(num) {
-        if(!$scope.form)
+    $scope.getStageByNumber = function(numArray) {
+        if(!$scope.form || numArray === undefined)
             return null;
-        for(var i=0;i<$scope.form.Mission.Vehicle.Stages.length;i++) {
-            if($scope.form.Mission.Vehicle.Stages[i].stageNumber === num)
-                return $scope.form.Mission.Vehicle.Stages[i];
-            
-            for(var j=0;j<$scope.form.Mission.Vehicle.Stages[i].Boosters.length;j++) {
-                if($scope.form.Mission.Vehicle.Stages[i].Boosters[j].stageNumber === num)
-                    return $scope.form.Mission.Vehicle.Stages[i].Boosters[j];
+        var arr = [];
+        for(var k=0;k<numArray.length;k++) {
+            var num = numArray[k];
+            for (var i = 0; i < $scope.form.Mission.Vehicle.Stages.length; i++) {
+                if ($scope.form.Mission.Vehicle.Stages[i].stageNumber === num) {
+                    arr.push($scope.form.Mission.Vehicle.Stages[i]);
+                    continue;
+                }
+
+                for (var j = 0; j < $scope.form.Mission.Vehicle.Stages[i].Boosters.length; j++) {
+                    if ($scope.form.Mission.Vehicle.Stages[i].Boosters[j].stageNumber === num) {
+                        arr.push($scope.form.Mission.Vehicle.Stages[i].Boosters[j]);
+                        continue;
+                    }
+                }
             }
         }
-        return null;
+        return arr.sort(function(a, b){return a.stageNumber-b.stageNumber;});
     };
 
     $scope.openStageEditDialog = function ($event, $stageIndex, stage) {
@@ -801,9 +809,15 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
         
         // check for events that reference non-existent stages
         $scope.form.Mission.Events.forEach(function(event) {
-            stagesReferencedInEvents.push(event.stage);    
-            if(event.stage === undefined || event.stage > maxStageNumber)
+            if(event.stageNumbers === undefined)
                 returnObj.invalidEvents.push(event);
+            else {
+                for(var i=0;i<event.stageNumbers.length;i++) {
+                    stagesReferencedInEvents.push(event.stageNumbers[i]);
+                    if(event.stageNumbers[i] > maxStageNumber)
+                        returnObj.invalidEvents.push(event);
+                }
+            }
         });
         
         // check for stages that have no attached events
