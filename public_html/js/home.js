@@ -802,7 +802,7 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
         // check for events that reference non-existent stages
         $scope.form.Mission.Events.forEach(function(event) {
             stagesReferencedInEvents.push(event.stage);    
-            if(event.stage > maxStageNumber)
+            if(event.stage === undefined || event.stage > maxStageNumber)
                 returnObj.invalidEvents.push(event);
         });
         
@@ -825,25 +825,23 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
         var validation = validateEventswithStages();
         if(!validation.isValid) {
             
-            var stageString = '';
+            var stageList = '<ul>';
             validation.unusedStages.forEach(function(stage) {
-                stageString += stage.stageName + ', ';
+                stageList += '<li>'+stage.stageName + '</li>';
             });
-            stageString.substring(0, stageString.length - 1);
+            stageList += '</ul>';
             
-            var eventString = '';
+            var eventList = '<ul>';
             validation.invalidEvents.forEach(function(event) {
-                eventString += event.name + ', ';
+                eventList += '<li>'+event.name + '</li>';
             });
-            eventString.substring(0, eventString.length - 1);
-            var x = 5;
+            eventList += '</ul>';
             
             var confirm = $mdDialog.confirm()
                     .title("Warning! Possible invalid profile")
-                    .htmlContent((stageString===''?'':('There were no events assigned to the following stages:<br>'
-                        +stageString+'<br>'))
-                        +(eventString===''?'':('The following events don\'t reference a valid stage:<br>'
-                        +eventString+'<br>'))
+                    .htmlContent(
+                        (validation.unusedStages.length===0?'':('There were no events assigned to the following stages:'+stageList))
+                        +(validation.invalidEvents.length===0?'':('The following events don\'t reference a valid stage:'+eventList))
                         +'Do you want to continue? Simulation may fail.'
                     )
                     .ariaLabel('Update Confirmation')
