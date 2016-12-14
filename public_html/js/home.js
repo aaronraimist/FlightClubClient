@@ -372,6 +372,7 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
                     newStage.Engines = $scope.selectedStage.Engines;
                     newStage.Boosters = $scope.selectedStage.Boosters;
                     $scope.selectedStage = jQuery.extend(true, {}, newStage);
+                    $scope.selectedStage.stageName = newStage.name;
                     
                 };
                 $scope.removeEngine = function ($index) {
