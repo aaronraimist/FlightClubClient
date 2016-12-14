@@ -206,7 +206,7 @@ angular.module('FlightClub').controller('ResultsCtrl', function ($scope, $mdDial
     };
 
     $scope.goToLive = function () {
-        $scope.$parent.redirect("/world?watch=1&code=" + $scope.queryParams['code']);
+        $scope.$parent.redirect("/world?w=1&code=" + $scope.queryParams['code']);
     };
 
     $scope.overrideLive = function () {

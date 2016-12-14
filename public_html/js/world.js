@@ -108,7 +108,7 @@ angular.module('FlightClub').controller('WorldCtrl', function ($scope, $mdDialog
                 if (seconds < 10)
                     seconds = '0' + seconds;
 
-                if (world.getProp('watch') !== '2') {
+                if (world.getProp('w') !== '2') {
                     if (Math.abs((_minute - rand5) - distance) < 1000)  // polls for aborts between T-5 -> T-0
                         $scope.pollLaunchTime();
                     if (Math.abs(rand5 + distance) < 1000) // poll for aborts between T-0 -> T+5
@@ -224,13 +224,13 @@ angular.module('FlightClub').controller('WorldCtrl', function ($scope, $mdDialog
         var timeUntilLaunch = $scope.launchTime - now;
 
         $scope.cesiumShow = $scope.countdown = $scope.finished = $scope.sidebarShow = false;
-        if ($scope.queryParams['watch'] === '2') {
+        if ($scope.queryParams['w'] === '2') {
 
             $scope.loadCesium(function () {
                 $scope.loadDataAndPlot();
             });
 
-        } else if ($scope.queryParams['watch'] === '1') {
+        } else if ($scope.queryParams['w'] === '1') {
             
             if (timeUntilLaunch > 1 * 60 * 60 * 1000) {
                 $scope.countdown = true;
@@ -334,7 +334,7 @@ angular.module('FlightClub').controller('WorldCtrl', function ($scope, $mdDialog
             var launchDate = new Date($scope.launchTime);
             var end = new Date($scope.launchTime + 600e3);
             var now;
-            if (w.getProp('watch') === '1')
+            if (w.getProp('w') === '1')
                 now = new Date();
             else
                 now = new Date($scope.launchTime - 30e3);
@@ -546,7 +546,7 @@ angular.module('FlightClub').controller('WorldCtrl', function ($scope, $mdDialog
                 interpolationAlgorithm: Cesium.LagrangePolynomialApproximation
             });
 
-            if (w.getProp('watch') !== undefined) {
+            if (w.getProp('w') !== undefined) {
                 var pinBuilder = new Cesium.PinBuilder();
                 w.entities[stage] = w.viewer.entities.add({
                     position: p_stage,
@@ -624,7 +624,7 @@ angular.module('FlightClub').controller('WorldCtrl', function ($scope, $mdDialog
 
     $scope.start = function () {
 
-        if ($scope.queryParams['watch'] !== undefined) {
+        if ($scope.queryParams['w'] !== undefined) {
             $scope.fillFutureArray();
 
             // just load up the futures

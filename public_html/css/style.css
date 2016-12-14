@@ -110,6 +110,19 @@ md-select, md-switch {
   display: none !important;
 }
 
+#results #wrapper {
+  overflow:hidden;
+  padding-bottom: 8px;
+}
+@-moz-document url-prefix() {
+    #results #wrapper {
+      overflow:auto;
+    }
+    #results md-grid-list {
+      top: 192px;
+    }
+}
+
 #world md-backdrop {
   display: none;
 }
