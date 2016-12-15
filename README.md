@@ -19,8 +19,7 @@ and spits out telemetry data for each stage of the vehicle's trajectory.
 
 Flight Club was originally built to prettify the C Launch code I had already written for the same purpose.
 It then served as a way to teach myself Java and SQL, and later web-design including front end frameworks such as jQuery. 
-(See the server side <a href="https://github.com/murphd37/FlightClub">here</a>.
-It has since evolved into a fully-fledged launch simulator utilised by online space enthusiasts, journalists and even brokerage firms. 
+(See the server side <a href="https://github.com/murphd37/FlightClub">here</a>. Note: server side code is not publicly accessible.) It has since evolved into a fully-fledged launch simulator utilised by online space enthusiasts, journalists and even brokerage firms.
 
 This app is live at <http://www.flightclub.io>
 
