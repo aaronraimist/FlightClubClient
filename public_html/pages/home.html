@@ -7,7 +7,7 @@
     <form ng-show="loadSuccess" layout-fill layout="row" flex name="profileForm" ng-cloak>
         <md-tabs flex md-selected="2" md-border-bottom md-autoselect md-swipe-content="true">
             <md-tab label='Launch Site'>
-                <md-tab-content md-swipe-left="onSwipeLeft()">
+                 <md-tab-content>
                     <md-content layout-fill flex layout-padding layout="row" layout-align="space-around center">
                         <md-grid-list layout-fill
                                       md-cols-xs="1" md-cols-sm="2" md-cols-md="4" md-cols-gt-md="6"
@@ -37,7 +37,7 @@
                                     </md-radio-button>
                                     <md-input-container flex class="md-block">
                                         <md-select ng-model="selectedVeh" name="selectedVeh" aria-label="SelectPastVehicle" ng-disabled="builderType !== 'previous'">
-                                            <md-option ng-repeat="mission in allMissions" value="{{mission.code}}" ng-click="selectMissionVehicle(mission.code)">{{mission.name}}</md-option>
+                                            <md-option ng-repeat="mission in allMissions" ng-show="mission.display || authorised" value="{{mission.code}}" ng-click="selectMissionVehicle(mission.code)">{{mission.name}}</md-option>
                                         </md-select>
                                     </md-input-container>
                                 </md-content>
@@ -115,7 +115,7 @@
                 </md-tab-content>
             </md-tab>
             <md-tab label='Flight Profile'>
-                <md-tab-content md-swipe-left="open('sidenav')">
+                <md-tab-content><!-- md-swipe-left="open('sidenav')">-->
                     <md-content layout-padding layout-fill flex layout='column' layout-gt-sm='row' layout-align='space-between start'>
                         <md-content flex layout-fill>
                             <md-content layout="row" layout-align="space-between center">
@@ -325,13 +325,13 @@
             </md-button>
         </md-toolbar>
         <md-list>
-            <md-subheader layout-fill class="md-no-sticky">Upcoming Missions</md-subheader>
+            <md-subheader class="md-no-sticky">Upcoming Missions</md-subheader>
             <md-list-item layout-align="space-between center" ng-repeat="mission in upcoming" ng-show="mission.display || authorised" ng-click="selectMission(mission)">
                 <md-progress-circular flex class="loadCircle" ng-show="loadingMission && mission === selectedMission" md-mode="indeterminate"></md-progress-circular>
                 <span flex class="md-secondary">{{mission.name}}</span>
             </md-list-item>
             <md-divider></md-divider>
-            <md-subheader layout-fill class="md-no-sticky">Past Missions</md-subheader>
+            <md-subheader class="md-no-sticky">Past Missions</md-subheader>
             <md-list-item layout-align="space-between center" ng-repeat="mission in past" ng-show="mission.display || authorised" ng-click="selectMission(mission)">
                 <md-progress-circular flex class="loadCircle" ng-show="loadingMission && mission === selectedMission" md-mode="indeterminate"></md-progress-circular>
                 <span flex class="md-secondary">{{mission.name}}</span>

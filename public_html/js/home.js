@@ -205,6 +205,7 @@ angular.module('FlightClub').controller('HomeCtrl', function ($scope, $mdDialog,
                         $scope.form.Mission.Events.splice(i, 1);
                 }
             }
+            $scope.$apply();
         }, null);
     };
 
